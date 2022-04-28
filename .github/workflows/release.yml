@@ -2,14 +2,21 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    tags:
+      - '*'
+
+permissions:
+  contents: write
 
 jobs:
 
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Fetch all tags
+      run: git fetch --force --tags
 
     - name: Set up Go
       uses: actions/setup-go@v3
