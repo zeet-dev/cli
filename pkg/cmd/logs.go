@@ -13,6 +13,7 @@ var logsCmd = &cobra.Command{
 	Short: "Logs",
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		LoginGate()
 		ctx := context.Background()
 
 		projectPath := args[0]

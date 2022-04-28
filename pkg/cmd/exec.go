@@ -15,6 +15,7 @@ var execCmd = &cobra.Command{
 	Use:   "exec",
 	Short: "Execute command in Zeet project",
 	Run: func(cmd *cobra.Command, args []string) {
+		LoginGate()
 		fmt.Println("exec called")
 	},
 }

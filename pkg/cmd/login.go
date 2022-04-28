@@ -27,42 +27,54 @@ var loginCmd = &cobra.Command{
 
 		ctx := context.Background()
 
-		token := viper.GetString("auth.access_token")
-		if token != "" {
-			if err := api.ShowCurrentUser(ctx); err == nil {
-				fmt.Print("Login as another user? [y/N]: ")
+		return Login(ctx)
+	},
+}
 
-				reader := bufio.NewReader(os.Stdin)
-				data, err := reader.ReadString('\n')
-				if err != nil {
-					return err
-				}
+func Login(ctx context.Context) error {
+	token := viper.GetString("auth.access_token")
+	if token != "" {
+		if err := api.ShowCurrentUser(ctx); err == nil {
+			fmt.Print("Login as another user? [y/N]: ")
 
-				confirm := strings.ToLower(strings.TrimSpace(data))
-				if !(confirm == "y" || confirm == "yes") {
-					return nil
-				}
+			reader := bufio.NewReader(os.Stdin)
+			data, err := reader.ReadString('\n')
+			if err != nil {
+				return err
+			}
+
+			confirm := strings.ToLower(strings.TrimSpace(data))
+			if !(confirm == "y" || confirm == "yes") {
+				return nil
 			}
 		}
+	}
 
-		fmt.Print("Enter Zeet API token: ")
-		tokenb, err := term.ReadPassword(int(syscall.Stdin))
-		if err != nil {
-			return err
-		}
-		fmt.Println()
+	fmt.Print("Enter Zeet API token: ")
+	newToken, err := term.ReadPassword(int(syscall.Stdin))
+	if err != nil {
+		return err
+	}
+	fmt.Println()
 
-		viper.Set("auth.access_token", string(tokenb))
-		if err := api.ShowCurrentUser(ctx); err != nil {
-			return err
-		}
+	viper.Set("auth.access_token", strings.TrimSpace(string(newToken)))
+	if err := api.ShowCurrentUser(ctx); err != nil {
+		return err
+	}
 
-		if err := viper.WriteConfig(); err != nil {
-			return err
-		}
+	if err := viper.WriteConfig(); err != nil {
+		return err
+	}
 
-		return nil
-	},
+	return nil
+}
+
+func LoginGate() error {
+	token := viper.GetString("auth.access_token")
+	if token == "" {
+		return Login(context.Background())
+	}
+	return nil
 }
 
 func init() {

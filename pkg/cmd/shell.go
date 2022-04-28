@@ -13,7 +13,8 @@ var shellCmd = &cobra.Command{
 	Use:   "shell",
 	Short: "Get a shell into zeet project",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		shellExec := []string{"sh", "-c", "clear; (bash || ash || sh)"}
+		LoginGate()
+		shellExec := []string{"sh", "-c", "clear; (bash || zsh || ash || sh)"}
 		return execCmd.RunE(cmd, append(args, shellExec...))
 	},
 }
