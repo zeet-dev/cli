@@ -7,8 +7,7 @@ import (
 )
 
 type Project struct {
-	ID   graphql.String
-	Name graphql.String
+	ID graphql.String
 }
 
 func GetProject(ctx context.Context, project string) (*Project, error) {

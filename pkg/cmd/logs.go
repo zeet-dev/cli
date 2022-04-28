@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/zeet-co/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/api"
 )
 
 var logsCmd = &cobra.Command{

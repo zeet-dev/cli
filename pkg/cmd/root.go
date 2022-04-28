@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Zeet, Inc - All Rights Reserved
+Copyright © 2022 Zeet, Inc - All Rights Reserved
 
 */
 package cmd
@@ -59,27 +59,39 @@ func initConfig() {
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
+
+		if err := viper.ReadInConfig(); err != nil {
+			panic(err)
+		}
 	} else {
 		// Find home directory.
 		home, err := homedir.Dir()
 		cobra.CheckErr(err)
 
-		// Search config in home directory with name ".config/zeet" (without extension).
-		viper.AddConfigPath(path.Join(home, ".config", "zeet"))
+		configPath := path.Join(home, ".config", "zeet")
+		viper.AddConfigPath(configPath)
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
+
+		// If a config file is found, read it in.
+		if err := viper.ReadInConfig(); err != nil {
+			if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+				if err := os.MkdirAll(configPath, os.ModePerm); err != nil {
+					cobra.CheckErr(err)
+				}
+				if err := viper.SafeWriteConfig(); err != nil {
+					cobra.CheckErr(err)
+				}
+			} else {
+				cobra.CheckErr(err)
+			}
+		}
 	}
 
 	viper.SetEnvPrefix("ZEET")
 	viper.AutomaticEnv() // read in environment variables that match
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err != nil {
-		panic(err)
-	}
-
 	if viper.GetBool("debug") {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
-		fmt.Fprintln(os.Stderr, viper.AllSettings())
 	}
 }

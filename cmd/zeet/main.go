@@ -1,10 +1,10 @@
 /*
-Copyright © 2021 Zeet, Inc - All Rights Reserved
+Copyright © 2022 Zeet, Inc - All Rights Reserved
 
 */
 package main
 
-import "github.com/zeet-co/cli/pkg/cmd"
+import "github.com/zeet-dev/cli/pkg/cmd"
 
 func main() {
 	cmd.Execute()

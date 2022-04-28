@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 Zeet, Inc - All Rights Reserved
+Copyright © 2022 Zeet, Inc - All Rights Reserved
 
 */
 package cmd
@@ -14,7 +14,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/zeet-co/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/api"
 	"golang.org/x/term"
 )
 
