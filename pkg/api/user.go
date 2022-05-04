@@ -2,26 +2,28 @@ package api
 
 import (
 	"context"
-	"fmt"
 
-	graphql "github.com/hasura/go-graphql-client"
+	"github.com/google/uuid"
 )
 
-func ShowCurrentUser(ctx context.Context) error {
-	client := NewGraphQLClient()
+type User struct {
+	Id    uuid.UUID
+	Login string
+}
 
-	var query struct {
-		CurrentUser struct {
-			ID    graphql.String
-			Login graphql.String
-		} `graphql:"currentUser()"`
-	}
-
-	err := client.Query(ctx, &query, map[string]interface{}{})
+func (c *Client) GetCurrentUser(ctx context.Context) (*User, error) {
+	_ = `# @genqlient
+		query getCurrentUser {
+		  currentUser {
+			id
+			login
+		  }
+		}
+	`
+	res, err := getCurrentUser(ctx, c.GQL)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Println("You are logged in as:", query.CurrentUser.Login)
-	return nil
+	return &User{Id: res.CurrentUser.Id, Login: res.CurrentUser.Login}, nil
 }
