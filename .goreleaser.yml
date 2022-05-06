@@ -44,3 +44,7 @@ checksum:
 project_name: zeet
 snapshot: 
   name_template: "{{ incpatch .Version }}-next"
+brews:
+  - tap:
+      owner: zeet-dev
+      name: homebrew-tap
