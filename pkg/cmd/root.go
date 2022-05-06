@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 var defaultConfigName = "config.yaml"
@@ -25,6 +26,8 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	rootCmd.SetErr(&utils.ErrorWriter{})
+
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
