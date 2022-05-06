@@ -21,8 +21,6 @@ var deployCmd = &cobra.Command{
 }
 
 func Deploy(c *CmdConfig) error {
-	fmt.Printf("Building %s\n", c.args[0])
-
 	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
 	if err != nil {
 		return err
@@ -34,36 +32,52 @@ func Deploy(c *CmdConfig) error {
 		return err
 	}
 
-	if err := printBuildLogs(c, deployment); err != nil {
-		return err
-	}
-
-	deployment, err = c.client.GetDeployment(c.ctx, deployment.ID)
-	if err != nil {
-		return err
-	}
-	if api.IsBuildSuccess(deployment.Status) {
-		fmt.Println(color.GreenString("⛏ ️Build succeeded. Starting deployment..."))
-	} else {
-		fmt.Println(color.RedString("Build failed"))
-		return nil
-	}
-
-	if err := printDeploymentLogs(c, deployment); err != nil {
-		return err
-	}
-
-	deployment, err = c.client.GetDeployment(c.ctx, deployment.ID)
-	if api.IsDeploySuccess(deployment.Status) {
-		fmt.Printf(color.GreenString("\n🚀 Deployed %s"), c.args[0])
-
-		fmt.Printf(color.GreenString("\n\nPublic Endpoints: %s"), utils.DisplayArray(deployment.Endpoints))
-
-		if deployment.PrivateEndpoint != "" {
-			fmt.Printf(color.GreenString("\nPrivate Endpoint: %s"), deployment.PrivateEndpoint)
+	deploymentFinished := false
+	for !deploymentFinished {
+		deployment, err = c.client.GetDeployment(c.ctx, deployment.ID)
+		if err != nil {
+			return err
 		}
-	} else {
-		fmt.Println(color.RedString("Deployment failed"))
+
+		switch deployment.Status {
+		// Build
+		case api.DeploymentStatusBuildInProgress:
+			fmt.Printf("⛏ Building %s...\n", c.args[0])
+			if err := printBuildLogs(c, deployment); err != nil {
+				return err
+			}
+			break
+		case api.DeploymentStatusBuildSucceeded:
+			fmt.Println(color.GreenString("⛏ Build complete\n"))
+			break
+		case api.DeploymentStatusBuildFailed:
+			fmt.Println(color.RedString("Build failed\n"))
+			deploymentFinished = true
+			break
+		case api.DeploymentStatusBuildAborted:
+			fmt.Println(color.RedString("Build aborted\n"))
+			deploymentFinished = true
+			break
+		case api.DeploymentStatusDeployStopped:
+			fmt.Println(color.RedString("Build stopped\n"))
+			break
+
+		// Deployment
+		case api.DeploymentStatusDeployInProgress:
+			fmt.Printf("Deploying %s...\n", c.args[0])
+			if err := printDeploymentLogs(c, deployment); err != nil {
+				return err
+			}
+			break
+		case api.DeploymentStatusDeploySucceeded:
+			printDeploymentSummary(c, deployment)
+			deploymentFinished = true
+			break
+		case api.DeploymentStatusDeployFailed:
+			fmt.Println(color.RedString("Deploy failed\n"))
+			deploymentFinished = true
+			break
+		}
 	}
 
 	return nil
@@ -73,14 +87,14 @@ func printBuildLogs(c *CmdConfig, deployment *api.Deployment) error {
 	getLogs := func() ([]api.LogEntry, error) {
 		return c.client.GetBuildLogs(c.ctx, deployment.ID)
 	}
-	checkStatus := func() (bool, error) {
+	getStatus := func() (api.DeploymentStatus, error) {
 		deployment, err := c.client.GetDeployment(c.ctx, deployment.ID)
 		if err != nil {
-			return false, nil
+			return deployment.Status, err
 		}
-		return api.IsBuildInProgress(deployment.Status), nil
+		return deployment.Status, nil
 	}
-	if err := printLogs(getLogs, checkStatus); err != nil {
+	if err := printLogs(getLogs, getStatus); err != nil {
 		return err
 	}
 
@@ -91,30 +105,40 @@ func printDeploymentLogs(c *CmdConfig, deployment *api.Deployment) error {
 	getLogs := func() ([]api.LogEntry, error) {
 		return c.client.GetDeploymentLogs(c.ctx, deployment.ID)
 	}
-	checkStatus := func() (bool, error) {
+	getStatus := func() (api.DeploymentStatus, error) {
 		deployment, err := c.client.GetDeployment(c.ctx, deployment.ID)
 		if err != nil {
-			return false, nil
+			return deployment.Status, err
 		}
-		return api.IsDeployInProgress(deployment.Status), nil
+		return deployment.Status, nil
 	}
-	if err := printLogs(getLogs, checkStatus); err != nil {
+	if err := printLogs(getLogs, getStatus); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func printLogs(getter func() ([]api.LogEntry, error), checker func() (bool, error)) (err error) {
+// printLogs fetches logs via getLogs and then prints them, until the result of getStatus changes
+func printLogs(getLogs func() ([]api.LogEntry, error), getStatus func() (api.DeploymentStatus, error)) (err error) {
 	lastLog := 0
 
-	shouldContinue, err := checker()
+	initialStatus, err := getStatus()
 	if err != nil {
 		return err
 	}
 
+	shouldContinue := true
+
 	for shouldContinue {
-		logs, err := getter()
+		// Stop looping if the status changes
+		status, err := getStatus()
+		if err != nil {
+			return err
+		}
+		shouldContinue = status == initialStatus
+
+		logs, err := getLogs()
 		if err != nil {
 			return err
 		}
@@ -125,14 +149,17 @@ func printLogs(getter func() ([]api.LogEntry, error), checker func() (bool, erro
 		lastLog = len(logs)
 
 		time.Sleep(time.Second)
-
-		shouldContinue, err = checker()
-		if err != nil {
-			return err
-		}
 	}
 
 	return nil
+}
+
+func printDeploymentSummary(c *CmdConfig, deployment *api.Deployment) {
+	fmt.Printf(color.GreenString("\n🚀 Deployed %s"), c.args[0])
+	fmt.Printf(color.GreenString("\n\nPublic Endpoints: \n%s"), utils.DisplayArray(deployment.Endpoints))
+	if deployment.PrivateEndpoint != "" {
+		fmt.Printf(color.GreenString("\nPrivate Endpoint: %s"), deployment.PrivateEndpoint)
+	}
 }
 
 func init() {

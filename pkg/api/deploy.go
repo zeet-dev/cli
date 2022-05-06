@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
-	"golang.org/x/exp/slices"
 )
 
 type Deployment struct {
@@ -149,57 +148,4 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 
 	err = copier.Copy(out, res.CurrentUser.Deployment)
 	return out, err
-}
-
-func IsDeployInProgress(status DeploymentStatus) bool {
-	inProgress := []DeploymentStatus{DeploymentStatusDeployPending,
-		DeploymentStatusDeployInProgress,
-		DeploymentStatusReleaseInProgress,
-	}
-	return slices.Contains(inProgress, status)
-}
-
-func IsDeployFailed(status DeploymentStatus) bool {
-	failed := []DeploymentStatus{
-		DeploymentStatusDeployFailed,
-		DeploymentStatusDeployStopped,
-		DeploymentStatusDeployCrashing,
-	}
-
-	return slices.Contains(failed, status)
-}
-
-func IsDeploySuccess(status DeploymentStatus) bool {
-	failed := []DeploymentStatus{
-		DeploymentStatusDeploySucceeded,
-		DeploymentStatusDeployHealhty,
-	}
-
-	return slices.Contains(failed, status)
-}
-
-func IsBuildInProgress(status DeploymentStatus) bool {
-	inProgress := []DeploymentStatus{
-		DeploymentStatusBuildPending,
-		DeploymentStatusBuildInProgress,
-	}
-	return slices.Contains(inProgress, status)
-}
-
-func IsBuildFailed(status DeploymentStatus) bool {
-	failed := []DeploymentStatus{
-		DeploymentStatusBuildFailed,
-		DeploymentStatusBuildAborted,
-	}
-
-	return slices.Contains(failed, status)
-}
-
-func IsBuildSuccess(status DeploymentStatus) bool {
-	failed := []DeploymentStatus{
-		DeploymentStatusBuildSucceeded,
-		DeploymentStatusDeployPending,
-	}
-
-	return slices.Contains(failed, status)
 }
