@@ -166,6 +166,11 @@ func printLogs(getLogs func() ([]api.LogEntry, error), getStatus func() (api.Dep
 			return nil
 		}
 
+		// Sometimes the backend returns an empty log which will then be replaced (same index) the next request...
+		logs = utils.SliceFilter(logs, func(l api.LogEntry) bool {
+			return l.Text != ""
+		})
+
 		for _, log := range logs[lastLog:] {
 			fmt.Println(log.Text)
 		}
