@@ -48,3 +48,4 @@ brews:
   - tap:
       owner: zeet-dev
       name: homebrew-tap
+      token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
