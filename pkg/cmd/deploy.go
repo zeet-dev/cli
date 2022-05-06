@@ -162,7 +162,7 @@ func printLogs(getLogs func() ([]api.LogEntry, error), getStatus func() (api.Dep
 		}
 		// Catch the edge case where the deployment has been cancelled after getStatus was called
 		// but before getLogs, making getLogs return [] and the range panicking
-		if len(logs) == 0 && lastLog > 1 {
+		if len(logs) == 0 && lastLog > 0 {
 			return nil
 		}
 
