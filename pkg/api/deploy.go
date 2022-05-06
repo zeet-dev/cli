@@ -72,6 +72,33 @@ func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch s
 	return out, nil
 }
 
+func (c *Client) DeployProjectBranch(ctx context.Context, projectID uuid.UUID, branch string, noCache bool) (*Deployment, error) {
+	_ = `# @genqlient
+		mutation deployRepoBranch($branch: String!, $projectId: UUID!) {
+		  deployRepoBranch(input: {id: $projectId, branch: $branch}) {
+			deployments {
+			  id
+			  status
+			  branch
+			  endpoints
+			  privateEndpoint
+			}
+		  }
+		}
+	`
+	out := &Deployment{}
+	res, err := deployRepoBranch(ctx, c.GQL, branch, projectID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := copier.Copy(out, res.DeployRepoBranch.Deployments[0]); err != nil {
+		return nil, err
+	}
+
+	return out, nil
+}
+
 func (c *Client) GetBuildLogs(ctx context.Context, deployID uuid.UUID) (out []LogEntry, err error) {
 	_ = `# @genqlient
 		query getBuildLogs($id: ID!) {

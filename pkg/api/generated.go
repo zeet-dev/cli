@@ -56,6 +56,18 @@ func (v *__buildRepoInput) GetBranch() string { return v.Branch }
 // GetNoCache returns __buildRepoInput.NoCache, and is useful for accessing the field via an interface.
 func (v *__buildRepoInput) GetNoCache() bool { return v.NoCache }
 
+// __deployRepoBranchInput is used internally by genqlient
+type __deployRepoBranchInput struct {
+	Branch    string    `json:"branch"`
+	ProjectId uuid.UUID `json:"projectId"`
+}
+
+// GetBranch returns __deployRepoBranchInput.Branch, and is useful for accessing the field via an interface.
+func (v *__deployRepoBranchInput) GetBranch() string { return v.Branch }
+
+// GetProjectId returns __deployRepoBranchInput.ProjectId, and is useful for accessing the field via an interface.
+func (v *__deployRepoBranchInput) GetProjectId() uuid.UUID { return v.ProjectId }
+
 // __getBuildLogsInput is used internally by genqlient
 type __getBuildLogsInput struct {
 	Id uuid.UUID `json:"id"`
@@ -197,6 +209,58 @@ type buildRepoResponse struct {
 
 // GetBuildRepo returns buildRepoResponse.BuildRepo, and is useful for accessing the field via an interface.
 func (v *buildRepoResponse) GetBuildRepo() buildRepoBuildRepo { return v.BuildRepo }
+
+// deployRepoBranchDeployRepoBranchRepo includes the requested fields of the GraphQL type Repo.
+type deployRepoBranchDeployRepoBranchRepo struct {
+	Deployments []deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment `json:"deployments"`
+}
+
+// GetDeployments returns deployRepoBranchDeployRepoBranchRepo.Deployments, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepo) GetDeployments() []deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment {
+	return v.Deployments
+}
+
+// deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
+type deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment struct {
+	Id              uuid.UUID        `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetId() uuid.UUID { return v.Id }
+
+// GetStatus returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetBranch returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetBranch() string {
+	return v.Branch
+}
+
+// GetEndpoints returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetEndpoints() []string {
+	return v.Endpoints
+}
+
+// GetPrivateEndpoint returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// deployRepoBranchResponse is returned by deployRepoBranch on success.
+type deployRepoBranchResponse struct {
+	DeployRepoBranch deployRepoBranchDeployRepoBranchRepo `json:"deployRepoBranch"`
+}
+
+// GetDeployRepoBranch returns deployRepoBranchResponse.DeployRepoBranch, and is useful for accessing the field via an interface.
+func (v *deployRepoBranchResponse) GetDeployRepoBranch() deployRepoBranchDeployRepoBranchRepo {
+	return v.DeployRepoBranch
+}
 
 // getBuildLogsCurrentUser includes the requested fields of the GraphQL type User.
 type getBuildLogsCurrentUser struct {
@@ -548,6 +612,41 @@ func buildRepoDefaultBranch(
 		`
 mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 	buildRepo(id: $id, noCache: $noCache) {
+		deployments {
+			id
+			status
+			branch
+			endpoints
+			privateEndpoint
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func deployRepoBranch(
+	ctx context.Context,
+	client graphql.Client,
+	branch string,
+	projectId uuid.UUID,
+) (*deployRepoBranchResponse, error) {
+	__input := __deployRepoBranchInput{
+		Branch:    branch,
+		ProjectId: projectId,
+	}
+	var err error
+
+	var retval deployRepoBranchResponse
+	err = client.MakeRequest(
+		ctx,
+		"deployRepoBranch",
+		`
+mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
+	deployRepoBranch(input: {id:$projectId,branch:$branch}) {
 		deployments {
 			id
 			status

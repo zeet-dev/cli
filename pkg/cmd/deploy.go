@@ -27,9 +27,27 @@ func Deploy(c *CmdConfig) error {
 	}
 
 	// Build project
-	deployment, err := c.client.BuildProject(c.ctx, project.ID, c.cfg.GetString("branch"), c.cfg.GetBool("use-cache"))
-	if err != nil {
-		return err
+	var deployment *api.Deployment
+
+	if c.cfg.GetBool("restart") {
+		// Get the branch to restart
+		branch := c.cfg.GetString("branch")
+		if branch == "" {
+			branch, err = c.client.GetProductionBranch(c.ctx, project.ID)
+			if err != nil {
+				return err
+			}
+		}
+
+		deployment, err = c.client.DeployProjectBranch(c.ctx, project.ID, branch, c.cfg.GetBool("use-cache"))
+		if err != nil {
+			return err
+		}
+	} else {
+		deployment, err = c.client.BuildProject(c.ctx, project.ID, c.cfg.GetString("branch"), c.cfg.GetBool("use-cache"))
+		if err != nil {
+			return err
+		}
 	}
 
 	deploymentFinished := false
@@ -142,6 +160,11 @@ func printLogs(getLogs func() ([]api.LogEntry, error), getStatus func() (api.Dep
 		if err != nil {
 			return err
 		}
+		// Catch the edge case where the deployment has been cancelled after getStatus was called
+		// but before getLogs, making getLogs return [] and the range panicking
+		if len(logs) == 0 && lastLog > 1 {
+			return nil
+		}
 
 		for _, log := range logs[lastLog:] {
 			fmt.Println(log.Text)
@@ -165,6 +188,7 @@ func printDeploymentSummary(c *CmdConfig, deployment *api.Deployment) {
 func init() {
 	deployCmd.Flags().Bool("use-cache", true, "Enable build cache")
 	deployCmd.Flags().StringP("branch", "b", "", "Deploy specific branch")
+	deployCmd.Flags().BoolP("restart", "r", false, "Rerun the latest deployment (this will override use-cache)")
 
 	viper.BindPFlag("use-cache", deployCmd.Flags().Lookup("use-cache"))
 	viper.BindPFlag("branch", deployCmd.Flags().Lookup("branch"))
