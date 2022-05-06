@@ -39,6 +39,9 @@ func Deploy(c *CmdConfig) error {
 	}
 
 	deployment, err = c.client.GetDeployment(c.ctx, deployment.ID)
+	if err != nil {
+		return err
+	}
 	if api.IsBuildSuccess(deployment.Status) {
 		fmt.Println(color.GreenString("⛏ ️Build succeeded. Starting deployment..."))
 	} else {
