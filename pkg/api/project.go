@@ -3,51 +3,72 @@ package api
 import (
 	"context"
 
-	graphql "github.com/hasura/go-graphql-client"
+	"github.com/google/uuid"
 )
 
 type Project struct {
-	ID graphql.String
+	ID uuid.UUID
 }
 
-func GetProject(ctx context.Context, project string) (*Project, error) {
-	client := NewGraphQLClient()
-	var query struct {
-		Project Project `graphql:"project(path: $path)"`
-	}
-	err := client.Query(ctx, &query, map[string]interface{}{
-		"path": graphql.String(project),
-	})
+func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project, error) {
+	_ = `# @genqlient
+		query getProjectByPath($path: String) {
+		  project(path: $path) {
+			id
+		  }
+		}
+	`
+	res, err := getProjectByPath(ctx, c.GQL, project)
 	if err != nil {
 		return nil, err
 	}
-	return &query.Project, nil
+	return &Project{res.Project.Id}, nil
 }
 
-func GetProjectLogs(ctx context.Context, projectID string) ([]string, error) {
-	client := NewGraphQLClient()
-	var query struct {
-		CurrentUser struct {
-			Repo struct {
-				ProductionDeployment struct {
-					Logs []struct {
-						Text graphql.String
-					}
+func (c *Client) GetProjectLogs(ctx context.Context, projectID uuid.UUID) ([]string, error) {
+	_ = `# @genqlient
+		query getProjectLogs($path: ID!) {
+		  currentUser {
+			repo(id: $path) {
+			  productionDeployment {
+				logs {
+				  text
 				}
-			} `graphql:"repo(id: $id)"`
-		} `graphql:"currentUser()"`
-	}
-	err := client.Query(ctx, &query, map[string]interface{}{
-		"id": graphql.ID(projectID),
-	})
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getProjectLogs(ctx, c.GQL, projectID)
 	if err != nil {
 		return nil, err
 	}
 
-	logs := []string{}
-	for _, log := range query.CurrentUser.Repo.ProductionDeployment.Logs {
-		logs = append(logs, string(log.Text))
+	var logs []string
+	for _, log := range res.CurrentUser.Repo.ProductionDeployment.Logs {
+		logs = append(logs, log.Text)
 	}
 
 	return logs, nil
+}
+
+func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (string, error) {
+	_ = `# @genqlient
+		query getProductionBranch($repoId: ID!) {
+		  currentUser {
+			repo(id: $repoId) {
+			  id
+			  productionBranchV2 {
+				name
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getProductionBranch(ctx, c.GQL, projectID)
+	if err != nil {
+		return "", err
+	}
+
+	return res.CurrentUser.Repo.ProductionBranchV2.Name, nil
 }

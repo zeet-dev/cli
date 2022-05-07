@@ -1,38 +1,36 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/zeet-dev/cli/pkg/api"
 )
 
 var logsCmd = &cobra.Command{
 	Use:   "logs",
 	Short: "Logs",
 	Args:  cobra.ExactArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		LoginGate()
-		ctx := context.Background()
+	RunE: withCmdConfig(func(c *CmdConfig) error {
+		return checkLoginAndRun(c, Logs)
+	}),
+}
 
-		projectPath := args[0]
-		project, err := api.GetProject(ctx, projectPath)
-		if err != nil {
-			return err
-		}
+func Logs(c *CmdConfig) error {
+	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
+	if err != nil {
+		return err
+	}
 
-		logs, err := api.GetProjectLogs(ctx, string(project.ID))
-		if err != nil {
-			return err
-		}
+	logs, err := c.client.GetProjectLogs(c.ctx, project.ID)
+	if err != nil {
+		return err
+	}
 
-		for _, log := range logs {
-			fmt.Println(log)
-		}
+	for _, log := range logs {
+		fmt.Print(log)
+	}
 
-		return nil
-	},
+	return nil
 }
 
 func init() {

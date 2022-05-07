@@ -6,7 +6,6 @@ package cmd
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -22,19 +21,19 @@ import (
 var loginCmd = &cobra.Command{
 	Use:   "login",
 	Short: "Login to Zeet",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		cmd.SilenceUsage = true
+	RunE: withCmdConfig(func(c *CmdConfig) error {
+		c.cmd.SilenceUsage = true
 
-		ctx := context.Background()
-
-		return Login(ctx)
-	},
+		return Login(c)
+	}),
 }
 
-func Login(ctx context.Context) error {
-	token := viper.GetString("auth.access_token")
-	if token != "" {
-		if err := api.ShowCurrentUser(ctx); err == nil {
+func Login(c *CmdConfig) error {
+	accessToken := c.cfg.GetString("auth.access_token")
+
+	if accessToken != "" {
+		if user, err := c.client.GetCurrentUser(c.ctx); err == nil {
+			fmt.Println("You are logged in as: " + user.Login)
 			fmt.Print("Login as another user? [y/N]: ")
 
 			reader := bufio.NewReader(os.Stdin)
@@ -57,10 +56,17 @@ func Login(ctx context.Context) error {
 	}
 	fmt.Println()
 
-	viper.Set("auth.access_token", strings.TrimSpace(string(newToken)))
-	if err := api.ShowCurrentUser(ctx); err != nil {
+	if err := c.cfg.Set("auth.access_token", strings.TrimSpace(string(newToken))); err != nil {
 		return err
 	}
+	// We'll need to recreate the client so that it uses the updated access token
+	c.client = api.New(c.cfg.GetString("server"), c.cfg.GetString("auth.access_token"))
+
+	user, err := c.client.GetCurrentUser(c.ctx)
+	if err != nil {
+		return err
+	}
+	fmt.Println("You are logged in as: " + user.Login)
 
 	if err := viper.WriteConfig(); err != nil {
 		return err
@@ -69,12 +75,14 @@ func Login(ctx context.Context) error {
 	return nil
 }
 
-func LoginGate() error {
-	token := viper.GetString("auth.access_token")
-	if token == "" {
-		return Login(context.Background())
+// checkLoginAndRun runs runner if the user is logged in, and returns an error if not
+func checkLoginAndRun(c *CmdConfig, runner func(c *CmdConfig) error) error {
+	accessToken := c.cfg.GetString("auth.access_token")
+	if accessToken == "" {
+		return fmt.Errorf("not logged in (hint: run 'zeet login')")
+	} else {
+		return runner(c)
 	}
-	return nil
 }
 
 func init() {
