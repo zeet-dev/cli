@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -59,8 +60,13 @@ func initConfig() {
 	cfgFile := viper.GetString("config")
 	viper.SetConfigFile(cfgFile)
 
-	err := viper.ReadInConfig()
-	cobra.CheckErr(err)
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(*fs.PathError); ok {
+			// No problem, the config file will be created after login
+		} else {
+			cobra.CheckErr(err)
+		}
+	}
 
 	if viper.GetBool("debug") {
 		fmt.Println("Using " + viper.ConfigFileUsed())
