@@ -6,21 +6,36 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/utils"
 )
 
-var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "Deploy",
-	Args:  cobra.ExactArgs(1),
-	RunE: withCmdConfig(func(c *CmdConfig) error {
-		return checkLoginAndRun(c, Deploy)
-	}),
+type deployOptions struct {
+	branch   string
+	useCache bool
+	restart  bool
 }
 
-func Deploy(c *CmdConfig) error {
+func createDeployCmd() *cobra.Command {
+	var opts = &deployOptions{}
+
+	deployCmd := &cobra.Command{
+		Use:   "deploy",
+		Short: "Deploy a project",
+		Args:  cobra.ExactArgs(1),
+		RunE: withCmdConfig(func(c *CmdConfig) error {
+			return checkLoginAndRunTMP(c, Deploy, opts)
+		}),
+	}
+
+	deployCmd.Flags().BoolVar(&opts.useCache, "use-cache", true, "Enable build cache")
+	deployCmd.Flags().StringVarP(&opts.branch, "branch", "b", "", "Deploy specific branch")
+	deployCmd.Flags().BoolVarP(&opts.restart, "restart", "r", false, "Rerun the latest deployment (this will override use-cache)")
+
+	return deployCmd
+}
+
+func Deploy(c *CmdConfig, opts *deployOptions) error {
 	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
 	if err != nil {
 		return err
@@ -31,7 +46,7 @@ func Deploy(c *CmdConfig) error {
 
 	if c.cfg.GetBool("restart") {
 		// Get the branch to restart
-		branch := c.cfg.GetString("branch")
+		branch := opts.branch
 		if branch == "" {
 			branch, err = c.client.GetProductionBranch(c.ctx, project.ID)
 			if err != nil {
@@ -39,12 +54,12 @@ func Deploy(c *CmdConfig) error {
 			}
 		}
 
-		deployment, err = c.client.DeployProjectBranch(c.ctx, project.ID, branch, c.cfg.GetBool("use-cache"))
+		deployment, err = c.client.DeployProjectBranch(c.ctx, project.ID, branch, opts.useCache)
 		if err != nil {
 			return err
 		}
 	} else {
-		deployment, err = c.client.BuildProject(c.ctx, project.ID, c.cfg.GetString("branch"), c.cfg.GetBool("use-cache"))
+		deployment, err = c.client.BuildProject(c.ctx, project.ID, opts.branch, opts.useCache)
 		if err != nil {
 			return err
 		}
@@ -191,12 +206,5 @@ func printDeploymentSummary(c *CmdConfig, deployment *api.Deployment) {
 }
 
 func init() {
-	deployCmd.Flags().Bool("use-cache", true, "Enable build cache")
-	deployCmd.Flags().StringP("branch", "b", "", "Deploy specific branch")
-	deployCmd.Flags().BoolP("restart", "r", false, "Rerun the latest deployment (this will override use-cache)")
-
-	viper.BindPFlag("use-cache", deployCmd.Flags().Lookup("use-cache"))
-	viper.BindPFlag("branch", deployCmd.Flags().Lookup("branch"))
-
-	rootCmd.AddCommand(deployCmd)
+	rootCmd.AddCommand(createDeployCmd())
 }
