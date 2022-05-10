@@ -49,7 +49,7 @@ func Login(c *CmdConfig) error {
 		}
 	}
 
-	fmt.Print("Enter Zeet API token: ")
+	fmt.Print("Enter Zeet API token (input hidden): ")
 	newToken, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return err
@@ -75,22 +75,13 @@ func Login(c *CmdConfig) error {
 	return nil
 }
 
-func checkLoginAndRunTMP[O any](c *CmdConfig, runner func(c *CmdConfig, opts O) error, opts O) error {
+// checkLoginAndRun runs runner if the user is logged in, and returns an error if not
+func checkLoginAndRun[O any](c *CmdConfig, runner func(c *CmdConfig, opts O) error, opts O) error {
 	accessToken := c.cfg.GetString("auth.access_token")
 	if accessToken == "" {
 		return fmt.Errorf("not logged in (hint: run 'zeet login')")
 	} else {
 		return runner(c, opts)
-	}
-}
-
-// checkLoginAndRun runs runner if the user is logged in, and returns an error if not
-func checkLoginAndRun(c *CmdConfig, runner func(c *CmdConfig) error) error {
-	accessToken := c.cfg.GetString("auth.access_token")
-	if accessToken == "" {
-		return fmt.Errorf("not logged in (hint: run 'zeet login')")
-	} else {
-		return runner(c)
 	}
 }
 

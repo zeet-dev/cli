@@ -24,7 +24,7 @@ func createDeployCmd() *cobra.Command {
 		Short: "Deploy a project",
 		Args:  cobra.ExactArgs(1),
 		RunE: withCmdConfig(func(c *CmdConfig) error {
-			return checkLoginAndRunTMP(c, Deploy, opts)
+			return checkLoginAndRun(c, Deploy, opts)
 		}),
 	}
 
