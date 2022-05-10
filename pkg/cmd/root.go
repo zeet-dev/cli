@@ -46,6 +46,9 @@ func init() {
 	rootCmd.PersistentFlags().String("ws-server", "wss://anchor.zeet.co", "Zeet Websocket/Subscriptions Server")
 	rootCmd.PersistentFlags().BoolP("debug", "v", false, "Enable verbose debug logging")
 
+	rootCmd.PersistentFlags().MarkHidden("server")
+	rootCmd.PersistentFlags().MarkHidden("ws-server")
+
 	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("ws-server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
