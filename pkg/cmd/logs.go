@@ -6,16 +6,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var logsCmd = &cobra.Command{
-	Use:   "logs",
-	Short: "Logs",
-	Args:  cobra.ExactArgs(1),
-	RunE: withCmdConfig(func(c *CmdConfig) error {
-		return checkLoginAndRun(c, Logs)
-	}),
+func createLogsCmd() *cobra.Command {
+	logsCmd := &cobra.Command{
+		Use:   "logs [project]",
+		Short: "Logs the output for a given project",
+		Args:  cobra.ExactArgs(1),
+		RunE: withCmdConfig(func(c *CmdConfig) error {
+			return checkLoginAndRun(c, Logs, struct{}{})
+		}),
+	}
+
+	return logsCmd
 }
 
-func Logs(c *CmdConfig) error {
+func Logs(c *CmdConfig, _ struct{}) error {
 	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
 	if err != nil {
 		return err
@@ -34,5 +38,5 @@ func Logs(c *CmdConfig) error {
 }
 
 func init() {
-	rootCmd.AddCommand(logsCmd)
+	rootCmd.AddCommand(createLogsCmd())
 }

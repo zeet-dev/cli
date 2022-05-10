@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -48,7 +49,6 @@ func init() {
 	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("ws-server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
-	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 }
 
 func initConfig() {
@@ -56,11 +56,17 @@ func initConfig() {
 	viper.AutomaticEnv()
 	viper.SetConfigType("yaml")
 
-	cfgFile := viper.GetString("config")
+	cfgFile, err := rootCmd.Flags().GetString("config")
+	cobra.CheckErr(err)
 	viper.SetConfigFile(cfgFile)
 
-	err := viper.ReadInConfig()
-	cobra.CheckErr(err)
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(*fs.PathError); ok {
+			// No problem, the config file will be created after login
+		} else {
+			cobra.CheckErr(err)
+		}
+	}
 
 	if viper.GetBool("debug") {
 		fmt.Println("Using " + viper.ConfigFileUsed())
