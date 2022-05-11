@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/hasura/go-graphql-client v0.4.0
 	github.com/jinzhu/copier v0.3.5
-	github.com/spf13/cobra v1.2.1
+	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.9.0
 	github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
@@ -19,6 +19,7 @@ require (
 	github.com/agnivade/levenshtein v1.1.0 // indirect
 	github.com/alexflint/go-arg v1.4.2 // indirect
 	github.com/alexflint/go-scalar v1.0.0 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/go-logr/logr v1.2.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -34,6 +35,7 @@ require (
 	github.com/motemen/go-nuts v0.0.0-20210915132349-615a782f2c69 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect

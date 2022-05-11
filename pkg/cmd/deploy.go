@@ -20,7 +20,7 @@ func createDeployCmd() *cobra.Command {
 	var opts = &deployOptions{}
 
 	deployCmd := &cobra.Command{
-		Use:   "deploy",
+		Use:   "deploy [project]",
 		Short: "Deploy a project",
 		Args:  cobra.ExactArgs(1),
 		RunE: withCmdConfig(func(c *CmdConfig) error {
