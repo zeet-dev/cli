@@ -34,7 +34,7 @@ func Login(c *CmdConfig) error {
 	if accessToken != "" {
 		if user, err := c.client.GetCurrentUser(c.ctx); err == nil {
 			fmt.Println("You are logged in as: " + user.Login)
-			fmt.Print("Login as another user? [y/N]: ")
+			fmt.Print("Login as a different user? [y/N]: ")
 
 			reader := bufio.NewReader(os.Stdin)
 			data, err := reader.ReadString('\n')
