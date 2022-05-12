@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 type Project struct {
@@ -25,7 +26,9 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 	return &Project{res.Project.Id}, nil
 }
 
-func (c *Client) GetProjectLogs(ctx context.Context, projectID uuid.UUID) ([]string, error) {
+func (c *Client) GetProjectLogs(ctx context.Context, projectID uuid.UUID) ([]LogEntry, error) {
+	var out []LogEntry
+
 	_ = `# @genqlient
 		query getProjectLogs($path: ID!) {
 		  currentUser {
@@ -33,6 +36,7 @@ func (c *Client) GetProjectLogs(ctx context.Context, projectID uuid.UUID) ([]str
 			  productionDeployment {
 				logs {
 				  text
+				  timestamp
 				}
 			  }
 			}
@@ -44,12 +48,8 @@ func (c *Client) GetProjectLogs(ctx context.Context, projectID uuid.UUID) ([]str
 		return nil, err
 	}
 
-	var logs []string
-	for _, log := range res.CurrentUser.Repo.ProductionDeployment.Logs {
-		logs = append(logs, log.Text)
-	}
-
-	return logs, nil
+	err = copier.Copy(&out, res.CurrentUser.Repo.ProductionDeployment.Logs)
+	return out, err
 }
 
 func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (string, error) {
