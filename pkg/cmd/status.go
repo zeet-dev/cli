@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
-	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -30,18 +30,7 @@ func Status(c *CmdConfig, _ struct{}) error {
 		return err
 	}
 
-	var statusMessage string
-
-	switch status.State {
-	case "deployed":
-		statusMessage = color.GreenString("HEALTHY")
-	case "health checking":
-		statusMessage = color.YellowString("HEALTH CHECKING")
-	default:
-		statusMessage = color.RedString("FAILED")
-	}
-
-	fmt.Printf("Status: %s\n", statusMessage)
+	fmt.Printf("Status: %s\n", strings.ToUpper(status.State))
 	fmt.Printf("Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
 	return nil
 }
