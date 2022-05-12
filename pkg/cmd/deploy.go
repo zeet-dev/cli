@@ -29,7 +29,7 @@ func createDeployCmd() *cobra.Command {
 	}
 
 	deployCmd.Flags().BoolVar(&opts.useCache, "use-cache", true, "Enable build cache")
-	deployCmd.Flags().StringVarP(&opts.branch, "branch", "b", "", "Deploy specific branch")
+	deployCmd.Flags().StringVarP(&opts.branch, "branch", "b", "", "Deploy specific branch (defaults to your configured production branch) ")
 	deployCmd.Flags().BoolVarP(&opts.restart, "restart", "r", false, "Rerun the latest deployment (this will override use-cache)")
 
 	return deployCmd
