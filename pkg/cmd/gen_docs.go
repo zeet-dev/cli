@@ -46,7 +46,7 @@ func GenDocs(dir string) error {
 
 func writeDocs(cmd *cobra.Command, dir string) error {
 	for _, c := range cmd.Commands() {
-		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() {
+		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() || c.Hidden {
 			continue
 		}
 		if err := writeDocs(c, dir); err != nil {
