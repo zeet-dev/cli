@@ -6,7 +6,7 @@
 
 
 ## Usage
-*For detailed docs, check out the [CLI Docs](https://zeet.co/cli/getting-started/)*
+*For detailed docs, check out the [CLI Docs](https://docs.zeet.co/cli/getting-started/)*
 
 ```
 Zeet CLI
