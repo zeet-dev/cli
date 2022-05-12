@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
@@ -16,9 +15,11 @@ type Deployment struct {
 	PrivateEndpoint string
 }
 
-type LogEntry struct {
-	Text      string
-	Timestamp time.Time
+type DeploymentReplicaStatus struct {
+	Replicas        int
+	ReadyReplicas   int
+	RunningReplicas int
+	State           string
 }
 
 func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch string, noCache bool) (*Deployment, error) {
@@ -174,5 +175,57 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 	}
 
 	err = copier.Copy(out, res.CurrentUser.Deployment)
+	return out, err
+}
+
+func (c *Client) GetDeploymentReplicaStatus(ctx context.Context, deploymentID uuid.UUID) (*DeploymentReplicaStatus, error) {
+	out := &DeploymentReplicaStatus{}
+
+	_ = `# @genqlient
+		query getDeploymentReplicaStatus($id: ID!) {
+		  currentUser {
+			deployment(id: $id) {
+			  deployStatus {
+				replicas
+				readyReplicas
+				runningReplicas
+				state
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getDeploymentReplicaStatus(ctx, c.GQL, deploymentID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = copier.Copy(out, res.CurrentUser.Deployment.DeployStatus)
+	return out, err
+}
+
+func (c *Client) GetProductionDeployment(ctx context.Context, path string) (*Deployment, error) {
+	out := &Deployment{}
+
+	_ = `# @genqlient
+		query getProductionDeployment($path: String!) {
+		  project(path: $path) {
+			repo {
+			  productionDeployment {
+				id
+				status
+				endpoints
+				privateEndpoint
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getProductionDeployment(ctx, c.GQL, path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = copier.Copy(out, res.Project.Repo.ProductionDeployment)
 	return out, err
 }
