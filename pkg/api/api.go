@@ -1,12 +1,14 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Khan/genqlient/graphql"
 	hgql "github.com/hasura/go-graphql-client"
 	"github.com/spf13/viper"
-	"github.com/zeet-dev/pkg/utils"
+	"github.com/zeet-dev/cli/pkg/utils"
+	zutils "github.com/zeet-dev/pkg/utils"
 	"k8s.io/client-go/transport"
 )
 
@@ -25,10 +27,11 @@ func New(host string, accessToken string) *Client {
 func newGraphQLClient(server, token string) graphql.Client {
 	tp := http.DefaultTransport
 	if viper.GetBool("debug") {
-		tp = utils.LoggingHttpTransport
+		tp = zutils.LoggingHttpTransport
 	}
+	tp = NewUserAgentTransport(fmt.Sprintf("zeet-cli/%s", utils.GetBuildVersion()), tp)
 
-	return graphql.NewClient(utils.URLJoin(server, "graphql"), &http.Client{
+	return graphql.NewClient(zutils.URLJoin(server, "graphql"), &http.Client{
 		Transport: transport.NewBearerAuthRoundTripper(token, tp),
 	})
 }
