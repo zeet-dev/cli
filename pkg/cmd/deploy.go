@@ -29,7 +29,6 @@ func createDeployCmd() *cobra.Command {
 
 	deployCmd.Flags().BoolVar(&opts.useCache, "use-cache", true, "Enable build cache")
 	deployCmd.Flags().StringVarP(&opts.branch, "branch", "b", "", "Deploy specific branch (defaults to your configured production branch) ")
-	deployCmd.Flags().BoolVarP(&opts.restart, "restart", "r", false, "Rerun the latest deployment (this will override use-cache)")
 
 	return deployCmd
 }
@@ -43,7 +42,7 @@ func Deploy(c *CmdConfig, opts *deployOptions) error {
 	// Build project
 	var deployment *api.Deployment
 
-	if c.cfg.GetBool("restart") {
+	if opts.restart {
 		// Get the branch to restart
 		branch := opts.branch
 		if branch == "" {
@@ -155,7 +154,7 @@ func printDeploymentSummary(c *CmdConfig, deployment *api.Deployment) {
 	fmt.Printf(color.GreenString("\n🚀 Deployed %s"), c.args[0])
 	fmt.Printf(color.GreenString("\n\nPublic Endpoints: \n%s"), utils.DisplayArray(deployment.Endpoints))
 	if deployment.PrivateEndpoint != "" {
-		fmt.Printf(color.GreenString("\nPrivate Endpoint: %s"), deployment.PrivateEndpoint)
+		fmt.Printf(color.GreenString("\nPrivate Endpoint: %s\n"), deployment.PrivateEndpoint)
 	}
 }
 
