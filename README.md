@@ -43,7 +43,7 @@ brew install zeet-dev/tap/zeet
 Download the latest release from the [Releases](https://github.com/zeet-dev/cli/releases) page.
 
 ### Authenticating
-Create an API key by going to [Dashboard](https://zeet.co/dashboard) >
+Create an API key by going to https://zeet.co/account/api, or to [Dashboard](https://zeet.co/dashboard) >
 Team Settings > API Keys > New API Key.
 
 Then, run `zeet login` and paste your key.
