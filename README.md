@@ -15,21 +15,20 @@ Usage:
   zeet [command]
 
 Available Commands:
-  completion  generate the autocompletion script for the specified shell
-  deploy      Deploy
+  completion  Generate the autocompletion script for the specified shell
+  deploy      Deploy a project
   help        Help about any command
   login       Login to Zeet
-  logs        View the logs for a project
+  logs        Logs the output for a given project
+  restart     Restart a project
+  status      Gets the status for a given project
 
 Flags:
-  -c, --config string      Config file (default "/Users/h/Library/Application Support/zeet/config.yaml")
-  -v, --debug              Enable verbose debug logging
-  -h, --help               help for zeet
-  -s, --server string      Zeet API Server (default "https://anchor.zeet.co")
-      --ws-server string   Zeet Websocket/Subscriptions Server (default "wss://anchor.zeet.co")
+  -c, --config string   Config file (default "/Users/h/Library/Application Support/zeet/config.yaml")
+  -v, --debug           Enable verbose debug logging
+  -h, --help            help for zeet
 
 Use "zeet [command] --help" for more information about a command.
-
 ```
 
 ## Installing
