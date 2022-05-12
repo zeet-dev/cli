@@ -34,11 +34,8 @@ hide_title: true
 `
 
 func GenDocs(dir string) error {
-	for _, cmd := range rootCmd.Commands() {
-		err := writeDocs(cmd, dir)
-		if err != nil {
-			return err
-		}
+	if err := writeDocs(rootCmd, dir); err != nil {
+		return err
 	}
 
 	return nil
@@ -46,6 +43,7 @@ func GenDocs(dir string) error {
 
 func writeDocs(cmd *cobra.Command, dir string) error {
 	for _, c := range cmd.Commands() {
+		fmt.Println(c.Name())
 		if !c.IsAvailableCommand() || c.IsAdditionalHelpTopicCommand() || c.Hidden {
 			continue
 		}
