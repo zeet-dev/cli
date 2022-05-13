@@ -25,8 +25,8 @@ func createLogsCmd() *cobra.Command {
 		}),
 	}
 
-	logsCmd.Flags().BoolVarP(&opts.live, "live", "l", false, "Continuously print new logs until exit")
-	logsCmd.Flags().StringVarP(&opts.deploymentID, "deployment", "d", "", "The ID of the deployment to get logs for")
+	logsCmd.Flags().BoolVarP(&opts.live, "follow", "f", false, "Follow log output")
+	logsCmd.Flags().StringVarP(&opts.deploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
 
 	return logsCmd
 }
@@ -50,7 +50,7 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 
 	if opts.live && opts.deploymentID == "" {
 		getStatus := func() (api.DeploymentStatus, error) {
-			deployment, err := c.client.GetDeployment(c.ctx, uuid.MustParse(opts.deploymentID))
+			deployment, err := c.client.GetProductionDeployment(c.ctx, c.args[0])
 			if err != nil {
 				return deployment.Status, err
 			}
@@ -60,7 +60,7 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 			return err
 		}
 	} else {
-		logs, err := c.client.GetProjectLogs(c.ctx, project.ID)
+		logs, err := c.client.GetDeploymentLogs(c.ctx, uuid.MustParse(opts.deploymentID))
 		if err != nil {
 			return err
 		}

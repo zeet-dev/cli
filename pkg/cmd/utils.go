@@ -37,6 +37,11 @@ func printLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus f
 			return nil
 		}
 
+		// TODO
+		if len(logs) < lastLog {
+			return nil
+		}
+
 		// Sometimes the backend returns an empty log which will then be replaced (same index) the next request...
 		logs = utils.SliceFilter(logs, func(l api.LogEntry) bool {
 			return l.Text != ""

@@ -132,14 +132,10 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		query getDeploymentLogs($id: ID!) {
 		  currentUser {
 			deployment(id: $id) {
-				deployStep {
-					logs {
-						entries {
-							text
-							timestamp
-						}
-					}
-				}
+			  logs {
+				text
+				timestamp
+			  }
 			}
 		  }
 		}
@@ -150,7 +146,7 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		return
 	}
 
-	err = copier.Copy(&out, res.CurrentUser.Deployment.DeployStep.Logs.Entries)
+	err = copier.Copy(&out, res.CurrentUser.Deployment.Logs)
 	return
 }
 
