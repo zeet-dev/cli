@@ -48,7 +48,7 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 		}
 	}
 
-	if opts.live && opts.deploymentID == "" {
+	if opts.deploymentID == "" {
 		getStatus := func() (api.DeploymentStatus, error) {
 			deployment, err := c.client.GetProductionDeployment(c.ctx, c.args[0])
 			if err != nil {
@@ -56,7 +56,8 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 			}
 			return deployment.Status, nil
 		}
-		if err := printLogs(logsGetter, getStatus); err != nil {
+		// TODO improve?
+		if err := printOrPollLogs(logsGetter, getStatus, opts.live); err != nil {
 			return err
 		}
 	} else {

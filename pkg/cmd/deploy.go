@@ -125,7 +125,7 @@ func printBuildLogs(c *CmdConfig, deployment *api.Deployment) error {
 		}
 		return deployment.Status, nil
 	}
-	if err := printLogs(getLogs, getStatus); err != nil {
+	if err := pollLogs(getLogs, getStatus); err != nil {
 		return err
 	}
 
@@ -143,7 +143,7 @@ func printDeploymentLogs(c *CmdConfig, deployment *api.Deployment) error {
 		}
 		return deployment.Status, nil
 	}
-	if err := printLogs(getLogs, getStatus); err != nil {
+	if err := pollLogs(getLogs, getStatus); err != nil {
 		return err
 	}
 
