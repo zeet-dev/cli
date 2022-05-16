@@ -42,7 +42,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configHome(), defaultConfigName), "Config file")
-	rootCmd.PersistentFlags().StringP("server", "s", "https://anchor.zeet.co", "Zeet API Server")
+	rootCmd.PersistentFlags().String("server", "https://anchor.zeet.co", "Zeet API Server")
 	rootCmd.PersistentFlags().String("ws-server", "wss://anchor.zeet.co", "Zeet Websocket/Subscriptions Server")
 	rootCmd.PersistentFlags().BoolP("debug", "v", false, "Enable verbose debug logging")
 
