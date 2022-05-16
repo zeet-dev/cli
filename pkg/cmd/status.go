@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,19 @@ func Status(c *CmdConfig, _ struct{}) error {
 		return err
 	}
 
-	fmt.Printf("Status: %s\n", strings.ToUpper(status.State))
+	var statusMessage string
+	switch status.State {
+	case "deploy failed":
+		statusMessage = color.RedString("DEPLOY FAILED")
+	case "build failed":
+		statusMessage = color.RedString("BUILD FAILED")
+	case "deployed":
+		statusMessage = color.GreenString("DEPLOYED")
+	default:
+		statusMessage = strings.ToUpper(status.State)
+	}
+
+	fmt.Printf("Status: %s\n", statusMessage)
 	fmt.Printf("Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
 	return nil
 }
