@@ -132,6 +132,32 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		query getDeploymentLogs($id: ID!) {
 		  currentUser {
 			deployment(id: $id) {
+			  deployStep {
+				logs {
+				  entries {
+					text
+					timestamp
+				  }
+				}
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getDeploymentLogs(ctx, c.GQL, deployID)
+	if err != nil {
+		return
+	}
+
+	err = copier.Copy(&out, res.CurrentUser.Deployment.DeployStep.Logs.Entries)
+	return
+}
+
+func (c *Client) GetRuntimeLogs(ctx context.Context, deployID uuid.UUID) (out []LogEntry, err error) {
+	_ = `# @genqlient
+		query getRuntimeLogs($id: ID!) {
+		  currentUser {
+			deployment(id: $id) {
 			  logs {
 				text
 				timestamp
@@ -140,8 +166,7 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		  }
 		}
 	`
-
-	res, err := getDeploymentLogs(ctx, c.GQL, deployID)
+	res, err := getRuntimeLogs(ctx, c.GQL, deployID)
 	if err != nil {
 		return
 	}

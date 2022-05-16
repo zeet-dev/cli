@@ -124,13 +124,13 @@ type __getProjectByPathInput struct {
 // GetPath returns __getProjectByPathInput.Path, and is useful for accessing the field via an interface.
 func (v *__getProjectByPathInput) GetPath() string { return v.Path }
 
-// __getProjectLogsInput is used internally by genqlient
-type __getProjectLogsInput struct {
-	Path uuid.UUID `json:"path"`
+// __getRuntimeLogsInput is used internally by genqlient
+type __getRuntimeLogsInput struct {
+	Id uuid.UUID `json:"id"`
 }
 
-// GetPath returns __getProjectLogsInput.Path, and is useful for accessing the field via an interface.
-func (v *__getProjectLogsInput) GetPath() uuid.UUID { return v.Path }
+// GetId returns __getRuntimeLogsInput.Id, and is useful for accessing the field via an interface.
+func (v *__getRuntimeLogsInput) GetId() uuid.UUID { return v.Id }
 
 // buildRepoBuildRepo includes the requested fields of the GraphQL type Repo.
 type buildRepoBuildRepo struct {
@@ -414,25 +414,47 @@ func (v *getDeploymentLogsCurrentUser) GetDeployment() getDeploymentLogsCurrentU
 
 // getDeploymentLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
 type getDeploymentLogsCurrentUserDeployment struct {
-	Logs []getDeploymentLogsCurrentUserDeploymentLogsLogEntry `json:"logs"`
+	DeployStep getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep `json:"deployStep"`
 }
 
-// GetLogs returns getDeploymentLogsCurrentUserDeployment.Logs, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeployment) GetLogs() []getDeploymentLogsCurrentUserDeploymentLogsLogEntry {
+// GetDeployStep returns getDeploymentLogsCurrentUserDeployment.DeployStep, and is useful for accessing the field via an interface.
+func (v *getDeploymentLogsCurrentUserDeployment) GetDeployStep() getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep {
+	return v.DeployStep
+}
+
+// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep includes the requested fields of the GraphQL type PipelineStep.
+type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep struct {
+	Logs getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs `json:"logs"`
+}
+
+// GetLogs returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep.Logs, and is useful for accessing the field via an interface.
+func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep) GetLogs() getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs {
 	return v.Logs
 }
 
-// getDeploymentLogsCurrentUserDeploymentLogsLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getDeploymentLogsCurrentUserDeploymentLogsLogEntry struct {
+// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs includes the requested fields of the GraphQL type Logs.
+type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs struct {
+	Entries []getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry `json:"entries"`
+}
+
+// GetEntries returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs.Entries, and is useful for accessing the field via an interface.
+func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs) GetEntries() []getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry {
+	return v.Entries
+}
+
+// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry struct {
 	Text      string    `json:"text"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
-// GetText returns getDeploymentLogsCurrentUserDeploymentLogsLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentLogsLogEntry) GetText() string { return v.Text }
+// GetText returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetText() string {
+	return v.Text
+}
 
-// GetTimestamp returns getDeploymentLogsCurrentUserDeploymentLogsLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentLogsLogEntry) GetTimestamp() time.Time {
+// GetTimestamp returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetTimestamp() time.Time {
 	return v.Timestamp
 }
 
@@ -616,57 +638,47 @@ type getProjectByPathResponse struct {
 // GetProject returns getProjectByPathResponse.Project, and is useful for accessing the field via an interface.
 func (v *getProjectByPathResponse) GetProject() getProjectByPathProject { return v.Project }
 
-// getProjectLogsCurrentUser includes the requested fields of the GraphQL type User.
-type getProjectLogsCurrentUser struct {
-	Repo getProjectLogsCurrentUserRepo `json:"repo"`
+// getRuntimeLogsCurrentUser includes the requested fields of the GraphQL type User.
+type getRuntimeLogsCurrentUser struct {
+	Deployment getRuntimeLogsCurrentUserDeployment `json:"deployment"`
 }
 
-// GetRepo returns getProjectLogsCurrentUser.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectLogsCurrentUser) GetRepo() getProjectLogsCurrentUserRepo { return v.Repo }
-
-// getProjectLogsCurrentUserRepo includes the requested fields of the GraphQL type Repo.
-type getProjectLogsCurrentUserRepo struct {
-	ProductionDeployment getProjectLogsCurrentUserRepoProductionDeployment `json:"productionDeployment"`
+// GetDeployment returns getRuntimeLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *getRuntimeLogsCurrentUser) GetDeployment() getRuntimeLogsCurrentUserDeployment {
+	return v.Deployment
 }
 
-// GetProductionDeployment returns getProjectLogsCurrentUserRepo.ProductionDeployment, and is useful for accessing the field via an interface.
-func (v *getProjectLogsCurrentUserRepo) GetProductionDeployment() getProjectLogsCurrentUserRepoProductionDeployment {
-	return v.ProductionDeployment
+// getRuntimeLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type getRuntimeLogsCurrentUserDeployment struct {
+	Logs []getRuntimeLogsCurrentUserDeploymentLogsLogEntry `json:"logs"`
 }
 
-// getProjectLogsCurrentUserRepoProductionDeployment includes the requested fields of the GraphQL type Deployment.
-type getProjectLogsCurrentUserRepoProductionDeployment struct {
-	Logs []getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry `json:"logs"`
-}
-
-// GetLogs returns getProjectLogsCurrentUserRepoProductionDeployment.Logs, and is useful for accessing the field via an interface.
-func (v *getProjectLogsCurrentUserRepoProductionDeployment) GetLogs() []getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry {
+// GetLogs returns getRuntimeLogsCurrentUserDeployment.Logs, and is useful for accessing the field via an interface.
+func (v *getRuntimeLogsCurrentUserDeployment) GetLogs() []getRuntimeLogsCurrentUserDeploymentLogsLogEntry {
 	return v.Logs
 }
 
-// getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry struct {
+// getRuntimeLogsCurrentUserDeploymentLogsLogEntry includes the requested fields of the GraphQL type LogEntry.
+type getRuntimeLogsCurrentUserDeploymentLogsLogEntry struct {
 	Text      string    `json:"text"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
-// GetText returns getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry) GetText() string {
-	return v.Text
-}
+// GetText returns getRuntimeLogsCurrentUserDeploymentLogsLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *getRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetText() string { return v.Text }
 
-// GetTimestamp returns getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getProjectLogsCurrentUserRepoProductionDeploymentLogsLogEntry) GetTimestamp() time.Time {
+// GetTimestamp returns getRuntimeLogsCurrentUserDeploymentLogsLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *getRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetTimestamp() time.Time {
 	return v.Timestamp
 }
 
-// getProjectLogsResponse is returned by getProjectLogs on success.
-type getProjectLogsResponse struct {
-	CurrentUser getProjectLogsCurrentUser `json:"currentUser"`
+// getRuntimeLogsResponse is returned by getRuntimeLogs on success.
+type getRuntimeLogsResponse struct {
+	CurrentUser getRuntimeLogsCurrentUser `json:"currentUser"`
 }
 
-// GetCurrentUser returns getProjectLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getProjectLogsResponse) GetCurrentUser() getProjectLogsCurrentUser { return v.CurrentUser }
+// GetCurrentUser returns getRuntimeLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *getRuntimeLogsResponse) GetCurrentUser() getRuntimeLogsCurrentUser { return v.CurrentUser }
 
 func buildRepo(
 	ctx context.Context,
@@ -885,9 +897,13 @@ func getDeploymentLogs(
 query getDeploymentLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
-			logs {
-				text
-				timestamp
+			deployStep {
+				logs {
+					entries {
+						text
+						timestamp
+					}
+				}
 			}
 		}
 	}
@@ -1026,29 +1042,27 @@ query getProjectByPath ($path: String) {
 	return &retval, err
 }
 
-func getProjectLogs(
+func getRuntimeLogs(
 	ctx context.Context,
 	client graphql.Client,
-	path uuid.UUID,
-) (*getProjectLogsResponse, error) {
-	__input := __getProjectLogsInput{
-		Path: path,
+	id uuid.UUID,
+) (*getRuntimeLogsResponse, error) {
+	__input := __getRuntimeLogsInput{
+		Id: id,
 	}
 	var err error
 
-	var retval getProjectLogsResponse
+	var retval getRuntimeLogsResponse
 	err = client.MakeRequest(
 		ctx,
-		"getProjectLogs",
+		"getRuntimeLogs",
 		`
-query getProjectLogs ($path: ID!) {
+query getRuntimeLogs ($id: ID!) {
 	currentUser {
-		repo(id: $path) {
-			productionDeployment {
-				logs {
-					text
-					timestamp
-				}
+		deployment(id: $id) {
+			logs {
+				text
+				timestamp
 			}
 		}
 	}
