@@ -11,6 +11,7 @@ import (
 type logsOptions struct {
 	live         bool
 	deploymentID string
+	stage        string
 }
 
 func createLogsCmd() *cobra.Command {
@@ -27,28 +28,31 @@ func createLogsCmd() *cobra.Command {
 
 	logsCmd.Flags().BoolVarP(&opts.live, "follow", "f", false, "Follow log output")
 	logsCmd.Flags().StringVarP(&opts.deploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
+	logsCmd.Flags().StringVar(&opts.stage, "stage", "runtime", "TODO")
 
 	return logsCmd
 }
 
 func Logs(c *CmdConfig, opts *logsOptions) error {
-	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
+	var deployment *api.Deployment
+	var err error
+
+	// Get deployment
+	if opts.deploymentID == "" {
+		deployment, err = c.client.GetProductionDeployment(c.ctx, c.args[0])
+	} else {
+		deployment, err = c.client.GetDeployment(c.ctx, uuid.MustParse(opts.deploymentID))
+	}
 	if err != nil {
 		return err
 	}
 
-	var logsGetter func() ([]api.LogEntry, error)
-	if opts.deploymentID == "" {
-		logsGetter = func() ([]api.LogEntry, error) {
-			return c.client.GetProjectLogs(c.ctx, project.ID)
-		}
-	} else {
-		logsGetter = func() ([]api.LogEntry, error) {
-			return c.client.GetDeploymentLogs(c.ctx, uuid.MustParse(opts.deploymentID))
-		}
+	validStage, logsGetter := logStageToGetter(c, opts.stage, deployment.ID)
+	if !validStage {
+		return fmt.Errorf("invalid stage name. it must be either \"build\", \"deployment\" or \"runtime\" ")
 	}
 
-	if opts.deploymentID == "" {
+	if opts.live {
 		getStatus := func() (api.DeploymentStatus, error) {
 			deployment, err := c.client.GetProductionDeployment(c.ctx, c.args[0])
 			if err != nil {
@@ -56,12 +60,11 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 			}
 			return deployment.Status, nil
 		}
-		// TODO improve?
-		if err := printOrPollLogs(logsGetter, getStatus, opts.live); err != nil {
+		if err := pollLogs(logsGetter, getStatus); err != nil {
 			return err
 		}
 	} else {
-		logs, err := c.client.GetDeploymentLogs(c.ctx, uuid.MustParse(opts.deploymentID))
+		logs, err := logsGetter()
 		if err != nil {
 			return err
 		}
@@ -71,6 +74,30 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 	}
 
 	return nil
+}
+
+func logStageToGetter(c *CmdConfig, stage string, deploymentID uuid.UUID) (valid bool, getter func() ([]api.LogEntry, error)) {
+	if stage == "runtime" {
+		return true, func() ([]api.LogEntry, error) {
+			return c.client.GetRuntimeLogs(c.ctx, deploymentID)
+		}
+	}
+
+	if stage == "build" {
+		return true, func() ([]api.LogEntry, error) {
+			return c.client.GetBuildLogs(c.ctx, deploymentID)
+		}
+	}
+
+	if stage == "deployment" {
+		return true, func() ([]api.LogEntry, error) {
+			return c.client.GetDeploymentLogs(c.ctx, deploymentID)
+		}
+	}
+
+	return false, func() ([]api.LogEntry, error) {
+		return nil, nil
+	}
 }
 
 func init() {

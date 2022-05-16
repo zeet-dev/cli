@@ -8,24 +8,6 @@ import (
 	"github.com/zeet-dev/cli/pkg/utils"
 )
 
-func printOrPollLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus func() (S, error), poll bool) error {
-	if poll {
-		if err := pollLogs(getLogs, getStatus); err != nil {
-			return err
-		}
-	} else {
-		logs, err := getLogs()
-		if err != nil {
-			return err
-		}
-		for _, log := range logs {
-			fmt.Println(log.Text)
-		}
-	}
-
-	return nil
-}
-
 // pollLogs continuously prints the output of getLogs, and stops when the output of getStatus changes
 func pollLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus func() (S, error)) (err error) {
 	lastLog := 0
