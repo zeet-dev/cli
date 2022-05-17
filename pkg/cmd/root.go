@@ -12,34 +12,36 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/zeet-dev/cli/pkg/utils"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
 )
 
 var defaultConfigName = "config.yaml"
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:          "zeet",
-	Short:        "Zeet CLI",
-	SilenceUsage: true,
-}
-
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-	rootCmd.SetErr(&utils.ErrorWriter{})
-
-	if err := rootCmd.Execute(); err != nil {
-		os.Exit(1)
+// NewRootCmd creates a cobra.Command and adds subcommands to it
+// It's called by main.go and passed a cmdutil.Factory
+func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
+	rootCmd := &cobra.Command{
+		Use:          "zeet",
+		Short:        "Zeet CLI",
+		SilenceUsage: true,
 	}
-}
 
-func init() {
+	// Commands
+	rootCmd.AddCommand(NewLoginCmd(f))
+	rootCmd.AddCommand(NewLogsCmd(f))
+	rootCmd.AddCommand(NewDeployCmd(f))
+	rootCmd.AddCommand(NewRestartCmd(f))
+	rootCmd.AddCommand(NewStatusCmd(f))
+
+	rootCmd.AddCommand(NewGenDocsCmd())
+
+	// Set inputs/outputs
+	rootCmd.SetErr(f.IOStreams.ErrOut)
+	rootCmd.SetIn(f.IOStreams.In)
+	rootCmd.SetOut(f.IOStreams.Out)
+
+	// Config & flags
 	cobra.OnInitialize(initConfig)
-
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configHome(), defaultConfigName), "Config file")
 	rootCmd.PersistentFlags().String("server", "https://anchor.zeet.co", "Zeet API Server")
@@ -49,9 +51,12 @@ func init() {
 	rootCmd.PersistentFlags().MarkHidden("server")
 	rootCmd.PersistentFlags().MarkHidden("ws-server")
 
+	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("ws-server", rootCmd.PersistentFlags().Lookup("server"))
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
+
+	return rootCmd
 }
 
 func initConfig() {
@@ -59,8 +64,7 @@ func initConfig() {
 	viper.AutomaticEnv()
 	viper.SetConfigType("yaml")
 
-	cfgFile, err := rootCmd.Flags().GetString("config")
-	cobra.CheckErr(err)
+	cfgFile := viper.GetString("config")
 	viper.SetConfigFile(cfgFile)
 
 	if err := viper.ReadInConfig(); err != nil {

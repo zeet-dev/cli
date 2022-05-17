@@ -10,21 +10,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func createGenDocsCmd() *cobra.Command {
+func NewGenDocsCmd() *cobra.Command {
 	var dir string
 
-	genDocsCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:    "gen-docs",
 		Hidden: true,
 		Short:  "Generates Markdown docs",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return GenDocs(dir)
+			return runGenDocs(dir, cmd.Parent())
 		},
 	}
 
-	genDocsCmd.Flags().StringVarP(&dir, "dir", "d", "./docs", "The directory to place the markdown docs in")
+	cmd.Flags().StringVarP(&dir, "dir", "d", "./docs", "The directory to place the markdown docs in")
 
-	return genDocsCmd
+	return cmd
 }
 
 const fmTemplate = `---
@@ -33,7 +33,7 @@ hide_title: true
 ---
 `
 
-func GenDocs(dir string) error {
+func runGenDocs(dir string, rootCmd *cobra.Command) error {
 	if err := writeDocs(rootCmd, dir); err != nil {
 		return err
 	}
@@ -121,8 +121,4 @@ func printOptions(buf *bytes.Buffer, cmd *cobra.Command, name string) error {
 		buf.WriteString("```\n\n")
 	}
 	return nil
-}
-
-func init() {
-	rootCmd.AddCommand(createGenDocsCmd())
 }

@@ -2,11 +2,10 @@ package config
 
 import (
 	"github.com/spf13/viper"
-	"github.com/zeet-dev/cli/pkg/api"
 )
 
 // Ensure type implements interface
-var _ Provider = &Live{}
+var _ Config = &Live{}
 
 // Live provides a viper-backed config for commands
 type Live struct{}
@@ -23,11 +22,11 @@ func (c *Live) GetBool(key string) bool {
 	return viper.GetBool(key)
 }
 
-func (c *Live) GetAPIClient(host, accessToken string) *api.Client {
-	return api.New(host, accessToken)
-}
-
 func (c *Live) Set(key string, val interface{}) error {
 	viper.Set(key, val)
 	return nil
+}
+
+func (c *Live) WriteConfig() error {
+	return viper.WriteConfig()
 }

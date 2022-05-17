@@ -1,66 +1,84 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
+	"github.com/zeet-dev/cli/internal/config"
 	"github.com/zeet-dev/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/iostreams"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
-type logsOptions struct {
-	live         bool
-	deploymentID string
-	stage        string
+type LogsOptions struct {
+	IO        *iostreams.IOStreams
+	Config    func() (config.Config, error)
+	ApiClient func() (*api.Client, error)
+
+	Live         bool
+	DeploymentID string
+	Stage        string
+	Project      string
 }
 
-func createLogsCmd() *cobra.Command {
-	var opts = &logsOptions{}
+func NewLogsCmd(f *cmdutil.Factory) *cobra.Command {
+	var opts = &LogsOptions{}
+	opts.IO = f.IOStreams
+	opts.Config = f.Config
+	opts.ApiClient = f.ApiClient
 
-	logsCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "logs [project]",
 		Short: "Logs the output for a given project",
 		Args:  cobra.ExactArgs(1),
-		RunE: withCmdConfig(func(c *CmdConfig) error {
-			return checkLoginAndRun(c, Logs, opts)
-		}),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			opts.Project = args[0]
+
+			return runLogs(opts)
+		},
 	}
 
-	logsCmd.Flags().BoolVarP(&opts.live, "follow", "f", false, "Follow log output")
-	logsCmd.Flags().StringVarP(&opts.deploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
-	logsCmd.Flags().StringVar(&opts.stage, "stage", "runtime", "TODO")
+	cmd.Flags().BoolVarP(&opts.Live, "follow", "f", false, "Follow log output")
+	cmd.Flags().StringVarP(&opts.DeploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
+	cmd.Flags().StringVar(&opts.Stage, "stage", "runtime", "TODO")
 
-	return logsCmd
+	return cmd
 }
 
-func Logs(c *CmdConfig, opts *logsOptions) error {
-	var deployment *api.Deployment
-	var err error
+func runLogs(opts *LogsOptions) error {
+	client, err := opts.ApiClient()
+	if err != nil {
+		return err
+	}
 
 	// Get deployment
-	if opts.deploymentID == "" {
-		deployment, err = c.client.GetProductionDeployment(c.ctx, c.args[0])
+	var deployment *api.Deployment
+	if opts.DeploymentID == "" {
+		deployment, err = client.GetProductionDeployment(context.Background(), opts.Project)
 	} else {
-		deployment, err = c.client.GetDeployment(c.ctx, uuid.MustParse(opts.deploymentID))
+		deployment, err = client.GetDeployment(context.Background(), uuid.MustParse(opts.DeploymentID))
 	}
 	if err != nil {
 		return err
 	}
 
-	validStage, logsGetter := logStageToGetter(c, opts.stage, deployment.ID)
+	validStage, logsGetter := logStageToGetter(client, opts.Stage, deployment.ID)
 	if !validStage {
 		return fmt.Errorf("invalid stage name. it must be either \"build\", \"deployment\" or \"runtime\" ")
 	}
 
-	if opts.live {
+	if opts.Live {
 		getStatus := func() (api.DeploymentStatus, error) {
-			deployment, err := c.client.GetProductionDeployment(c.ctx, c.args[0])
+			deployment, err := client.GetProductionDeployment(context.Background(), opts.Project)
 			if err != nil {
 				return deployment.Status, err
 			}
 			return deployment.Status, nil
 		}
-		if err := pollLogs(logsGetter, getStatus); err != nil {
+		if err := utils.PollLogs(logsGetter, getStatus, opts.IO.Out); err != nil {
 			return err
 		}
 	} else {
@@ -69,37 +87,33 @@ func Logs(c *CmdConfig, opts *logsOptions) error {
 			return err
 		}
 		for _, log := range logs {
-			fmt.Println(log.Text)
+			fmt.Fprintln(opts.IO.Out, log.Text)
 		}
 	}
 
 	return nil
 }
 
-func logStageToGetter(c *CmdConfig, stage string, deploymentID uuid.UUID) (valid bool, getter func() ([]api.LogEntry, error)) {
+func logStageToGetter(client *api.Client, stage string, deploymentID uuid.UUID) (valid bool, getter func() ([]api.LogEntry, error)) {
 	if stage == "runtime" {
 		return true, func() ([]api.LogEntry, error) {
-			return c.client.GetRuntimeLogs(c.ctx, deploymentID)
+			return client.GetRuntimeLogs(context.Background(), deploymentID)
 		}
 	}
 
 	if stage == "build" {
 		return true, func() ([]api.LogEntry, error) {
-			return c.client.GetBuildLogs(c.ctx, deploymentID)
+			return client.GetBuildLogs(context.Background(), deploymentID)
 		}
 	}
 
 	if stage == "deployment" {
 		return true, func() ([]api.LogEntry, error) {
-			return c.client.GetDeploymentLogs(c.ctx, deploymentID)
+			return client.GetDeploymentLogs(context.Background(), deploymentID)
 		}
 	}
 
 	return false, func() ([]api.LogEntry, error) {
 		return nil, nil
 	}
-}
-
-func init() {
-	rootCmd.AddCommand(createLogsCmd())
 }

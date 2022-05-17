@@ -6,6 +6,7 @@ package cmd
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -13,28 +14,52 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/zeet-dev/cli/internal/config"
 	"github.com/zeet-dev/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/iostreams"
 	"golang.org/x/term"
 )
 
-// loginCmd represents the login command
-var loginCmd = &cobra.Command{
-	Use:   "login",
-	Short: "Login to Zeet",
-	RunE: withCmdConfig(func(c *CmdConfig) error {
-		c.cmd.SilenceUsage = true
-
-		return Login(c)
-	}),
+type LoginOptions struct {
+	IO        *iostreams.IOStreams
+	ApiClient func() (*api.Client, error)
+	Config    func() (config.Config, error)
 }
 
-func Login(c *CmdConfig) error {
-	accessToken := c.cfg.GetString("auth.access_token")
+func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
+	opts := &LoginOptions{}
+	opts.IO = f.IOStreams
+	opts.Config = f.Config
+	opts.ApiClient = f.ApiClient
+
+	cmd := &cobra.Command{
+		Use:   "login",
+		Short: "Login to Zeet",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return runLogin(opts)
+		},
+	}
+
+	return cmd
+}
+
+func runLogin(opts *LoginOptions) error {
+	cfg, err := opts.Config()
+	if err != nil {
+		return err
+	}
+	apiClient, err := opts.ApiClient()
+	if err != nil {
+		return err
+	}
+
+	accessToken := cfg.GetString("auth.access_token")
 
 	if accessToken != "" {
-		if user, err := c.client.GetCurrentUser(c.ctx); err == nil {
-			fmt.Println("You are logged in as: " + user.Login)
-			fmt.Print("Login as a different user? [y/N]: ")
+		if user, err := apiClient.GetCurrentUser(context.Background()); err == nil {
+			fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
+			fmt.Fprintf(opts.IO.Out, "Login as a different user? [y/N]: ")
 
 			reader := bufio.NewReader(os.Stdin)
 			data, err := reader.ReadString('\n')
@@ -49,42 +74,35 @@ func Login(c *CmdConfig) error {
 		}
 	}
 
-	fmt.Print("Enter Zeet API token (input hidden): ")
+	fmt.Fprint(opts.IO.Out, "Enter Zeet API token (input hidden): ")
 	newToken, err := term.ReadPassword(int(syscall.Stdin))
 	if err != nil {
 		return err
 	}
-	fmt.Println()
+	fmt.Fprintln(opts.IO.Out)
 
-	if err := c.cfg.Set("auth.access_token", strings.TrimSpace(string(newToken))); err != nil {
+	if err := cfg.Set("auth.access_token", strings.TrimSpace(string(newToken))); err != nil {
 		return err
 	}
-	// We'll need to recreate the client so that it uses the updated access token
-	c.client = api.New(c.cfg.GetString("server"), c.cfg.GetString("auth.access_token"))
+	if err := cfg.WriteConfig(); err != nil {
+		return err
+	}
 
-	user, err := c.client.GetCurrentUser(c.ctx)
+	// Refresh api client to use updated access token
+	apiClient, err = opts.ApiClient()
 	if err != nil {
 		return err
 	}
-	fmt.Println("You are logged in as: " + user.Login)
+
+	user, err := apiClient.GetCurrentUser(context.Background())
+	if err != nil {
+		return err
+	}
+	fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
 
 	if err := viper.WriteConfig(); err != nil {
 		return err
 	}
 
 	return nil
-}
-
-// checkLoginAndRun runs runner if the user is logged in, and returns an error if not
-func checkLoginAndRun[O any](c *CmdConfig, runner func(c *CmdConfig, opts O) error, opts O) error {
-	accessToken := c.cfg.GetString("auth.access_token")
-	if accessToken == "" {
-		return fmt.Errorf("not logged in (hint: run 'zeet login')")
-	} else {
-		return runner(c, opts)
-	}
-}
-
-func init() {
-	rootCmd.AddCommand(loginCmd)
 }

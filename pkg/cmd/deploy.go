@@ -1,40 +1,57 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"io"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/zeet-dev/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/iostreams"
 	"github.com/zeet-dev/cli/pkg/utils"
 )
 
-type deployOptions struct {
-	branch   string
-	useCache bool
-	restart  bool
+type DeployOptions struct {
+	IO        *iostreams.IOStreams
+	ApiClient func() (*api.Client, error)
+
+	Branch   string
+	Project  string
+	UseCache bool
+	Restart  bool
 }
 
-func createDeployCmd() *cobra.Command {
-	var opts = &deployOptions{}
+func NewDeployCmd(f *cmdutil.Factory) *cobra.Command {
+	var opts = &DeployOptions{}
+	opts.IO = f.IOStreams
+	opts.ApiClient = f.ApiClient
 
 	deployCmd := &cobra.Command{
 		Use:   "deploy [project]",
 		Short: "Deploy a project",
 		Args:  cobra.ExactArgs(1),
-		RunE: withCmdConfig(func(c *CmdConfig) error {
-			return checkLoginAndRun(c, Deploy, opts)
-		}),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			opts.Project = args[0]
+
+			return runDeploy(opts)
+		},
 	}
 
-	deployCmd.Flags().BoolVar(&opts.useCache, "use-cache", true, "Enable build cache")
-	deployCmd.Flags().StringVarP(&opts.branch, "branch", "b", "", "Deploy specific branch (defaults to your configured production branch) ")
+	deployCmd.Flags().BoolVar(&opts.UseCache, "use-cache", true, "Enable build cache")
+	deployCmd.Flags().StringVarP(&opts.Branch, "branch", "b", "", "Deploy specific Branch (defaults to your configured production Branch) ")
 
 	return deployCmd
 }
 
-func Deploy(c *CmdConfig, opts *deployOptions) error {
-	project, err := c.client.GetProjectByPath(c.ctx, c.args[0])
+func runDeploy(opts *DeployOptions) error {
+	client, err := opts.ApiClient()
+	if err != nil {
+		return err
+	}
+
+	project, err := client.GetProjectByPath(context.Background(), opts.Project)
 	if err != nil {
 		return err
 	}
@@ -42,22 +59,22 @@ func Deploy(c *CmdConfig, opts *deployOptions) error {
 	// Build project
 	var deployment *api.Deployment
 
-	if opts.restart {
-		// Get the branch to restart
-		branch := opts.branch
+	if opts.Restart {
+		// Get the branch to Restart
+		branch := opts.Branch
 		if branch == "" {
-			branch, err = c.client.GetProductionBranch(c.ctx, project.ID)
+			branch, err = client.GetProductionBranch(context.Background(), project.ID)
 			if err != nil {
 				return err
 			}
 		}
 
-		deployment, err = c.client.DeployProjectBranch(c.ctx, project.ID, branch, opts.useCache)
+		deployment, err = client.DeployProjectBranch(context.Background(), project.ID, branch, opts.UseCache)
 		if err != nil {
 			return err
 		}
 	} else {
-		deployment, err = c.client.BuildProject(c.ctx, project.ID, opts.branch, opts.useCache)
+		deployment, err = client.BuildProject(context.Background(), project.ID, opts.Branch, opts.UseCache)
 		if err != nil {
 			return err
 		}
@@ -65,7 +82,7 @@ func Deploy(c *CmdConfig, opts *deployOptions) error {
 
 	deploymentFinished := false
 	for !deploymentFinished {
-		deployment, err = c.client.GetDeployment(c.ctx, deployment.ID)
+		deployment, err = client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
 			return err
 		}
@@ -73,39 +90,39 @@ func Deploy(c *CmdConfig, opts *deployOptions) error {
 		switch deployment.Status {
 		// Build
 		case api.DeploymentStatusBuildInProgress:
-			fmt.Printf("⛏ Building %s...\n", c.args[0])
-			if err := printBuildLogs(c, deployment); err != nil {
+			fmt.Fprintf(opts.IO.Out, "⛏ Building %s...\n", opts.Project)
+			if err := printBuildLogs(client, deployment, opts.IO.Out); err != nil {
 				return err
 			}
 			break
 		case api.DeploymentStatusBuildSucceeded:
-			fmt.Println(color.GreenString("⛏ Build complete\n"))
+			fmt.Fprintf(opts.IO.Out, color.GreenString("⛏ Build complete\n"))
 			break
 		case api.DeploymentStatusBuildFailed:
-			fmt.Println(color.RedString("Build failed\n"))
+			fmt.Fprintf(opts.IO.Out, color.RedString("Build failed\n"))
 			deploymentFinished = true
 			break
 		case api.DeploymentStatusBuildAborted:
-			fmt.Println(color.RedString("Build aborted\n"))
+			fmt.Fprintf(opts.IO.Out, color.RedString("Build aborted\n"))
 			deploymentFinished = true
 			break
 		case api.DeploymentStatusDeployStopped:
-			fmt.Println(color.RedString("Build stopped\n"))
+			fmt.Fprintf(opts.IO.Out, color.RedString("Build stopped\n"))
 			break
 
 		// Deployment
 		case api.DeploymentStatusDeployInProgress:
-			fmt.Printf("Deploying %s...\n", c.args[0])
-			if err := printDeploymentLogs(c, deployment); err != nil {
+			fmt.Fprintf(opts.IO.Out, "Deploying %s...\n", opts.Project)
+			if err := printDeploymentLogs(client, deployment, opts.IO.Out); err != nil {
 				return err
 			}
 			break
 		case api.DeploymentStatusDeploySucceeded:
-			printDeploymentSummary(c, deployment)
+			printDeploymentSummary(deployment, opts.Project, opts.IO.Out)
 			deploymentFinished = true
 			break
 		case api.DeploymentStatusDeployFailed:
-			fmt.Println(color.RedString("Deploy failed\n"))
+			fmt.Fprintln(opts.IO.Out, color.RedString("Deploy failed\n"))
 			deploymentFinished = true
 			break
 		}
@@ -114,50 +131,46 @@ func Deploy(c *CmdConfig, opts *deployOptions) error {
 	return nil
 }
 
-func printBuildLogs(c *CmdConfig, deployment *api.Deployment) error {
+func printBuildLogs(client *api.Client, deployment *api.Deployment, out io.Writer) error {
 	getLogs := func() ([]api.LogEntry, error) {
-		return c.client.GetBuildLogs(c.ctx, deployment.ID)
+		return client.GetBuildLogs(context.Background(), deployment.ID)
 	}
 	getStatus := func() (api.DeploymentStatus, error) {
-		deployment, err := c.client.GetDeployment(c.ctx, deployment.ID)
+		deployment, err := client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
 			return deployment.Status, err
 		}
 		return deployment.Status, nil
 	}
-	if err := pollLogs(getLogs, getStatus); err != nil {
+	if err := utils.PollLogs(getLogs, getStatus, out); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func printDeploymentLogs(c *CmdConfig, deployment *api.Deployment) error {
+func printDeploymentLogs(client *api.Client, deployment *api.Deployment, out io.Writer) error {
 	getLogs := func() ([]api.LogEntry, error) {
-		return c.client.GetDeploymentLogs(c.ctx, deployment.ID)
+		return client.GetDeploymentLogs(context.Background(), deployment.ID)
 	}
 	getStatus := func() (api.DeploymentStatus, error) {
-		deployment, err := c.client.GetDeployment(c.ctx, deployment.ID)
+		deployment, err := client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
 			return deployment.Status, err
 		}
 		return deployment.Status, nil
 	}
-	if err := pollLogs(getLogs, getStatus); err != nil {
+	if err := utils.PollLogs(getLogs, getStatus, out); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func printDeploymentSummary(c *CmdConfig, deployment *api.Deployment) {
-	fmt.Printf(color.GreenString("\n🚀 Deployed %s"), c.args[0])
-	fmt.Printf(color.GreenString("\n\nPublic Endpoints: \n%s"), utils.DisplayArray(deployment.Endpoints))
+func printDeploymentSummary(deployment *api.Deployment, project string, out io.Writer) {
+	fmt.Fprintf(out, color.GreenString("\n🚀 Deployed %s"), project)
+	fmt.Fprintf(out, color.GreenString("\n\nPublic Endpoints: \n%s"), utils.DisplayArray(deployment.Endpoints))
 	if deployment.PrivateEndpoint != "" {
 		fmt.Printf(color.GreenString("\nPrivate Endpoint: %s\n"), deployment.PrivateEndpoint)
 	}
-}
-
-func init() {
-	rootCmd.AddCommand(createDeployCmd())
 }

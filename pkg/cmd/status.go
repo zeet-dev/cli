@@ -1,32 +1,54 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"github.com/zeet-dev/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
-func createStatusCmd() *cobra.Command {
+type StatusOpts struct {
+	IO        *iostreams.IOStreams
+	ApiClient func() (*api.Client, error)
+
+	Project string
+}
+
+func NewStatusCmd(f *cmdutil.Factory) *cobra.Command {
+	opts := &StatusOpts{}
+	opts.IO = f.IOStreams
+	opts.ApiClient = f.ApiClient
+
 	statusCmd := &cobra.Command{
 		Use:   "status [project]",
 		Short: "Gets the status for a given project",
 		Args:  cobra.ExactArgs(1),
-		RunE: withCmdConfig(func(c *CmdConfig) error {
-			return checkLoginAndRun(c, Status, struct{}{})
-		}),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			opts.Project = args[0]
+
+			return runStatus(opts)
+		},
 	}
 
 	return statusCmd
 }
 
-func Status(c *CmdConfig, _ struct{}) error {
-	deployment, err := c.client.GetProductionDeployment(c.ctx, c.args[0])
+func runStatus(opts *StatusOpts) error {
+	client, err := opts.ApiClient()
 	if err != nil {
 		return err
 	}
-	status, err := c.client.GetDeploymentReplicaStatus(c.ctx, deployment.ID)
+
+	deployment, err := client.GetProductionDeployment(context.Background(), opts.Project)
+	if err != nil {
+		return err
+	}
+	status, err := client.GetDeploymentReplicaStatus(context.Background(), deployment.ID)
 	if err != nil {
 		return err
 	}
@@ -43,11 +65,7 @@ func Status(c *CmdConfig, _ struct{}) error {
 		statusMessage = strings.ToUpper(status.State)
 	}
 
-	fmt.Printf("Status: %s\n", statusMessage)
-	fmt.Printf("Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
+	fmt.Fprintf(opts.IO.Out, "Status: %s\n", statusMessage)
+	fmt.Fprintf(opts.IO.Out, "Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
 	return nil
-}
-
-func init() {
-	rootCmd.AddCommand(createStatusCmd())
 }
