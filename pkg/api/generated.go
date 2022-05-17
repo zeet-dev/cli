@@ -28,6 +28,17 @@ const (
 	DeploymentStatusDeployCrashing    DeploymentStatus = "DEPLOY_CRASHING"
 )
 
+type EnvVarInput struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns EnvVarInput.Name, and is useful for accessing the field via an interface.
+func (v *EnvVarInput) GetName() string { return v.Name }
+
+// GetValue returns EnvVarInput.Value, and is useful for accessing the field via an interface.
+func (v *EnvVarInput) GetValue() string { return v.Value }
+
 // __buildRepoDefaultBranchInput is used internally by genqlient
 type __buildRepoDefaultBranchInput struct {
 	Id      uuid.UUID `json:"id"`
@@ -100,6 +111,14 @@ type __getDeploymentReplicaStatusInput struct {
 // GetId returns __getDeploymentReplicaStatusInput.Id, and is useful for accessing the field via an interface.
 func (v *__getDeploymentReplicaStatusInput) GetId() uuid.UUID { return v.Id }
 
+// __getEnvVarsInput is used internally by genqlient
+type __getEnvVarsInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __getEnvVarsInput.Id, and is useful for accessing the field via an interface.
+func (v *__getEnvVarsInput) GetId() uuid.UUID { return v.Id }
+
 // __getProductionBranchInput is used internally by genqlient
 type __getProductionBranchInput struct {
 	RepoId uuid.UUID `json:"repoId"`
@@ -124,6 +143,14 @@ type __getProjectByPathInput struct {
 // GetPath returns __getProjectByPathInput.Path, and is useful for accessing the field via an interface.
 func (v *__getProjectByPathInput) GetPath() string { return v.Path }
 
+// __getProjectRepoInput is used internally by genqlient
+type __getProjectRepoInput struct {
+	Path string `json:"path"`
+}
+
+// GetPath returns __getProjectRepoInput.Path, and is useful for accessing the field via an interface.
+func (v *__getProjectRepoInput) GetPath() string { return v.Path }
+
 // __getRuntimeLogsInput is used internally by genqlient
 type __getRuntimeLogsInput struct {
 	Id uuid.UUID `json:"id"`
@@ -131,6 +158,18 @@ type __getRuntimeLogsInput struct {
 
 // GetId returns __getRuntimeLogsInput.Id, and is useful for accessing the field via an interface.
 func (v *__getRuntimeLogsInput) GetId() uuid.UUID { return v.Id }
+
+// __setEnvVarsInput is used internally by genqlient
+type __setEnvVarsInput struct {
+	Id   uuid.UUID     `json:"id"`
+	Envs []EnvVarInput `json:"envs"`
+}
+
+// GetId returns __setEnvVarsInput.Id, and is useful for accessing the field via an interface.
+func (v *__setEnvVarsInput) GetId() uuid.UUID { return v.Id }
+
+// GetEnvs returns __setEnvVarsInput.Envs, and is useful for accessing the field via an interface.
+func (v *__setEnvVarsInput) GetEnvs() []EnvVarInput { return v.Envs }
 
 // buildRepoBuildRepo includes the requested fields of the GraphQL type Repo.
 type buildRepoBuildRepo struct {
@@ -526,6 +565,42 @@ func (v *getDeploymentReplicaStatusResponse) GetCurrentUser() getDeploymentRepli
 	return v.CurrentUser
 }
 
+// getEnvVarsCurrentUser includes the requested fields of the GraphQL type User.
+type getEnvVarsCurrentUser struct {
+	Repo getEnvVarsCurrentUserRepo `json:"repo"`
+}
+
+// GetRepo returns getEnvVarsCurrentUser.Repo, and is useful for accessing the field via an interface.
+func (v *getEnvVarsCurrentUser) GetRepo() getEnvVarsCurrentUserRepo { return v.Repo }
+
+// getEnvVarsCurrentUserRepo includes the requested fields of the GraphQL type Repo.
+type getEnvVarsCurrentUserRepo struct {
+	Envs []getEnvVarsCurrentUserRepoEnvsEnvVar `json:"envs"`
+}
+
+// GetEnvs returns getEnvVarsCurrentUserRepo.Envs, and is useful for accessing the field via an interface.
+func (v *getEnvVarsCurrentUserRepo) GetEnvs() []getEnvVarsCurrentUserRepoEnvsEnvVar { return v.Envs }
+
+// getEnvVarsCurrentUserRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type getEnvVarsCurrentUserRepoEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns getEnvVarsCurrentUserRepoEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *getEnvVarsCurrentUserRepoEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns getEnvVarsCurrentUserRepoEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *getEnvVarsCurrentUserRepoEnvsEnvVar) GetValue() string { return v.Value }
+
+// getEnvVarsResponse is returned by getEnvVars on success.
+type getEnvVarsResponse struct {
+	CurrentUser getEnvVarsCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns getEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *getEnvVarsResponse) GetCurrentUser() getEnvVarsCurrentUser { return v.CurrentUser }
+
 // getProductionBranchCurrentUser includes the requested fields of the GraphQL type User.
 type getProductionBranchCurrentUser struct {
 	Repo getProductionBranchCurrentUserRepo `json:"repo"`
@@ -638,6 +713,30 @@ type getProjectByPathResponse struct {
 // GetProject returns getProjectByPathResponse.Project, and is useful for accessing the field via an interface.
 func (v *getProjectByPathResponse) GetProject() getProjectByPathProject { return v.Project }
 
+// getProjectRepoProject includes the requested fields of the GraphQL type Project.
+type getProjectRepoProject struct {
+	Repo getProjectRepoProjectRepo `json:"repo"`
+}
+
+// GetRepo returns getProjectRepoProject.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectRepoProject) GetRepo() getProjectRepoProjectRepo { return v.Repo }
+
+// getProjectRepoProjectRepo includes the requested fields of the GraphQL type Repo.
+type getProjectRepoProjectRepo struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns getProjectRepoProjectRepo.Id, and is useful for accessing the field via an interface.
+func (v *getProjectRepoProjectRepo) GetId() uuid.UUID { return v.Id }
+
+// getProjectRepoResponse is returned by getProjectRepo on success.
+type getProjectRepoResponse struct {
+	Project getProjectRepoProject `json:"project"`
+}
+
+// GetProject returns getProjectRepoResponse.Project, and is useful for accessing the field via an interface.
+func (v *getProjectRepoResponse) GetProject() getProjectRepoProject { return v.Project }
+
 // getRuntimeLogsCurrentUser includes the requested fields of the GraphQL type User.
 type getRuntimeLogsCurrentUser struct {
 	Deployment getRuntimeLogsCurrentUserDeployment `json:"deployment"`
@@ -679,6 +778,30 @@ type getRuntimeLogsResponse struct {
 
 // GetCurrentUser returns getRuntimeLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getRuntimeLogsResponse) GetCurrentUser() getRuntimeLogsCurrentUser { return v.CurrentUser }
+
+// setEnvVarsResponse is returned by setEnvVars on success.
+type setEnvVarsResponse struct {
+	SetRepoEnvs setEnvVarsSetRepoEnvsRepo `json:"setRepoEnvs"`
+}
+
+// GetSetRepoEnvs returns setEnvVarsResponse.SetRepoEnvs, and is useful for accessing the field via an interface.
+func (v *setEnvVarsResponse) GetSetRepoEnvs() setEnvVarsSetRepoEnvsRepo { return v.SetRepoEnvs }
+
+// setEnvVarsSetRepoEnvsRepo includes the requested fields of the GraphQL type Repo.
+type setEnvVarsSetRepoEnvsRepo struct {
+	Envs []setEnvVarsSetRepoEnvsRepoEnvsEnvVar `json:"envs"`
+}
+
+// GetEnvs returns setEnvVarsSetRepoEnvsRepo.Envs, and is useful for accessing the field via an interface.
+func (v *setEnvVarsSetRepoEnvsRepo) GetEnvs() []setEnvVarsSetRepoEnvsRepoEnvsEnvVar { return v.Envs }
+
+// setEnvVarsSetRepoEnvsRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type setEnvVarsSetRepoEnvsRepoEnvsEnvVar struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns setEnvVarsSetRepoEnvsRepoEnvsEnvVar.Id, and is useful for accessing the field via an interface.
+func (v *setEnvVarsSetRepoEnvsRepoEnvsEnvVar) GetId() uuid.UUID { return v.Id }
 
 func buildRepo(
 	ctx context.Context,
@@ -949,6 +1072,38 @@ query getDeploymentReplicaStatus ($id: ID!) {
 	return &retval, err
 }
 
+func getEnvVars(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*getEnvVarsResponse, error) {
+	__input := __getEnvVarsInput{
+		Id: id,
+	}
+	var err error
+
+	var retval getEnvVarsResponse
+	err = client.MakeRequest(
+		ctx,
+		"getEnvVars",
+		`
+query getEnvVars ($id: ID!) {
+	currentUser {
+		repo(id: $id) {
+			envs {
+				name
+				value
+			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
 func getProductionBranch(
 	ctx context.Context,
 	client graphql.Client,
@@ -1042,6 +1197,35 @@ query getProjectByPath ($path: String) {
 	return &retval, err
 }
 
+func getProjectRepo(
+	ctx context.Context,
+	client graphql.Client,
+	path string,
+) (*getProjectRepoResponse, error) {
+	__input := __getProjectRepoInput{
+		Path: path,
+	}
+	var err error
+
+	var retval getProjectRepoResponse
+	err = client.MakeRequest(
+		ctx,
+		"getProjectRepo",
+		`
+query getProjectRepo ($path: String!) {
+	project(path: $path) {
+		repo {
+			id
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
 func getRuntimeLogs(
 	ctx context.Context,
 	client graphql.Client,
@@ -1064,6 +1248,37 @@ query getRuntimeLogs ($id: ID!) {
 				text
 				timestamp
 			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func setEnvVars(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+	envs []EnvVarInput,
+) (*setEnvVarsResponse, error) {
+	__input := __setEnvVarsInput{
+		Id:   id,
+		Envs: envs,
+	}
+	var err error
+
+	var retval setEnvVarsResponse
+	err = client.MakeRequest(
+		ctx,
+		"setEnvVars",
+		`
+mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
+	setRepoEnvs(input: {id:$id,envs:$envs}) {
+		envs {
+			id
 		}
 	}
 }

@@ -32,11 +32,12 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewDeployCmd(f))
 	rootCmd.AddCommand(NewRestartCmd(f))
 	rootCmd.AddCommand(NewStatusCmd(f))
+	rootCmd.AddCommand(NewEnvSetCmd(f))
 
 	rootCmd.AddCommand(NewGenDocsCmd())
 
 	// Set inputs/outputs
-	rootCmd.SetErr(f.IOStreams.ErrOut)
+	rootCmd.SetErr(&cmdutil.ErrorWriter{Out: f.IOStreams.Out})
 	rootCmd.SetIn(f.IOStreams.In)
 	rootCmd.SetOut(f.IOStreams.Out)
 
