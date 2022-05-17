@@ -14,8 +14,14 @@ func DisplayArray(arr []string) (out string) {
 }
 
 func DisplayMap(m map[string]string) (out string) {
+	i := 0
+
 	for k, v := range m {
+		i++
 		out += fmt.Sprintf("%s=%v", k, v)
+		if len(m) != i {
+			out += "\n"
+		}
 	}
 
 	return
