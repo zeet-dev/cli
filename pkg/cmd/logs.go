@@ -43,7 +43,7 @@ func NewLogsCmd(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.Flags().BoolVarP(&opts.Live, "follow", "f", false, "Follow log output")
 	cmd.Flags().StringVarP(&opts.DeploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
-	cmd.Flags().StringVar(&opts.Stage, "stage", "runtime", "TODO")
+	cmd.Flags().StringVar(&opts.Stage, "stage", "runtime", "The deployment stage to get the logs for (build, deployment, or runtime)")
 
 	return cmd
 }
