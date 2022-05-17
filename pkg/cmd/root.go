@@ -83,6 +83,10 @@ func initConfig() {
 }
 
 func configHome() string {
+	if os.Getenv("APP_ENV") == "gen_docs" {
+		return "/your/config/dir/zeet"
+	}
+
 	cfgDir, err := os.UserConfigDir()
 	cobra.CheckErr(err)
 

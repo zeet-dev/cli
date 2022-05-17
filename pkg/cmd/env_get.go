@@ -32,7 +32,7 @@ func NewEnvGetCmd(f *cmdutil.Factory) *cobra.Command {
 			$ zeet env:get zeet-demo/zeet-demo-node-sample DB_USERNAME DB_PASSWORD
 			$ zeet env:get zeet-demo/zeet-demo-node-sample
 		`),
-		Short: "Retrieve an environmental variable for a project. Pass only the project name to get a list of all variables.",
+		Short: "Retrieve an environment variable for a project. Pass only the project name to get a list of all variables.",
 		Args:  cobra.MinimumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Project = args[0]
