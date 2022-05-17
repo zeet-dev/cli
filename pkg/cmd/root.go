@@ -33,6 +33,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewRestartCmd(f))
 	rootCmd.AddCommand(NewStatusCmd(f))
 	rootCmd.AddCommand(NewEnvSetCmd(f))
+	rootCmd.AddCommand(NewEnvGetCmd(f))
 
 	rootCmd.AddCommand(NewGenDocsCmd())
 

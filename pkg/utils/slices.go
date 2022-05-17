@@ -12,3 +12,13 @@ func SliceFilter[S ~[]T, T any](items S, f func(el T) bool) S {
 	}
 	return result
 }
+
+// SliceContains returns true if el in arr.
+func SliceContains[S ~[]T, T comparable](items S, el T) bool {
+	for _, val := range items {
+		if val == el {
+			return true
+		}
+	}
+	return false
+}
