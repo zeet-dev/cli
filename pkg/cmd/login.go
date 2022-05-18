@@ -39,6 +39,7 @@ func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runLogin(opts)
 		},
+		Annotations: map[string]string{"skipAuthCheck": "true"},
 	}
 
 	return cmd
