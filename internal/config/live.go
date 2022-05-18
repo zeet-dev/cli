@@ -8,25 +8,31 @@ import (
 var _ Config = &Live{}
 
 // Live provides a viper-backed config for commands
-type Live struct{}
+type Live struct {
+	v *viper.Viper
+}
 
 func (c *Live) GetInt(key string) int {
-	return viper.GetInt(key)
+	return c.v.GetInt(key)
+}
+
+func (c *Live) GetInt64(key string) int64 {
+	return c.v.GetInt64(key)
 }
 
 func (c *Live) GetString(key string) string {
-	return viper.GetString(key)
+	return c.v.GetString(key)
 }
 
 func (c *Live) GetBool(key string) bool {
-	return viper.GetBool(key)
+	return c.v.GetBool(key)
 }
 
 func (c *Live) Set(key string, val interface{}) error {
-	viper.Set(key, val)
+	c.v.Set(key, val)
 	return nil
 }
 
 func (c *Live) WriteConfig() error {
-	return viper.WriteConfig()
+	return c.v.WriteConfig()
 }

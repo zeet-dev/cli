@@ -7,11 +7,11 @@ package cmd
 import (
 	"fmt"
 	"io/fs"
-	"os"
 	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/zeet-dev/cli/internal/config"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 )
 
@@ -45,7 +45,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	// Config & flags
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configHome(), defaultConfigName), "Config file")
+	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configDir(), defaultConfigName), "Config file")
 	rootCmd.PersistentFlags().String("server", "https://anchor.zeet.co", "Zeet API Server")
 	rootCmd.PersistentFlags().String("ws-server", "wss://anchor.zeet.co", "Zeet Websocket/Subscriptions Server")
 	rootCmd.PersistentFlags().BoolP("debug", "v", false, "Enable verbose debug logging")
@@ -61,6 +61,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	return rootCmd
 }
 
+// TODO put viper code somewhere else?
 func initConfig() {
 	viper.SetEnvPrefix("ZEET")
 	viper.AutomaticEnv()
@@ -82,17 +83,8 @@ func initConfig() {
 	}
 }
 
-func configHome() string {
-	if os.Getenv("APP_ENV") == "gen_docs" {
-		return "/your/config/dir/zeet"
-	}
-
-	cfgDir, err := os.UserConfigDir()
+func configDir() string {
+	p, err := config.ConfigDir()
 	cobra.CheckErr(err)
-
-	ch := filepath.Join(cfgDir, "zeet")
-	err = os.MkdirAll(ch, os.ModePerm)
-	cobra.CheckErr(err)
-
-	return ch
+	return p
 }
