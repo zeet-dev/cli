@@ -13,6 +13,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"github.com/zeet-dev/cli/internal/build"
 	"github.com/zeet-dev/cli/internal/config"
 	"github.com/zeet-dev/cli/internal/update"
 	"github.com/zeet-dev/cli/pkg/cmd"
@@ -22,7 +23,7 @@ import (
 )
 
 func main() {
-	version := "v0.1.0"
+	version := build.Version
 
 	f := factory.New(version)
 	stdout := f.IOStreams.Out
@@ -78,7 +79,7 @@ func main() {
 }
 
 func checkForUpdate(state config.Config, client *http.Client, currentVersion string) (*update.ReleaseInfo, error) {
-	if utils.IsCI() || !update.ShouldCheck(state) {
+	if build.Version == "(devel)" || utils.IsCI() || !update.ShouldCheck(state) {
 		return nil, nil
 	}
 
