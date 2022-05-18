@@ -59,6 +59,10 @@ func runEnvSet(opts *EnvSetOptions) error {
 
 	for _, v := range opts.Vars {
 		s := strings.Split(v, "=")
+		if len(s) != 2 {
+			return fmt.Errorf("invalid environment variable syntax. expected KEY=VALUE")
+		}
+
 		vars[s[0]] = s[1]
 	}
 
