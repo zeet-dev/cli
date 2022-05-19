@@ -25,6 +25,8 @@ type LoginOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 	Config    func() (config.Config, error)
+
+	AccessToken string
 }
 
 func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
@@ -41,6 +43,8 @@ func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
 		},
 		Annotations: map[string]string{"skipAuthCheck": "true"},
 	}
+
+	cmd.Flags().StringVarP(&opts.AccessToken, "token", "t", "", "Your Zeet access token")
 
 	return cmd
 }
@@ -75,14 +79,22 @@ func runLogin(opts *LoginOptions) error {
 		}
 	}
 
-	fmt.Fprint(opts.IO.Out, "Enter Zeet API token (input hidden): ")
-	newToken, err := term.ReadPassword(int(syscall.Stdin))
-	if err != nil {
-		return err
+	// If no access token is provided, prompt for one
+	// If an access token is provided, use it
+	var newToken string
+	if opts.AccessToken == "" {
+		fmt.Fprint(opts.IO.Out, "Enter Zeet API token (input hidden): ")
+		_newToken, err := term.ReadPassword(int(syscall.Stdin))
+		newToken = string(_newToken)
+		if err != nil {
+			return err
+		}
+		fmt.Fprintln(opts.IO.Out)
+	} else {
+		newToken = opts.AccessToken
 	}
-	fmt.Fprintln(opts.IO.Out)
 
-	if err := cfg.Set("auth.access_token", strings.TrimSpace(string(newToken))); err != nil {
+	if err := cfg.Set("auth.access_token", strings.TrimSpace(newToken)); err != nil {
 		return err
 	}
 	if err := cfg.WriteConfig(); err != nil {
