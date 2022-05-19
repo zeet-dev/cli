@@ -16,6 +16,7 @@ import (
 )
 
 var defaultConfigName = "config.yaml"
+var configPath string
 
 // NewRootCmd creates a cobra.Command and adds subcommands to it
 // It's called by main.go and passed a cmdutil.Factory
@@ -34,6 +35,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewStatusCmd(f))
 	rootCmd.AddCommand(NewEnvSetCmd(f))
 	rootCmd.AddCommand(NewEnvGetCmd(f))
+	rootCmd.AddCommand(NewConfigSetCmd(f))
 
 	rootCmd.AddCommand(NewGenDocsCmd())
 
@@ -45,15 +47,11 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	// Config & flags
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configDir(), defaultConfigName), "Config file")
-	rootCmd.PersistentFlags().BoolP("debug", "v", false, "Enable verbose debug logging")
-
-	rootCmd.PersistentFlags().MarkHidden("server")
-	rootCmd.PersistentFlags().MarkHidden("ws-server")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", filepath.Join(configDir(), defaultConfigName), "Config file")
 
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
-	viper.BindPFlag("server", rootCmd.PersistentFlags().Lookup("server"))
-	viper.BindPFlag("ws-server", rootCmd.PersistentFlags().Lookup("server"))
+	viper.BindEnv("server")
+	viper.BindEnv("ws-server")
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 
 	return rootCmd
@@ -65,12 +63,12 @@ func initConfig() {
 	viper.AutomaticEnv()
 	viper.SetConfigType("yaml")
 
-	cfgFile := viper.GetString("config")
-	viper.SetConfigFile(cfgFile)
+	viper.SetConfigFile(configPath)
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(*fs.PathError); ok {
-			// No problem, the config file will be created after login
+			err := writeDefaultConfig()
+			cobra.CheckErr(err)
 		} else {
 			cobra.CheckErr(err)
 		}
@@ -79,6 +77,12 @@ func initConfig() {
 	if viper.GetBool("debug") {
 		fmt.Println("Using " + viper.ConfigFileUsed())
 	}
+}
+
+func writeDefaultConfig() error {
+	viper.Set("server", "https://anchor.zeet.co")
+	viper.Set("ws-server", "wss://anchor.zeet.co")
+	return viper.WriteConfig()
 }
 
 func configDir() string {
