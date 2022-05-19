@@ -37,7 +37,7 @@ func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Login to Zeet",
+		Short: "Login to Zeet. You'll be prompted for a token (from https://zeet.co/account/api) if it's not passed via --token.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runLogin(opts)
 		},
