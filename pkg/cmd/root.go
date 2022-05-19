@@ -46,8 +46,6 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringP("config", "c", filepath.Join(configDir(), defaultConfigName), "Config file")
-	rootCmd.PersistentFlags().String("server", "https://anchor.zeet.co", "Zeet API Server")
-	rootCmd.PersistentFlags().String("ws-server", "wss://anchor.zeet.co", "Zeet Websocket/Subscriptions Server")
 	rootCmd.PersistentFlags().BoolP("debug", "v", false, "Enable verbose debug logging")
 
 	rootCmd.PersistentFlags().MarkHidden("server")
