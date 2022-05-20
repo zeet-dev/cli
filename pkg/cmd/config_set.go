@@ -23,10 +23,11 @@ func NewConfigSetCmd(f *cmdutil.Factory) *cobra.Command {
 	opts.Config = f.Config
 
 	cmd := &cobra.Command{
-		Use:     "config:set [name=value]",
-		Example: "$ zeet config:set server=https://anchor.zeet.co",
-		Short:   "Add or modify a CLI config variable",
-		Args:    cobra.MinimumNArgs(1),
+		Use:         "config:set [name=value]",
+		Example:     "$ zeet config:set server=https://anchor.zeet.co",
+		Short:       "Add or modify a CLI config variable",
+		Args:        cobra.MinimumNArgs(1),
+		Annotations: map[string]string{"skipAuthCheck": "true"},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Vars = args[0:]
 
