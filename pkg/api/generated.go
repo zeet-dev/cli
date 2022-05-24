@@ -39,6 +39,15 @@ func (v *EnvVarInput) GetName() string { return v.Name }
 // GetValue returns EnvVarInput.Value, and is useful for accessing the field via an interface.
 func (v *EnvVarInput) GetValue() string { return v.Value }
 
+type JobRunState string
+
+const (
+	JobRunStateJobRunStarting  JobRunState = "JOB_RUN_STARTING"
+	JobRunStateJobRunRunning   JobRunState = "JOB_RUN_RUNNING"
+	JobRunStateJobRunFailed    JobRunState = "JOB_RUN_FAILED"
+	JobRunStateJobRunSucceeded JobRunState = "JOB_RUN_SUCCEEDED"
+)
+
 // __buildRepoDefaultBranchInput is used internally by genqlient
 type __buildRepoDefaultBranchInput struct {
 	Id      uuid.UUID `json:"id"`
@@ -119,6 +128,30 @@ type __getEnvVarsInput struct {
 // GetId returns __getEnvVarsInput.Id, and is useful for accessing the field via an interface.
 func (v *__getEnvVarsInput) GetId() uuid.UUID { return v.Id }
 
+// __getJobInput is used internally by genqlient
+type __getJobInput struct {
+	ProjectID uuid.UUID `json:"projectID"`
+	JobID     uuid.UUID `json:"jobID"`
+}
+
+// GetProjectID returns __getJobInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__getJobInput) GetProjectID() uuid.UUID { return v.ProjectID }
+
+// GetJobID returns __getJobInput.JobID, and is useful for accessing the field via an interface.
+func (v *__getJobInput) GetJobID() uuid.UUID { return v.JobID }
+
+// __getJobLogsInput is used internally by genqlient
+type __getJobLogsInput struct {
+	ProjectID uuid.UUID `json:"projectID"`
+	JobID     uuid.UUID `json:"jobID"`
+}
+
+// GetProjectID returns __getJobLogsInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__getJobLogsInput) GetProjectID() uuid.UUID { return v.ProjectID }
+
+// GetJobID returns __getJobLogsInput.JobID, and is useful for accessing the field via an interface.
+func (v *__getJobLogsInput) GetJobID() uuid.UUID { return v.JobID }
+
 // __getLatestDeploymentInput is used internally by genqlient
 type __getLatestDeploymentInput struct {
 	Project string `json:"project"`
@@ -170,6 +203,22 @@ type __getRuntimeLogsInput struct {
 
 // GetId returns __getRuntimeLogsInput.Id, and is useful for accessing the field via an interface.
 func (v *__getRuntimeLogsInput) GetId() uuid.UUID { return v.Id }
+
+// __runJobInput is used internally by genqlient
+type __runJobInput struct {
+	Id      uuid.UUID `json:"id"`
+	Command string    `json:"command"`
+	Build   bool      `json:"build"`
+}
+
+// GetId returns __runJobInput.Id, and is useful for accessing the field via an interface.
+func (v *__runJobInput) GetId() uuid.UUID { return v.Id }
+
+// GetCommand returns __runJobInput.Command, and is useful for accessing the field via an interface.
+func (v *__runJobInput) GetCommand() string { return v.Command }
+
+// GetBuild returns __runJobInput.Build, and is useful for accessing the field via an interface.
+func (v *__runJobInput) GetBuild() bool { return v.Build }
 
 // __setEnvVarsInput is used internally by genqlient
 type __setEnvVarsInput struct {
@@ -645,6 +694,96 @@ type getEnvVarsResponse struct {
 // GetCurrentUser returns getEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getEnvVarsResponse) GetCurrentUser() getEnvVarsCurrentUser { return v.CurrentUser }
 
+// getJobLogsProject includes the requested fields of the GraphQL type Project.
+type getJobLogsProject struct {
+	Repo getJobLogsProjectRepo `json:"repo"`
+}
+
+// GetRepo returns getJobLogsProject.Repo, and is useful for accessing the field via an interface.
+func (v *getJobLogsProject) GetRepo() getJobLogsProjectRepo { return v.Repo }
+
+// getJobLogsProjectRepo includes the requested fields of the GraphQL type Repo.
+type getJobLogsProjectRepo struct {
+	JobRun getJobLogsProjectRepoJobRun `json:"jobRun"`
+}
+
+// GetJobRun returns getJobLogsProjectRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *getJobLogsProjectRepo) GetJobRun() getJobLogsProjectRepoJobRun { return v.JobRun }
+
+// getJobLogsProjectRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type getJobLogsProjectRepoJobRun struct {
+	Logs getJobLogsProjectRepoJobRunLogs `json:"logs"`
+}
+
+// GetLogs returns getJobLogsProjectRepoJobRun.Logs, and is useful for accessing the field via an interface.
+func (v *getJobLogsProjectRepoJobRun) GetLogs() getJobLogsProjectRepoJobRunLogs { return v.Logs }
+
+// getJobLogsProjectRepoJobRunLogs includes the requested fields of the GraphQL type Logs.
+type getJobLogsProjectRepoJobRunLogs struct {
+	Entries []getJobLogsProjectRepoJobRunLogsEntriesLogEntry `json:"entries"`
+}
+
+// GetEntries returns getJobLogsProjectRepoJobRunLogs.Entries, and is useful for accessing the field via an interface.
+func (v *getJobLogsProjectRepoJobRunLogs) GetEntries() []getJobLogsProjectRepoJobRunLogsEntriesLogEntry {
+	return v.Entries
+}
+
+// getJobLogsProjectRepoJobRunLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type getJobLogsProjectRepoJobRunLogsEntriesLogEntry struct {
+	Text      string    `json:"text"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+// GetText returns getJobLogsProjectRepoJobRunLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *getJobLogsProjectRepoJobRunLogsEntriesLogEntry) GetText() string { return v.Text }
+
+// GetTimestamp returns getJobLogsProjectRepoJobRunLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *getJobLogsProjectRepoJobRunLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
+
+// getJobLogsResponse is returned by getJobLogs on success.
+type getJobLogsResponse struct {
+	Project getJobLogsProject `json:"project"`
+}
+
+// GetProject returns getJobLogsResponse.Project, and is useful for accessing the field via an interface.
+func (v *getJobLogsResponse) GetProject() getJobLogsProject { return v.Project }
+
+// getJobProject includes the requested fields of the GraphQL type Project.
+type getJobProject struct {
+	Repo getJobProjectRepo `json:"repo"`
+}
+
+// GetRepo returns getJobProject.Repo, and is useful for accessing the field via an interface.
+func (v *getJobProject) GetRepo() getJobProjectRepo { return v.Repo }
+
+// getJobProjectRepo includes the requested fields of the GraphQL type Repo.
+type getJobProjectRepo struct {
+	JobRun getJobProjectRepoJobRun `json:"jobRun"`
+}
+
+// GetJobRun returns getJobProjectRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *getJobProjectRepo) GetJobRun() getJobProjectRepoJobRun { return v.JobRun }
+
+// getJobProjectRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type getJobProjectRepoJobRun struct {
+	Id    uuid.UUID   `json:"id"`
+	State JobRunState `json:"state"`
+}
+
+// GetId returns getJobProjectRepoJobRun.Id, and is useful for accessing the field via an interface.
+func (v *getJobProjectRepoJobRun) GetId() uuid.UUID { return v.Id }
+
+// GetState returns getJobProjectRepoJobRun.State, and is useful for accessing the field via an interface.
+func (v *getJobProjectRepoJobRun) GetState() JobRunState { return v.State }
+
+// getJobResponse is returned by getJob on success.
+type getJobResponse struct {
+	Project getJobProject `json:"project"`
+}
+
+// GetProject returns getJobResponse.Project, and is useful for accessing the field via an interface.
+func (v *getJobResponse) GetProject() getJobProject { return v.Project }
+
 // getLatestDeploymentProject includes the requested fields of the GraphQL type Project.
 type getLatestDeploymentProject struct {
 	Repo getLatestDeploymentProjectRepo `json:"repo"`
@@ -892,6 +1031,26 @@ type getRuntimeLogsResponse struct {
 
 // GetCurrentUser returns getRuntimeLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getRuntimeLogsResponse) GetCurrentUser() getRuntimeLogsCurrentUser { return v.CurrentUser }
+
+// runJobResponse is returned by runJob on success.
+type runJobResponse struct {
+	RunJob runJobRunJobJobRun `json:"runJob"`
+}
+
+// GetRunJob returns runJobResponse.RunJob, and is useful for accessing the field via an interface.
+func (v *runJobResponse) GetRunJob() runJobRunJobJobRun { return v.RunJob }
+
+// runJobRunJobJobRun includes the requested fields of the GraphQL type JobRun.
+type runJobRunJobJobRun struct {
+	State JobRunState `json:"state"`
+	Id    uuid.UUID   `json:"id"`
+}
+
+// GetState returns runJobRunJobJobRun.State, and is useful for accessing the field via an interface.
+func (v *runJobRunJobJobRun) GetState() JobRunState { return v.State }
+
+// GetId returns runJobRunJobJobRun.Id, and is useful for accessing the field via an interface.
+func (v *runJobRunJobJobRun) GetId() uuid.UUID { return v.Id }
 
 // setEnvVarsResponse is returned by setEnvVars on success.
 type setEnvVarsResponse struct {
@@ -1254,6 +1413,78 @@ query getEnvVars ($id: ID!) {
 	return &retval, err
 }
 
+func getJob(
+	ctx context.Context,
+	client graphql.Client,
+	projectID uuid.UUID,
+	jobID uuid.UUID,
+) (*getJobResponse, error) {
+	__input := __getJobInput{
+		ProjectID: projectID,
+		JobID:     jobID,
+	}
+	var err error
+
+	var retval getJobResponse
+	err = client.MakeRequest(
+		ctx,
+		"getJob",
+		`
+query getJob ($projectID: UUID!, $jobID: UUID!) {
+	project(id: $projectID) {
+		repo {
+			jobRun(id: $jobID) {
+				id
+				state
+			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func getJobLogs(
+	ctx context.Context,
+	client graphql.Client,
+	projectID uuid.UUID,
+	jobID uuid.UUID,
+) (*getJobLogsResponse, error) {
+	__input := __getJobLogsInput{
+		ProjectID: projectID,
+		JobID:     jobID,
+	}
+	var err error
+
+	var retval getJobLogsResponse
+	err = client.MakeRequest(
+		ctx,
+		"getJobLogs",
+		`
+query getJobLogs ($projectID: UUID!, $jobID: UUID!) {
+	project(id: $projectID) {
+		repo {
+			jobRun(id: $jobID) {
+				logs {
+					entries {
+						text
+						timestamp
+					}
+				}
+			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
 func getLatestDeployment(
 	ctx context.Context,
 	client graphql.Client,
@@ -1438,6 +1669,38 @@ query getRuntimeLogs ($id: ID!) {
 				timestamp
 			}
 		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func runJob(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+	command string,
+	build bool,
+) (*runJobResponse, error) {
+	__input := __runJobInput{
+		Id:      id,
+		Command: command,
+		Build:   build,
+	}
+	var err error
+
+	var retval runJobResponse
+	err = client.MakeRequest(
+		ctx,
+		"runJob",
+		`
+mutation runJob ($id: UUID!, $command: String!, $build: Boolean!) {
+	runJob(input: {id:$id,runCommand:$command,build:$build}) {
+		state
+		id
 	}
 }
 `,

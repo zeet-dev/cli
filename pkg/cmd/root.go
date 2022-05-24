@@ -36,6 +36,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewEnvSetCmd(f))
 	rootCmd.AddCommand(NewEnvGetCmd(f))
 	rootCmd.AddCommand(NewConfigSetCmd(f))
+	rootCmd.AddCommand(NewJobRunCmd(f))
 
 	rootCmd.AddCommand(NewGenDocsCmd())
 
