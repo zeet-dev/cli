@@ -45,3 +45,35 @@ func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (
 
 	return res.CurrentUser.Repo.ProductionBranchV2.Name, nil
 }
+
+func (c *Client) UpdateBranch(ctx context.Context, projectID uuid.UUID, image string, branchName string, deploy bool) error {
+	_ = `# @genqlient
+		mutation updateBranch($image: String!, $deploy: Boolean, $projectID: UUID!, $branchName: String!) {
+		  updateBranch(input: {image: $image, deploy: $deploy, repoID: $projectID, name: $branchName}) {
+			id
+		  }
+		}
+	`
+	_, err := updateBranch(ctx, c.GQL, image, deploy, projectID, branchName)
+	if err != nil {
+		return err
+	}
+
+	return err
+}
+
+func (c *Client) UpdateProject(ctx context.Context, projectID uuid.UUID, image string) error {
+	_ = `# @genqlient
+		mutation updateProject($projectID: ID!, $image: String!) {
+		  updateProject(input: {id: $projectID, dockerImage: $image}) {
+			id
+		  }
+		}
+	`
+	_, err := updateProject(ctx, c.GQL, projectID, image)
+	if err != nil {
+		return err
+	}
+
+	return err
+}

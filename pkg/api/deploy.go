@@ -225,12 +225,12 @@ func (c *Client) GetDeploymentReplicaStatus(ctx context.Context, deploymentID uu
 	return out, err
 }
 
-func (c *Client) GetProductionDeployment(ctx context.Context, path string) (*Deployment, error) {
+func (c *Client) GetProductionDeployment(ctx context.Context, project string) (*Deployment, error) {
 	out := &Deployment{}
 
 	_ = `# @genqlient
-		query getProductionDeployment($path: String!) {
-		  project(path: $path) {
+		query getProductionDeployment($project: String!) {
+		  project(path: $project) {
 			repo {
 			  productionDeployment {
 				id
@@ -242,11 +242,40 @@ func (c *Client) GetProductionDeployment(ctx context.Context, path string) (*Dep
 		  }
 		}
 	`
-	res, err := getProductionDeployment(ctx, c.GQL, path)
+	res, err := getProductionDeployment(ctx, c.GQL, project)
 	if err != nil {
 		return nil, err
 	}
 
 	err = copier.Copy(out, res.Project.Repo.ProductionDeployment)
+	return out, err
+}
+
+func (c *Client) GetLatestDeployment(ctx context.Context, project string, branch string) (*Deployment, error) {
+	out := &Deployment{}
+
+	_ = `# @genqlient
+		query getLatestDeployment($project: String, $branch: String) {
+		  project(path: $project) {
+			repo {
+			  branch(name: $branch) {
+				latestDeployment {
+				  id
+				  status
+				  branch
+				  endpoints
+				  privateEndpoint
+				}
+			  }
+			}
+		  }
+		}
+	`
+	res, err := getLatestDeployment(ctx, c.GQL, project, branch)
+	if err != nil {
+		return nil, err
+	}
+
+	err = copier.Copy(out, res.Project.Repo.Branch.LatestDeployment)
 	return out, err
 }

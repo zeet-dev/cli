@@ -119,6 +119,18 @@ type __getEnvVarsInput struct {
 // GetId returns __getEnvVarsInput.Id, and is useful for accessing the field via an interface.
 func (v *__getEnvVarsInput) GetId() uuid.UUID { return v.Id }
 
+// __getLatestDeploymentInput is used internally by genqlient
+type __getLatestDeploymentInput struct {
+	Project string `json:"project"`
+	Branch  string `json:"branch"`
+}
+
+// GetProject returns __getLatestDeploymentInput.Project, and is useful for accessing the field via an interface.
+func (v *__getLatestDeploymentInput) GetProject() string { return v.Project }
+
+// GetBranch returns __getLatestDeploymentInput.Branch, and is useful for accessing the field via an interface.
+func (v *__getLatestDeploymentInput) GetBranch() string { return v.Branch }
+
 // __getProductionBranchInput is used internally by genqlient
 type __getProductionBranchInput struct {
 	RepoId uuid.UUID `json:"repoId"`
@@ -129,11 +141,11 @@ func (v *__getProductionBranchInput) GetRepoId() uuid.UUID { return v.RepoId }
 
 // __getProductionDeploymentInput is used internally by genqlient
 type __getProductionDeploymentInput struct {
-	Path string `json:"path"`
+	Project string `json:"project"`
 }
 
-// GetPath returns __getProductionDeploymentInput.Path, and is useful for accessing the field via an interface.
-func (v *__getProductionDeploymentInput) GetPath() string { return v.Path }
+// GetProject returns __getProductionDeploymentInput.Project, and is useful for accessing the field via an interface.
+func (v *__getProductionDeploymentInput) GetProject() string { return v.Project }
 
 // __getProjectByPathInput is used internally by genqlient
 type __getProjectByPathInput struct {
@@ -170,6 +182,38 @@ func (v *__setEnvVarsInput) GetId() uuid.UUID { return v.Id }
 
 // GetEnvs returns __setEnvVarsInput.Envs, and is useful for accessing the field via an interface.
 func (v *__setEnvVarsInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// __updateBranchInput is used internally by genqlient
+type __updateBranchInput struct {
+	Image      string    `json:"image"`
+	Deploy     bool      `json:"deploy"`
+	ProjectID  uuid.UUID `json:"projectID"`
+	BranchName string    `json:"branchName"`
+}
+
+// GetImage returns __updateBranchInput.Image, and is useful for accessing the field via an interface.
+func (v *__updateBranchInput) GetImage() string { return v.Image }
+
+// GetDeploy returns __updateBranchInput.Deploy, and is useful for accessing the field via an interface.
+func (v *__updateBranchInput) GetDeploy() bool { return v.Deploy }
+
+// GetProjectID returns __updateBranchInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__updateBranchInput) GetProjectID() uuid.UUID { return v.ProjectID }
+
+// GetBranchName returns __updateBranchInput.BranchName, and is useful for accessing the field via an interface.
+func (v *__updateBranchInput) GetBranchName() string { return v.BranchName }
+
+// __updateProjectInput is used internally by genqlient
+type __updateProjectInput struct {
+	ProjectID uuid.UUID `json:"projectID"`
+	Image     string    `json:"image"`
+}
+
+// GetProjectID returns __updateProjectInput.ProjectID, and is useful for accessing the field via an interface.
+func (v *__updateProjectInput) GetProjectID() uuid.UUID { return v.ProjectID }
+
+// GetImage returns __updateProjectInput.Image, and is useful for accessing the field via an interface.
+func (v *__updateProjectInput) GetImage() string { return v.Image }
 
 // buildRepoBuildRepo includes the requested fields of the GraphQL type Repo.
 type buildRepoBuildRepo struct {
@@ -601,6 +645,76 @@ type getEnvVarsResponse struct {
 // GetCurrentUser returns getEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getEnvVarsResponse) GetCurrentUser() getEnvVarsCurrentUser { return v.CurrentUser }
 
+// getLatestDeploymentProject includes the requested fields of the GraphQL type Project.
+type getLatestDeploymentProject struct {
+	Repo getLatestDeploymentProjectRepo `json:"repo"`
+}
+
+// GetRepo returns getLatestDeploymentProject.Repo, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProject) GetRepo() getLatestDeploymentProjectRepo { return v.Repo }
+
+// getLatestDeploymentProjectRepo includes the requested fields of the GraphQL type Repo.
+type getLatestDeploymentProjectRepo struct {
+	Branch getLatestDeploymentProjectRepoBranchRepoBranchV2 `json:"branch"`
+}
+
+// GetBranch returns getLatestDeploymentProjectRepo.Branch, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepo) GetBranch() getLatestDeploymentProjectRepoBranchRepoBranchV2 {
+	return v.Branch
+}
+
+// getLatestDeploymentProjectRepoBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type getLatestDeploymentProjectRepoBranchRepoBranchV2 struct {
+	LatestDeployment getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment `json:"latestDeployment"`
+}
+
+// GetLatestDeployment returns getLatestDeploymentProjectRepoBranchRepoBranchV2.LatestDeployment, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2) GetLatestDeployment() getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment {
+	return v.LatestDeployment
+}
+
+// getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment includes the requested fields of the GraphQL type Deployment.
+type getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment struct {
+	Id              uuid.UUID        `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Id, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetId() uuid.UUID {
+	return v.Id
+}
+
+// GetStatus returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Status, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetBranch returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetBranch() string {
+	return v.Branch
+}
+
+// GetEndpoints returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetEndpoints() []string {
+	return v.Endpoints
+}
+
+// GetPrivateEndpoint returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// getLatestDeploymentResponse is returned by getLatestDeployment on success.
+type getLatestDeploymentResponse struct {
+	Project getLatestDeploymentProject `json:"project"`
+}
+
+// GetProject returns getLatestDeploymentResponse.Project, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentResponse) GetProject() getLatestDeploymentProject { return v.Project }
+
 // getProductionBranchCurrentUser includes the requested fields of the GraphQL type User.
 type getProductionBranchCurrentUser struct {
 	Repo getProductionBranchCurrentUserRepo `json:"repo"`
@@ -802,6 +916,42 @@ type setEnvVarsSetRepoEnvsRepoEnvsEnvVar struct {
 
 // GetId returns setEnvVarsSetRepoEnvsRepoEnvsEnvVar.Id, and is useful for accessing the field via an interface.
 func (v *setEnvVarsSetRepoEnvsRepoEnvsEnvVar) GetId() uuid.UUID { return v.Id }
+
+// updateBranchResponse is returned by updateBranch on success.
+type updateBranchResponse struct {
+	UpdateBranch updateBranchUpdateBranchRepoBranchV2 `json:"updateBranch"`
+}
+
+// GetUpdateBranch returns updateBranchResponse.UpdateBranch, and is useful for accessing the field via an interface.
+func (v *updateBranchResponse) GetUpdateBranch() updateBranchUpdateBranchRepoBranchV2 {
+	return v.UpdateBranch
+}
+
+// updateBranchUpdateBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type updateBranchUpdateBranchRepoBranchV2 struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns updateBranchUpdateBranchRepoBranchV2.Id, and is useful for accessing the field via an interface.
+func (v *updateBranchUpdateBranchRepoBranchV2) GetId() uuid.UUID { return v.Id }
+
+// updateProjectResponse is returned by updateProject on success.
+type updateProjectResponse struct {
+	UpdateProject updateProjectUpdateProjectRepo `json:"updateProject"`
+}
+
+// GetUpdateProject returns updateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
+func (v *updateProjectResponse) GetUpdateProject() updateProjectUpdateProjectRepo {
+	return v.UpdateProject
+}
+
+// updateProjectUpdateProjectRepo includes the requested fields of the GraphQL type Repo.
+type updateProjectUpdateProjectRepo struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns updateProjectUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
+func (v *updateProjectUpdateProjectRepo) GetId() uuid.UUID { return v.Id }
 
 func buildRepo(
 	ctx context.Context,
@@ -1104,6 +1254,45 @@ query getEnvVars ($id: ID!) {
 	return &retval, err
 }
 
+func getLatestDeployment(
+	ctx context.Context,
+	client graphql.Client,
+	project string,
+	branch string,
+) (*getLatestDeploymentResponse, error) {
+	__input := __getLatestDeploymentInput{
+		Project: project,
+		Branch:  branch,
+	}
+	var err error
+
+	var retval getLatestDeploymentResponse
+	err = client.MakeRequest(
+		ctx,
+		"getLatestDeployment",
+		`
+query getLatestDeployment ($project: String, $branch: String) {
+	project(path: $project) {
+		repo {
+			branch(name: $branch) {
+				latestDeployment {
+					id
+					status
+					branch
+					endpoints
+					privateEndpoint
+				}
+			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
 func getProductionBranch(
 	ctx context.Context,
 	client graphql.Client,
@@ -1139,10 +1328,10 @@ query getProductionBranch ($repoId: ID!) {
 func getProductionDeployment(
 	ctx context.Context,
 	client graphql.Client,
-	path string,
+	project string,
 ) (*getProductionDeploymentResponse, error) {
 	__input := __getProductionDeploymentInput{
-		Path: path,
+		Project: project,
 	}
 	var err error
 
@@ -1151,8 +1340,8 @@ func getProductionDeployment(
 		ctx,
 		"getProductionDeployment",
 		`
-query getProductionDeployment ($path: String!) {
-	project(path: $path) {
+query getProductionDeployment ($project: String!) {
+	project(path: $project) {
 		repo {
 			productionDeployment {
 				id
@@ -1280,6 +1469,68 @@ mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 		envs {
 			id
 		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func updateBranch(
+	ctx context.Context,
+	client graphql.Client,
+	image string,
+	deploy bool,
+	projectID uuid.UUID,
+	branchName string,
+) (*updateBranchResponse, error) {
+	__input := __updateBranchInput{
+		Image:      image,
+		Deploy:     deploy,
+		ProjectID:  projectID,
+		BranchName: branchName,
+	}
+	var err error
+
+	var retval updateBranchResponse
+	err = client.MakeRequest(
+		ctx,
+		"updateBranch",
+		`
+mutation updateBranch ($image: String!, $deploy: Boolean, $projectID: UUID!, $branchName: String!) {
+	updateBranch(input: {image:$image,deploy:$deploy,repoID:$projectID,name:$branchName}) {
+		id
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func updateProject(
+	ctx context.Context,
+	client graphql.Client,
+	projectID uuid.UUID,
+	image string,
+) (*updateProjectResponse, error) {
+	__input := __updateProjectInput{
+		ProjectID: projectID,
+		Image:     image,
+	}
+	var err error
+
+	var retval updateProjectResponse
+	err = client.MakeRequest(
+		ctx,
+		"updateProject",
+		`
+mutation updateProject ($projectID: ID!, $image: String!) {
+	updateProject(input: {id:$projectID,dockerImage:$image}) {
+		id
 	}
 }
 `,

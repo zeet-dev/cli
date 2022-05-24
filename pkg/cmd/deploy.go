@@ -17,6 +17,7 @@ type DeployOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 
+	Image    string
 	Branch   string
 	Project  string
 	UseCache bool
@@ -40,7 +41,8 @@ func NewDeployCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	deployCmd.Flags().BoolVar(&opts.UseCache, "use-cache", true, "Enable build cache")
-	deployCmd.Flags().StringVarP(&opts.Branch, "branch", "b", "", "Deploy specific Branch (defaults to your configured production Branch) ")
+	deployCmd.Flags().StringVarP(&opts.Branch, "branch", "b", "", "Deploy specific Branch (defaults to your configured production branch) ")
+	deployCmd.Flags().StringVarP(&opts.Image, "image", "i", "", "The Docker image to use for this deployment (if used with --branch, only the branch's image will be updated)")
 
 	return deployCmd
 }
@@ -70,6 +72,11 @@ func runDeploy(opts *DeployOptions) error {
 		}
 
 		deployment, err = client.DeployProjectBranch(context.Background(), project.ID, branch, opts.UseCache)
+		if err != nil {
+			return err
+		}
+	} else if opts.Image != "" {
+		deployment, err = updateImage(client, project, opts.Project, opts.Image, opts.Branch)
 		if err != nil {
 			return err
 		}
@@ -173,4 +180,28 @@ func printDeploymentSummary(deployment *api.Deployment, project string, out io.W
 	if deployment.PrivateEndpoint != "" {
 		fmt.Printf(color.GreenString("\nPrivate Endpoint: %s\n"), deployment.PrivateEndpoint)
 	}
+}
+
+// updateImage updates a project's Docker image. If branch is not empty, it will update a branch's image instead
+func updateImage(client *api.Client, project *api.Project, projectPath string, image, branch string) (deployment *api.Deployment, err error) {
+	// Update
+	if branch == "" {
+		err = client.UpdateProject(context.Background(), project.ID, image)
+		if err != nil {
+			return
+		}
+	} else {
+		err = client.UpdateBranch(context.Background(), project.ID, image, branch, true)
+		if err != nil {
+			return
+		}
+	}
+
+	// Get the resulting deployment
+	if branch == "" {
+		deployment, err = client.GetProductionDeployment(context.Background(), projectPath)
+	} else {
+		deployment, err = client.GetLatestDeployment(context.Background(), projectPath, branch)
+	}
+	return
 }
