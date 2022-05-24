@@ -22,6 +22,7 @@ type DeployOptions struct {
 	Project  string
 	UseCache bool
 	Restart  bool
+	Follow   bool
 }
 
 func NewDeployCmd(f *cmdutil.Factory) *cobra.Command {
@@ -43,6 +44,7 @@ func NewDeployCmd(f *cmdutil.Factory) *cobra.Command {
 	deployCmd.Flags().BoolVar(&opts.UseCache, "use-cache", true, "Enable build cache")
 	deployCmd.Flags().StringVarP(&opts.Branch, "branch", "b", "", "Deploy specific Branch (defaults to your configured production branch) ")
 	deployCmd.Flags().StringVarP(&opts.Image, "image", "i", "", "The Docker image to use for this deployment (if used with --branch, only the branch's image will be updated)")
+	deployCmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Follow the deployment logs. If false, the deployment will be started then the command will exit")
 
 	return deployCmd
 }
@@ -85,6 +87,11 @@ func runDeploy(opts *DeployOptions) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	if !opts.Follow {
+		fmt.Fprintln(opts.IO.Out, "Deploy started...")
+		return nil
 	}
 
 	deploymentFinished := false
