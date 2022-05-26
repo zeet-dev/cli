@@ -968,23 +968,11 @@ func (v *getProductionDeploymentResponse) GetProject() getProductionDeploymentPr
 
 // getProjectByIdProject includes the requested fields of the GraphQL type Project.
 type getProjectByIdProject struct {
-	Id   uuid.UUID                 `json:"id"`
-	Repo getProjectByIdProjectRepo `json:"repo"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns getProjectByIdProject.Id, and is useful for accessing the field via an interface.
 func (v *getProjectByIdProject) GetId() uuid.UUID { return v.Id }
-
-// GetRepo returns getProjectByIdProject.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectByIdProject) GetRepo() getProjectByIdProjectRepo { return v.Repo }
-
-// getProjectByIdProjectRepo includes the requested fields of the GraphQL type Repo.
-type getProjectByIdProjectRepo struct {
-	Path string `json:"path"`
-}
-
-// GetPath returns getProjectByIdProjectRepo.Path, and is useful for accessing the field via an interface.
-func (v *getProjectByIdProjectRepo) GetPath() string { return v.Path }
 
 // getProjectByIdResponse is returned by getProjectById on success.
 type getProjectByIdResponse struct {
@@ -996,23 +984,11 @@ func (v *getProjectByIdResponse) GetProject() getProjectByIdProject { return v.P
 
 // getProjectByPathProject includes the requested fields of the GraphQL type Project.
 type getProjectByPathProject struct {
-	Id   uuid.UUID                   `json:"id"`
-	Repo getProjectByPathProjectRepo `json:"repo"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns getProjectByPathProject.Id, and is useful for accessing the field via an interface.
 func (v *getProjectByPathProject) GetId() uuid.UUID { return v.Id }
-
-// GetRepo returns getProjectByPathProject.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectByPathProject) GetRepo() getProjectByPathProjectRepo { return v.Repo }
-
-// getProjectByPathProjectRepo includes the requested fields of the GraphQL type Repo.
-type getProjectByPathProjectRepo struct {
-	Path string `json:"path"`
-}
-
-// GetPath returns getProjectByPathProjectRepo.Path, and is useful for accessing the field via an interface.
-func (v *getProjectByPathProjectRepo) GetPath() string { return v.Path }
 
 // getProjectByPathResponse is returned by getProjectByPath on success.
 type getProjectByPathResponse struct {
@@ -1688,9 +1664,6 @@ func getProjectById(
 query getProjectById ($id: UUID!) {
 	project(id: $id) {
 		id
-		repo {
-			path
-		}
 	}
 }
 `,
@@ -1718,9 +1691,6 @@ func getProjectByPath(
 query getProjectByPath ($path: String) {
 	project(path: $path) {
 		id
-		repo {
-			path
-		}
 	}
 }
 `,

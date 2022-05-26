@@ -8,7 +8,7 @@ import (
 )
 
 type Project struct {
-	ID uuid.UUID
+	ID uuid.UUID `copier:"Id"`
 }
 
 func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project, error) {
@@ -18,9 +18,6 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 		query getProjectByPath($path: String) {
 		  project(path: $path) {
 			id
-			repo {
-			  path
-			}
 		  }
 		}
 	`
@@ -42,9 +39,6 @@ func (c *Client) GetProjectById(ctx context.Context, id uuid.UUID) (*Project, er
 		query getProjectById($id: UUID!) {
 		  project(id: $id) {
 			id
-			repo {
-			  path
-			}
 		  }
 		}
 	`
