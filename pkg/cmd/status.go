@@ -10,6 +10,7 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type StatusOpts struct {
@@ -44,7 +45,12 @@ func runStatus(opts *StatusOpts) error {
 		return err
 	}
 
-	deployment, err := client.GetProductionDeployment(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+
+	deployment, err := client.GetProductionDeployment(context.Background(), path)
 	if err != nil {
 		return err
 	}

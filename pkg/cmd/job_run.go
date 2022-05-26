@@ -55,10 +55,15 @@ func runJobRun(opts *JobRunOptions) error {
 		return err
 	}
 
-	project, err := client.GetProjectByPath(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
 	if err != nil {
 		return err
 	}
+	project, err := client.GetProjectByPath(context.Background(), path)
+	if err != nil {
+		return err
+	}
+
 	job, err := client.RunJob(context.Background(), project.ID, opts.Command, opts.Build)
 	if err != nil {
 		return err

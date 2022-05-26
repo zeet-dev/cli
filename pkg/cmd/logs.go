@@ -54,10 +54,15 @@ func runLogs(opts *LogsOptions) error {
 		return err
 	}
 
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+
 	// Get deployment
 	var deployment *api.Deployment
 	if opts.DeploymentID == "" {
-		deployment, err = client.GetProductionDeployment(context.Background(), opts.Project)
+		deployment, err = client.GetProductionDeployment(context.Background(), path)
 	} else {
 		deployment, err = client.GetDeployment(context.Background(), uuid.MustParse(opts.DeploymentID))
 	}
@@ -72,7 +77,7 @@ func runLogs(opts *LogsOptions) error {
 
 	if opts.Live {
 		getStatus := func() (api.DeploymentStatus, error) {
-			deployment, err := client.GetProductionDeployment(context.Background(), opts.Project)
+			deployment, err := client.GetProductionDeployment(context.Background(), path)
 			if err != nil {
 				return deployment.Status, err
 			}

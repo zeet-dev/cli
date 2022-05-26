@@ -180,6 +180,14 @@ type __getProductionDeploymentInput struct {
 // GetProject returns __getProductionDeploymentInput.Project, and is useful for accessing the field via an interface.
 func (v *__getProductionDeploymentInput) GetProject() string { return v.Project }
 
+// __getProjectByIdInput is used internally by genqlient
+type __getProjectByIdInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __getProjectByIdInput.Id, and is useful for accessing the field via an interface.
+func (v *__getProjectByIdInput) GetId() uuid.UUID { return v.Id }
+
 // __getProjectByPathInput is used internally by genqlient
 type __getProjectByPathInput struct {
 	Path string `json:"path"`
@@ -187,6 +195,14 @@ type __getProjectByPathInput struct {
 
 // GetPath returns __getProjectByPathInput.Path, and is useful for accessing the field via an interface.
 func (v *__getProjectByPathInput) GetPath() string { return v.Path }
+
+// __getProjectPathInput is used internally by genqlient
+type __getProjectPathInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __getProjectPathInput.Id, and is useful for accessing the field via an interface.
+func (v *__getProjectPathInput) GetId() uuid.UUID { return v.Id }
 
 // __getProjectRepoInput is used internally by genqlient
 type __getProjectRepoInput struct {
@@ -950,13 +966,53 @@ func (v *getProductionDeploymentResponse) GetProject() getProductionDeploymentPr
 	return v.Project
 }
 
+// getProjectByIdProject includes the requested fields of the GraphQL type Project.
+type getProjectByIdProject struct {
+	Id   uuid.UUID                 `json:"id"`
+	Repo getProjectByIdProjectRepo `json:"repo"`
+}
+
+// GetId returns getProjectByIdProject.Id, and is useful for accessing the field via an interface.
+func (v *getProjectByIdProject) GetId() uuid.UUID { return v.Id }
+
+// GetRepo returns getProjectByIdProject.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectByIdProject) GetRepo() getProjectByIdProjectRepo { return v.Repo }
+
+// getProjectByIdProjectRepo includes the requested fields of the GraphQL type Repo.
+type getProjectByIdProjectRepo struct {
+	Path string `json:"path"`
+}
+
+// GetPath returns getProjectByIdProjectRepo.Path, and is useful for accessing the field via an interface.
+func (v *getProjectByIdProjectRepo) GetPath() string { return v.Path }
+
+// getProjectByIdResponse is returned by getProjectById on success.
+type getProjectByIdResponse struct {
+	Project getProjectByIdProject `json:"project"`
+}
+
+// GetProject returns getProjectByIdResponse.Project, and is useful for accessing the field via an interface.
+func (v *getProjectByIdResponse) GetProject() getProjectByIdProject { return v.Project }
+
 // getProjectByPathProject includes the requested fields of the GraphQL type Project.
 type getProjectByPathProject struct {
-	Id uuid.UUID `json:"id"`
+	Id   uuid.UUID                   `json:"id"`
+	Repo getProjectByPathProjectRepo `json:"repo"`
 }
 
 // GetId returns getProjectByPathProject.Id, and is useful for accessing the field via an interface.
 func (v *getProjectByPathProject) GetId() uuid.UUID { return v.Id }
+
+// GetRepo returns getProjectByPathProject.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectByPathProject) GetRepo() getProjectByPathProjectRepo { return v.Repo }
+
+// getProjectByPathProjectRepo includes the requested fields of the GraphQL type Repo.
+type getProjectByPathProjectRepo struct {
+	Path string `json:"path"`
+}
+
+// GetPath returns getProjectByPathProjectRepo.Path, and is useful for accessing the field via an interface.
+func (v *getProjectByPathProjectRepo) GetPath() string { return v.Path }
 
 // getProjectByPathResponse is returned by getProjectByPath on success.
 type getProjectByPathResponse struct {
@@ -965,6 +1021,30 @@ type getProjectByPathResponse struct {
 
 // GetProject returns getProjectByPathResponse.Project, and is useful for accessing the field via an interface.
 func (v *getProjectByPathResponse) GetProject() getProjectByPathProject { return v.Project }
+
+// getProjectPathProject includes the requested fields of the GraphQL type Project.
+type getProjectPathProject struct {
+	Repo getProjectPathProjectRepo `json:"repo"`
+}
+
+// GetRepo returns getProjectPathProject.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectPathProject) GetRepo() getProjectPathProjectRepo { return v.Repo }
+
+// getProjectPathProjectRepo includes the requested fields of the GraphQL type Repo.
+type getProjectPathProjectRepo struct {
+	Path string `json:"path"`
+}
+
+// GetPath returns getProjectPathProjectRepo.Path, and is useful for accessing the field via an interface.
+func (v *getProjectPathProjectRepo) GetPath() string { return v.Path }
+
+// getProjectPathResponse is returned by getProjectPath on success.
+type getProjectPathResponse struct {
+	Project getProjectPathProject `json:"project"`
+}
+
+// GetProject returns getProjectPathResponse.Project, and is useful for accessing the field via an interface.
+func (v *getProjectPathResponse) GetProject() getProjectPathProject { return v.Project }
 
 // getProjectRepoProject includes the requested fields of the GraphQL type Project.
 type getProjectRepoProject struct {
@@ -1590,6 +1670,36 @@ query getProductionDeployment ($project: String!) {
 	return &retval, err
 }
 
+func getProjectById(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*getProjectByIdResponse, error) {
+	__input := __getProjectByIdInput{
+		Id: id,
+	}
+	var err error
+
+	var retval getProjectByIdResponse
+	err = client.MakeRequest(
+		ctx,
+		"getProjectById",
+		`
+query getProjectById ($id: UUID!) {
+	project(id: $id) {
+		id
+		repo {
+			path
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
 func getProjectByPath(
 	ctx context.Context,
 	client graphql.Client,
@@ -1608,6 +1718,38 @@ func getProjectByPath(
 query getProjectByPath ($path: String) {
 	project(path: $path) {
 		id
+		repo {
+			path
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func getProjectPath(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*getProjectPathResponse, error) {
+	__input := __getProjectPathInput{
+		Id: id,
+	}
+	var err error
+
+	var retval getProjectPathResponse
+	err = client.MakeRequest(
+		ctx,
+		"getProjectPath",
+		`
+query getProjectPath ($id: UUID!) {
+	project(id: $id) {
+		repo {
+			path
+		}
 	}
 }
 `,
