@@ -79,6 +79,6 @@ func runStatus(opts *StatusOpts) error {
 	fmt.Fprintf(opts.IO.Out, "Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
 
 	dashboard := fmt.Sprintf("https://zeet.co/repo/%s/deployments/%s", project.ID, deployment.ID)
-	fmt.Fprintf(opts.IO.Out, "Dashboard: %s", dashboard)
+	fmt.Fprintf(opts.IO.Out, "Dashboard: %s\n", dashboard)
 	return nil
 }
