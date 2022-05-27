@@ -73,7 +73,7 @@ func runJobRun(opts *JobRunOptions) error {
 	}
 
 	fmt.Fprintln(opts.IO.Out, "Starting job...")
-	fmt.Fprintln(opts.IO.Out, "Dashboard: "+fmt.Sprintf("https://zeet.co/repo/%s/jobs/%s", project.ID, job.ID))
+	fmt.Fprintf(opts.IO.Out, "Dashboard: %s\n\n", fmt.Sprintf("https://zeet.co/repo/%s/jobs/%s", project.ID, job.ID))
 
 	if opts.Follow {
 		return nil
