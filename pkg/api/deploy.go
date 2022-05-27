@@ -13,13 +13,16 @@ type Deployment struct {
 	Branch          string
 	Endpoints       []string
 	PrivateEndpoint string
+	ErrorMessage    string
 }
 
+// TODO this should be named DeploymentStatus, but that's already used
 type DeploymentReplicaStatus struct {
 	Replicas        int
 	ReadyReplicas   int
 	RunningReplicas int
 	State           string
+	ErrorMessage    string
 }
 
 func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch string, noCache bool) (*Deployment, error) {
@@ -186,6 +189,7 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 			  status
 			  endpoints
 			  privateEndpoint
+              errorMessage
 			}
 		  }
 		}
@@ -199,7 +203,7 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 	return out, err
 }
 
-func (c *Client) GetDeploymentReplicaStatus(ctx context.Context, deploymentID uuid.UUID) (*DeploymentReplicaStatus, error) {
+func (c *Client) GetDeploymentStatus(ctx context.Context, deploymentID uuid.UUID) (*DeploymentReplicaStatus, error) {
 	out := &DeploymentReplicaStatus{}
 
 	_ = `# @genqlient
@@ -211,6 +215,7 @@ func (c *Client) GetDeploymentReplicaStatus(ctx context.Context, deploymentID uu
 				readyReplicas
 				runningReplicas
 				state
+				errorMessage
 			  }
 			}
 		  }

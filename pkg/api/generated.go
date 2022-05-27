@@ -524,6 +524,7 @@ type getDeploymentInfoCurrentUserDeployment struct {
 	Status          DeploymentStatus `json:"status"`
 	Endpoints       []string         `json:"endpoints"`
 	PrivateEndpoint string           `json:"privateEndpoint"`
+	ErrorMessage    string           `json:"errorMessage"`
 }
 
 // GetId returns getDeploymentInfoCurrentUserDeployment.Id, and is useful for accessing the field via an interface.
@@ -539,6 +540,9 @@ func (v *getDeploymentInfoCurrentUserDeployment) GetEndpoints() []string { retur
 func (v *getDeploymentInfoCurrentUserDeployment) GetPrivateEndpoint() string {
 	return v.PrivateEndpoint
 }
+
+// GetErrorMessage returns getDeploymentInfoCurrentUserDeployment.ErrorMessage, and is useful for accessing the field via an interface.
+func (v *getDeploymentInfoCurrentUserDeployment) GetErrorMessage() string { return v.ErrorMessage }
 
 // getDeploymentInfoResponse is returned by getDeploymentInfo on success.
 type getDeploymentInfoResponse struct {
@@ -642,6 +646,7 @@ type getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus struct {
 	ReadyReplicas   int    `json:"readyReplicas"`
 	RunningReplicas int    `json:"runningReplicas"`
 	State           string `json:"state"`
+	ErrorMessage    string `json:"errorMessage"`
 }
 
 // GetReplicas returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.Replicas, and is useful for accessing the field via an interface.
@@ -662,6 +667,11 @@ func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetRunning
 // GetState returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.State, and is useful for accessing the field via an interface.
 func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetState() string {
 	return v.State
+}
+
+// GetErrorMessage returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.ErrorMessage, and is useful for accessing the field via an interface.
+func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetErrorMessage() string {
+	return v.ErrorMessage
 }
 
 // getDeploymentReplicaStatusResponse is returned by getDeploymentReplicaStatus on success.
@@ -1357,6 +1367,7 @@ query getDeploymentInfo ($id: ID!) {
 			status
 			endpoints
 			privateEndpoint
+			errorMessage
 		}
 	}
 }
@@ -1426,6 +1437,7 @@ query getDeploymentReplicaStatus ($id: ID!) {
 				readyReplicas
 				runningReplicas
 				state
+				errorMessage
 			}
 		}
 	}
