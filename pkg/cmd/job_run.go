@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -33,16 +34,16 @@ func NewJobRunCmd(f *cmdutil.Factory) *cobra.Command {
 	opts.ApiClient = f.ApiClient
 
 	cmd := &cobra.Command{
-		Use:   "job:run [project]",
+		Use:   "job:run [project] [command]",
 		Short: "Executes a command on a project, in a new instance",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Project = args[0]
+			opts.Command = strings.Join(args[1:], " ")
 
 			return runJobRun(opts)
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.Command, "cmd", "", "The command to run")
 	cmd.Flags().BoolVarP(&opts.Build, "build", "b", false, "Trigger build (true) or use latest image (false)")
 	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Run until the job is complete")
 
@@ -79,37 +80,46 @@ func runJobRun(opts *JobRunOptions) error {
 	}
 
 	jobFinished := false
-	var lastState api.JobRunState
+	logsPrinted := false
 	for !jobFinished {
 		job, err = client.GetJob(context.Background(), project.ID, job.ID)
 		if err != nil {
 			return err
 		}
 
+		// TODO improve logic...
 		switch job.State {
 		case api.JobRunStateJobRunStarting:
 			break
 		case api.JobRunStateJobRunRunning:
-			if err := pollJobLogs(client, project, job, opts.IO.Out); err != nil {
-				return err
+			if !logsPrinted {
+				if err := pollJobLogs(client, project, job, opts.IO.Out); err != nil {
+					return err
+				}
 			}
+			logsPrinted = true
 			break
 		case api.JobRunStateJobRunSucceeded:
 			jobFinished = true
-			if lastState == api.JobRunStateJobRunStarting {
+			if !logsPrinted {
 				if err := printJobLogs(client, project, job, opts.IO.Out); err != nil {
 					return err
 				}
 			}
+			logsPrinted = true
 			fmt.Fprintln(opts.IO.Out, color.GreenString("Job ran successfully"))
 			break
 		case api.JobRunStateJobRunFailed:
 			jobFinished = true
+			if !logsPrinted {
+				if err := printJobLogs(client, project, job, opts.IO.Out); err != nil {
+					return err
+				}
+			}
+			logsPrinted = true
 			fmt.Fprintln(opts.IO.Out, color.RedString("Job failed"))
 			break
 		}
-
-		lastState = job.State
 	}
 
 	return nil

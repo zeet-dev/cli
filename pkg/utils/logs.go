@@ -36,7 +36,6 @@ func PollLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus fu
 			return nil
 		}
 
-		// TODO
 		if len(logs) < lastLog {
 			return nil
 		}
