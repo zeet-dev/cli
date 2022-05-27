@@ -58,7 +58,7 @@ func runStatus(opts *StatusOpts) error {
 	if err != nil {
 		return err
 	}
-	status, err := client.GetDeploymentReplicaStatus(context.Background(), deployment.ID)
+	status, err := client.GetDeploymentStatus(context.Background(), deployment.ID)
 	if err != nil {
 		return err
 	}
