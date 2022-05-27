@@ -46,7 +46,7 @@ func NewJobRunCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd.Flags().BoolVarP(&opts.Build, "build", "b", false, "Trigger build (true) or use latest image (false)")
 	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Run until the job is complete")
 
-	cmd.MarkFlagRequired("command")
+	cmd.MarkFlagRequired("cmd")
 
 	return cmd
 }
