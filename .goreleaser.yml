@@ -52,3 +52,6 @@ brews:
 
     homepage: "https://zeet.co"
     description: "The Zeet CLI"
+
+    custom_block: |
+      head "https://github.com/zeet-dev/cli.git"
