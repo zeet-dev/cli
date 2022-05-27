@@ -34,7 +34,7 @@ func NewJobRunCmd(f *cmdutil.Factory) *cobra.Command {
 
 	cmd := &cobra.Command{
 		Use:   "job:run [project]",
-		Short: "Executes a command on a project",
+		Short: "Executes a command on a project, in a new instance",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.Project = args[0]
 
