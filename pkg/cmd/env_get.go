@@ -52,7 +52,12 @@ func runEnvGet(opts *EnvGetOptions) error {
 		return err
 	}
 
-	repo, err := client.GetProjectRepo(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+
+	repo, err := client.GetProjectRepo(context.Background(), path)
 	if err != nil {
 		return err
 	}

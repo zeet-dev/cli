@@ -4,13 +4,16 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 type Project struct {
-	ID uuid.UUID
+	ID uuid.UUID `copier:"Id"`
 }
 
 func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project, error) {
+	out := &Project{}
+
 	_ = `# @genqlient
 		query getProjectByPath($path: String) {
 		  project(path: $path) {
@@ -22,7 +25,50 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 	if err != nil {
 		return nil, err
 	}
-	return &Project{res.Project.Id}, nil
+
+	if err := copier.Copy(out, res.Project); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *Client) GetProjectById(ctx context.Context, id uuid.UUID) (*Project, error) {
+	out := &Project{}
+
+	_ = `# @genqlient
+		query getProjectById($id: UUID!) {
+		  project(id: $id) {
+			id
+		  }
+		}
+	`
+	res, err := getProjectById(ctx, c.GQL, id)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := copier.Copy(out, res.Project); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, error) {
+	_ = `# @genqlient
+		query getProjectPath($id: UUID!) {
+		  project(id: $id) {
+			repo {
+			  path
+			}
+		  }
+		}
+	`
+	res, err := getProjectPath(ctx, c.GQL, id)
+	if err != nil {
+		return "", err
+	}
+
+	return res.Project.Repo.Path, nil
 }
 
 func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (string, error) {

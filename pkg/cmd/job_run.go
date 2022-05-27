@@ -42,9 +42,11 @@ func NewJobRunCmd(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&opts.Command, "command", "", "The command to run")
-	cmd.Flags().BoolVarP(&opts.Build, "build", "b", false, "Trigger a build. Set to false to use latest the latest image")
-	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Follow the logs until the command is complete")
+	cmd.Flags().StringVar(&opts.Command, "cmd", "", "The command to run")
+	cmd.Flags().BoolVarP(&opts.Build, "build", "b", false, "Trigger build (true) or use latest image (false)")
+	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Run until the job is complete")
+
+	cmd.MarkFlagRequired("command")
 
 	return cmd
 }
@@ -55,13 +57,25 @@ func runJobRun(opts *JobRunOptions) error {
 		return err
 	}
 
-	project, err := client.GetProjectByPath(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
 	if err != nil {
 		return err
 	}
+	project, err := client.GetProjectByPath(context.Background(), path)
+	if err != nil {
+		return err
+	}
+
 	job, err := client.RunJob(context.Background(), project.ID, opts.Command, opts.Build)
 	if err != nil {
 		return err
+	}
+
+	fmt.Fprintln(opts.IO.Out, "Starting job...")
+	fmt.Fprintln(opts.IO.Out, "Dashboard: "+fmt.Sprintf("https://zeet.co/repo/%s/jobs/%s", project.ID, job.ID))
+
+	if opts.Follow {
+		return nil
 	}
 
 	jobFinished := false
@@ -73,20 +87,21 @@ func runJobRun(opts *JobRunOptions) error {
 		}
 
 		switch job.State {
-		// Prevent printing the same state multiple times
-		case lastState:
-			break
 		case api.JobRunStateJobRunStarting:
-			fmt.Fprintln(opts.IO.Out, "Starting job...")
 			break
 		case api.JobRunStateJobRunRunning:
-			if err := printJobLogs(client, project, job, opts.IO.Out); err != nil {
+			if err := pollJobLogs(client, project, job, opts.IO.Out); err != nil {
 				return err
 			}
 			break
 		case api.JobRunStateJobRunSucceeded:
-			fmt.Fprintln(opts.IO.Out, color.GreenString("Job ran successfully"))
 			jobFinished = true
+			if lastState == api.JobRunStateJobRunStarting {
+				if err := printJobLogs(client, project, job, opts.IO.Out); err != nil {
+					return err
+				}
+			}
+			fmt.Fprintln(opts.IO.Out, color.GreenString("Job ran successfully"))
 			break
 		case api.JobRunStateJobRunFailed:
 			jobFinished = true
@@ -100,7 +115,7 @@ func runJobRun(opts *JobRunOptions) error {
 	return nil
 }
 
-func printJobLogs(client *api.Client, project *api.Project, job *api.Job, out io.Writer) error {
+func pollJobLogs(client *api.Client, project *api.Project, job *api.Job, out io.Writer) error {
 	getLogs := func() ([]api.LogEntry, error) {
 		return client.GetJobLogs(context.Background(), project.ID, job.ID)
 	}
@@ -114,4 +129,17 @@ func printJobLogs(client *api.Client, project *api.Project, job *api.Job, out io
 	}
 
 	return utils.PollLogs(getLogs, getState, out)
+}
+
+func printJobLogs(client *api.Client, project *api.Project, job *api.Job, out io.Writer) error {
+	logs, err := client.GetJobLogs(context.Background(), project.ID, job.ID)
+	if err != nil {
+		return err
+	}
+
+	for _, l := range logs {
+		fmt.Fprintln(out, l.Text)
+	}
+
+	return nil
 }

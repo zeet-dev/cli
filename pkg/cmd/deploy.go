@@ -55,7 +55,11 @@ func runDeploy(opts *DeployOptions) error {
 		return err
 	}
 
-	project, err := client.GetProjectByPath(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+	project, err := client.GetProjectByPath(context.Background(), path)
 	if err != nil {
 		return err
 	}
@@ -78,7 +82,7 @@ func runDeploy(opts *DeployOptions) error {
 			return err
 		}
 	} else if opts.Image != "" {
-		deployment, err = updateImage(client, project, opts.Project, opts.Image, opts.Branch)
+		deployment, err = updateImage(client, project, path, opts.Image, opts.Branch)
 		if err != nil {
 			return err
 		}
@@ -104,7 +108,7 @@ func runDeploy(opts *DeployOptions) error {
 		switch deployment.Status {
 		// Build
 		case api.DeploymentStatusBuildInProgress:
-			fmt.Fprintf(opts.IO.Out, "⛏ Building %s...\n", opts.Project)
+			fmt.Fprintf(opts.IO.Out, "⛏ Building %s...\n", path)
 			if err := printBuildLogs(client, deployment, opts.IO.Out); err != nil {
 				return err
 			}
@@ -126,13 +130,13 @@ func runDeploy(opts *DeployOptions) error {
 
 		// Deployment
 		case api.DeploymentStatusDeployInProgress:
-			fmt.Fprintf(opts.IO.Out, "Deploying %s...\n", opts.Project)
+			fmt.Fprintf(opts.IO.Out, "Deploying %s...\n", path)
 			if err := printDeploymentLogs(client, deployment, opts.IO.Out); err != nil {
 				return err
 			}
 			break
 		case api.DeploymentStatusDeploySucceeded:
-			printDeploymentSummary(deployment, opts.Project, opts.IO.Out)
+			printDeploymentSummary(deployment, path, opts.IO.Out)
 			deploymentFinished = true
 			break
 		case api.DeploymentStatusDeployFailed:

@@ -10,6 +10,7 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type EnvSetOptions struct {
@@ -47,7 +48,12 @@ func runEnvSet(opts *EnvSetOptions) error {
 		return err
 	}
 
-	repo, err := client.GetProjectRepo(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+
+	repo, err := client.GetProjectRepo(context.Background(), path)
 	if err != nil {
 		return err
 	}

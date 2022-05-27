@@ -10,6 +10,7 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type StatusOpts struct {
@@ -44,7 +45,16 @@ func runStatus(opts *StatusOpts) error {
 		return err
 	}
 
-	deployment, err := client.GetProductionDeployment(context.Background(), opts.Project)
+	path, err := utils.ToProjectPath(client, opts.Project)
+	if err != nil {
+		return err
+	}
+	project, err := client.GetProjectByPath(context.Background(), path)
+	if err != nil {
+		return err
+	}
+
+	deployment, err := client.GetProductionDeployment(context.Background(), path)
 	if err != nil {
 		return err
 	}
@@ -67,5 +77,8 @@ func runStatus(opts *StatusOpts) error {
 
 	fmt.Fprintf(opts.IO.Out, "Status: %s\n", statusMessage)
 	fmt.Fprintf(opts.IO.Out, "Healthy Replicas: [%d/%d]\n", status.ReadyReplicas, status.Replicas)
+
+	dashboard := fmt.Sprintf("https://zeet.co/repo/%s/deployments/%s", project.ID, deployment.ID)
+	fmt.Fprintf(opts.IO.Out, "Dashboard: %s", dashboard)
 	return nil
 }
