@@ -44,7 +44,7 @@ func NewDeployCmd(f *cmdutil.Factory) *cobra.Command {
 	deployCmd.Flags().BoolVar(&opts.UseCache, "use-cache", true, "Enable build cache")
 	deployCmd.Flags().StringVarP(&opts.Branch, "branch", "b", "", "Deploy specific Branch (defaults to your configured production branch) ")
 	deployCmd.Flags().StringVarP(&opts.Image, "image", "i", "", "The Docker image to use for this deployment (if used with --branch, only the branch's image will be updated)")
-	deployCmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Follow the deployment logs. If false, the deployment will be started then the command will exit")
+	deployCmd.Flags().BoolVarP(&opts.Follow, "follow", "f", true, "Follow the deployment logs. If false, the deployment will be started then the command will exit")
 
 	return deployCmd
 }
@@ -93,8 +93,8 @@ func runDeploy(opts *DeployOptions) error {
 		}
 	}
 
+	fmt.Fprintln(opts.IO.Out, "Deploy started...")
 	if !opts.Follow {
-		fmt.Fprintln(opts.IO.Out, "Deploy started...")
 		return nil
 	}
 
@@ -141,6 +141,9 @@ func runDeploy(opts *DeployOptions) error {
 			break
 		case api.DeploymentStatusDeployFailed:
 			fmt.Fprintln(opts.IO.Out, color.RedString("Deploy failed\n"))
+			if deployment.ErrorMessage != "" {
+				fmt.Fprintf(opts.IO.Out, color.RedString("Error: %s\n"), deployment.ErrorMessage)
+			}
 			deploymentFinished = true
 			break
 		}
