@@ -45,13 +45,24 @@ project_name: zeet
 snapshot: 
   name_template: "{{ incpatch .Version }}-next"
 brews:
-  - tap:
+  -
+    name: zeet
+    tap:
       owner: zeet-dev
       name: homebrew-tap
       token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
 
     homepage: "https://zeet.co"
     description: "The Zeet CLI"
+    skip_upload: auto
 
     custom_block: |
       head "https://github.com/zeet-dev/cli.git"
+  -
+    name: zeet-rc
+    tap:
+      owner: zeet-dev
+      name: homebrew-tap
+      token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
+    homepage: "https://zeet.co"
+    description: "The Zeet CLI [w/ release candidates]"
