@@ -66,3 +66,5 @@ brews:
       token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
     homepage: "https://zeet.co"
     description: "The Zeet CLI [w/ release candidates]"
+    install: |
+      bin.install "zeet" => "zeet-rc"
