@@ -111,7 +111,7 @@ func runDeploy(opts *DeployOptions) error {
 			return err
 		}
 		if fullStatus.State == "error" {
-			fmt.Fprintf(opts.IO.Out, color.RedString("Deploy failed. Error: %s\n"), fullStatus.State)
+			fmt.Fprintf(opts.IO.Out, color.RedString("Deploy failed. Error: %s\n"), fullStatus.ErrorMessage)
 			deploymentFinished = true
 		}
 
