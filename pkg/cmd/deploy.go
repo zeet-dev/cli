@@ -100,8 +100,7 @@ func runDeploy(opts *DeployOptions) error {
 		return nil
 	}
 
-	deploymentFinished := false
-	for !deploymentFinished {
+	for {
 		deployment, err = client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
 			return err
@@ -111,8 +110,7 @@ func runDeploy(opts *DeployOptions) error {
 			return err
 		}
 		if fullStatus.State == "error" {
-			fmt.Fprintf(opts.IO.Out, color.RedString("Deploy failed. Error: %s\n"), fullStatus.ErrorMessage)
-			deploymentFinished = true
+			return fmt.Errorf("Deploy failed. %s\n", fullStatus.ErrorMessage)
 		}
 
 		switch deployment.Status {
@@ -125,19 +123,13 @@ func runDeploy(opts *DeployOptions) error {
 			break
 		case api.DeploymentStatusBuildSucceeded:
 			fmt.Fprintf(opts.IO.Out, color.GreenString("⛏ Build complete\n"))
-			break
+			return nil
 		case api.DeploymentStatusBuildFailed:
-			fmt.Fprintf(opts.IO.Out, color.RedString("Build failed\n"))
-			deploymentFinished = true
-			break
+			return fmt.Errorf("Build failed\n")
 		case api.DeploymentStatusBuildAborted:
-			fmt.Fprintf(opts.IO.Out, color.RedString("Build aborted\n"))
-			deploymentFinished = true
-			break
+			return fmt.Errorf("Build aborted\n")
 		case api.DeploymentStatusDeployStopped:
-			fmt.Fprintf(opts.IO.Out, color.RedString("Build stopped\n"))
-			deploymentFinished = true
-			break
+			return fmt.Errorf("Build stopped\n")
 
 		// Deployment
 		case api.DeploymentStatusDeployInProgress:
@@ -148,19 +140,11 @@ func runDeploy(opts *DeployOptions) error {
 			break
 		case api.DeploymentStatusDeploySucceeded:
 			printDeploymentSummary(deployment, path, opts.IO.Out)
-			deploymentFinished = true
-			break
+			return nil
 		case api.DeploymentStatusDeployFailed:
-			fmt.Fprintln(opts.IO.Out, color.RedString("Deploy failed\n"))
-			if deployment.ErrorMessage != "" {
-				fmt.Fprintf(opts.IO.Out, color.RedString("Error: %s\n"), deployment.ErrorMessage)
-			}
-			deploymentFinished = true
-			break
+			return fmt.Errorf("Deploy failed. %s\n", deployment.ErrorMessage)
 		}
 	}
-
-	return nil
 }
 
 func printBuildLogs(client *api.Client, deployment *api.Deployment, out io.Writer) error {
