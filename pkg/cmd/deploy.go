@@ -94,6 +94,8 @@ func runDeploy(opts *DeployOptions) error {
 	}
 
 	fmt.Fprintln(opts.IO.Out, "Deploy started...")
+	dashboard := fmt.Sprintf("https://zeet.co/repo/%s/deployments/%s", project.ID, deployment.ID)
+	fmt.Fprintln(opts.IO.Out, "Dashboard: "+dashboard)
 	if !opts.Follow {
 		return nil
 	}
@@ -103,6 +105,14 @@ func runDeploy(opts *DeployOptions) error {
 		deployment, err = client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
 			return err
+		}
+		fullStatus, err := client.GetDeploymentStatus(context.Background(), deployment.ID)
+		if err != nil {
+			return err
+		}
+		if fullStatus.State == "error" {
+			fmt.Fprintf(opts.IO.Out, color.RedString("Deploy failed. Error: %s\n"), fullStatus.State)
+			deploymentFinished = true
 		}
 
 		switch deployment.Status {
@@ -126,6 +136,7 @@ func runDeploy(opts *DeployOptions) error {
 			break
 		case api.DeploymentStatusDeployStopped:
 			fmt.Fprintf(opts.IO.Out, color.RedString("Build stopped\n"))
+			deploymentFinished = true
 			break
 
 		// Deployment
