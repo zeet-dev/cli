@@ -27,6 +27,7 @@ type LoginOptions struct {
 	Config    func() (config.Config, error)
 
 	AccessToken string
+	Overwrite   bool
 }
 
 func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
@@ -45,6 +46,7 @@ func NewLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&opts.AccessToken, "token", "t", "", "Your Zeet access token")
+	cmd.Flags().BoolVarP(&opts.Overwrite, "overwrite", "o", false, "If a user is already authenticated, overwrite their credentials")
 
 	return cmd
 }
@@ -61,7 +63,7 @@ func runLogin(opts *LoginOptions) error {
 
 	accessToken := cfg.GetString("auth.access_token")
 
-	if accessToken != "" {
+	if accessToken != "" && !opts.Overwrite {
 		if user, err := apiClient.GetCurrentUser(context.Background()); err == nil {
 			fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
 			fmt.Fprintf(opts.IO.Out, "Login as a different user? [y/N]: ")
