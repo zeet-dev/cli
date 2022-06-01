@@ -1,5 +1,7 @@
---- 
-archives: 
+---
+release:
+  prerelease: auto
+archives:
   - 
     replacements: 
       amd64: x86_64
