@@ -45,7 +45,7 @@ func NewJobRunCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.Flags().BoolVarP(&opts.Build, "build", "b", false, "Trigger build (true) or use latest image (false)")
-	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Run until the job is complete")
+	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", true, "Run until the job is complete, while printing logs")
 
 	return cmd
 }
@@ -73,7 +73,7 @@ func runJobRun(opts *JobRunOptions) error {
 	fmt.Fprintln(opts.IO.Out, "Starting job...")
 	fmt.Fprintf(opts.IO.Out, "Dashboard: %s\n\n", fmt.Sprintf("https://zeet.co/repo/%s/jobs/%s", project.ID, job.ID))
 
-	if opts.Follow {
+	if !opts.Follow {
 		return nil
 	}
 
