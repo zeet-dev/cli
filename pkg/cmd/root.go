@@ -38,8 +38,6 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewConfigSetCmd(f))
 	rootCmd.AddCommand(NewJobRunCmd(f))
 
-	rootCmd.AddCommand(NewGenDocsCmd())
-
 	// Set inputs/outputs
 	rootCmd.SetErr(&cmdutil.ErrorWriter{Out: f.IOStreams.Out})
 	rootCmd.SetIn(f.IOStreams.In)

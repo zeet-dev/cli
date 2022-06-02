@@ -1,4 +1,4 @@
-package cmd
+package main
 
 import (
 	"bytes"
@@ -8,24 +8,10 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
+	"github.com/zeet-dev/cli/pkg/cmd"
+	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/iostreams"
 )
-
-func NewGenDocsCmd() *cobra.Command {
-	var dir string
-
-	cmd := &cobra.Command{
-		Use:    "gen-docs",
-		Hidden: true,
-		Short:  "Generates Markdown docs",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return runGenDocs(dir, cmd.Parent())
-		},
-	}
-
-	cmd.Flags().StringVarP(&dir, "dir", "d", "./docs", "The directory to place the markdown docs in")
-
-	return cmd
-}
 
 const fmTemplate = `---
 title: "%s"
@@ -33,8 +19,17 @@ hide_title: true
 ---
 `
 
-func runGenDocs(dir string, rootCmd *cobra.Command) error {
-	if err := writeDocs(rootCmd, dir); err != nil {
+func main() {
+	if err := run(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
+	rootCmd := cmd.NewRootCmd(&cmdutil.Factory{IOStreams: iostreams.System()})
+
+	if err := writeDocs(rootCmd, os.Getenv("DOCS_OUT")); err != nil {
 		return err
 	}
 
