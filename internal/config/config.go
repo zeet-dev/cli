@@ -47,10 +47,6 @@ func NewState() (Config, error) {
 }
 
 func ConfigDir() (string, error) {
-	if os.Getenv("APP_ENV") == "gen_docs" {
-		return "/your/config/dir/zeet", nil
-	}
-
 	cfgDir, err := os.UserConfigDir()
 	if err != nil {
 		return "", err
