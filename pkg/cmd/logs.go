@@ -10,7 +10,6 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
-	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type LogsOptions struct {
@@ -54,7 +53,7 @@ func runLogs(opts *LogsOptions) error {
 		return err
 	}
 
-	path, err := utils.ToProjectPath(client, opts.Project)
+	path, err := client.ToProjectPath(opts.Project)
 	if err != nil {
 		return err
 	}
@@ -76,14 +75,10 @@ func runLogs(opts *LogsOptions) error {
 	}
 
 	if opts.Live {
-		getStatus := func() (api.DeploymentStatus, error) {
-			deployment, err := client.GetProductionDeployment(context.Background(), path)
-			if err != nil {
-				return deployment.Status, err
-			}
-			return deployment.Status, nil
+		shouldContinue := func() (bool, error) {
+			return true, nil
 		}
-		if err := utils.PollLogs(logsGetter, getStatus, opts.IO.Out); err != nil {
+		if err := pollLogs(logsGetter, shouldContinue, opts.IO.Out); err != nil {
 			return err
 		}
 	} else {
@@ -105,20 +100,23 @@ func logStageToGetter(client *api.Client, stage string, deploymentID uuid.UUID) 
 			return client.GetRuntimeLogs(context.Background(), deploymentID)
 		}
 	}
-
 	if stage == "build" {
 		return true, func() ([]api.LogEntry, error) {
 			return client.GetBuildLogs(context.Background(), deploymentID)
 		}
 	}
-
 	if stage == "deployment" {
 		return true, func() ([]api.LogEntry, error) {
 			return client.GetDeploymentLogs(context.Background(), deploymentID)
 		}
 	}
-
 	return false, func() ([]api.LogEntry, error) {
 		return nil, nil
 	}
 }
+
+//func checker(stage string, status string) bool {
+//	if stage == "runtime" {
+//		return utils.SliceContains([]api.DeploymentStatus{})
+//	}
+//}

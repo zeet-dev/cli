@@ -10,7 +10,6 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
-	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type EnvSetOptions struct {
@@ -48,7 +47,7 @@ func runEnvSet(opts *EnvSetOptions) error {
 		return err
 	}
 
-	path, err := utils.ToProjectPath(client, opts.Project)
+	path, err := client.ToProjectPath(opts.Project)
 	if err != nil {
 		return err
 	}

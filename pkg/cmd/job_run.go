@@ -15,7 +15,6 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
-	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type JobRunOptions struct {
@@ -56,7 +55,7 @@ func runJobRun(opts *JobRunOptions) error {
 		return err
 	}
 
-	path, err := utils.ToProjectPath(client, opts.Project)
+	path, err := client.ToProjectPath(opts.Project)
 	if err != nil {
 		return err
 	}
@@ -127,16 +126,16 @@ func pollJobLogs(client *api.Client, project *api.Project, job *api.Job, out io.
 	getLogs := func() ([]api.LogEntry, error) {
 		return client.GetJobLogs(context.Background(), project.ID, job.ID)
 	}
-	getState := func() (api.JobRunState, error) {
+	shouldContinue := func() (bool, error) {
 		job, err := client.GetJob(context.Background(), project.ID, job.ID)
 		if err != nil {
-			return "", err
+			return false, err
 		}
 
-		return job.State, nil
+		return api.IsJobInProgress(job.State), nil
 	}
 
-	return utils.PollLogs(getLogs, getState, out)
+	return pollLogs(getLogs, shouldContinue, out)
 }
 
 func printJobLogs(client *api.Client, project *api.Project, job *api.Job, out io.Writer) error {

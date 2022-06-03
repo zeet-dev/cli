@@ -52,7 +52,7 @@ func runEnvGet(opts *EnvGetOptions) error {
 		return err
 	}
 
-	path, err := utils.ToProjectPath(client, opts.Project)
+	path, err := client.ToProjectPath(opts.Project)
 	if err != nil {
 		return err
 	}
