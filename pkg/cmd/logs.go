@@ -17,7 +17,7 @@ type LogsOptions struct {
 	Config    func() (config.Config, error)
 	ApiClient func() (*api.Client, error)
 
-	Live         bool
+	Follow       bool
 	DeploymentID string
 	Stage        string
 	Project      string
@@ -40,7 +40,7 @@ func NewLogsCmd(f *cmdutil.Factory) *cobra.Command {
 		},
 	}
 
-	cmd.Flags().BoolVarP(&opts.Live, "follow", "f", false, "Follow log output")
+	cmd.Flags().BoolVarP(&opts.Follow, "follow", "f", false, "Follow log output")
 	cmd.Flags().StringVarP(&opts.DeploymentID, "deployment", "d", "", "The ID of the deployment to get logs for (not respected for serverless)")
 	cmd.Flags().StringVar(&opts.Stage, "stage", "runtime", "The deployment stage to get the logs for (build, deployment, or runtime)")
 
@@ -74,7 +74,7 @@ func runLogs(opts *LogsOptions) error {
 		return fmt.Errorf("invalid stage name. it must be either \"build\", \"deployment\" or \"runtime\" ")
 	}
 
-	if opts.Live {
+	if opts.Follow {
 		shouldContinue := func() (bool, error) {
 			return true, nil
 		}
