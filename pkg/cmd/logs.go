@@ -10,6 +10,7 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type LogsOptions struct {
@@ -69,14 +70,21 @@ func runLogs(opts *LogsOptions) error {
 		return err
 	}
 
-	validStage, logsGetter := logStageToGetter(client, opts.Stage, deployment.ID)
-	if !validStage {
+	// Make sure stage name is valid
+	if ok := isStageValid(opts.Stage); !ok {
 		return fmt.Errorf("invalid stage name. it must be either \"build\", \"deployment\" or \"runtime\" ")
 	}
 
-	if opts.Follow {
+	logsGetter := logStageToGetter(client, opts.Stage, deployment.ID)
+
+	shouldFollow, err := isStageInProgress(client, opts.Stage, deployment.ID)
+	if err != nil {
+		return err
+	}
+
+	if opts.Follow && shouldFollow {
 		shouldContinue := func() (bool, error) {
-			return true, nil
+			return isStageInProgress(client, opts.Stage, deployment.ID)
 		}
 		if err := pollLogs(logsGetter, shouldContinue, opts.IO.Out); err != nil {
 			return err
@@ -94,23 +102,47 @@ func runLogs(opts *LogsOptions) error {
 	return nil
 }
 
-func logStageToGetter(client *api.Client, stage string, deploymentID uuid.UUID) (valid bool, getter func() ([]api.LogEntry, error)) {
+func isStageValid(stage string) bool {
+	ok := []string{"runtime", "build", "deployment"}
+	return utils.SliceContains(ok, stage)
+}
+
+func logStageToGetter(client *api.Client, stage string, deploymentID uuid.UUID) (getter func() ([]api.LogEntry, error)) {
 	if stage == "runtime" {
-		return true, func() ([]api.LogEntry, error) {
+		return func() ([]api.LogEntry, error) {
 			return client.GetRuntimeLogs(context.Background(), deploymentID)
 		}
 	}
 	if stage == "build" {
-		return true, func() ([]api.LogEntry, error) {
+		return func() ([]api.LogEntry, error) {
 			return client.GetBuildLogs(context.Background(), deploymentID)
 		}
 	}
 	if stage == "deployment" {
-		return true, func() ([]api.LogEntry, error) {
+		return func() ([]api.LogEntry, error) {
 			return client.GetDeploymentLogs(context.Background(), deploymentID)
 		}
 	}
-	return false, func() ([]api.LogEntry, error) {
+	return func() ([]api.LogEntry, error) {
 		return nil, nil
 	}
+}
+
+func isStageInProgress(client *api.Client, stage string, deploymentID uuid.UUID) (bool, error) {
+	deployment, err := client.GetDeployment(context.Background(), deploymentID)
+	if err != nil {
+		return false, err
+	}
+
+	if stage == "build" {
+		return api.IsBuildInProgress(deployment.Status), nil
+	}
+	if stage == "deployment" {
+		return api.IsDeployInProgress(deployment.Status), nil
+	}
+	if stage == "runtime" {
+		return deployment.Status == api.DeploymentStatusDeploySucceeded, nil
+	}
+
+	return false, nil
 }
