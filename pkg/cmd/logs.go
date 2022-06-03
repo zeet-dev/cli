@@ -114,9 +114,3 @@ func logStageToGetter(client *api.Client, stage string, deploymentID uuid.UUID) 
 		return nil, nil
 	}
 }
-
-//func checker(stage string, status string) bool {
-//	if stage == "runtime" {
-//		return utils.SliceContains([]api.DeploymentStatus{})
-//	}
-//}
