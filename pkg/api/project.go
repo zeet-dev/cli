@@ -123,3 +123,24 @@ func (c *Client) UpdateProject(ctx context.Context, projectID uuid.UUID, image s
 
 	return err
 }
+
+func (c *Client) GetProjectByPathOrUUID(project string) (*Project, error) {
+	id, err := uuid.Parse(project)
+	if err == nil {
+		return c.GetProjectById(context.Background(), id)
+	} else {
+		return c.GetProjectByPath(context.Background(), project)
+	}
+}
+
+// ToProjectPath returns the path for a given project UUID or path
+func (c *Client) ToProjectPath(input string) (string, error) {
+	id, err := uuid.Parse(input)
+
+	if err == nil {
+		return c.GetProjectPath(context.Background(), id)
+	} else {
+		return input, nil
+	}
+
+}

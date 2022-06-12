@@ -55,7 +55,7 @@ func runDeploy(opts *DeployOptions) error {
 		return err
 	}
 
-	path, err := utils.ToProjectPath(client, opts.Project)
+	path, err := client.ToProjectPath(opts.Project)
 	if err != nil {
 		return err
 	}
@@ -151,14 +151,14 @@ func printBuildLogs(client *api.Client, deployment *api.Deployment, out io.Write
 	getLogs := func() ([]api.LogEntry, error) {
 		return client.GetBuildLogs(context.Background(), deployment.ID)
 	}
-	getStatus := func() (api.DeploymentStatus, error) {
+	shouldContinue := func() (bool, error) {
 		deployment, err := client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
-			return deployment.Status, err
+			return false, err
 		}
-		return deployment.Status, nil
+		return api.IsBuildInProgress(deployment.Status), nil
 	}
-	if err := utils.PollLogs(getLogs, getStatus, out); err != nil {
+	if err := pollLogs(getLogs, shouldContinue, out); err != nil {
 		return err
 	}
 
@@ -169,14 +169,14 @@ func printDeploymentLogs(client *api.Client, deployment *api.Deployment, out io.
 	getLogs := func() ([]api.LogEntry, error) {
 		return client.GetDeploymentLogs(context.Background(), deployment.ID)
 	}
-	getStatus := func() (api.DeploymentStatus, error) {
+	getStatus := func() (bool, error) {
 		deployment, err := client.GetDeployment(context.Background(), deployment.ID)
 		if err != nil {
-			return deployment.Status, err
+			return false, err
 		}
-		return deployment.Status, nil
+		return api.IsDeployInProgress(deployment.Status), nil
 	}
-	if err := utils.PollLogs(getLogs, getStatus, out); err != nil {
+	if err := pollLogs(getLogs, getStatus, out); err != nil {
 		return err
 	}
 

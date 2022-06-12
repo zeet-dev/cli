@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type Job struct {
@@ -91,4 +92,9 @@ func (c *Client) GetJob(ctx context.Context, projectID uuid.UUID, jobID uuid.UUI
 	}
 
 	return out, nil
+}
+
+func IsJobInProgress(state JobRunState) bool {
+	ok := []JobRunState{JobRunStateJobRunStarting, JobRunStateJobRunRunning}
+	return utils.SliceContains(ok, state)
 }

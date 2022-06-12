@@ -1,4 +1,4 @@
-package utils
+package cmd
 
 import (
 	"fmt"
@@ -6,31 +6,27 @@ import (
 	"time"
 
 	"github.com/zeet-dev/cli/pkg/api"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
-func PollLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus func() (S, error), out io.Writer) (err error) {
+func pollLogs(getLogs func() ([]api.LogEntry, error), shouldContinue func() (bool, error), out io.Writer) error {
 	lastLog := 0
 
-	initialStatus, err := getStatus()
+	cont, err := shouldContinue()
 	if err != nil {
 		return err
 	}
-
-	shouldContinue := true
-
-	for shouldContinue {
-		// Stop looping if the status changes
-		status, err := getStatus()
+	for cont {
+		cont, err = shouldContinue()
 		if err != nil {
 			return err
 		}
-		shouldContinue = status == initialStatus
 
 		logs, err := getLogs()
 		if err != nil {
 			return err
 		}
-		// Catch the edge case where the deployment has been cancelled after getStatus was called
+		// Catch the edge case where the deployment has been cancelled after shouldContinue was called
 		// but before getLogs, making getLogs return [] and the range panicking
 		if len(logs) == 0 && lastLog > 0 {
 			return nil
@@ -41,7 +37,7 @@ func PollLogs[S comparable](getLogs func() ([]api.LogEntry, error), getStatus fu
 		}
 
 		// Sometimes the backend returns an empty log which will then be replaced (same index) the next request...
-		logs = SliceFilter(logs, func(l api.LogEntry) bool {
+		logs = utils.SliceFilter(logs, func(l api.LogEntry) bool {
 			return l.Text != ""
 		})
 

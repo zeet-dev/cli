@@ -5,6 +5,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
+	"github.com/zeet-dev/cli/pkg/utils"
 )
 
 type Deployment struct {
@@ -283,4 +284,14 @@ func (c *Client) GetLatestDeployment(ctx context.Context, project string, branch
 
 	err = copier.Copy(out, res.Project.Repo.Branch.LatestDeployment)
 	return out, err
+}
+
+func IsDeployInProgress(status DeploymentStatus) bool {
+	ok := []DeploymentStatus{DeploymentStatusDeployInProgress, DeploymentStatusDeployPending}
+	return utils.SliceContains(ok, status)
+}
+
+func IsBuildInProgress(status DeploymentStatus) bool {
+	ok := []DeploymentStatus{DeploymentStatusBuildInProgress, DeploymentStatusBuildPending}
+	return utils.SliceContains(ok, status)
 }
