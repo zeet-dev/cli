@@ -53,6 +53,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 	viper.BindEnv("server")
 	viper.BindEnv("ws-server")
+	viper.BindEnv("auth.access_token", "ZEET_TOKEN")
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 
 	return rootCmd
@@ -81,8 +82,8 @@ func initConfig() {
 }
 
 func writeDefaultConfig() error {
-	viper.Set("server", "https://anchor.zeet.co")
-	viper.Set("ws-server", "wss://anchor.zeet.co")
+	viper.SetDefault("server", "https://anchor.zeet.co")
+	viper.SetDefault("ws-server", "wss://anchor.zeet.co")
 	return viper.WriteConfig()
 }
 
