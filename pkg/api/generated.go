@@ -268,6 +268,18 @@ func (v *__updateBranchInput) GetProjectID() uuid.UUID { return v.ProjectID }
 // GetBranchName returns __updateBranchInput.BranchName, and is useful for accessing the field via an interface.
 func (v *__updateBranchInput) GetBranchName() string { return v.BranchName }
 
+// __updateClusterInput is used internally by genqlient
+type __updateClusterInput struct {
+	Id   uuid.UUID `json:"id"`
+	File string    `json:"file"`
+}
+
+// GetId returns __updateClusterInput.Id, and is useful for accessing the field via an interface.
+func (v *__updateClusterInput) GetId() uuid.UUID { return v.Id }
+
+// GetFile returns __updateClusterInput.File, and is useful for accessing the field via an interface.
+func (v *__updateClusterInput) GetFile() string { return v.File }
+
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
 	ProjectID uuid.UUID `json:"projectID"`
@@ -1160,6 +1172,22 @@ type updateBranchUpdateBranchRepoBranchV2 struct {
 // GetId returns updateBranchUpdateBranchRepoBranchV2.Id, and is useful for accessing the field via an interface.
 func (v *updateBranchUpdateBranchRepoBranchV2) GetId() uuid.UUID { return v.Id }
 
+// updateClusterResponse is returned by updateCluster on success.
+type updateClusterResponse struct {
+	UpdateCluster updateClusterUpdateCluster `json:"updateCluster"`
+}
+
+// GetUpdateCluster returns updateClusterResponse.UpdateCluster, and is useful for accessing the field via an interface.
+func (v *updateClusterResponse) GetUpdateCluster() updateClusterUpdateCluster { return v.UpdateCluster }
+
+// updateClusterUpdateCluster includes the requested fields of the GraphQL type Cluster.
+type updateClusterUpdateCluster struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns updateClusterUpdateCluster.Id, and is useful for accessing the field via an interface.
+func (v *updateClusterUpdateCluster) GetId() uuid.UUID { return v.Id }
+
 // updateProjectResponse is returned by updateProject on success.
 type updateProjectResponse struct {
 	UpdateProject updateProjectUpdateProjectRepo `json:"updateProject"`
@@ -1888,6 +1916,35 @@ func updateBranch(
 		`
 mutation updateBranch ($image: String!, $deploy: Boolean, $projectID: UUID!, $branchName: String!) {
 	updateBranch(input: {image:$image,deploy:$deploy,repoID:$projectID,name:$branchName}) {
+		id
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func updateCluster(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+	file string,
+) (*updateClusterResponse, error) {
+	__input := __updateClusterInput{
+		Id:   id,
+		File: file,
+	}
+	var err error
+
+	var retval updateClusterResponse
+	err = client.MakeRequest(
+		ctx,
+		"updateCluster",
+		`
+mutation updateCluster ($id: UUID!, $file: Upload!) {
+	updateCluster(input: {id:$id,kubeconfig:$file}) {
 		id
 	}
 }

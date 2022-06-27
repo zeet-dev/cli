@@ -10,23 +10,31 @@ import (
 )
 
 type Client struct {
-	GQL graphql.Client
+	gql  graphql.Client
+	http *http.Client
+	path string
 }
 
 func New(server, token, version string, debug bool) *Client {
-	client := newGraphQLClient(server, token, version, debug)
+	path := zutils.URLJoin(server, "graphql")
+	httpClient := newHTTPClient(debug, version, token)
+	gqlClient := newGraphQLClient(path, httpClient)
 
-	return &Client{GQL: client}
+	return &Client{path: path, gql: gqlClient, http: httpClient}
 }
 
-func newGraphQLClient(server, token, version string, debug bool) graphql.Client {
+func newHTTPClient(debug bool, version, token string) *http.Client {
 	tp := http.DefaultTransport
 	if debug {
 		tp = zutils.LoggingHttpTransport
 	}
 	tp = NewUserAgentTransport(fmt.Sprintf("zeet-cli/%s", version), tp)
 
-	return graphql.NewClient(zutils.URLJoin(server, "graphql"), &http.Client{
+	return &http.Client{
 		Transport: transport.NewBearerAuthRoundTripper(token, tp),
-	})
+	}
+}
+
+func newGraphQLClient(path string, httpClient *http.Client) graphql.Client {
+	return graphql.NewClient(path, httpClient)
 }

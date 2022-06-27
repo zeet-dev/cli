@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zeet-dev/cli/internal/config"
+	"github.com/zeet-dev/cli/pkg/cmd/cluster"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 )
 
@@ -37,6 +38,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewEnvGetCmd(f))
 	rootCmd.AddCommand(NewConfigSetCmd(f))
 	rootCmd.AddCommand(NewJobRunCmd(f))
+	rootCmd.AddCommand(cluster.NewClusterCmd(f))
 
 	// Set inputs/outputs
 	rootCmd.SetErr(&cmdutil.ErrorWriter{Out: f.IOStreams.Out})

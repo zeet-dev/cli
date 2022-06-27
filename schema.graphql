@@ -58,6 +58,11 @@ input AddGCPAccountInput {
   credentials: Upload!
 }
 
+input AddLinodeAccountInput {
+  userID: UUID!
+  accessToken: String!
+}
+
 input AddProjectCollaboratorInput {
   id: ID!
   user: String!
@@ -82,6 +87,19 @@ type APIKey {
   name: String!
   description: String!
   createdAt: Time!
+}
+
+input AttachAwsPolicyToUser {
+  userID: UUID!
+  policyArn: String!
+  awsUsername: String!
+  awsAccountCredentialsId: UUID!
+}
+
+type AttachedAwsIamPolicy {
+  arn: String!
+  policyName: String!
+  groupName: String!
 }
 
 type Autoscaling {
@@ -123,16 +141,28 @@ type AWSAccount {
   accountID: String
   roleARN: String
   cloudFormationURL: String!
+  cloudFormationReadOnlyURL: String!
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
   createdAt: Time!
   updatedAt: Time!
+  iamUsers: [AwsUser!]
+  userIamConnections: [UserIamConnection!]
+  awsIamPolicies: [AwsIamPolicy!]
+  awsPolicyJson(input: awsPolicyJsonInput!): AwsPolicyJson
+  networks: [Network!]
 }
 
 enum AWSAccountState {
   WAITING
   SUCCESS
   ERROR
+}
+
+type AwsIamPolicy {
+  arn: String!
+  policyName: String!
+  awsAccountId: String!
 }
 
 type AWSLambda {
@@ -155,6 +185,24 @@ type AWSLinks {
   ec2: String
   vpc: String
   iam: String
+}
+
+type AwsPolicyJson {
+  awsPolicyJson: JSON!
+}
+
+input awsPolicyJsonInput {
+  arn: String
+  username: String
+  policyName: String
+}
+
+type AwsUser {
+  arn: String!
+  userId: String!
+  username: String!
+  awsAccountId: String!
+  attachedAwsPolicies: [AttachedAwsIamPolicy]!
 }
 
 input BranchInput {
@@ -307,7 +355,7 @@ interface CISource {
   description: String
 }
 
-union CloudAccount = AWSAccount | GCPAccount | DOAccount
+union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount
 
 enum CloudAccountState {
   WAITING
@@ -333,6 +381,15 @@ enum CloudProvider {
   SCALEWAY
 }
 
+type CloudRuntime {
+  cloud: CloudAccount
+  region: String
+  awsLambda: String
+  awsFargate: String
+  gcpCloudRun: String
+  azureApp: String
+}
+
 type Cluster {
   id: UUID!
   name: String!
@@ -346,6 +403,7 @@ type Cluster {
   gcpAccount: GCPAccount
   doAccount: DOAccount
   cwAccount: CoreWeaveAccount
+  linodeAccount: LinodeAccount
   cloudAccount: CloudAccount
   namespace: String
   domain: String
@@ -362,6 +420,8 @@ type Cluster {
   projects(input: ProjectsInput): ProjectConnection
   createdAt: Time!
   updatedAt: Time!
+  network: Network
+  machines: [Machine!]
 }
 
 type ClusterDomains {
@@ -377,6 +437,7 @@ enum ClusterProvider {
   GKE
   DOKS
   COREWEAVE
+  LKE
 }
 
 enum ClusterState {
@@ -386,6 +447,12 @@ enum ClusterState {
   DELETING
   ERROR
   ERROR_DELETING
+}
+
+input ConnectUserToIamInput {
+  userID: UUID!
+  awsIamArn: String
+  awsAccountId: String
 }
 
 type Container {
@@ -445,6 +512,27 @@ type CoreWeaveAccount {
   clusters: [Cluster!]
   createdAt: Time!
   updatedAt: Time!
+  networks: [Network!]
+}
+
+type Cost {
+  service: String
+  unblendedCostAmount: Float
+  unblendedCostUnit: String
+  periodStart: String
+  periodEnd: String
+}
+
+input CostByServiceWhere {
+  services: [String!]!
+}
+
+input CostUsageWhere {
+  granularity: String!
+  dimensionType1: String!
+  dimensionType2: String!
+  dimension2NotIn: [String!]!
+  dimension1In: [String!]!
 }
 
 input CreateAPIKeyInput {
@@ -457,6 +545,7 @@ input CreateClusterInput {
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
+  linodeAccountID: UUID
   name: String!
   region: String!
 }
@@ -592,6 +681,7 @@ input DatabaseDeployTargetInput {
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
+  linodeAccountID: UUID
   clusterID: UUID
 }
 
@@ -670,11 +760,13 @@ type Deployment {
   volumes: [Volume!]
   awsLinks: AWSLinks
   gcpLinks: GCPLinks
+  githubLinks: GithubLinks
   helmRelease: HelmRelease
   dataOut: String
   createdAt: Time!
   updatedAt: Time!
   events: [Event!]!
+  runtime: Runtime
 }
 
 type DeploymentConnection {
@@ -739,6 +831,13 @@ enum DeployTarget {
   GCP_CLOUD_RUN
 }
 
+input DetachAwsPolicyToUser {
+  userID: UUID!
+  policyArn: String!
+  awsUsername: String!
+  awsAccountCredentialsId: UUID!
+}
+
 enum DisableReason {
   FREE_TRIAL_ENDED
   USER_ACTION
@@ -791,6 +890,7 @@ type DOAccount {
   projects(input: ProjectsInput): ProjectConnection
   createdAt: Time!
   updatedAt: Time!
+  networks: [Network!]
 }
 
 enum DOAccountState {
@@ -889,6 +989,7 @@ type GCPAccount {
   projects(input: ProjectsInput): ProjectConnection
   createdAt: Time!
   updatedAt: Time!
+  networks: [Network!]
 }
 
 enum GCPAccountState {
@@ -932,6 +1033,10 @@ type GitHubInstallation {
   account: GitHubUser!
   repositorySelection: String!
   repositories: [GitHubRepository!]
+}
+
+type GithubLinks {
+  commitURL: String
 }
 
 type GitHubRepository implements GitRepository & CISource {
@@ -1120,10 +1225,36 @@ enum JobRunState {
 
 scalar JSON
 
+type KubernetesRuntime {
+  cluster: Cluster
+  region: String
+}
+
+input LinkCloudToClusterInput {
+  cloudType: CloudProvider!
+  cloudId: UUID!
+  clusterID: UUID!
+  cloudAZ: String
+  cloudRegion: String
+}
+
 input LinkDatabaseInput {
   id: UUID!
   databaseID: UUID!
   envPrefix: String
+}
+
+type LinodeAccount {
+  id: UUID!
+  name: String!
+  state: CloudAccountState!
+  accessTokenPrefix: String
+  connected: Boolean
+  clusters: [Cluster!]
+  projects(input: ProjectsInput): ProjectConnection
+  createdAt: Time!
+  updatedAt: Time!
+  networks: [Network!]
 }
 
 type LoadBalancer {
@@ -1186,6 +1317,16 @@ input LogzIntegrationInput {
   url: String!
 }
 
+type Machine {
+  id: ID!
+  name: String!
+  region: String!
+  data: JSON
+  network: Network
+  cluster: Cluster
+  projects(input: ProjectsInput): ProjectConnection
+}
+
 type Metric {
   timestamp: Time!
   value: Float
@@ -1212,6 +1353,10 @@ type Mutation {
   addAWSAccount(input: AddAWSAccountInput!): AWSAccount!
   verifyAWSAccount(id: UUID!): AWSAccount!
   removeAWSAccount(id: UUID!): Boolean!
+  connectUserToIam(input: ConnectUserToIamInput!): Boolean!
+  disconnectUserFromIam(id: UUID!): Boolean!
+  attachAwsPolicyToUser(input: AttachAwsPolicyToUser!): Boolean!
+  detachAwsPolicyToUser(input: DetachAwsPolicyToUser!): Boolean!
   updateBranch(input: UpdateBranchInput!): RepoBranchV2!
   addCDN(input: AddCDNInput!): CDN!
   updateCDN(input: UpdateCDNInput!): CDN!
@@ -1221,6 +1366,8 @@ type Mutation {
   deleteCluster(id: UUID!): Boolean!
   updateCluster(input: UpdateClusterInput!): Cluster!
   addCluster(input: AddClusterInput!): Cluster!
+  linkCloudToCluster(input: LinkCloudToClusterInput!): Cluster!
+  updateClusterDomain(input: UpdateClusterDomainInput!): Cluster!
   addContainerRegistry(input: AddContainerRegistryInput!): ContainerRegistry!
   removeContainerRegistry(id: UUID!): Boolean!
   addCoreWeaveAccount(input: AddCoreWeaveAccountInput!): CoreWeaveAccount!
@@ -1246,6 +1393,8 @@ type Mutation {
   removeUserIntegration(input: RemoveUserIntegrationInput!): Boolean!
   createIPFSService(input: CreateIPFSServiceInput!): IPFSService!
   runJob(input: RunJobInput!): JobRun!
+  addLinodeAccount(input: AddLinodeAccountInput!): LinodeAccount!
+  removeLinodeAccount(id: UUID!): Boolean!
   createProjectGit(input: CreateProjectGitInput!): Repo!
   updateProject(input: UpdateProjectInput!): Repo!
   removeProbe(input: RemoveProbeInput!): Repo!
@@ -1271,6 +1420,16 @@ type Mutation {
   deleteUser: Boolean!
   createWeb3Challenge(input: CreateWeb3ChallengeInput!): Web3Challenge!
   signInWithWeb3(input: SignInWithWeb3Input!): UserAuth!
+}
+
+type Network {
+  id: ID!
+  name: String!
+  region: String!
+  data: JSON
+  cloud: CloudAccount
+  clusters: [Cluster!]
+  machines: [Machine]
 }
 
 type PageInfo {
@@ -1426,6 +1585,7 @@ input ProjectDeployInput {
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
+  linodeAccountID: UUID
   clusterID: UUID
   region: String
 }
@@ -1492,6 +1652,8 @@ type Query {
   dockerRepository(image: String!): DockerRepository
   checkPrice(input: CheckPriceInput!): CheckPriceOutput!
   prices: Prices!
+  awsCostByService(awsAccountId: UUID!, where: CostByServiceWhere!): [Cost!]!
+  awsCostUsage2(awsAccountId: UUID!, where: CostUsageWhere!): [Cost!]!
   searchHelmCharts(input: SearchHelmChartsInput!): HelmChartConnection!
   helmRepository(url: String!): HelmRepository!
   template(id: UUID, slug: String, url: String): Template!
@@ -1621,6 +1783,7 @@ type Repo {
   tpu: TPUSpec
   ephemeralStorage: Float
   dedicated: Boolean
+  machines: [Machine!]
 }
 
 type RepoBranch {
@@ -1687,6 +1850,8 @@ input RunJobInput {
   runCommand: String
   build: Boolean
 }
+
+union Runtime = CloudRuntime | KubernetesRuntime
 
 input SearchHelmChartsInput {
   first: Int
@@ -1824,6 +1989,7 @@ type Team implements ProfileOwner & ProjectOwner {
   name: String!
   avatar: URL!
   user: User!
+  awsAccounts: [AWSAccount!]
   parent: Team
   children: [Team!]
   members: [UserTeamEdge!]!
@@ -1890,6 +2056,7 @@ input UpdateBranchInput {
   repoID: UUID
   name: String
   image: String
+  githubSha: String
   build: Boolean
   deploy: Boolean
 }
@@ -1899,8 +2066,14 @@ input UpdateCDNInput {
   domains: [String!]
 }
 
+input UpdateClusterDomainInput {
+  domain: String!
+  clusterID: UUID!
+}
+
 input UpdateClusterInput {
   id: UUID!
+  kubeconfig: Upload
   containerRepository: String
   containerCacheRepository: String
   containerRegistryID: UUID
@@ -1947,10 +2120,10 @@ input UpdateProjectInput {
   staticIP: Boolean
   iamPolicies: [String!]
   manualDeploy: Boolean
+  autoRetry: Boolean
+  deployStrategy: DeployStrategy
   deployBranch: Boolean
   branchIgnore: String
-  deployStrategy: DeployStrategy
-  autoRetry: Boolean
   helmVersion: String
   helmValues: String
   terraformVersion: String
@@ -2047,9 +2220,11 @@ type User implements ProfileOwner & ProjectOwner {
   suggestProjectName(input: SuggestProjectNameInput!): String!
   checkProjectName(input: CheckProjectNameInput!): Boolean!
   suggestTemplateName(input: SuggestTemplateNameInput!): String!
+  awsAccount(id: UUID!): AWSAccount
   awsAccounts: [AWSAccount!]
   gcpAccounts: [GCPAccount!]
   doAccounts: [DOAccount!]
+  linodeAccounts: [LinodeAccount!]
   coreweaveAccounts: [CoreWeaveAccount!]
   cloudAccount(id: ID!): CloudAccount
   jobRun(id: UUID!): JobRun!
@@ -2069,6 +2244,13 @@ enum UserAction {
 
 type UserAuth {
   authToken: String!
+}
+
+type UserIamConnection {
+  userId: String!
+  awsIamArn: String!
+  awsAccountId: String!
+  id: UUID!
 }
 
 type UserTeamEdge {
