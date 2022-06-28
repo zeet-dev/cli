@@ -51,8 +51,13 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.PersistentFlags().StringVarP(&configPath, "config", "c", filepath.Join(configDir(), defaultConfigName), "Config file")
 
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
+
 	viper.BindEnv("server")
+	viper.SetDefault("server", "https://anchor.zeet.co")
+
 	viper.BindEnv("ws-server")
+	viper.SetDefault("ws-server", "wss://anchor.zeet.co")
+
 	viper.BindEnv("auth.access_token", "ZEET_TOKEN")
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 
@@ -69,8 +74,6 @@ func initConfig() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(*fs.PathError); ok {
-			err := writeDefaultConfig()
-			cobra.CheckErr(err)
 		} else {
 			cobra.CheckErr(err)
 		}
@@ -79,12 +82,6 @@ func initConfig() {
 	if viper.GetBool("debug") {
 		fmt.Println("Using " + viper.ConfigFileUsed())
 	}
-}
-
-func writeDefaultConfig() error {
-	viper.SetDefault("server", "https://anchor.zeet.co")
-	viper.SetDefault("ws-server", "wss://anchor.zeet.co")
-	return viper.WriteConfig()
 }
 
 func configDir() string {

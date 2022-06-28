@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 
@@ -27,12 +28,17 @@ func NewKubeconfigSetCmd(f *cmdutil.Factory) *cobra.Command {
 	opts.ApiClient = f.ApiClient
 
 	cmd := &cobra.Command{
-		Use:   "kubeconfig:set [kubeconfig location] [cluster id]",
+		Use:   "kubeconfig:set [cluster id] [kubeconfig location]",
 		Short: "Uploads a kubeconfig.yaml to Zeet",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts.File = args[1]
-			opts.ClusterID = uuid.MustParse(args[0])
+
+			id, err := uuid.Parse(args[0])
+			if err != nil {
+				return errors.New("invalid cluster ID format")
+			}
+			opts.ClusterID = id
 
 			return runKubeconfigSet(opts)
 		},
