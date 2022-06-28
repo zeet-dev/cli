@@ -36,7 +36,7 @@ func apiClientFunc(f *cmdutil.Factory, version string) func() (*api.Client, erro
 
 	return func() (*api.Client, error) {
 		return api.New(
-			cfg.GetString("server"),
+			cfg.GetString("api-url"),
 			cfg.GetString("auth.access_token"),
 			version,
 			cfg.GetBool("debug"),

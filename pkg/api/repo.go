@@ -29,7 +29,7 @@ func (c *Client) SetEnvVars(ctx context.Context, repoID uuid.UUID, vars map[stri
 		  }
 		}
 	`
-	_, err := setEnvVars(ctx, c.GQL, repoID, inp)
+	_, err := setEnvVars(ctx, c.gql, repoID, inp)
 	return err
 }
 
@@ -46,7 +46,7 @@ func (c *Client) GetEnvVars(ctx context.Context, repoID uuid.UUID) (map[string]s
 		  }
 		}
 	`
-	res, err := getEnvVars(ctx, c.GQL, repoID)
+	res, err := getEnvVars(ctx, c.gql, repoID)
 	if err != nil {
 		return nil, err
 	}
@@ -71,7 +71,7 @@ func (c *Client) GetProjectRepo(ctx context.Context, path string) (*Repo, error)
 		  }
 		}
 	`
-	res, err := getProjectRepo(ctx, c.GQL, path)
+	res, err := getProjectRepo(ctx, c.gql, path)
 	if err := copier.Copy(out, res.Project.Repo); err != nil {
 		return nil, err
 	}

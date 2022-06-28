@@ -13,7 +13,6 @@ import (
 	"syscall"
 
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/zeet-dev/cli/internal/config"
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
@@ -115,7 +114,7 @@ func runLogin(opts *LoginOptions) error {
 	}
 	fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
 
-	if err := viper.WriteConfig(); err != nil {
+	if err := cfg.WriteConfig(); err != nil {
 		return err
 	}
 
