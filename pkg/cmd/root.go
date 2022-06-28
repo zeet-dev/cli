@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io/fs"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -52,11 +53,11 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 
 	viper.BindPFlag("config", rootCmd.PersistentFlags().Lookup("config"))
 
-	viper.BindEnv("server")
-	viper.SetDefault("server", "https://anchor.zeet.co")
+	viper.BindEnv("api-url")
+	viper.SetDefault("api-url", "https://anchor.zeet.co")
 
-	viper.BindEnv("ws-server")
-	viper.SetDefault("ws-server", "wss://anchor.zeet.co")
+	viper.BindEnv("ws-url")
+	viper.SetDefault("ws-url", "wss://anchor.zeet.co")
 
 	viper.BindEnv("auth.access_token", "ZEET_TOKEN")
 	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
@@ -69,6 +70,8 @@ func initConfig() {
 	viper.SetEnvPrefix("ZEET")
 	viper.AutomaticEnv()
 	viper.SetConfigType("yaml")
+
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 
 	viper.SetConfigFile(configPath)
 
