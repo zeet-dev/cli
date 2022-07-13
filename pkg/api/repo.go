@@ -8,7 +8,19 @@ import (
 )
 
 type Repo struct {
-	ID uuid.UUID `copier:"Id"`
+	Branch string    `json:"branch"`
+	ID     uuid.UUID `copier:"Id"`
+}
+
+func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID, branch string) error {
+	_ = `# @genqlient
+		mutation delete($id: ID!) {
+		  deleteRepo(id: $id)
+		}
+	`
+
+	_, err := delete(ctx, c.gql, repoID)
+	return err
 }
 
 func (c *Client) SetEnvVars(ctx context.Context, repoID uuid.UUID, vars map[string]string) error {

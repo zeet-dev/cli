@@ -40,6 +40,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewConfigSetCmd(f))
 	rootCmd.AddCommand(NewJobRunCmd(f))
 	rootCmd.AddCommand(cluster.NewClusterCmd(f))
+	rootCmd.AddCommand(NewDeleteCmd(f))
 
 	// Set inputs/outputs
 	rootCmd.SetErr(&cmdutil.ErrorWriter{Out: f.IOStreams.Out})
