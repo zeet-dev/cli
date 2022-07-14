@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Zeet, Inc - All Rights Reserved
-test
 */
 
 package cmd
