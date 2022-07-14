@@ -8,11 +8,10 @@ import (
 )
 
 type Repo struct {
-	Branch string    `json:"branch"`
 	ID     uuid.UUID `copier:"Id"`
 }
 
-func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID, branch string) error {
+func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID) error {
 	_ = `# @genqlient
 		mutation delete($id: ID!) {
 		  deleteRepo(id: $id)
