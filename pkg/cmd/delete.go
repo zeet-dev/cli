@@ -56,15 +56,7 @@ func runDelete(opts *DeleteOptions) error {
 		return err
 	}
 
-	branch := opts.Project
-	if branch == "" {
-		branch, err = client.GetProductionBranch(context.Background(), project.ID)
-		if err != nil {
-			return err
-		}
-	}
-
-	err = client.DeleteRepo(context.Background(), project.ID, branch)
+	err = client.DeleteRepo(context.Background(), project.ID)
 	if err != nil {
 		return err
 	}
