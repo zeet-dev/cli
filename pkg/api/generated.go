@@ -76,6 +76,14 @@ func (v *__buildRepoInput) GetBranch() string { return v.Branch }
 // GetNoCache returns __buildRepoInput.NoCache, and is useful for accessing the field via an interface.
 func (v *__buildRepoInput) GetNoCache() bool { return v.NoCache }
 
+// __deleteInput is used internally by genqlient
+type __deleteInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __deleteInput.Id, and is useful for accessing the field via an interface.
+func (v *__deleteInput) GetId() uuid.UUID { return v.Id }
+
 // __deployRepoBranchInput is used internally by genqlient
 type __deployRepoBranchInput struct {
 	Branch    string    `json:"branch"`
@@ -385,6 +393,14 @@ type buildRepoResponse struct {
 
 // GetBuildRepo returns buildRepoResponse.BuildRepo, and is useful for accessing the field via an interface.
 func (v *buildRepoResponse) GetBuildRepo() buildRepoBuildRepo { return v.BuildRepo }
+
+// deleteResponse is returned by delete on success.
+type deleteResponse struct {
+	DeleteRepo bool `json:"deleteRepo"`
+}
+
+// GetDeleteRepo returns deleteResponse.DeleteRepo, and is useful for accessing the field via an interface.
+func (v *deleteResponse) GetDeleteRepo() bool { return v.DeleteRepo }
 
 // deployRepoBranchDeployRepoBranchRepo includes the requested fields of the GraphQL type Repo.
 type deployRepoBranchDeployRepoBranchRepo struct {
@@ -1270,6 +1286,31 @@ mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 			privateEndpoint
 		}
 	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func delete(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*deleteResponse, error) {
+	__input := __deleteInput{
+		Id: id,
+	}
+	var err error
+
+	var retval deleteResponse
+	err = client.MakeRequest(
+		ctx,
+		"delete",
+		`
+mutation delete ($id: ID!) {
+	deleteRepo(id: $id)
 }
 `,
 		&retval,
