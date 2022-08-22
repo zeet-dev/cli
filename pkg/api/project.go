@@ -16,7 +16,7 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 
 	_ = `# @genqlient
 		query getProjectByPath($path: String) {
-		  project(path: $path) {
+		  repo(path: $path) {
 			id
 		  }
 		}
@@ -26,7 +26,7 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 		return nil, err
 	}
 
-	if err := copier.Copy(out, res.Project); err != nil {
+	if err := copier.Copy(out, res.Repo); err != nil {
 		return nil, err
 	}
 	return out, nil

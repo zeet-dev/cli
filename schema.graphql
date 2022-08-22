@@ -2,6 +2,13 @@ directive @enforceUserAction(action: UserAction!) on FIELD_DEFINITION
 
 directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
+"""
+The @specifiedBy built-in directive is used within the type system definition
+language to provide a scalar specification URL for specifying the behavior of
+custom scalar types.
+"""
+directive @specifiedBy(url: String!) on SCALAR
+
 type AcceleratorSpec {
   type: String
   count: Int
@@ -37,7 +44,7 @@ input AddClusterInput {
 input AddContainerRegistryInput {
   userID: UUID!
   name: String!
-  registry: URL!
+  registry: String!
   username: String!
   password: String!
 }
@@ -150,6 +157,12 @@ type AWSAccount {
   userIamConnections: [UserIamConnection!]
   awsIamPolicies: [AwsIamPolicy!]
   awsPolicyJson(input: awsPolicyJsonInput!): AwsPolicyJson
+  cloudQuery: CloudQueryService
+  costs(input: AwsCostsInput!): [AwsCostItem!]!
+  costsByService(input: AwsCostsByServiceInput!): [GroupedAwsCostItem!]!
+  savingsPlanRecommendations(input: SavingsPlanRecommendationsInput!): SavingsPlanRecommendation
+  rightSizingRecommendations: [RightSizingRecommendation!]
+  awsResources(input: AwsResourceSearchInput): AwsResourcesOutput!
   networks: [Network!]
 }
 
@@ -157,6 +170,31 @@ enum AWSAccountState {
   WAITING
   SUCCESS
   ERROR
+}
+
+type AwsCostItem {
+  timePeriod: TimePeriod!
+  total: AwsCostTotal!
+}
+
+input AwsCostsByServiceInput {
+  includeCredit: Boolean!
+  timeFilter: TimeFilter!
+  startAt: Time!
+  endAt: Time!
+  services: [String!]!
+}
+
+input AwsCostsInput {
+  includeCredit: Boolean!
+  timeFilter: TimeFilter!
+  startAt: Time!
+  endAt: Time!
+}
+
+type AwsCostTotal {
+  amount: String!
+  unit: String!
 }
 
 type AwsIamPolicy {
@@ -195,6 +233,28 @@ input awsPolicyJsonInput {
   arn: String
   username: String
   policyName: String
+}
+
+type AwsResource {
+  arn: String!
+  type: String!
+  region: String
+}
+
+input AwsResourceSearchInput {
+  region: String
+  tag: String
+  nextToken: String
+}
+
+type AwsResourcesOutput {
+  awsResources: [AwsResource!]
+  nextToken: String
+}
+
+type AwsServiceCostItem {
+  service: String!
+  total: AwsCostTotal!
 }
 
 type AwsUser {
@@ -263,7 +323,6 @@ enum BuildType {
   NODE
   NODE_STATIC
   NODE_NEXTJS
-  NODE_NEXTJS_FAST
   UBUNTU
   ELIXIR_PHOENIX
   GOLANG_MODULES
@@ -379,6 +438,33 @@ enum CloudProvider {
   LINODE
   VULTR
   SCALEWAY
+}
+
+type CloudQueryService {
+  state: CloudQueryState!
+  id: UUID!
+}
+
+enum CloudQueryState {
+  READY
+  ERROR
+  CREATING
+  DELETING
+}
+
+type CloudResource {
+  resourceType: CloudResourceType!
+  id: String!
+  shared: Boolean!
+  region: String!
+}
+
+enum CloudResourceType {
+  Machine
+  Disk
+  LoadBalancer
+  VPC
+  Cluster
 }
 
 type CloudRuntime {
@@ -553,6 +639,10 @@ input CreateClusterInput {
 input CreateDatabaseInput {
   userID: UUID!
   name: String!
+  projectID: UUID
+  environmentID: UUID
+  projectName: String
+  environmentName: String
   deployTarget: DatabaseDeployTargetInput!
   engine: DatabaseEngineType!
   version: String!
@@ -572,8 +662,12 @@ input CreateIPFSServiceInput {
 }
 
 input CreateProjectDockerInput {
-  teamID: ID
+  userID: UUID
   name: String
+  projectID: UUID
+  environmentID: UUID
+  projectName: String
+  environmentName: String
   deployTarget: ProjectDeployInput
   dockerImage: String!
   envs: [EnvVarInput!]
@@ -584,6 +678,14 @@ input CreateProjectDockerInput {
   memory: String
   dedicated: Boolean
   gpu: String
+  enabled: Boolean
+  teamID: ID
+}
+
+input CreateProjectEnvironmentInput {
+  projectID: UUID!
+  name: String!
+  repos: [UUID!]
 }
 
 input CreateProjectFromProjectTemplateInput {
@@ -595,36 +697,93 @@ input CreateProjectFromProjectTemplateInput {
 input CreateProjectGitInput {
   userID: UUID
   name: String
-  deployTarget: ProjectDeployInput
+  projectID: UUID
+  environmentID: UUID
+  projectName: String
+  environmentName: String
   url: String!
+  deployTarget: ProjectDeployInput
+  build: ProjectBuildInput
+  deployService: Boolean
+  manualDeploy: Boolean
+  autoRetry: Boolean
+  autoRollback: Boolean
+  deployBranch: Boolean
+  branchIgnore: String
+  containerRepository: String
+  containerCacheRepository: String
+  containerRegistryID: UUID
+  resources: ContainerResourcesSpecInput
+  buildResources: ContainerResourcesSpecInput
+  branchResources: ContainerResourcesSpecInput
   envs: [EnvVarInput!]
   ports: [PortInput!]
   volumes: [VolumeInput!]
-  resources: ProjectResourcesInput
-  build: ProjectBuildInput
+  replication: [ReplicationInput!]
   runCommand: String
+  logShipper: LogShipperInput
+  deployStrategy: DeployStrategy
+  autoscaling: AutoscalingInput
+  preStopSleep: Int
+  terminationGracePeriodSeconds: Int
+  prometheusScrape: PrometheusScrapeInput
+  readinessProbe: ProbeInput
+  livenessProbe: ProbeInput
+  startupProbe: ProbeInput
+  clusterIssuerName: String
+  hostNetwork: Boolean
+  staticIP: Boolean
+  nodeSelector: JSON
+  noBuildCache: Boolean
+  kanikoFlags: KanikoFlagsInput
+  datadogApmEnabled: Boolean
+  enabled: Boolean
+  path: String
 }
 
 input CreateProjectHelmInput {
   userID: UUID!
+  projectID: UUID
+  environmentName: String
+  environmentID: UUID
   name: String!
   deployTarget: ProjectDeployInput!
-  repository: String!
-  chart: String!
   namespace: String
   releaseName: String!
+  repository: String
+  chart: String
+  githubConnection: GithubConnectionInput
+  gitRepository: String
+  gitReference: String
+  workingDirectory: String
   values: String
   valuesRef: String
-  githubConnection: GithubConnectionInput
+  enabled: Boolean
 }
 
 input CreateProjectInput {
-  teamID: ID
+  userID: UUID
   name: String
-  deployTarget: ProjectDeployInput
+  projectID: UUID
+  environmentID: UUID
+  projectName: String
+  environmentName: String
   installation: ID!
   owner: String!
   repo: String!
+  deployTarget: ProjectDeployInput
+  deployService: Boolean
+  manualDeploy: Boolean
+  autoRetry: Boolean
+  autoRollback: Boolean
+  deployBranch: Boolean
+  branchIgnore: String
+  containerRepository: String
+  containerCacheRepository: String
+  containerRegistryID: UUID
+  resources: ContainerResourcesSpecInput
+  buildResources: ContainerResourcesSpecInput
+  branchResources: ContainerResourcesSpecInput
   envs: [EnvVarInput!]
   ports: JSON
   replication: [ReplicationInput!]
@@ -637,6 +796,8 @@ input CreateProjectInput {
   buildType: String
   runCommand: String
   staticPath: String
+  enabled: Boolean
+  teamID: ID
 }
 
 input CreateProjectsFromTemplateInput {
@@ -644,6 +805,26 @@ input CreateProjectsFromTemplateInput {
   userID: UUID
   name: String
   projects: [CreateProjectFromProjectTemplateInput!]
+}
+
+input CreateProjectTerraformInput {
+  userID: UUID!
+  name: String!
+  deployTarget: ProjectDeployInput!
+  githubConnection: GithubConnectionInput
+  gitRepository: String
+  gitReference: String
+  workingDirectory: String
+  variables: JSON
+  envs: [EnvVarInput!]
+  terraformVersion: String
+  manualApproval: Boolean
+  enabled: Boolean
+}
+
+input CreateProjectV2Input {
+  userID: UUID!
+  name: String!
 }
 
 input CreateTeamInput {
@@ -767,6 +948,7 @@ type Deployment {
   updatedAt: Time!
   events: [Event!]!
   runtime: Runtime
+  terraformOperation: TerraformOperation
 }
 
 type DeploymentConnection {
@@ -923,6 +1105,15 @@ input DuplicateProjectInput {
   id: UUID!
   enabled: Boolean!
   name: String!
+  projectID: UUID
+  environmentName: String
+  environmentID: UUID
+}
+
+input DuplicateRepoInput {
+  repoID: UUID!
+  name: String!
+  environmentID: UUID!
 }
 
 type EnvVar {
@@ -930,6 +1121,8 @@ type EnvVar {
   name: String!
   value: String!
   visible: Boolean!
+  sealed: Boolean!
+  source: EnvVarSource
   createdAt: Time!
   updatedAt: Time!
 }
@@ -937,6 +1130,19 @@ type EnvVar {
 input EnvVarInput {
   name: String!
   value: String!
+  sealed: Boolean
+}
+
+type EnvVarSource {
+  type: EnvVarSourceType!
+}
+
+enum EnvVarSourceType {
+  ZEET
+  PROJECT
+  ENVIRONMENT
+  CLUSTER
+  DATABASE
 }
 
 type EnvVarTemplate {
@@ -1023,8 +1229,10 @@ type GitCommit {
 }
 
 input GithubConnectionInput {
-  endpoint: String
+  apiUrl: URL
   installation: String!
+  owner: String!
+  repo: String!
 }
 
 type GitHubInstallation {
@@ -1037,6 +1245,28 @@ type GitHubInstallation {
 
 type GithubLinks {
   commitURL: String
+}
+
+type GitHubRepoIntegration {
+  id: UUID!
+  githubConnectionID: Int
+  githubRepository: GitHubRepository
+  autoDeployBranch: Boolean!
+  autoStopBranch: Boolean!
+  autoStopPullRequest: Boolean!
+  branchIgnore: String!
+  branchStopIgnore: String!
+}
+
+input GitHubRepoIntegrationInput {
+  githubConnectionID: Int
+  githubOwner: String
+  githubName: String
+  autoDeployBranch: Boolean
+  autoStopBranch: Boolean
+  autoStopPullRequest: Boolean
+  branchIgnore: String
+  branchStopIgnore: String
 }
 
 type GitHubRepository implements GitRepository & CISource {
@@ -1062,7 +1292,7 @@ type GitHubRepository implements GitRepository & CISource {
 type GitHubUser {
   id: ID!
   login: String!
-  avatar: URL!
+  avatar: URL
   type: GithubUserType!
 }
 
@@ -1107,6 +1337,11 @@ type Grafana {
   url: String!
   user: String
   password: String
+}
+
+type GroupedAwsCostItem {
+  timePeriod: TimePeriod!
+  groups: [AwsServiceCostItem!]!
 }
 
 type HelmChart {
@@ -1225,9 +1460,47 @@ enum JobRunState {
 
 scalar JSON
 
+type KanikoFlags {
+  compressedCaching: Boolean
+}
+
+input KanikoFlagsInput {
+  compressedCaching: Boolean
+}
+
+type KubernetesCustomization {
+  nodeSelector: MapString
+  hostNetwork: Boolean
+  serviceAccountName: String
+  podAnnotations: MapString
+  serviceAnnotations: MapString
+  ingressAnnotations: MapString
+  clusterIssuerName: String
+}
+
+input KubernetesCustomizationInput {
+  nodeSelector: JSON
+  hostNetwork: Boolean
+  podAnnotations: JSON
+  serviceAnnotations: JSON
+  ingressAnnotations: JSON
+  clusterIssuerName: String
+}
+
 type KubernetesRuntime {
   cluster: Cluster
   region: String
+}
+
+type KubernetesSecretMount {
+  secretName: String!
+  mountPath: String!
+  readOnly: Boolean!
+}
+
+input KubernetesSecretMountInput {
+  secretName: String!
+  mountPath: String!
 }
 
 input LinkCloudToClusterInput {
@@ -1327,9 +1600,21 @@ type Machine {
   projects(input: ProjectsInput): ProjectConnection
 }
 
+scalar Map
+
+scalar MapString
+
 type Metric {
   timestamp: Time!
   value: Float
+}
+
+input MoveRepoInput {
+  id: UUID!
+  projectID: UUID
+  environmentName: String
+  environmentID: UUID
+  name: String
 }
 
 type Mutation {
@@ -1342,11 +1627,9 @@ type Mutation {
   deployRepoBranch(input: DeployRepoBranchInput!): Repo!
   setRepoEnvs(input: SetRepoEnvsInput!): Repo!
   setPaymentMethod(paymentMethod: String!): User!
-  createProject(input: CreateProjectInput!): Repo!
-  createProjectDocker(input: CreateProjectDockerInput!): Repo!
+  copyEnvVars(from: ID!, to: ID!): Repo
   addProjectCollaborator(input: AddProjectCollaboratorInput!): Repo!
   removeProjectCollaborator(id: ID!): Repo!
-  copyEnvVars(from: ID!, to: ID!): Repo
   transferProject(input: TransferProjectInput!): Repo!
   createAPIKey(input: CreateAPIKeyInput): APIKey!
   deleteAPIKey(id: UUID!): Boolean!
@@ -1362,6 +1645,7 @@ type Mutation {
   updateCDN(input: UpdateCDNInput!): CDN!
   removeCDN(id: UUID!): Boolean!
   invalidateCDNCache(id: UUID!): CDN!
+  ensureCloudqueryEnabled(awsAccountId: UUID!): Boolean!
   createCluster(input: CreateClusterInput!): Cluster!
   deleteCluster(id: UUID!): Boolean!
   updateCluster(input: UpdateClusterInput!): Cluster!
@@ -1395,14 +1679,25 @@ type Mutation {
   runJob(input: RunJobInput!): JobRun!
   addLinodeAccount(input: AddLinodeAccountInput!): LinodeAccount!
   removeLinodeAccount(id: UUID!): Boolean!
-  createProjectGit(input: CreateProjectGitInput!): Repo!
-  updateProject(input: UpdateProjectInput!): Repo!
-  removeProbe(input: RemoveProbeInput!): Repo!
+  createProjectV2(input: CreateProjectV2Input!): Project!
+  updateProjectV2(input: UpdateProjectV2Input!): Project!
+  deleteProjectV2(id: UUID!): Boolean!
+  createProjectEnvironment(input: CreateProjectEnvironmentInput!): ProjectEnvironment!
+  updateProjectEnvironment(input: UpdateProjectEnvironmentInput!): ProjectEnvironment!
+  deleteProjectEnvironment(id: UUID!): Boolean!
+  moveRepoToProjectEnvironment(input: MoveRepoInput!): Repo!
+  duplicateProject(input: DuplicateProjectInput!): Repo!
+  duplicateRepo(input: DuplicateRepoInput!): Repo!
   deleteProjectBranch(id: UUID!, branch: String!): Boolean!
+  rollbackProjectToDeployment(projectID: UUID!, deploymentID: UUID!): Repo!
+  updateProject(input: UpdateProjectInput!): Repo!
+  updateProjectDanger(input: UpdateProjectDangerInput!): Repo!
+  removeProbe(input: RemoveProbeInput!): Repo!
   removeLogShipper(id: UUID!): Boolean!
   migrateGithubConnection(id: UUID!, installationID: String!): Repo!
-  rollbackProjectToDeployment(projectID: UUID!, deploymentID: UUID!): Repo!
-  duplicateProject(input: DuplicateProjectInput!): Repo!
+  createProject(input: CreateProjectInput!): Repo!
+  createProjectDocker(input: CreateProjectDockerInput!): Repo!
+  createProjectGit(input: CreateProjectGitInput!): Repo!
   createTeam(input: CreateTeamInput!): Team!
   deleteTeam(id: UUID!): Boolean!
   updateTeam(input: UpdateTeamInput!): Team!
@@ -1416,6 +1711,7 @@ type Mutation {
   uploadDockerCompose(contents: String!): Template!
   createProjectsFromTemplate(input: CreateProjectsFromTemplateInput!): [Repo!]!
   freezeRepo(id: UUID!): Template!
+  createProjectTerraform(input: CreateProjectTerraformInput!): Repo!
   updateUser(input: UpdateUserInput!): User!
   deleteUser: Boolean!
   createWeb3Challenge(input: CreateWeb3ChallengeInput!): Web3Challenge!
@@ -1538,12 +1834,23 @@ input ProbeInput {
 interface ProfileOwner {
   login: String!
   name: String!
-  avatar: URL!
+  avatar: URL
 }
 
 type Project {
   id: UUID!
-  repo: Repo
+  name: String!
+  envs: [EnvVar!]
+  isMultiRepo: Boolean!
+  defaultEnvironment: ProjectEnvironment!
+  environment(id: UUID, name: String): ProjectEnvironment!
+  environments: [ProjectEnvironment!]!
+  defaultRepo: Repo
+  repo(id: UUID, name: String): Repo
+  repos: [Repo!]!
+  owner: User!
+  createdAt: Time!
+  updatedAt: Time!
 }
 
 input ProjectBuildInput {
@@ -1551,7 +1858,9 @@ input ProjectBuildInput {
   dockerfilePath: String
   workingDirectory: String
   buildCommand: String
+  runCommand: String
   staticPath: String
+  nodejsVersion: String
 }
 
 type ProjectCollaborator {
@@ -1595,16 +1904,20 @@ type ProjectEdge {
   node: Project!
 }
 
-interface ProjectOwner {
-  projects(input: ProjectsInput): ProjectConnection!
+type ProjectEnvironment {
+  id: UUID!
+  name: String!
+  envs: [EnvVar!]
+  defaultRepo: Repo
+  repo(id: UUID, name: String): Repo
+  repos: [Repo!]!
+  project: Project
+  createdAt: Time!
+  updatedAt: Time!
 }
 
-input ProjectResourcesInput {
-  replication: [ReplicationInput]
-  cpu: String
-  memory: String
-  dedicated: Boolean
-  gpu: String
+interface ProjectOwner {
+  projects(input: ProjectsInput): ProjectConnection!
 }
 
 input ProjectsInput {
@@ -1649,6 +1962,7 @@ type Query {
   user(id: ID!): User!
   team(id: UUID, path: String): Team
   project(id: UUID, path: String): Project
+  repo(id: UUID, path: String): Repo
   dockerRepository(image: String!): DockerRepository
   checkPrice(input: CheckPriceInput!): CheckPriceOutput!
   prices: Prices!
@@ -1657,6 +1971,7 @@ type Query {
   searchHelmCharts(input: SearchHelmChartsInput!): HelmChartConnection!
   helmRepository(url: String!): HelmRepository!
   template(id: UUID, slug: String, url: String): Template!
+  terraformRegistry(url: URL): TerraformRegistry!
 }
 
 input ReissueCustomDomainCertificateInput {
@@ -1704,35 +2019,35 @@ input ReplicationInput {
 
 type Repo {
   id: ID!
-  path: String!
   name: String!
   source: RepoSource!
+  appID: String
   enabled: Boolean!
   namespace: String
+  kappID: String
   clusterDomains: [ClusterDomains!]
   cdns: [CDN!]
   envs: [EnvVar!]
   replication: [Replication!]
   ports: [Port!]
   volumes: [VolumeSpec!]
+  secretMounts: [KubernetesSecretMount!]
   manualDeploy: Boolean
-  deployBranch: Boolean
-  branchIgnore: String
-  deployPullRequest: Boolean
   autoRetry: Boolean
+  autoRollback: Boolean
   buildMethod: BuildMethod
+  noBuildCache: Boolean
+  kanikoFlags: KanikoFlags
   resources: ContainerResourcesSpec
   buildResources: ContainerResourcesSpec
   branchResources: ContainerResourcesSpec
-  deployStrategy: DeployStrategy
-  deployTarget: DeployTarget
+  serverlessResources: ServerlessResourceSpec
   readinessProbe: Probe
   livenessProbe: Probe
   startupProbe: Probe
   autoscaling: Autoscaling
   preStopSleep: Int
   terminationGracePeriodSeconds: Int
-  hostNetwork: Boolean
   staticIP: Boolean
   deployments(first: Int = 10, after: String, input: DeploymentsInput): [Deployment!]
   deployment(id: ID!): Deployment
@@ -1743,22 +2058,26 @@ type Repo {
   productionBranch: String
   productionDeployment: Deployment
   githubRepository: GitHubRepository
+  githubIntegration: GitHubRepoIntegration
   helmChart: HelmChart
   helmValues: String
   terraformVersion: String
   terraformVariables: JSON
-  clusterIssuerName: String
-  nodeSelector: JSON
   image: String
   collaborators: [ProjectCollaborator!]
   collaboratorInvitations: [ProjectCollaboratorInvitation!]
   free: Boolean
   prometheusScrape: PrometheusScrape
   logShipper: LogShipper
+  kubernetesCustomization: KubernetesCustomization
+  deployTarget: DeployTarget
+  canDeploy: Boolean
   cluster: Cluster
   awsAccount: AWSAccount
   gcpAccount: GCPAccount
-  disableReason: DisableReason
+  awsIamRole: String
+  gcpServiceAccount: String
+  deployStrategy: DeployStrategy
   deployService: Boolean
   cronJobSchedule: String
   jobRun(id: UUID!): JobRun!
@@ -1772,7 +2091,10 @@ type Repo {
   databaseLinks: [DatabaseLink!]!
   linkedProjects: [DatabaseLink!]!
   databaseEnvs: [EnvVar!]!
-  canDeploy: Boolean
+  disableReason: DisableReason
+  datadogApmEnabled: Boolean
+  project: Project
+  projectEnvironment: ProjectEnvironment
   owner: User!
   createdAt: Time!
   updatedAt: Time!
@@ -1783,6 +2105,12 @@ type Repo {
   tpu: TPUSpec
   ephemeralStorage: Float
   dedicated: Boolean
+  deployBranch: Boolean
+  branchIgnore: String
+  nodeSelector: JSON
+  hostNetwork: Boolean
+  clusterIssuerName: String
+  path: String!
   machines: [Machine!]
 }
 
@@ -1814,11 +2142,14 @@ type RepoBranchV2 {
   loadBalancers: [LoadBalancer!]
   metrics(name: String!): [Metric!]
   image: String
+  namespace: String
+  kappID: String
   awsLinks: AWSLinks
   gcpLinks: GCPLinks
   repo: Repo
   createdAt: Time!
   updatedAt: Time!
+  resources: [CloudResource!]
 }
 
 input ReposInput {
@@ -1845,6 +2176,37 @@ enum RepoSourceType {
   TERRAFORM
 }
 
+type RightSizingInstance {
+  name: String
+  monthlyCost: String
+  hourlyCost: String
+  type: String
+  memory: String
+  storage: String
+  vcpu: String
+  utilization: RightSizingUtilization
+  resourceId: String
+}
+
+type RightSizingRecommendation {
+  currentInstance: RightSizingInstance
+  recommendations: [RightSizingRecommendationDetail!]
+  reasons: [String!]!
+}
+
+type RightSizingRecommendationDetail {
+  estimatedMonthlyCost: String
+  estimatedMonthlySavings: String
+  platformDifferences: [String]
+  instance: RightSizingInstance
+}
+
+type RightSizingUtilization {
+  maxCpuUtilizationPercentage: String
+  maxMemoryUtilizationPercentage: String
+  maxStorageUtilizationPercentage: String
+}
+
 input RunJobInput {
   id: UUID!
   runCommand: String
@@ -1852,6 +2214,53 @@ input RunJobInput {
 }
 
 union Runtime = CloudRuntime | KubernetesRuntime
+
+enum SavingsPlanPaymentOption {
+  NO_UPFRONT
+  PARTIAL_UPFRONT
+  ALL_UPFRONT
+  LIGHT_UTILIZATION
+  MEDIUM_UTILIZATION
+  HEAVY_UTILIZATION
+}
+
+type SavingsPlanRecommendation {
+  currentOnDemandSpend: String
+  estimatedSavingsAmount: String
+  estimatedSavingsPercentage: String
+  estimatedOnDemandCostWithCurrentCommitment: String
+  hourlyCommitmentToPurchase: String
+  estimatedMonthlySavingsAmount: String
+  details: [SavingsPlanRecommendationDetail!]
+}
+
+type SavingsPlanRecommendationDetail {
+  instanceFamily: String
+  offeringId: String
+  region: String
+  currentAverageHourlyOnDemandSpend: String
+  estimatedAverageUtilization: String
+  upfrontCost: String
+  hourlyCommitmentToPurchase: String
+  estimatedMonthlySavingsAmount: String
+}
+
+input SavingsPlanRecommendationsInput {
+  paymentOption: SavingsPlanPaymentOption!
+  type: SavingsPlanType!
+  term: SavingsPlanTerm!
+}
+
+enum SavingsPlanTerm {
+  ONE_YEAR
+  THREE_YEARS
+}
+
+enum SavingsPlanType {
+  COMPUTE_SP
+  EC2_INSTANCE_SP
+  SAGEMAKER_SP
+}
 
 input SearchHelmChartsInput {
   first: Int
@@ -1877,6 +2286,16 @@ type ServerlessProvider {
   stage: String
   region: String
   stackName: String
+}
+
+type ServerlessResourceSpec {
+  cpu: Float
+  memory: Float
+}
+
+input ServerlessResourcesSpecInput {
+  cpu: Float
+  memory: Float!
 }
 
 input SetRepoEnvsInput {
@@ -1987,7 +2406,7 @@ type Team implements ProfileOwner & ProjectOwner {
   id: UUID!
   login: String!
   name: String!
-  avatar: URL!
+  avatar: URL
   user: User!
   awsAccounts: [AWSAccount!]
   parent: Team
@@ -2020,8 +2439,8 @@ type Template {
   name: String!
   description: String!
   image: String!
-  homepageURL: URL
-  repositoryURL: URL
+  homepageURL: String
+  repositoryURL: String
   stats: TemplateStats
   projects: [ProjectTemplate!]!
 }
@@ -2032,7 +2451,64 @@ type TemplateStats {
   stars: Int!
 }
 
+type TerraformModule {
+  id: ID!
+  owner: String
+  namespace: String
+  name: String
+  version: String
+  provider: String
+  description: String
+  source: String
+  publishedAt: Time
+  downloads: Int
+  verified: Boolean
+  registry: TerraformRegistry!
+}
+
+type TerraformModuleConnection {
+  totalCount: Int!
+  nodes: [TerraformModule!]!
+  pageInfo: PageInfo!
+}
+
+type TerraformOperation {
+  id: UUID!
+  state: TerraformOperationState!
+  approved: Boolean!
+  config: JSON
+  planStage: PipelineStage
+  applyStage: PipelineStage
+}
+
+enum TerraformOperationState {
+  PENDING
+  PLANNING
+  WAITING_FOR_APPROVAL
+  APPLYING
+  PLAN_FAILED
+  APPLY_FAILED
+  CANCELED
+  SUCCEEDED
+}
+
+type TerraformRegistry {
+  id: ID!
+  url: URL
+  module(id: ID!): TerraformModule!
+}
+
 scalar Time
+
+enum TimeFilter {
+  Monthly
+  Daily
+}
+
+type TimePeriod {
+  startAt: Time!
+  endAt: Time!
+}
 
 input TPUInput {
   type: String!
@@ -2089,12 +2565,25 @@ input UpdateIPFSServiceInput {
   accessToken: String
 }
 
+input UpdateProjectDangerInput {
+  id: UUID!
+  namespace: String
+  appID: String
+  deployTarget: ProjectDeployInput
+}
+
+input UpdateProjectEnvironmentInput {
+  id: UUID!
+  name: String
+  envs: [EnvVarInput!]
+}
+
 input UpdateProjectInput {
   id: ID!
   path: String
+  name: String
   dockerImage: String
-  githubInstallationID: String
-  githubRepository: String
+  githubIntegration: GitHubRepoIntegrationInput
   buildType: String
   dockerfilePath: String
   workingDirectory: String
@@ -2103,12 +2592,15 @@ input UpdateProjectInput {
   staticPath: String
   releaseCommand: String
   nodejsVersion: String
+  noBuildCache: Boolean
+  kanikoFlags: KanikoFlagsInput
   volumes: JSON
   ports: JSON
   replication: [ReplicationInput!]
   resources: ContainerResourcesSpecInput
   buildResources: ContainerResourcesSpecInput
   branchResources: ContainerResourcesSpecInput
+  serverlessResources: ServerlessResourcesSpecInput
   readinessProbe: ProbeInput
   livenessProbe: ProbeInput
   startupProbe: ProbeInput
@@ -2121,13 +2613,14 @@ input UpdateProjectInput {
   iamPolicies: [String!]
   manualDeploy: Boolean
   autoRetry: Boolean
+  autoRollback: Boolean
   deployStrategy: DeployStrategy
-  deployBranch: Boolean
-  branchIgnore: String
   helmVersion: String
   helmValues: String
   terraformVersion: String
   terraformVariables: String
+  awsIamRole: String
+  gcpServiceAccount: String
   clusterIssuerName: String
   logShipper: LogShipperInput
   deployService: Boolean
@@ -2135,7 +2628,8 @@ input UpdateProjectInput {
   productionBranch: String
   containerRegistry: UUID
   nodeSelector: JSON
-  deployTarget: ProjectDeployInput
+  secretMounts: [KubernetesSecretMountInput!]
+  kubernetesCustomization: KubernetesCustomizationInput
   buildCPU: Float
   buildMemory: Float
   cpu: String
@@ -2144,6 +2638,18 @@ input UpdateProjectInput {
   gpu: GPUInput
   tpu: TPUInput
   dedicated: Boolean
+  githubInstallationID: String
+  githubRepository: String
+  deployBranch: Boolean
+  branchIgnore: String
+  datadogApmEnabled: Boolean
+  deployTarget: ProjectDeployInput
+}
+
+input UpdateProjectV2Input {
+  id: UUID!
+  name: String
+  envs: [EnvVarInput!]
 }
 
 input UpdateRepoCustomDomainInput {
@@ -2189,7 +2695,7 @@ type User implements ProfileOwner & ProjectOwner {
   id: ID!
   login: String!
   name: String!
-  avatar: URL!
+  avatar: URL
   isTeam: Boolean
   canDeploy: Boolean
   hasZeetCloud: Boolean

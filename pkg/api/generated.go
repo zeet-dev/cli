@@ -29,8 +29,9 @@ const (
 )
 
 type EnvVarInput struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name   string `json:"name"`
+	Value  string `json:"value"`
+	Sealed bool   `json:"sealed"`
 }
 
 // GetName returns EnvVarInput.Name, and is useful for accessing the field via an interface.
@@ -38,6 +39,9 @@ func (v *EnvVarInput) GetName() string { return v.Name }
 
 // GetValue returns EnvVarInput.Value, and is useful for accessing the field via an interface.
 func (v *EnvVarInput) GetValue() string { return v.Value }
+
+// GetSealed returns EnvVarInput.Sealed, and is useful for accessing the field via an interface.
+func (v *EnvVarInput) GetSealed() bool { return v.Sealed }
 
 type JobRunState string
 
@@ -1004,21 +1008,21 @@ type getProjectByIdResponse struct {
 // GetProject returns getProjectByIdResponse.Project, and is useful for accessing the field via an interface.
 func (v *getProjectByIdResponse) GetProject() getProjectByIdProject { return v.Project }
 
-// getProjectByPathProject includes the requested fields of the GraphQL type Project.
-type getProjectByPathProject struct {
+// getProjectByPathRepo includes the requested fields of the GraphQL type Repo.
+type getProjectByPathRepo struct {
 	Id uuid.UUID `json:"id"`
 }
 
-// GetId returns getProjectByPathProject.Id, and is useful for accessing the field via an interface.
-func (v *getProjectByPathProject) GetId() uuid.UUID { return v.Id }
+// GetId returns getProjectByPathRepo.Id, and is useful for accessing the field via an interface.
+func (v *getProjectByPathRepo) GetId() uuid.UUID { return v.Id }
 
 // getProjectByPathResponse is returned by getProjectByPath on success.
 type getProjectByPathResponse struct {
-	Project getProjectByPathProject `json:"project"`
+	Repo getProjectByPathRepo `json:"repo"`
 }
 
-// GetProject returns getProjectByPathResponse.Project, and is useful for accessing the field via an interface.
-func (v *getProjectByPathResponse) GetProject() getProjectByPathProject { return v.Project }
+// GetRepo returns getProjectByPathResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectByPathResponse) GetRepo() getProjectByPathRepo { return v.Repo }
 
 // getProjectPathProject includes the requested fields of the GraphQL type Project.
 type getProjectPathProject struct {
@@ -1729,7 +1733,7 @@ func getProjectByPath(
 		"getProjectByPath",
 		`
 query getProjectByPath ($path: String) {
-	project(path: $path) {
+	repo(path: $path) {
 		id
 	}
 }
