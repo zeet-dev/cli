@@ -964,11 +964,11 @@ func (v *getProjectByPathResponse) GetRepo() getProjectByPathRepo { return v.Rep
 
 // getProjectPathRepo includes the requested fields of the GraphQL type Repo.
 type getProjectPathRepo struct {
-	Path string `json:"path"`
+	FullPath string `json:"fullPath"`
 }
 
-// GetPath returns getProjectPathRepo.Path, and is useful for accessing the field via an interface.
-func (v *getProjectPathRepo) GetPath() string { return v.Path }
+// GetFullPath returns getProjectPathRepo.FullPath, and is useful for accessing the field via an interface.
+func (v *getProjectPathRepo) GetFullPath() string { return v.FullPath }
 
 // getProjectPathResponse is returned by getProjectPath on success.
 type getProjectPathResponse struct {
@@ -1648,7 +1648,7 @@ func getProjectPath(
 		`
 query getProjectPath ($id: UUID!) {
 	repo(id: $id) {
-		path
+		fullPath
 	}
 }
 `,

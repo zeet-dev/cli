@@ -36,7 +36,7 @@ func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, erro
 	_ = `# @genqlient
 		query getProjectPath($id: UUID!) {
 		  repo(id: $id) {
-			path
+			fullPath
           }
 		}
 	`
@@ -45,7 +45,7 @@ func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, erro
 		return "", err
 	}
 
-	return res.Repo.Path, nil
+	return res.Repo.FullPath, nil
 }
 
 func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (string, error) {

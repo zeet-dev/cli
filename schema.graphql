@@ -1443,6 +1443,7 @@ type JobRun {
   createdAt: Time
   build: Build
   project: Repo
+  repo: Repo!
 }
 
 type JobRunConnection {
@@ -2111,6 +2112,7 @@ type Repo {
   hostNetwork: Boolean
   clusterIssuerName: String
   path: String!
+  fullPath: String!
   machines: [Machine!]
 }
 
