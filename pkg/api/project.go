@@ -32,35 +32,12 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 	return out, nil
 }
 
-func (c *Client) GetProjectById(ctx context.Context, id uuid.UUID) (*Project, error) {
-	out := &Project{}
-
-	_ = `# @genqlient
-		query getProjectById($id: UUID!) {
-		  project(id: $id) {
-			id
-		  }
-		}
-	`
-	res, err := getProjectById(ctx, c.gql, id)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := copier.Copy(out, res.Project); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, error) {
 	_ = `# @genqlient
 		query getProjectPath($id: UUID!) {
-		  project(id: $id) {
-			repo {
-			  path
-			}
-		  }
+		  repo(id: $id) {
+			path
+          }
 		}
 	`
 	res, err := getProjectPath(ctx, c.gql, id)
@@ -68,7 +45,7 @@ func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, erro
 		return "", err
 	}
 
-	return res.Project.Repo.Path, nil
+	return res.Repo.Path, nil
 }
 
 func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (string, error) {
@@ -122,15 +99,6 @@ func (c *Client) UpdateProject(ctx context.Context, projectID uuid.UUID, image s
 	}
 
 	return err
-}
-
-func (c *Client) GetProjectByPathOrUUID(project string) (*Project, error) {
-	id, err := uuid.Parse(project)
-	if err == nil {
-		return c.GetProjectById(context.Background(), id)
-	} else {
-		return c.GetProjectByPath(context.Background(), project)
-	}
 }
 
 // ToProjectPath returns the path for a given project UUID or path

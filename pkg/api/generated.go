@@ -146,12 +146,12 @@ func (v *__getJobInput) GetJobID() uuid.UUID { return v.JobID }
 
 // __getJobLogsInput is used internally by genqlient
 type __getJobLogsInput struct {
-	ProjectID uuid.UUID `json:"projectID"`
-	JobID     uuid.UUID `json:"jobID"`
+	RepoID uuid.UUID `json:"repoID"`
+	JobID  uuid.UUID `json:"jobID"`
 }
 
-// GetProjectID returns __getJobLogsInput.ProjectID, and is useful for accessing the field via an interface.
-func (v *__getJobLogsInput) GetProjectID() uuid.UUID { return v.ProjectID }
+// GetRepoID returns __getJobLogsInput.RepoID, and is useful for accessing the field via an interface.
+func (v *__getJobLogsInput) GetRepoID() uuid.UUID { return v.RepoID }
 
 // GetJobID returns __getJobLogsInput.JobID, and is useful for accessing the field via an interface.
 func (v *__getJobLogsInput) GetJobID() uuid.UUID { return v.JobID }
@@ -184,14 +184,6 @@ type __getProductionDeploymentInput struct {
 // GetProject returns __getProductionDeploymentInput.Project, and is useful for accessing the field via an interface.
 func (v *__getProductionDeploymentInput) GetProject() string { return v.Project }
 
-// __getProjectByIdInput is used internally by genqlient
-type __getProjectByIdInput struct {
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns __getProjectByIdInput.Id, and is useful for accessing the field via an interface.
-func (v *__getProjectByIdInput) GetId() uuid.UUID { return v.Id }
-
 // __getProjectByPathInput is used internally by genqlient
 type __getProjectByPathInput struct {
 	Path string `json:"path"`
@@ -208,13 +200,13 @@ type __getProjectPathInput struct {
 // GetId returns __getProjectPathInput.Id, and is useful for accessing the field via an interface.
 func (v *__getProjectPathInput) GetId() uuid.UUID { return v.Id }
 
-// __getProjectRepoInput is used internally by genqlient
-type __getProjectRepoInput struct {
+// __getRepoInput is used internally by genqlient
+type __getRepoInput struct {
 	Path string `json:"path"`
 }
 
-// GetPath returns __getProjectRepoInput.Path, and is useful for accessing the field via an interface.
-func (v *__getProjectRepoInput) GetPath() string { return v.Path }
+// GetPath returns __getRepoInput.Path, and is useful for accessing the field via an interface.
+func (v *__getRepoInput) GetPath() string { return v.Path }
 
 // __getRuntimeLogsInput is used internally by genqlient
 type __getRuntimeLogsInput struct {
@@ -736,126 +728,102 @@ type getEnvVarsResponse struct {
 // GetCurrentUser returns getEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getEnvVarsResponse) GetCurrentUser() getEnvVarsCurrentUser { return v.CurrentUser }
 
-// getJobLogsProject includes the requested fields of the GraphQL type Project.
-type getJobLogsProject struct {
-	Repo getJobLogsProjectRepo `json:"repo"`
+// getJobLogsRepo includes the requested fields of the GraphQL type Repo.
+type getJobLogsRepo struct {
+	JobRun getJobLogsRepoJobRun `json:"jobRun"`
 }
 
-// GetRepo returns getJobLogsProject.Repo, and is useful for accessing the field via an interface.
-func (v *getJobLogsProject) GetRepo() getJobLogsProjectRepo { return v.Repo }
+// GetJobRun returns getJobLogsRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *getJobLogsRepo) GetJobRun() getJobLogsRepoJobRun { return v.JobRun }
 
-// getJobLogsProjectRepo includes the requested fields of the GraphQL type Repo.
-type getJobLogsProjectRepo struct {
-	JobRun getJobLogsProjectRepoJobRun `json:"jobRun"`
+// getJobLogsRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type getJobLogsRepoJobRun struct {
+	Logs getJobLogsRepoJobRunLogs `json:"logs"`
 }
 
-// GetJobRun returns getJobLogsProjectRepo.JobRun, and is useful for accessing the field via an interface.
-func (v *getJobLogsProjectRepo) GetJobRun() getJobLogsProjectRepoJobRun { return v.JobRun }
+// GetLogs returns getJobLogsRepoJobRun.Logs, and is useful for accessing the field via an interface.
+func (v *getJobLogsRepoJobRun) GetLogs() getJobLogsRepoJobRunLogs { return v.Logs }
 
-// getJobLogsProjectRepoJobRun includes the requested fields of the GraphQL type JobRun.
-type getJobLogsProjectRepoJobRun struct {
-	Logs getJobLogsProjectRepoJobRunLogs `json:"logs"`
+// getJobLogsRepoJobRunLogs includes the requested fields of the GraphQL type Logs.
+type getJobLogsRepoJobRunLogs struct {
+	Entries []getJobLogsRepoJobRunLogsEntriesLogEntry `json:"entries"`
 }
 
-// GetLogs returns getJobLogsProjectRepoJobRun.Logs, and is useful for accessing the field via an interface.
-func (v *getJobLogsProjectRepoJobRun) GetLogs() getJobLogsProjectRepoJobRunLogs { return v.Logs }
-
-// getJobLogsProjectRepoJobRunLogs includes the requested fields of the GraphQL type Logs.
-type getJobLogsProjectRepoJobRunLogs struct {
-	Entries []getJobLogsProjectRepoJobRunLogsEntriesLogEntry `json:"entries"`
-}
-
-// GetEntries returns getJobLogsProjectRepoJobRunLogs.Entries, and is useful for accessing the field via an interface.
-func (v *getJobLogsProjectRepoJobRunLogs) GetEntries() []getJobLogsProjectRepoJobRunLogsEntriesLogEntry {
+// GetEntries returns getJobLogsRepoJobRunLogs.Entries, and is useful for accessing the field via an interface.
+func (v *getJobLogsRepoJobRunLogs) GetEntries() []getJobLogsRepoJobRunLogsEntriesLogEntry {
 	return v.Entries
 }
 
-// getJobLogsProjectRepoJobRunLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getJobLogsProjectRepoJobRunLogsEntriesLogEntry struct {
+// getJobLogsRepoJobRunLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type getJobLogsRepoJobRunLogsEntriesLogEntry struct {
 	Text      string    `json:"text"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
-// GetText returns getJobLogsProjectRepoJobRunLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getJobLogsProjectRepoJobRunLogsEntriesLogEntry) GetText() string { return v.Text }
+// GetText returns getJobLogsRepoJobRunLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *getJobLogsRepoJobRunLogsEntriesLogEntry) GetText() string { return v.Text }
 
-// GetTimestamp returns getJobLogsProjectRepoJobRunLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getJobLogsProjectRepoJobRunLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
+// GetTimestamp returns getJobLogsRepoJobRunLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *getJobLogsRepoJobRunLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
 
 // getJobLogsResponse is returned by getJobLogs on success.
 type getJobLogsResponse struct {
-	Project getJobLogsProject `json:"project"`
+	Repo getJobLogsRepo `json:"repo"`
 }
 
-// GetProject returns getJobLogsResponse.Project, and is useful for accessing the field via an interface.
-func (v *getJobLogsResponse) GetProject() getJobLogsProject { return v.Project }
+// GetRepo returns getJobLogsResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getJobLogsResponse) GetRepo() getJobLogsRepo { return v.Repo }
 
-// getJobProject includes the requested fields of the GraphQL type Project.
-type getJobProject struct {
-	Repo getJobProjectRepo `json:"repo"`
+// getJobRepo includes the requested fields of the GraphQL type Repo.
+type getJobRepo struct {
+	JobRun getJobRepoJobRun `json:"jobRun"`
 }
 
-// GetRepo returns getJobProject.Repo, and is useful for accessing the field via an interface.
-func (v *getJobProject) GetRepo() getJobProjectRepo { return v.Repo }
+// GetJobRun returns getJobRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *getJobRepo) GetJobRun() getJobRepoJobRun { return v.JobRun }
 
-// getJobProjectRepo includes the requested fields of the GraphQL type Repo.
-type getJobProjectRepo struct {
-	JobRun getJobProjectRepoJobRun `json:"jobRun"`
-}
-
-// GetJobRun returns getJobProjectRepo.JobRun, and is useful for accessing the field via an interface.
-func (v *getJobProjectRepo) GetJobRun() getJobProjectRepoJobRun { return v.JobRun }
-
-// getJobProjectRepoJobRun includes the requested fields of the GraphQL type JobRun.
-type getJobProjectRepoJobRun struct {
+// getJobRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type getJobRepoJobRun struct {
 	Id    uuid.UUID   `json:"id"`
 	State JobRunState `json:"state"`
 }
 
-// GetId returns getJobProjectRepoJobRun.Id, and is useful for accessing the field via an interface.
-func (v *getJobProjectRepoJobRun) GetId() uuid.UUID { return v.Id }
+// GetId returns getJobRepoJobRun.Id, and is useful for accessing the field via an interface.
+func (v *getJobRepoJobRun) GetId() uuid.UUID { return v.Id }
 
-// GetState returns getJobProjectRepoJobRun.State, and is useful for accessing the field via an interface.
-func (v *getJobProjectRepoJobRun) GetState() JobRunState { return v.State }
+// GetState returns getJobRepoJobRun.State, and is useful for accessing the field via an interface.
+func (v *getJobRepoJobRun) GetState() JobRunState { return v.State }
 
 // getJobResponse is returned by getJob on success.
 type getJobResponse struct {
-	Project getJobProject `json:"project"`
+	Repo getJobRepo `json:"repo"`
 }
 
-// GetProject returns getJobResponse.Project, and is useful for accessing the field via an interface.
-func (v *getJobResponse) GetProject() getJobProject { return v.Project }
+// GetRepo returns getJobResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getJobResponse) GetRepo() getJobRepo { return v.Repo }
 
-// getLatestDeploymentProject includes the requested fields of the GraphQL type Project.
-type getLatestDeploymentProject struct {
-	Repo getLatestDeploymentProjectRepo `json:"repo"`
+// getLatestDeploymentRepo includes the requested fields of the GraphQL type Repo.
+type getLatestDeploymentRepo struct {
+	Branch getLatestDeploymentRepoBranchRepoBranchV2 `json:"branch"`
 }
 
-// GetRepo returns getLatestDeploymentProject.Repo, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProject) GetRepo() getLatestDeploymentProjectRepo { return v.Repo }
-
-// getLatestDeploymentProjectRepo includes the requested fields of the GraphQL type Repo.
-type getLatestDeploymentProjectRepo struct {
-	Branch getLatestDeploymentProjectRepoBranchRepoBranchV2 `json:"branch"`
-}
-
-// GetBranch returns getLatestDeploymentProjectRepo.Branch, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepo) GetBranch() getLatestDeploymentProjectRepoBranchRepoBranchV2 {
+// GetBranch returns getLatestDeploymentRepo.Branch, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepo) GetBranch() getLatestDeploymentRepoBranchRepoBranchV2 {
 	return v.Branch
 }
 
-// getLatestDeploymentProjectRepoBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
-type getLatestDeploymentProjectRepoBranchRepoBranchV2 struct {
-	LatestDeployment getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment `json:"latestDeployment"`
+// getLatestDeploymentRepoBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type getLatestDeploymentRepoBranchRepoBranchV2 struct {
+	LatestDeployment getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment `json:"latestDeployment"`
 }
 
-// GetLatestDeployment returns getLatestDeploymentProjectRepoBranchRepoBranchV2.LatestDeployment, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2) GetLatestDeployment() getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment {
+// GetLatestDeployment returns getLatestDeploymentRepoBranchRepoBranchV2.LatestDeployment, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2) GetLatestDeployment() getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment {
 	return v.LatestDeployment
 }
 
-// getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment includes the requested fields of the GraphQL type Deployment.
-type getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment struct {
+// getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment includes the requested fields of the GraphQL type Deployment.
+type getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment struct {
 	Id              uuid.UUID        `json:"id"`
 	Status          DeploymentStatus `json:"status"`
 	Branch          string           `json:"branch"`
@@ -863,38 +831,36 @@ type getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment struct {
 	PrivateEndpoint string           `json:"privateEndpoint"`
 }
 
-// GetId returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Id, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetId() uuid.UUID {
-	return v.Id
-}
+// GetId returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Id, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetId() uuid.UUID { return v.Id }
 
-// GetStatus returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Status, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetStatus() DeploymentStatus {
+// GetStatus returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Status, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetStatus() DeploymentStatus {
 	return v.Status
 }
 
-// GetBranch returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Branch, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetBranch() string {
+// GetBranch returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetBranch() string {
 	return v.Branch
 }
 
-// GetEndpoints returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetEndpoints() []string {
+// GetEndpoints returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetEndpoints() []string {
 	return v.Endpoints
 }
 
-// GetPrivateEndpoint returns getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentProjectRepoBranchRepoBranchV2LatestDeployment) GetPrivateEndpoint() string {
+// GetPrivateEndpoint returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetPrivateEndpoint() string {
 	return v.PrivateEndpoint
 }
 
 // getLatestDeploymentResponse is returned by getLatestDeployment on success.
 type getLatestDeploymentResponse struct {
-	Project getLatestDeploymentProject `json:"project"`
+	Repo getLatestDeploymentRepo `json:"repo"`
 }
 
-// GetProject returns getLatestDeploymentResponse.Project, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentResponse) GetProject() getLatestDeploymentProject { return v.Project }
+// GetRepo returns getLatestDeploymentResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getLatestDeploymentResponse) GetRepo() getLatestDeploymentRepo { return v.Repo }
 
 // getProductionBranchCurrentUser includes the requested fields of the GraphQL type User.
 type getProductionBranchCurrentUser struct {
@@ -938,75 +904,47 @@ func (v *getProductionBranchResponse) GetCurrentUser() getProductionBranchCurren
 	return v.CurrentUser
 }
 
-// getProductionDeploymentProject includes the requested fields of the GraphQL type Project.
-type getProductionDeploymentProject struct {
-	Repo getProductionDeploymentProjectRepo `json:"repo"`
+// getProductionDeploymentRepo includes the requested fields of the GraphQL type Repo.
+type getProductionDeploymentRepo struct {
+	ProductionDeployment getProductionDeploymentRepoProductionDeployment `json:"productionDeployment"`
 }
 
-// GetRepo returns getProductionDeploymentProject.Repo, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProject) GetRepo() getProductionDeploymentProjectRepo { return v.Repo }
-
-// getProductionDeploymentProjectRepo includes the requested fields of the GraphQL type Repo.
-type getProductionDeploymentProjectRepo struct {
-	ProductionDeployment getProductionDeploymentProjectRepoProductionDeployment `json:"productionDeployment"`
-}
-
-// GetProductionDeployment returns getProductionDeploymentProjectRepo.ProductionDeployment, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProjectRepo) GetProductionDeployment() getProductionDeploymentProjectRepoProductionDeployment {
+// GetProductionDeployment returns getProductionDeploymentRepo.ProductionDeployment, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentRepo) GetProductionDeployment() getProductionDeploymentRepoProductionDeployment {
 	return v.ProductionDeployment
 }
 
-// getProductionDeploymentProjectRepoProductionDeployment includes the requested fields of the GraphQL type Deployment.
-type getProductionDeploymentProjectRepoProductionDeployment struct {
+// getProductionDeploymentRepoProductionDeployment includes the requested fields of the GraphQL type Deployment.
+type getProductionDeploymentRepoProductionDeployment struct {
 	Id              uuid.UUID        `json:"id"`
 	Status          DeploymentStatus `json:"status"`
 	Endpoints       []string         `json:"endpoints"`
 	PrivateEndpoint string           `json:"privateEndpoint"`
 }
 
-// GetId returns getProductionDeploymentProjectRepoProductionDeployment.Id, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProjectRepoProductionDeployment) GetId() uuid.UUID { return v.Id }
+// GetId returns getProductionDeploymentRepoProductionDeployment.Id, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentRepoProductionDeployment) GetId() uuid.UUID { return v.Id }
 
-// GetStatus returns getProductionDeploymentProjectRepoProductionDeployment.Status, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProjectRepoProductionDeployment) GetStatus() DeploymentStatus {
+// GetStatus returns getProductionDeploymentRepoProductionDeployment.Status, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentRepoProductionDeployment) GetStatus() DeploymentStatus {
 	return v.Status
 }
 
-// GetEndpoints returns getProductionDeploymentProjectRepoProductionDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProjectRepoProductionDeployment) GetEndpoints() []string {
-	return v.Endpoints
-}
+// GetEndpoints returns getProductionDeploymentRepoProductionDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentRepoProductionDeployment) GetEndpoints() []string { return v.Endpoints }
 
-// GetPrivateEndpoint returns getProductionDeploymentProjectRepoProductionDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentProjectRepoProductionDeployment) GetPrivateEndpoint() string {
+// GetPrivateEndpoint returns getProductionDeploymentRepoProductionDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentRepoProductionDeployment) GetPrivateEndpoint() string {
 	return v.PrivateEndpoint
 }
 
 // getProductionDeploymentResponse is returned by getProductionDeployment on success.
 type getProductionDeploymentResponse struct {
-	Project getProductionDeploymentProject `json:"project"`
+	Repo getProductionDeploymentRepo `json:"repo"`
 }
 
-// GetProject returns getProductionDeploymentResponse.Project, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentResponse) GetProject() getProductionDeploymentProject {
-	return v.Project
-}
-
-// getProjectByIdProject includes the requested fields of the GraphQL type Project.
-type getProjectByIdProject struct {
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns getProjectByIdProject.Id, and is useful for accessing the field via an interface.
-func (v *getProjectByIdProject) GetId() uuid.UUID { return v.Id }
-
-// getProjectByIdResponse is returned by getProjectById on success.
-type getProjectByIdResponse struct {
-	Project getProjectByIdProject `json:"project"`
-}
-
-// GetProject returns getProjectByIdResponse.Project, and is useful for accessing the field via an interface.
-func (v *getProjectByIdResponse) GetProject() getProjectByIdProject { return v.Project }
+// GetRepo returns getProductionDeploymentResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getProductionDeploymentResponse) GetRepo() getProductionDeploymentRepo { return v.Repo }
 
 // getProjectByPathRepo includes the requested fields of the GraphQL type Repo.
 type getProjectByPathRepo struct {
@@ -1024,53 +962,37 @@ type getProjectByPathResponse struct {
 // GetRepo returns getProjectByPathResponse.Repo, and is useful for accessing the field via an interface.
 func (v *getProjectByPathResponse) GetRepo() getProjectByPathRepo { return v.Repo }
 
-// getProjectPathProject includes the requested fields of the GraphQL type Project.
-type getProjectPathProject struct {
-	Repo getProjectPathProjectRepo `json:"repo"`
-}
-
-// GetRepo returns getProjectPathProject.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectPathProject) GetRepo() getProjectPathProjectRepo { return v.Repo }
-
-// getProjectPathProjectRepo includes the requested fields of the GraphQL type Repo.
-type getProjectPathProjectRepo struct {
+// getProjectPathRepo includes the requested fields of the GraphQL type Repo.
+type getProjectPathRepo struct {
 	Path string `json:"path"`
 }
 
-// GetPath returns getProjectPathProjectRepo.Path, and is useful for accessing the field via an interface.
-func (v *getProjectPathProjectRepo) GetPath() string { return v.Path }
+// GetPath returns getProjectPathRepo.Path, and is useful for accessing the field via an interface.
+func (v *getProjectPathRepo) GetPath() string { return v.Path }
 
 // getProjectPathResponse is returned by getProjectPath on success.
 type getProjectPathResponse struct {
-	Project getProjectPathProject `json:"project"`
+	Repo getProjectPathRepo `json:"repo"`
 }
 
-// GetProject returns getProjectPathResponse.Project, and is useful for accessing the field via an interface.
-func (v *getProjectPathResponse) GetProject() getProjectPathProject { return v.Project }
+// GetRepo returns getProjectPathResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getProjectPathResponse) GetRepo() getProjectPathRepo { return v.Repo }
 
-// getProjectRepoProject includes the requested fields of the GraphQL type Project.
-type getProjectRepoProject struct {
-	Repo getProjectRepoProjectRepo `json:"repo"`
-}
-
-// GetRepo returns getProjectRepoProject.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectRepoProject) GetRepo() getProjectRepoProjectRepo { return v.Repo }
-
-// getProjectRepoProjectRepo includes the requested fields of the GraphQL type Repo.
-type getProjectRepoProjectRepo struct {
+// getRepoRepo includes the requested fields of the GraphQL type Repo.
+type getRepoRepo struct {
 	Id uuid.UUID `json:"id"`
 }
 
-// GetId returns getProjectRepoProjectRepo.Id, and is useful for accessing the field via an interface.
-func (v *getProjectRepoProjectRepo) GetId() uuid.UUID { return v.Id }
+// GetId returns getRepoRepo.Id, and is useful for accessing the field via an interface.
+func (v *getRepoRepo) GetId() uuid.UUID { return v.Id }
 
-// getProjectRepoResponse is returned by getProjectRepo on success.
-type getProjectRepoResponse struct {
-	Project getProjectRepoProject `json:"project"`
+// getRepoResponse is returned by getRepo on success.
+type getRepoResponse struct {
+	Repo getRepoRepo `json:"repo"`
 }
 
-// GetProject returns getProjectRepoResponse.Project, and is useful for accessing the field via an interface.
-func (v *getProjectRepoResponse) GetProject() getProjectRepoProject { return v.Project }
+// GetRepo returns getRepoResponse.Repo, and is useful for accessing the field via an interface.
+func (v *getRepoResponse) GetRepo() getRepoRepo { return v.Repo }
 
 // getRuntimeLogsCurrentUser includes the requested fields of the GraphQL type User.
 type getRuntimeLogsCurrentUser struct {
@@ -1531,12 +1453,10 @@ func getJob(
 		"getJob",
 		`
 query getJob ($projectID: UUID!, $jobID: UUID!) {
-	project(id: $projectID) {
-		repo {
-			jobRun(id: $jobID) {
-				id
-				state
-			}
+	repo(id: $projectID) {
+		jobRun(id: $jobID) {
+			id
+			state
 		}
 	}
 }
@@ -1550,12 +1470,12 @@ query getJob ($projectID: UUID!, $jobID: UUID!) {
 func getJobLogs(
 	ctx context.Context,
 	client graphql.Client,
-	projectID uuid.UUID,
+	repoID uuid.UUID,
 	jobID uuid.UUID,
 ) (*getJobLogsResponse, error) {
 	__input := __getJobLogsInput{
-		ProjectID: projectID,
-		JobID:     jobID,
+		RepoID: repoID,
+		JobID:  jobID,
 	}
 	var err error
 
@@ -1564,15 +1484,13 @@ func getJobLogs(
 		ctx,
 		"getJobLogs",
 		`
-query getJobLogs ($projectID: UUID!, $jobID: UUID!) {
-	project(id: $projectID) {
-		repo {
-			jobRun(id: $jobID) {
-				logs {
-					entries {
-						text
-						timestamp
-					}
+query getJobLogs ($repoID: UUID!, $jobID: UUID!) {
+	repo(id: $repoID) {
+		jobRun(id: $jobID) {
+			logs {
+				entries {
+					text
+					timestamp
 				}
 			}
 		}
@@ -1603,16 +1521,14 @@ func getLatestDeployment(
 		"getLatestDeployment",
 		`
 query getLatestDeployment ($project: String, $branch: String) {
-	project(path: $project) {
-		repo {
-			branch(name: $branch) {
-				latestDeployment {
-					id
-					status
-					branch
-					endpoints
-					privateEndpoint
-				}
+	repo(path: $project) {
+		branch(name: $branch) {
+			latestDeployment {
+				id
+				status
+				branch
+				endpoints
+				privateEndpoint
 			}
 		}
 	}
@@ -1672,42 +1588,13 @@ func getProductionDeployment(
 		"getProductionDeployment",
 		`
 query getProductionDeployment ($project: String!) {
-	project(path: $project) {
-		repo {
-			productionDeployment {
-				id
-				status
-				endpoints
-				privateEndpoint
-			}
+	repo(path: $project) {
+		productionDeployment {
+			id
+			status
+			endpoints
+			privateEndpoint
 		}
-	}
-}
-`,
-		&retval,
-		&__input,
-	)
-	return &retval, err
-}
-
-func getProjectById(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getProjectByIdResponse, error) {
-	__input := __getProjectByIdInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getProjectByIdResponse
-	err = client.MakeRequest(
-		ctx,
-		"getProjectById",
-		`
-query getProjectById ($id: UUID!) {
-	project(id: $id) {
-		id
 	}
 }
 `,
@@ -1760,10 +1647,8 @@ func getProjectPath(
 		"getProjectPath",
 		`
 query getProjectPath ($id: UUID!) {
-	project(id: $id) {
-		repo {
-			path
-		}
+	repo(id: $id) {
+		path
 	}
 }
 `,
@@ -1773,26 +1658,24 @@ query getProjectPath ($id: UUID!) {
 	return &retval, err
 }
 
-func getProjectRepo(
+func getRepo(
 	ctx context.Context,
 	client graphql.Client,
 	path string,
-) (*getProjectRepoResponse, error) {
-	__input := __getProjectRepoInput{
+) (*getRepoResponse, error) {
+	__input := __getRepoInput{
 		Path: path,
 	}
 	var err error
 
-	var retval getProjectRepoResponse
+	var retval getRepoResponse
 	err = client.MakeRequest(
 		ctx,
-		"getProjectRepo",
+		"getRepo",
 		`
-query getProjectRepo ($path: String!) {
-	project(path: $path) {
-		repo {
-			id
-		}
+query getRepo ($path: String!) {
+	repo(path: $path) {
+		id
 	}
 }
 `,
