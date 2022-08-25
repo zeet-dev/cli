@@ -70,20 +70,18 @@ func (c *Client) GetEnvVars(ctx context.Context, repoID uuid.UUID) (map[string]s
 	return out, nil
 }
 
-func (c *Client) GetProjectRepo(ctx context.Context, path string) (*Repo, error) {
+func (c *Client) GetRepo(ctx context.Context, path string) (*Repo, error) {
 	out := &Repo{}
 
 	_ = `# @genqlient
-		query getProjectRepo($path: String!) {
-		  project(path: $path) {
-			repo {
-			  id
-			}
+		query getRepo($path: String!) {
+		  repo(path: $path) {
+			id
 		  }
 		}
 	`
-	res, err := getProjectRepo(ctx, c.gql, path)
-	if err := copier.Copy(out, res.Project.Repo); err != nil {
+	res, err := getRepo(ctx, c.gql, path)
+	if err := copier.Copy(out, res.Repo); err != nil {
 		return nil, err
 	}
 

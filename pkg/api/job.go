@@ -36,31 +36,29 @@ func (c *Client) RunJob(ctx context.Context, projectID uuid.UUID, command string
 	return out, nil
 }
 
-func (c *Client) GetJobLogs(ctx context.Context, projectID uuid.UUID, jobID uuid.UUID) ([]LogEntry, error) {
+func (c *Client) GetJobLogs(ctx context.Context, repoID uuid.UUID, jobID uuid.UUID) ([]LogEntry, error) {
 	out := []LogEntry{}
 
 	_ = `# @genqlient
-		query getJobLogs($projectID: UUID!, $jobID: UUID!) {
-		  project(id: $projectID) {
-			repo {
-			  jobRun(id: $jobID) {
-				logs {
-				  entries {
-					text
-					timestamp
-				  }
+		query getJobLogs($repoID: UUID!, $jobID: UUID!) {
+		  repo(id: $repoID) {
+			jobRun(id: $jobID) {
+			  logs {
+				entries {
+				  text
+				  timestamp
 				}
 			  }
 			}
 		  }
 		}
 	`
-	res, err := getJobLogs(ctx, c.gql, projectID, jobID)
+	res, err := getJobLogs(ctx, c.gql, repoID, jobID)
 	if err != nil {
 		return out, err
 	}
 
-	if err := copier.Copy(&out, res.Project.Repo.JobRun.Logs.Entries); err != nil {
+	if err := copier.Copy(&out, res.Repo.JobRun.Logs.Entries); err != nil {
 		return out, err
 	}
 
@@ -72,14 +70,12 @@ func (c *Client) GetJob(ctx context.Context, projectID uuid.UUID, jobID uuid.UUI
 
 	_ = `# @genqlient
 		query getJob($projectID: UUID!, $jobID: UUID!) {
-		  project(id: $projectID) {
-			repo {
+			repo(id: $projectID) {
 			  jobRun(id: $jobID) {
 				id
 				state
 			  }
 			}
-		  }
 		}
 	`
 	res, err := getJob(ctx, c.gql, projectID, jobID)
@@ -87,7 +83,7 @@ func (c *Client) GetJob(ctx context.Context, projectID uuid.UUID, jobID uuid.UUI
 		return out, err
 	}
 
-	if err := copier.Copy(&out, res.Project.Repo.JobRun); err != nil {
+	if err := copier.Copy(&out, res.Repo.JobRun); err != nil {
 		return out, err
 	}
 
