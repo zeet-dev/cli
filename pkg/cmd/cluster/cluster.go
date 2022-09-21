@@ -13,6 +13,7 @@ func NewClusterCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(NewKubeconfigSetCmd(f))
+	cmd.AddCommand(NewKubeconfigGetCmd(f))
 
 	return cmd
 }

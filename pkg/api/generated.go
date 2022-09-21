@@ -108,6 +108,14 @@ type __getBuildLogsInput struct {
 // GetId returns __getBuildLogsInput.Id, and is useful for accessing the field via an interface.
 func (v *__getBuildLogsInput) GetId() uuid.UUID { return v.Id }
 
+// __getClusterKubeconfigInput is used internally by genqlient
+type __getClusterKubeconfigInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __getClusterKubeconfigInput.Id, and is useful for accessing the field via an interface.
+func (v *__getClusterKubeconfigInput) GetId() uuid.UUID { return v.Id }
+
 // __getDeploymentInfoInput is used internally by genqlient
 type __getDeploymentInfoInput struct {
 	Id uuid.UUID `json:"id"`
@@ -511,6 +519,42 @@ type getBuildLogsResponse struct {
 
 // GetCurrentUser returns getBuildLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *getBuildLogsResponse) GetCurrentUser() getBuildLogsCurrentUser { return v.CurrentUser }
+
+// getClusterKubeconfigCurrentUser includes the requested fields of the GraphQL type User.
+type getClusterKubeconfigCurrentUser struct {
+	Cluster getClusterKubeconfigCurrentUserCluster `json:"cluster"`
+}
+
+// GetCluster returns getClusterKubeconfigCurrentUser.Cluster, and is useful for accessing the field via an interface.
+func (v *getClusterKubeconfigCurrentUser) GetCluster() getClusterKubeconfigCurrentUserCluster {
+	return v.Cluster
+}
+
+// getClusterKubeconfigCurrentUserCluster includes the requested fields of the GraphQL type Cluster.
+type getClusterKubeconfigCurrentUserCluster struct {
+	Id         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	Kubeconfig string    `json:"kubeconfig"`
+}
+
+// GetId returns getClusterKubeconfigCurrentUserCluster.Id, and is useful for accessing the field via an interface.
+func (v *getClusterKubeconfigCurrentUserCluster) GetId() uuid.UUID { return v.Id }
+
+// GetName returns getClusterKubeconfigCurrentUserCluster.Name, and is useful for accessing the field via an interface.
+func (v *getClusterKubeconfigCurrentUserCluster) GetName() string { return v.Name }
+
+// GetKubeconfig returns getClusterKubeconfigCurrentUserCluster.Kubeconfig, and is useful for accessing the field via an interface.
+func (v *getClusterKubeconfigCurrentUserCluster) GetKubeconfig() string { return v.Kubeconfig }
+
+// getClusterKubeconfigResponse is returned by getClusterKubeconfig on success.
+type getClusterKubeconfigResponse struct {
+	CurrentUser getClusterKubeconfigCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns getClusterKubeconfigResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *getClusterKubeconfigResponse) GetCurrentUser() getClusterKubeconfigCurrentUser {
+	return v.CurrentUser
+}
 
 // getCurrentUserCurrentUser includes the requested fields of the GraphQL type User.
 type getCurrentUserCurrentUser struct {
@@ -1306,6 +1350,37 @@ query getBuildLogs ($id: ID!) {
 					}
 				}
 			}
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func getClusterKubeconfig(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*getClusterKubeconfigResponse, error) {
+	__input := __getClusterKubeconfigInput{
+		Id: id,
+	}
+	var err error
+
+	var retval getClusterKubeconfigResponse
+	err = client.MakeRequest(
+		ctx,
+		"getClusterKubeconfig",
+		`
+query getClusterKubeconfig ($id: UUID!) {
+	currentUser {
+		cluster(id: $id) {
+			id
+			name
+			kubeconfig
 		}
 	}
 }

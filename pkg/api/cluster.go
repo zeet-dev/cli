@@ -38,3 +38,34 @@ func (c *Client) UpdateClusterKubeconfig(ctx context.Context, clusterId uuid.UUI
 
 	return out, nil
 }
+
+type GetClusterKubeconfigResponse struct {
+	ID         uuid.UUID
+	Name       string
+	Kubeconfig string
+}
+
+func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) (*GetClusterKubeconfigResponse, error) {
+	_ = `# @genqlient
+		query getClusterKubeconfig($id: UUID!) {
+		  currentUser {
+			cluster(id: $id) {
+			  id
+			  name
+			  kubeconfig
+			}
+		  }
+		}
+	`
+
+	res, err := getClusterKubeconfig(ctx, c.gql, clusterID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetClusterKubeconfigResponse{
+		ID:         res.CurrentUser.Cluster.Id,
+		Name:       res.CurrentUser.Cluster.Name,
+		Kubeconfig: res.CurrentUser.Cluster.Kubeconfig,
+	}, nil
+}

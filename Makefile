@@ -5,3 +5,5 @@ copy-docs:
 gen-go:
 	get-graphql-schema http://localhost:7001/graphql > schema.graphql
 	go generate ./...
+gen:
+	go run github.com/Khan/genqlient
