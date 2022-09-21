@@ -43,6 +43,134 @@ func (v *EnvVarInput) GetValue() string { return v.Value }
 // GetSealed returns EnvVarInput.Sealed, and is useful for accessing the field via an interface.
 func (v *EnvVarInput) GetSealed() bool { return v.Sealed }
 
+// GetCloudAWSCurrentUser includes the requested fields of the GraphQL type User.
+type GetCloudAWSCurrentUser struct {
+	AwsAccount GetCloudAWSCurrentUserAwsAccountAWSAccount `json:"awsAccount"`
+}
+
+// GetAwsAccount returns GetCloudAWSCurrentUser.AwsAccount, and is useful for accessing the field via an interface.
+func (v *GetCloudAWSCurrentUser) GetAwsAccount() GetCloudAWSCurrentUserAwsAccountAWSAccount {
+	return v.AwsAccount
+}
+
+// GetCloudAWSCurrentUserAwsAccountAWSAccount includes the requested fields of the GraphQL type AWSAccount.
+type GetCloudAWSCurrentUserAwsAccountAWSAccount struct {
+	Id         uuid.UUID `json:"id"`
+	RoleARN    string    `json:"roleARN"`
+	ExternalID string    `json:"externalID"`
+}
+
+// GetId returns GetCloudAWSCurrentUserAwsAccountAWSAccount.Id, and is useful for accessing the field via an interface.
+func (v *GetCloudAWSCurrentUserAwsAccountAWSAccount) GetId() uuid.UUID { return v.Id }
+
+// GetRoleARN returns GetCloudAWSCurrentUserAwsAccountAWSAccount.RoleARN, and is useful for accessing the field via an interface.
+func (v *GetCloudAWSCurrentUserAwsAccountAWSAccount) GetRoleARN() string { return v.RoleARN }
+
+// GetExternalID returns GetCloudAWSCurrentUserAwsAccountAWSAccount.ExternalID, and is useful for accessing the field via an interface.
+func (v *GetCloudAWSCurrentUserAwsAccountAWSAccount) GetExternalID() string { return v.ExternalID }
+
+// GetCloudAWSResponse is returned by GetCloudAWS on success.
+type GetCloudAWSResponse struct {
+	CurrentUser GetCloudAWSCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetCloudAWSResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetCloudAWSResponse) GetCurrentUser() GetCloudAWSCurrentUser { return v.CurrentUser }
+
+// GetCloudDigitalOceanCurrentUser includes the requested fields of the GraphQL type User.
+type GetCloudDigitalOceanCurrentUser struct {
+	DoAccount GetCloudDigitalOceanCurrentUserDoAccountDOAccount `json:"doAccount"`
+}
+
+// GetDoAccount returns GetCloudDigitalOceanCurrentUser.DoAccount, and is useful for accessing the field via an interface.
+func (v *GetCloudDigitalOceanCurrentUser) GetDoAccount() GetCloudDigitalOceanCurrentUserDoAccountDOAccount {
+	return v.DoAccount
+}
+
+// GetCloudDigitalOceanCurrentUserDoAccountDOAccount includes the requested fields of the GraphQL type DOAccount.
+type GetCloudDigitalOceanCurrentUserDoAccountDOAccount struct {
+	Id          uuid.UUID `json:"id"`
+	AccessToken string    `json:"accessToken"`
+}
+
+// GetId returns GetCloudDigitalOceanCurrentUserDoAccountDOAccount.Id, and is useful for accessing the field via an interface.
+func (v *GetCloudDigitalOceanCurrentUserDoAccountDOAccount) GetId() uuid.UUID { return v.Id }
+
+// GetAccessToken returns GetCloudDigitalOceanCurrentUserDoAccountDOAccount.AccessToken, and is useful for accessing the field via an interface.
+func (v *GetCloudDigitalOceanCurrentUserDoAccountDOAccount) GetAccessToken() string {
+	return v.AccessToken
+}
+
+// GetCloudDigitalOceanResponse is returned by GetCloudDigitalOcean on success.
+type GetCloudDigitalOceanResponse struct {
+	CurrentUser GetCloudDigitalOceanCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetCloudDigitalOceanResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetCloudDigitalOceanResponse) GetCurrentUser() GetCloudDigitalOceanCurrentUser {
+	return v.CurrentUser
+}
+
+// GetCloudGCPCurrentUser includes the requested fields of the GraphQL type User.
+type GetCloudGCPCurrentUser struct {
+	GcpAccount GetCloudGCPCurrentUserGcpAccountGCPAccount `json:"gcpAccount"`
+}
+
+// GetGcpAccount returns GetCloudGCPCurrentUser.GcpAccount, and is useful for accessing the field via an interface.
+func (v *GetCloudGCPCurrentUser) GetGcpAccount() GetCloudGCPCurrentUserGcpAccountGCPAccount {
+	return v.GcpAccount
+}
+
+// GetCloudGCPCurrentUserGcpAccountGCPAccount includes the requested fields of the GraphQL type GCPAccount.
+type GetCloudGCPCurrentUserGcpAccountGCPAccount struct {
+	Id          uuid.UUID `json:"id"`
+	Credentials string    `json:"credentials"`
+}
+
+// GetId returns GetCloudGCPCurrentUserGcpAccountGCPAccount.Id, and is useful for accessing the field via an interface.
+func (v *GetCloudGCPCurrentUserGcpAccountGCPAccount) GetId() uuid.UUID { return v.Id }
+
+// GetCredentials returns GetCloudGCPCurrentUserGcpAccountGCPAccount.Credentials, and is useful for accessing the field via an interface.
+func (v *GetCloudGCPCurrentUserGcpAccountGCPAccount) GetCredentials() string { return v.Credentials }
+
+// GetCloudGCPResponse is returned by GetCloudGCP on success.
+type GetCloudGCPResponse struct {
+	CurrentUser GetCloudGCPCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetCloudGCPResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetCloudGCPResponse) GetCurrentUser() GetCloudGCPCurrentUser { return v.CurrentUser }
+
+// GetCloudLinodeCurrentUser includes the requested fields of the GraphQL type User.
+type GetCloudLinodeCurrentUser struct {
+	LinodeAccount GetCloudLinodeCurrentUserLinodeAccount `json:"linodeAccount"`
+}
+
+// GetLinodeAccount returns GetCloudLinodeCurrentUser.LinodeAccount, and is useful for accessing the field via an interface.
+func (v *GetCloudLinodeCurrentUser) GetLinodeAccount() GetCloudLinodeCurrentUserLinodeAccount {
+	return v.LinodeAccount
+}
+
+// GetCloudLinodeCurrentUserLinodeAccount includes the requested fields of the GraphQL type LinodeAccount.
+type GetCloudLinodeCurrentUserLinodeAccount struct {
+	Id          uuid.UUID `json:"id"`
+	AccessToken string    `json:"accessToken"`
+}
+
+// GetId returns GetCloudLinodeCurrentUserLinodeAccount.Id, and is useful for accessing the field via an interface.
+func (v *GetCloudLinodeCurrentUserLinodeAccount) GetId() uuid.UUID { return v.Id }
+
+// GetAccessToken returns GetCloudLinodeCurrentUserLinodeAccount.AccessToken, and is useful for accessing the field via an interface.
+func (v *GetCloudLinodeCurrentUserLinodeAccount) GetAccessToken() string { return v.AccessToken }
+
+// GetCloudLinodeResponse is returned by GetCloudLinode on success.
+type GetCloudLinodeResponse struct {
+	CurrentUser GetCloudLinodeCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetCloudLinodeResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetCloudLinodeResponse) GetCurrentUser() GetCloudLinodeCurrentUser { return v.CurrentUser }
+
 type JobRunState string
 
 const (
@@ -51,6 +179,38 @@ const (
 	JobRunStateJobRunFailed    JobRunState = "JOB_RUN_FAILED"
 	JobRunStateJobRunSucceeded JobRunState = "JOB_RUN_SUCCEEDED"
 )
+
+// __GetCloudAWSInput is used internally by genqlient
+type __GetCloudAWSInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __GetCloudAWSInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetCloudAWSInput) GetId() uuid.UUID { return v.Id }
+
+// __GetCloudDigitalOceanInput is used internally by genqlient
+type __GetCloudDigitalOceanInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __GetCloudDigitalOceanInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetCloudDigitalOceanInput) GetId() uuid.UUID { return v.Id }
+
+// __GetCloudGCPInput is used internally by genqlient
+type __GetCloudGCPInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __GetCloudGCPInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetCloudGCPInput) GetId() uuid.UUID { return v.Id }
+
+// __GetCloudLinodeInput is used internally by genqlient
+type __GetCloudLinodeInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __GetCloudLinodeInput.Id, and is useful for accessing the field via an interface.
+func (v *__GetCloudLinodeInput) GetId() uuid.UUID { return v.Id }
 
 // __buildRepoDefaultBranchInput is used internally by genqlient
 type __buildRepoDefaultBranchInput struct {
@@ -1191,6 +1351,127 @@ type updateProjectUpdateProjectRepo struct {
 
 // GetId returns updateProjectUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
 func (v *updateProjectUpdateProjectRepo) GetId() uuid.UUID { return v.Id }
+
+func GetCloudAWS(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*GetCloudAWSResponse, error) {
+	__input := __GetCloudAWSInput{
+		Id: id,
+	}
+	var err error
+
+	var retval GetCloudAWSResponse
+	err = client.MakeRequest(
+		ctx,
+		"GetCloudAWS",
+		`
+query GetCloudAWS ($id: UUID!) {
+	currentUser {
+		awsAccount(id: $id) {
+			id
+			roleARN
+			externalID
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func GetCloudDigitalOcean(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*GetCloudDigitalOceanResponse, error) {
+	__input := __GetCloudDigitalOceanInput{
+		Id: id,
+	}
+	var err error
+
+	var retval GetCloudDigitalOceanResponse
+	err = client.MakeRequest(
+		ctx,
+		"GetCloudDigitalOcean",
+		`
+query GetCloudDigitalOcean ($id: UUID!) {
+	currentUser {
+		doAccount(id: $id) {
+			id
+			accessToken
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func GetCloudGCP(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*GetCloudGCPResponse, error) {
+	__input := __GetCloudGCPInput{
+		Id: id,
+	}
+	var err error
+
+	var retval GetCloudGCPResponse
+	err = client.MakeRequest(
+		ctx,
+		"GetCloudGCP",
+		`
+query GetCloudGCP ($id: UUID!) {
+	currentUser {
+		gcpAccount(id: $id) {
+			id
+			credentials
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func GetCloudLinode(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*GetCloudLinodeResponse, error) {
+	__input := __GetCloudLinodeInput{
+		Id: id,
+	}
+	var err error
+
+	var retval GetCloudLinodeResponse
+	err = client.MakeRequest(
+		ctx,
+		"GetCloudLinode",
+		`
+query GetCloudLinode ($id: UUID!) {
+	currentUser {
+		linodeAccount(id: $id) {
+			id
+			accessToken
+		}
+	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
 
 func buildRepo(
 	ctx context.Context,
