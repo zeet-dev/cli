@@ -79,6 +79,8 @@ input AddProjectCollaboratorInput {
 input AddRepoCustomDomainInput {
   id: UUID!
   domain: String!
+  certManagerChallengerType: CertManagerChallengeType
+  syncDomainID: UUID
 }
 
 input AddTeamMemberInput {
@@ -147,6 +149,7 @@ type AWSAccount {
   connected: Boolean
   accountID: String
   roleARN: String
+  externalID: String
   cloudFormationURL: String!
   cloudFormationReadOnlyURL: String!
   clusters: [Cluster!]
@@ -375,6 +378,11 @@ enum CertificateProivder {
   AWS_ACM
 }
 
+enum CertManagerChallengeType {
+  dns01
+  http01
+}
+
 input CheckPriceInput {
   teamId: UUID
   source: RepoSourceType
@@ -414,7 +422,7 @@ interface CISource {
   description: String
 }
 
-union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount
+union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount | CoreWeaveAccount
 
 enum CloudAccountState {
   WAITING
@@ -514,7 +522,6 @@ type ClusterDomains {
   id: ID!
   cluster: Cluster!
   domains: [CustomDomain!]
-  cdns: [CDN!]
 }
 
 enum ClusterProvider {
@@ -738,6 +745,7 @@ input CreateProjectGitInput {
   kanikoFlags: KanikoFlagsInput
   datadogApmEnabled: Boolean
   enabled: Boolean
+  pipelineClusterID: UUID
   path: String
 }
 
@@ -853,6 +861,8 @@ type CustomDomain {
   ipTargets: [String!]
   isApex: Boolean!
   disableCertManager: Boolean
+  certManagerChallengeType: CertManagerChallengeType
+  syncDomain: CustomDomain
   instructions: [DNSRecord!]
   certificate: Certificate
 }
@@ -926,8 +936,6 @@ type Deployment {
   errorMessage: String
   branch: String
   build: Build
-  release: Release
-  deployStep: PipelineStep
   buildStage: BuildStage
   testStage: PipelineStage
   releaseStage: PipelineStage
@@ -944,8 +952,11 @@ type Deployment {
   githubLinks: GithubLinks
   helmRelease: HelmRelease
   dataOut: String
+  pipelineCluster: Cluster
   createdAt: Time!
   updatedAt: Time!
+  release: Release
+  deployStep: PipelineStep
   events: [Event!]!
   runtime: Runtime
   terraformOperation: TerraformOperation
@@ -1066,6 +1077,7 @@ type DOAccount {
   name: String!
   state: DOAccountState!
   accessTokenPrefix: String
+  accessToken: String
   defaultProject: String
   connected: Boolean
   clusters: [Cluster!]
@@ -1191,6 +1203,7 @@ type GCPAccount {
   connected: Boolean
   projectID: String
   clientEmail: String
+  credentials: String
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
   createdAt: Time!
@@ -1440,10 +1453,9 @@ type JobRun {
   exitCode: Int
   logs: Logs
   metrics(name: String!): [Metric!]
+  errorMessage: String
   createdAt: Time
   build: Build
-  project: Repo
-  repo: Repo!
 }
 
 type JobRunConnection {
@@ -1523,6 +1535,7 @@ type LinodeAccount {
   name: String!
   state: CloudAccountState!
   accessTokenPrefix: String
+  accessToken: String
   connected: Boolean
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
@@ -2094,6 +2107,7 @@ type Repo {
   databaseEnvs: [EnvVar!]!
   disableReason: DisableReason
   datadogApmEnabled: Boolean
+  pipelineCluster: Cluster
   project: Project
   projectEnvironment: ProjectEnvironment
   owner: User!
@@ -2645,6 +2659,7 @@ input UpdateProjectInput {
   deployBranch: Boolean
   branchIgnore: String
   datadogApmEnabled: Boolean
+  pipelineClusterID: UUID
   deployTarget: ProjectDeployInput
 }
 
@@ -2657,6 +2672,8 @@ input UpdateProjectV2Input {
 input UpdateRepoCustomDomainInput {
   id: UUID!
   disableCertManager: Boolean
+  certManagerChallengerType: CertManagerChallengeType
+  syncDomainID: UUID
 }
 
 input UpdateTeamInput {
@@ -2730,9 +2747,13 @@ type User implements ProfileOwner & ProjectOwner {
   suggestTemplateName(input: SuggestTemplateNameInput!): String!
   awsAccount(id: UUID!): AWSAccount
   awsAccounts: [AWSAccount!]
+  gcpAccount(id: UUID!): GCPAccount
   gcpAccounts: [GCPAccount!]
+  doAccount(id: UUID!): DOAccount
   doAccounts: [DOAccount!]
+  linodeAccount(id: UUID!): LinodeAccount
   linodeAccounts: [LinodeAccount!]
+  coreweaveAccount(id: UUID!): CoreWeaveAccount
   coreweaveAccounts: [CoreWeaveAccount!]
   cloudAccount(id: ID!): CloudAccount
   jobRun(id: UUID!): JobRun!
