@@ -9,10 +9,13 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/jinzhu/copier v0.3.5
 	github.com/rogpeppe/go-internal v1.8.1
+	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.9.0
+	github.com/vektah/gqlparser/v2 v2.3.1
 	github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
+	golang.org/x/text v0.3.7
 	k8s.io/client-go v0.22.3
 )
 
@@ -34,20 +37,17 @@ require (
 	github.com/motemen/go-nuts v0.0.0-20210915132349-615a782f2c69 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
-	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
-	github.com/vektah/gqlparser/v2 v2.3.1 // indirect
 	golang.org/x/crypto v0.0.0-20220427172511-eb4f295cb31f // indirect
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20211209124913-491a49abca63 // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect
 	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
-	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.1.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect

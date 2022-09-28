@@ -2,53 +2,47 @@
 release:
   prerelease: auto
 archives:
-  - 
-    replacements: 
+  - replacements:
       amd64: x86_64
     format_overrides:
       - goos: windows
         format: zip
 before:
-  hooks: 
+  hooks:
     - "go mod tidy"
     - "go generate ./..."
-builds: 
-  - 
-    env: 
+builds:
+  - env:
       - CGO_ENABLED=0
-    goarch: 
+    goarch:
       - amd64
-      - arm
       - arm64
-    goos: 
+      - arm
+    goos:
       - linux
       - windows
       - darwin
-    ignore: 
-      - 
+    ignore:
+      - goos: windows
         goarch: arm
-        goos: windows
-      - 
+      - goos: windows
         goarch: arm64
-        goos: windows
-      - 
+      - goos: darwin
         goarch: arm
-        goos: darwin
     main: ./cmd/zeet
-changelog: 
-  filters: 
-    exclude: 
+changelog:
+  filters:
+    exclude:
       - "^docs:"
       - "^test:"
   sort: asc
-checksum: 
+checksum:
   name_template: checksums.txt
 project_name: zeet
-snapshot: 
+snapshot:
   name_template: "{{ incpatch .Version }}-next"
 brews:
-  -
-    name: zeet
+  - name: zeet
     tap:
       owner: zeet-dev
       name: homebrew-tap
@@ -60,8 +54,7 @@ brews:
 
     custom_block: |
       head "https://github.com/zeet-dev/cli.git"
-  -
-    name: zeet-rc
+  - name: zeet-rc
     tap:
       owner: zeet-dev
       name: homebrew-tap
@@ -70,3 +63,21 @@ brews:
     description: "The Zeet CLI [w/ release candidates]"
     install: |
       bin.install "zeet" => "zeet-rc"
+dockers:
+  - use: buildx
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - "docker.io/zeetdev/cli:{{ .Version }}-amd64"
+      - "docker.io/zeetdev/cli:latest-amd64"
+  - use: buildx
+    goos: linux
+    goarch: arm64
+    image_templates:
+      - "docker.io/zeetdev/cli:{{ .Version }}-arm64"
+      - "docker.io/zeetdev/cli:latest-arm64"
+docker_manifests:
+  - name_template: docker.io/zeetdev/cli:{{ .Version }}
+    image_templates:
+      - docker.io/zeetdev/cli:{{ .Version }}-amd64
+      - docker.io/zeetdev/cli:{{ .Version }}-armv7
