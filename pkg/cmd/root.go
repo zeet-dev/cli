@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zeet-dev/cli/internal/config"
+	"github.com/zeet-dev/cli/pkg/cmd/build"
 	"github.com/zeet-dev/cli/pkg/cmd/cloud"
 	"github.com/zeet-dev/cli/pkg/cmd/cluster"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
@@ -47,6 +48,9 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	// Cloud Commands
 	cloud.InitCloudCmds(f, rootCmd)
 	rootCmd.AddCommand(cluster.NewClusterCmd(f))
+
+	// Build Commands
+	build.InitCmds(f, rootCmd)
 
 	// Set inputs/outputs
 	rootCmd.SetErr(&cmdutil.ErrorWriter{Out: f.IOStreams.Out})

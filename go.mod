@@ -34,6 +34,7 @@ require (
 	github.com/motemen/go-nuts v0.0.0-20210915132349-615a782f2c69 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/rs/zerolog v1.26.1 // indirect
+	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
