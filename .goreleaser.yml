@@ -80,4 +80,4 @@ docker_manifests:
   - name_template: docker.io/zeetdev/cli:{{ .Version }}
     image_templates:
       - docker.io/zeetdev/cli:{{ .Version }}-amd64
-      - docker.io/zeetdev/cli:{{ .Version }}-armv7
+      - docker.io/zeetdev/cli:{{ .Version }}-arm64
