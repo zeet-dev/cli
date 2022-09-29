@@ -70,12 +70,16 @@ dockers:
     image_templates:
       - "docker.io/zeetdev/cli:{{ .Version }}-amd64"
       - "docker.io/zeetdev/cli:latest-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
   - use: buildx
     goos: linux
     goarch: arm64
     image_templates:
       - "docker.io/zeetdev/cli:{{ .Version }}-arm64"
       - "docker.io/zeetdev/cli:latest-arm64"
+    build_flag_templates:
+      - "--platform=linux/arm64/v8"
 docker_manifests:
   - name_template: docker.io/zeetdev/cli:{{ .Version }}
     image_templates:
