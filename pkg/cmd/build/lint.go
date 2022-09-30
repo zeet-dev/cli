@@ -23,6 +23,7 @@ func InitCmds(f *cmdutil.Factory, root *cobra.Command) {
 
 			return build.LintFiles(workDir, target)
 		},
+		Annotations: map[string]string{"skipAuthCheck": "true"},
 	}
 
 	lintCmd.PersistentFlags().StringVarP(&target, "target", "t", "", "target runtime environment")

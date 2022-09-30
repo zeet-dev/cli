@@ -33,6 +33,7 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 
 	// Commands
 	rootCmd.AddCommand(NewLoginCmd(f))
+	rootCmd.AddCommand(NewLogoutCmd(f))
 	rootCmd.AddCommand(NewLogsCmd(f))
 
 	// Project Commands
