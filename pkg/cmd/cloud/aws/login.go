@@ -29,6 +29,7 @@ type AWSLoginOptions struct {
 }
 
 var eval bool
+var console bool
 
 func NewAWSLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	var opts = &AWSLoginOptions{}
@@ -50,11 +51,16 @@ func NewAWSLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
+	cmd.Flags().BoolVarP(&console, "open", "o", false, "open AWS console")
 
 	return cmd
 }
 
 func runAWSLogin(opts *AWSLoginOptions) error {
+	if console {
+		return runAWSConsole(opts)
+	}
+
 	client, err := opts.ApiClient()
 	if err != nil {
 		return err

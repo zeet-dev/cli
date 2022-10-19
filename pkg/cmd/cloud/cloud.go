@@ -17,6 +17,7 @@ func InitCloudCmds(f *cmdutil.Factory, root *cobra.Command) {
 	}
 
 	awsCmd.AddCommand(aws.NewAWSLoginCmd(f))
+	awsCmd.AddCommand(aws.NewAWSConsoleCmd(f))
 
 	gcpCmd := &cobra.Command{
 		Use:   "gcp [command]",
