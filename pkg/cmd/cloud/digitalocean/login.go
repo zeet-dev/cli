@@ -16,12 +16,19 @@ import (
 	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
+const (
+	Name     = "DO"
+	NameFull = "Digital Ocean"
+)
+
 type DOLoginOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 
 	CloudID uuid.UUID
 }
+
+var eval bool
 
 func NewDOLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	var opts = &DOLoginOptions{}
@@ -41,6 +48,8 @@ func NewDOLoginCmd(f *cmdutil.Factory) *cobra.Command {
 			return runDOLogin(opts)
 		},
 	}
+
+	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
 
 	return cmd
 }
@@ -75,6 +84,12 @@ echo "DO credentials configured"
 		return err
 	}
 
-	fmt.Fprintln(opts.IO.Out, color.GreenString("DO creds fetched"))
+	if eval {
+		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+		fmt.Fprintf(opts.IO.Out, "source %s", ofile)
+	} else {
+		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+	}
+
 	return nil
 }

@@ -28,6 +28,7 @@ func (c *Client) GetCloudGCP(ctx context.Context, cloudID uuid.UUID) (*GetCloudG
 		  currentUser {
 			gcpAccount(id: $id) {
 			  id
+			  projectID
 			  credentials
 			}
 		  }

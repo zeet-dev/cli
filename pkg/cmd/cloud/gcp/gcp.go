@@ -16,12 +16,19 @@ import (
 	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
+const (
+	Name     = "GCP"
+	NameFull = "Google Cloud Platform"
+)
+
 type GCPLoginOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 
 	CloudID uuid.UUID
 }
+
+var eval bool
 
 func NewGCPLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	var opts = &GCPLoginOptions{}
@@ -41,6 +48,8 @@ func NewGCPLoginCmd(f *cmdutil.Factory) *cobra.Command {
 			return runGCPLogin(opts)
 		},
 	}
+
+	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
 
 	return cmd
 }
@@ -75,12 +84,19 @@ func runGCPLogin(opts *GCPLoginOptions) error {
 	if err := os.WriteFile(ofile, []byte(fmt.Sprintf(`#!/bin/sh
 export GOOGLE_APPLICATION_CREDENTIALS=%s
 gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
+gcloud config set project %s
 echo "GCP credentials configured"
 `,
-		sfile)), 0600); err != nil {
+		sfile, cloud.CurrentUser.GcpAccount.ProjectID)), 0600); err != nil {
 		return err
 	}
 
-	fmt.Fprintln(opts.IO.Out, color.GreenString("GCP creds fetched"))
+	if eval {
+		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+		fmt.Fprintf(opts.IO.Out, "source %s", ofile)
+	} else {
+		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+	}
+
 	return nil
 }

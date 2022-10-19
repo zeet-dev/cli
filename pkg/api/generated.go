@@ -124,11 +124,15 @@ func (v *GetCloudGCPCurrentUser) GetGcpAccount() GetCloudGCPCurrentUserGcpAccoun
 // GetCloudGCPCurrentUserGcpAccountGCPAccount includes the requested fields of the GraphQL type GCPAccount.
 type GetCloudGCPCurrentUserGcpAccountGCPAccount struct {
 	Id          uuid.UUID `json:"id"`
+	ProjectID   string    `json:"projectID"`
 	Credentials string    `json:"credentials"`
 }
 
 // GetId returns GetCloudGCPCurrentUserGcpAccountGCPAccount.Id, and is useful for accessing the field via an interface.
 func (v *GetCloudGCPCurrentUserGcpAccountGCPAccount) GetId() uuid.UUID { return v.Id }
+
+// GetProjectID returns GetCloudGCPCurrentUserGcpAccountGCPAccount.ProjectID, and is useful for accessing the field via an interface.
+func (v *GetCloudGCPCurrentUserGcpAccountGCPAccount) GetProjectID() string { return v.ProjectID }
 
 // GetCredentials returns GetCloudGCPCurrentUserGcpAccountGCPAccount.Credentials, and is useful for accessing the field via an interface.
 func (v *GetCloudGCPCurrentUserGcpAccountGCPAccount) GetCredentials() string { return v.Credentials }
@@ -1432,6 +1436,7 @@ query GetCloudGCP ($id: UUID!) {
 	currentUser {
 		gcpAccount(id: $id) {
 			id
+			projectID
 			credentials
 		}
 	}

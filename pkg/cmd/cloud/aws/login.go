@@ -16,12 +16,19 @@ import (
 	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
+const (
+	Name     = "AWS"
+	NameFull = "Amazon Web Services"
+)
+
 type AWSLoginOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 
 	CloudID uuid.UUID
 }
+
+var eval bool
 
 func NewAWSLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	var opts = &AWSLoginOptions{}
@@ -41,6 +48,8 @@ func NewAWSLoginCmd(f *cmdutil.Factory) *cobra.Command {
 			return runAWSLogin(opts)
 		},
 	}
+
+	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
 
 	return cmd
 }
@@ -81,6 +90,7 @@ ASSUMED_SESSION=$(aws sts assume-role \
 if [ $? -eq 0 ]; then
    eval "export $ASSUMED_SESSION"
    echo "AWS credentials configured"
+   echo "You are $(aws sts get-caller-identity --query "Arn" --output json)"
 else
    echo "Failed to assume role"
 fi
@@ -90,6 +100,12 @@ fi
 		return err
 	}
 
-	fmt.Fprintln(opts.IO.Out, color.GreenString("AWS creds fetched"))
+	if eval {
+		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+		fmt.Fprintf(opts.IO.Out, "source %s", ofile)
+	} else {
+		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+	}
+
 	return nil
 }

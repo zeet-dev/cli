@@ -16,12 +16,19 @@ import (
 	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
+const (
+	Name     = "LINODE"
+	NameFull = "Linode"
+)
+
 type LinodeLoginOptions struct {
 	IO        *iostreams.IOStreams
 	ApiClient func() (*api.Client, error)
 
 	CloudID uuid.UUID
 }
+
+var eval bool
 
 func NewLinodeLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	var opts = &LinodeLoginOptions{}
@@ -41,6 +48,8 @@ func NewLinodeLoginCmd(f *cmdutil.Factory) *cobra.Command {
 			return runLinodeLogin(opts)
 		},
 	}
+
+	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
 
 	return cmd
 }
@@ -76,6 +85,12 @@ echo "Linode credentials configured"
 		return err
 	}
 
-	fmt.Fprintln(opts.IO.Out, color.GreenString("Linode creds fetched"))
+	if eval {
+		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+		fmt.Fprintf(opts.IO.Out, "source %s", ofile)
+	} else {
+		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s creds fetched", Name)))
+	}
+
 	return nil
 }
