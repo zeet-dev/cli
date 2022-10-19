@@ -1,31 +1,15 @@
 package cluster
 
 import (
-	"context"
 	"errors"
-	"fmt"
-	"os"
-	"path"
-	"path/filepath"
 
-	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
-	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
-	"github.com/zeet-dev/cli/pkg/iostreams"
 )
 
-type KubeconfigGetOptions struct {
-	IO        *iostreams.IOStreams
-	ApiClient func() (*api.Client, error)
-
-	File      string
-	ClusterID uuid.UUID
-}
-
 func NewKubeconfigGetCmd(f *cmdutil.Factory) *cobra.Command {
-	var opts = &KubeconfigGetOptions{}
+	var opts = &ClusterLoginOptions{}
 	opts.IO = f.IOStreams
 	opts.ApiClient = f.ApiClient
 
@@ -47,32 +31,6 @@ func NewKubeconfigGetCmd(f *cmdutil.Factory) *cobra.Command {
 	return cmd
 }
 
-func runKubeconfigGet(opts *KubeconfigGetOptions) error {
-	client, err := opts.ApiClient()
-	if err != nil {
-		return err
-	}
-
-	cluster, err := client.GetClusterKubeconfig(context.Background(), opts.ClusterID)
-	if err != nil {
-		return err
-	}
-
-	home, err := os.UserHomeDir()
-	if err != nil {
-		return err
-	}
-
-	ofile := path.Join(home, ".zeet", "clusters", cluster.ID.String(), "kubeconfig.yaml")
-
-	if err := os.MkdirAll(filepath.Dir(ofile), os.ModePerm); err != nil {
-		return err
-	}
-
-	if err := os.WriteFile(ofile, []byte(cluster.Kubeconfig), 0600); err != nil {
-		return err
-	}
-
-	fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("Cluster %s kubeconfig fetched", cluster.Name)))
-	return nil
+func runKubeconfigGet(opts *ClusterLoginOptions) error {
+	return runClusterLogin(opts)
 }
