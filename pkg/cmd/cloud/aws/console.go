@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os/exec"
@@ -103,7 +103,7 @@ func runAWSConsole(opts *AWSLoginOptions) error {
 		return err
 	}
 
-	tokenBody, err := ioutil.ReadAll(tokenResp.Body)
+	tokenBody, err := io.ReadAll(tokenResp.Body)
 	if err != nil {
 		return err
 	}
@@ -127,7 +127,7 @@ func runAWSConsole(opts *AWSLoginOptions) error {
 		"Action":      []string{"login"},
 		"SigninToken": []string{tokenObj["SigninToken"]},
 		"Destination": []string{"https://console.aws.amazon.com/"},
-		"Issuer":      []string{"zeet.co"},
+		"Issuer":      []string{"https://zeet.co"},
 	}.Encode()
 
 	if !openBrowser(signinURL.String()) {

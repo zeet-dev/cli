@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -33,7 +33,7 @@ func LintFilesLambda(workDir string) error {
 
 	fmt.Println("Linting requirements.txt")
 
-	bfile, err := ioutil.ReadAll(file)
+	bfile, err := io.ReadAll(file)
 	if err != nil {
 		return err
 	}
@@ -49,13 +49,13 @@ func LintFilesLambda(workDir string) error {
 	if err != nil {
 		return err
 	}
-	content, err := ioutil.ReadAll(transform.NewReader(bytes.NewBuffer(bfile), e.NewDecoder()))
+	content, err := io.ReadAll(transform.NewReader(bytes.NewBuffer(bfile), e.NewDecoder()))
 	if err != nil {
 		return err
 	}
 
 	out := ReplaceLambdaRequirements(string(content))
-	if err := ioutil.WriteFile(reqFile, []byte(out), 0644); err != nil {
+	if err := os.WriteFile(reqFile, []byte(out), 0644); err != nil {
 		return err
 	}
 

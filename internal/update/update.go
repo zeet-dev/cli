@@ -2,7 +2,7 @@ package update
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 
@@ -28,7 +28,11 @@ func Check(client *http.Client, state config.Config, currentVersion string) (*Re
 	if err != nil {
 		return nil, err
 	}
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := json.Unmarshal(body, rel); err != nil {
 		return nil, err
 	}
