@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/Khan/genqlient v0.4.0
 	github.com/MakeNowJust/heredoc v1.0.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.16.19
 	github.com/fatih/color v1.13.0
 	github.com/google/uuid v1.1.2
 	github.com/jinzhu/copier v0.3.5
@@ -29,7 +30,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.17 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.11.23 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.13.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.16.19 // indirect
 	github.com/aws/smithy-go v1.13.3 // indirect
 )
 
@@ -62,7 +62,7 @@ require (
 	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/net v0.0.0-20211209124913-491a49abca63 // indirect
 	golang.org/x/oauth2 v0.0.0-20210819190943-2bc19b11175f // indirect
-	golang.org/x/sys v0.0.0-20211019181941-9d821ace8654 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.1.7 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
@@ -73,5 +73,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	k8s.io/apimachinery v0.23.6 // indirect
 	k8s.io/klog/v2 v2.30.0 // indirect
-	k8s.io/utils v0.0.0-20211116205334-6203023598ed // indirect
+	k8s.io/utils v0.0.0-20211116205334-6203023598ed
 )
