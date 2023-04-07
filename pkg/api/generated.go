@@ -4,10 +4,42 @@ package api
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/Khan/genqlient/graphql"
 	"github.com/google/uuid"
+)
+
+// BlueprintSummary includes the GraphQL fields of Blueprint requested by the fragment BlueprintSummary.
+type BlueprintSummary struct {
+	Id          uuid.UUID     `json:"id"`
+	Description string        `json:"description"`
+	DisplayName string        `json:"displayName"`
+	Type        BlueprintType `json:"type"`
+}
+
+// GetId returns BlueprintSummary.Id, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetId() uuid.UUID { return v.Id }
+
+// GetDescription returns BlueprintSummary.Description, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetDescription() string { return v.Description }
+
+// GetDisplayName returns BlueprintSummary.DisplayName, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetDisplayName() string { return v.DisplayName }
+
+// GetType returns BlueprintSummary.Type, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetType() BlueprintType { return v.Type }
+
+type BlueprintType string
+
+const (
+	BlueprintTypeTerraform          BlueprintType = "TERRAFORM"
+	BlueprintTypeKubernetesManifest BlueprintType = "KUBERNETES_MANIFEST"
+	BlueprintTypeHelm               BlueprintType = "HELM"
+	BlueprintTypeZeetKubernetes     BlueprintType = "ZEET_KUBERNETES"
+	BlueprintTypeZeetAwsLambda      BlueprintType = "ZEET_AWS_LAMBDA"
+	BlueprintTypeZeetGcpCloudRun    BlueprintType = "ZEET_GCP_CLOUD_RUN"
 )
 
 type DeploymentStatus string
@@ -178,10 +210,11 @@ func (v *GetCloudLinodeResponse) GetCurrentUser() GetCloudLinodeCurrentUser { re
 type JobRunState string
 
 const (
-	JobRunStateJobRunStarting  JobRunState = "JOB_RUN_STARTING"
-	JobRunStateJobRunRunning   JobRunState = "JOB_RUN_RUNNING"
-	JobRunStateJobRunFailed    JobRunState = "JOB_RUN_FAILED"
-	JobRunStateJobRunSucceeded JobRunState = "JOB_RUN_SUCCEEDED"
+	JobRunStateJobRunStarting        JobRunState = "JOB_RUN_STARTING"
+	JobRunStateJobRunRunning         JobRunState = "JOB_RUN_RUNNING"
+	JobRunStateJobRunFailed          JobRunState = "JOB_RUN_FAILED"
+	JobRunStateJobRunSucceeded       JobRunState = "JOB_RUN_SUCCEEDED"
+	JobRunStateJobRunPendingApproval JobRunState = "JOB_RUN_PENDING_APPROVAL"
 )
 
 // __GetCloudAWSInput is used internally by genqlient
@@ -263,6 +296,14 @@ func (v *__deployRepoBranchInput) GetBranch() string { return v.Branch }
 
 // GetProjectId returns __deployRepoBranchInput.ProjectId, and is useful for accessing the field via an interface.
 func (v *__deployRepoBranchInput) GetProjectId() uuid.UUID { return v.ProjectId }
+
+// __getBlueprintsInput is used internally by genqlient
+type __getBlueprintsInput struct {
+	UserId uuid.UUID `json:"userId"`
+}
+
+// GetUserId returns __getBlueprintsInput.UserId, and is useful for accessing the field via an interface.
+func (v *__getBlueprintsInput) GetUserId() uuid.UUID { return v.UserId }
 
 // __getBuildLogsInput is used internally by genqlient
 type __getBuildLogsInput struct {
@@ -620,6 +661,112 @@ type deployRepoBranchResponse struct {
 // GetDeployRepoBranch returns deployRepoBranchResponse.DeployRepoBranch, and is useful for accessing the field via an interface.
 func (v *deployRepoBranchResponse) GetDeployRepoBranch() deployRepoBranchDeployRepoBranchRepo {
 	return v.DeployRepoBranch
+}
+
+// getBlueprintsResponse is returned by getBlueprints on success.
+type getBlueprintsResponse struct {
+	User getBlueprintsUser `json:"user"`
+}
+
+// GetUser returns getBlueprintsResponse.User, and is useful for accessing the field via an interface.
+func (v *getBlueprintsResponse) GetUser() getBlueprintsUser { return v.User }
+
+// getBlueprintsUser includes the requested fields of the GraphQL type User.
+type getBlueprintsUser struct {
+	Blueprints getBlueprintsUserBlueprintsBlueprintConnection `json:"blueprints"`
+}
+
+// GetBlueprints returns getBlueprintsUser.Blueprints, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUser) GetBlueprints() getBlueprintsUserBlueprintsBlueprintConnection {
+	return v.Blueprints
+}
+
+// getBlueprintsUserBlueprintsBlueprintConnection includes the requested fields of the GraphQL type BlueprintConnection.
+type getBlueprintsUserBlueprintsBlueprintConnection struct {
+	Nodes []getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint `json:"nodes"`
+}
+
+// GetNodes returns getBlueprintsUserBlueprintsBlueprintConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnection) GetNodes() []getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint {
+	return v.Nodes
+}
+
+// getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint includes the requested fields of the GraphQL type Blueprint.
+type getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint struct {
+	BlueprintSummary `json:"-"`
+}
+
+// GetId returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Id, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetId() uuid.UUID {
+	return v.BlueprintSummary.Id
+}
+
+// GetDescription returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDescription() string {
+	return v.BlueprintSummary.Description
+}
+
+// GetDisplayName returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.DisplayName, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDisplayName() string {
+	return v.BlueprintSummary.DisplayName
+}
+
+// GetType returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Type, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetType() BlueprintType {
+	return v.BlueprintSummary.Type
+}
+
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.BlueprintSummary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint struct {
+	Id uuid.UUID `json:"id"`
+
+	Description string `json:"description"`
+
+	DisplayName string `json:"displayName"`
+
+	Type BlueprintType `json:"type"`
+}
+
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) __premarshalJSON() (*__premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint, error) {
+	var retval __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint
+
+	retval.Id = v.BlueprintSummary.Id
+	retval.Description = v.BlueprintSummary.Description
+	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Type = v.BlueprintSummary.Type
+	return &retval, nil
 }
 
 // getBuildLogsCurrentUser includes the requested fields of the GraphQL type User.
@@ -1602,6 +1749,43 @@ mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 			privateEndpoint
 		}
 	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func getBlueprints(
+	ctx context.Context,
+	client graphql.Client,
+	userId uuid.UUID,
+) (*getBlueprintsResponse, error) {
+	__input := __getBlueprintsInput{
+		UserId: userId,
+	}
+	var err error
+
+	var retval getBlueprintsResponse
+	err = client.MakeRequest(
+		ctx,
+		"getBlueprints",
+		`
+query getBlueprints ($userId: ID!) {
+	user(id: $userId) {
+		blueprints {
+			nodes {
+				... BlueprintSummary
+			}
+		}
+	}
+}
+fragment BlueprintSummary on Blueprint {
+	id
+	description
+	displayName
+	type
 }
 `,
 		&retval,
