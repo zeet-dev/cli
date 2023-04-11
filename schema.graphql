@@ -325,6 +325,7 @@ type Blueprint {
   published: Boolean!
   type: BlueprintType!
   isOfficial: Boolean
+  enabled: Boolean
   description: String
   tags: [String!]!
   logoUrl: String
@@ -2128,6 +2129,7 @@ type JobRun {
   metrics(name: String!): [Metric!]
   errorMessage: String
   createdAt: Time
+  updatedAt: Time
   build: Build
 }
 
@@ -2410,6 +2412,7 @@ type Mutation {
   createBlueprint(input: CreateBlueprintInput!): Blueprint!
   updateBlueprint(blueprintID: UUID!, input: UpdateBlueprintInput!): Blueprint!
   deleteBlueprint(id: UUID!): Boolean!
+  updateMarketplaceBlueprint(input: UpdateMarketplaceBlueprintInput!): Blueprint!
   createProjectV3(input: CreateProjectV3Input!): ProjectV3!
   updateProjectV3(projectID: UUID!, input: UpdateProjectV3Input!): ProjectV3!
   deleteProjectV3(id: UUID!): Boolean!
@@ -2516,6 +2519,8 @@ input PageInput {
   filter: String
   sort: String
 }
+
+scalar PermissibleMutation
 
 type PipelineStage implements IPipelineStage {
   id: UUID!
@@ -2752,6 +2757,8 @@ type ProjectV3AdapterConnection {
 
 enum ProjectV3AdapterStatus {
   UNKNOWN
+  DRAFT
+  PAUSED
   JOB_RUN_STARTING
   JOB_RUN_RUNNING
   JOB_RUN_FAILED
@@ -3768,6 +3775,12 @@ input UpdateLinodeAccountInput {
   name: String
 }
 
+input UpdateMarketplaceBlueprintInput {
+  userID: UUID!
+  blueprintID: UUID!
+  enabled: Boolean
+}
+
 input UpdateProjectDangerInput {
   id: UUID!
   namespace: String
@@ -3995,6 +4008,7 @@ type User implements ProfileOwner & ProjectOwner {
   projectV3DriverActionExecutions(filter: FilterInput!): BlueprintDriverActionExecutionConnection
   projectV3Adapters(filter: FilterInput!): ProjectV3AdapterConnection
   eventIntegrations: [EventIntegration!]
+  permissions: UserPermissionsConnection
 }
 
 enum UserAction {
@@ -4015,6 +4029,16 @@ type UserIamConnection {
   awsIamArn: String!
   awsAccountId: String!
   id: UUID!
+}
+
+type UserPermissionsConnection {
+  principal: User
+  user(userID: UUID!): UserPermissionsUserConnection
+}
+
+type UserPermissionsUserConnection {
+  user: User
+  mutations: [PermissibleMutation!]!
 }
 
 type UserTeamEdge {

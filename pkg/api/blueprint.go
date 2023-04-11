@@ -11,9 +11,13 @@ import (
 var _ = `# @genqlient
 		fragment BlueprintSummary on Blueprint {
 			id
-			description
+			slug
 			displayName
+			description
 			type
+			projectCount
+			richInputSchema
+			tags
 		}`
 
 func (c *Client) GetBlueprint(ctx context.Context, id uuid.UUID) (*BlueprintSummary, error) {

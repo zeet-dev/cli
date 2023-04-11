@@ -13,23 +13,39 @@ import (
 
 // BlueprintSummary includes the GraphQL fields of Blueprint requested by the fragment BlueprintSummary.
 type BlueprintSummary struct {
-	Id          uuid.UUID     `json:"id"`
-	Description string        `json:"description"`
-	DisplayName string        `json:"displayName"`
-	Type        BlueprintType `json:"type"`
+	Id              uuid.UUID     `json:"id"`
+	Slug            string        `json:"slug"`
+	DisplayName     string        `json:"displayName"`
+	Description     string        `json:"description"`
+	Type            BlueprintType `json:"type"`
+	ProjectCount    int           `json:"projectCount"`
+	RichInputSchema string        `json:"richInputSchema"`
+	Tags            []string      `json:"tags"`
 }
 
 // GetId returns BlueprintSummary.Id, and is useful for accessing the field via an interface.
 func (v *BlueprintSummary) GetId() uuid.UUID { return v.Id }
 
-// GetDescription returns BlueprintSummary.Description, and is useful for accessing the field via an interface.
-func (v *BlueprintSummary) GetDescription() string { return v.Description }
+// GetSlug returns BlueprintSummary.Slug, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetSlug() string { return v.Slug }
 
 // GetDisplayName returns BlueprintSummary.DisplayName, and is useful for accessing the field via an interface.
 func (v *BlueprintSummary) GetDisplayName() string { return v.DisplayName }
 
+// GetDescription returns BlueprintSummary.Description, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetDescription() string { return v.Description }
+
 // GetType returns BlueprintSummary.Type, and is useful for accessing the field via an interface.
 func (v *BlueprintSummary) GetType() BlueprintType { return v.Type }
+
+// GetProjectCount returns BlueprintSummary.ProjectCount, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetProjectCount() int { return v.ProjectCount }
+
+// GetRichInputSchema returns BlueprintSummary.RichInputSchema, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetRichInputSchema() string { return v.RichInputSchema }
+
+// GetTags returns BlueprintSummary.Tags, and is useful for accessing the field via an interface.
+func (v *BlueprintSummary) GetTags() []string { return v.Tags }
 
 type BlueprintType string
 
@@ -699,14 +715,28 @@ type getBlueprintUserBlueprint struct {
 // GetId returns getBlueprintUserBlueprint.Id, and is useful for accessing the field via an interface.
 func (v *getBlueprintUserBlueprint) GetId() uuid.UUID { return v.BlueprintSummary.Id }
 
-// GetDescription returns getBlueprintUserBlueprint.Description, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetDescription() string { return v.BlueprintSummary.Description }
+// GetSlug returns getBlueprintUserBlueprint.Slug, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetSlug() string { return v.BlueprintSummary.Slug }
 
 // GetDisplayName returns getBlueprintUserBlueprint.DisplayName, and is useful for accessing the field via an interface.
 func (v *getBlueprintUserBlueprint) GetDisplayName() string { return v.BlueprintSummary.DisplayName }
 
+// GetDescription returns getBlueprintUserBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetDescription() string { return v.BlueprintSummary.Description }
+
 // GetType returns getBlueprintUserBlueprint.Type, and is useful for accessing the field via an interface.
 func (v *getBlueprintUserBlueprint) GetType() BlueprintType { return v.BlueprintSummary.Type }
+
+// GetProjectCount returns getBlueprintUserBlueprint.ProjectCount, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetProjectCount() int { return v.BlueprintSummary.ProjectCount }
+
+// GetRichInputSchema returns getBlueprintUserBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetRichInputSchema() string {
+	return v.BlueprintSummary.RichInputSchema
+}
+
+// GetTags returns getBlueprintUserBlueprint.Tags, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetTags() []string { return v.BlueprintSummary.Tags }
 
 func (v *getBlueprintUserBlueprint) UnmarshalJSON(b []byte) error {
 
@@ -736,11 +766,19 @@ func (v *getBlueprintUserBlueprint) UnmarshalJSON(b []byte) error {
 type __premarshalgetBlueprintUserBlueprint struct {
 	Id uuid.UUID `json:"id"`
 
-	Description string `json:"description"`
+	Slug string `json:"slug"`
 
 	DisplayName string `json:"displayName"`
 
+	Description string `json:"description"`
+
 	Type BlueprintType `json:"type"`
+
+	ProjectCount int `json:"projectCount"`
+
+	RichInputSchema string `json:"richInputSchema"`
+
+	Tags []string `json:"tags"`
 }
 
 func (v *getBlueprintUserBlueprint) MarshalJSON() ([]byte, error) {
@@ -755,9 +793,13 @@ func (v *getBlueprintUserBlueprint) __premarshalJSON() (*__premarshalgetBlueprin
 	var retval __premarshalgetBlueprintUserBlueprint
 
 	retval.Id = v.BlueprintSummary.Id
-	retval.Description = v.BlueprintSummary.Description
+	retval.Slug = v.BlueprintSummary.Slug
 	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Description = v.BlueprintSummary.Description
 	retval.Type = v.BlueprintSummary.Type
+	retval.ProjectCount = v.BlueprintSummary.ProjectCount
+	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
+	retval.Tags = v.BlueprintSummary.Tags
 	return &retval, nil
 }
 
@@ -799,9 +841,9 @@ func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetId() u
 	return v.BlueprintSummary.Id
 }
 
-// GetDescription returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Description, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDescription() string {
-	return v.BlueprintSummary.Description
+// GetSlug returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Slug, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetSlug() string {
+	return v.BlueprintSummary.Slug
 }
 
 // GetDisplayName returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.DisplayName, and is useful for accessing the field via an interface.
@@ -809,9 +851,29 @@ func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDispla
 	return v.BlueprintSummary.DisplayName
 }
 
+// GetDescription returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDescription() string {
+	return v.BlueprintSummary.Description
+}
+
 // GetType returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Type, and is useful for accessing the field via an interface.
 func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetType() BlueprintType {
 	return v.BlueprintSummary.Type
+}
+
+// GetProjectCount returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.ProjectCount, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetProjectCount() int {
+	return v.BlueprintSummary.ProjectCount
+}
+
+// GetRichInputSchema returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetRichInputSchema() string {
+	return v.BlueprintSummary.RichInputSchema
+}
+
+// GetTags returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Tags, and is useful for accessing the field via an interface.
+func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetTags() []string {
+	return v.BlueprintSummary.Tags
 }
 
 func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) UnmarshalJSON(b []byte) error {
@@ -842,11 +904,19 @@ func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) Unmarshal
 type __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint struct {
 	Id uuid.UUID `json:"id"`
 
-	Description string `json:"description"`
+	Slug string `json:"slug"`
 
 	DisplayName string `json:"displayName"`
 
+	Description string `json:"description"`
+
 	Type BlueprintType `json:"type"`
+
+	ProjectCount int `json:"projectCount"`
+
+	RichInputSchema string `json:"richInputSchema"`
+
+	Tags []string `json:"tags"`
 }
 
 func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) MarshalJSON() ([]byte, error) {
@@ -861,9 +931,13 @@ func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) __premars
 	var retval __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint
 
 	retval.Id = v.BlueprintSummary.Id
-	retval.Description = v.BlueprintSummary.Description
+	retval.Slug = v.BlueprintSummary.Slug
 	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Description = v.BlueprintSummary.Description
 	retval.Type = v.BlueprintSummary.Type
+	retval.ProjectCount = v.BlueprintSummary.ProjectCount
+	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
+	retval.Tags = v.BlueprintSummary.Tags
 	return &retval, nil
 }
 
@@ -1881,9 +1955,13 @@ query getBlueprint ($userID: ID!, $blueprintID: UUID!) {
 }
 fragment BlueprintSummary on Blueprint {
 	id
-	description
+	slug
 	displayName
+	description
 	type
+	projectCount
+	richInputSchema
+	tags
 }
 `,
 		&retval,
@@ -1918,9 +1996,13 @@ query getBlueprints ($userId: ID!) {
 }
 fragment BlueprintSummary on Blueprint {
 	id
-	description
+	slug
 	displayName
+	description
 	type
+	projectCount
+	richInputSchema
+	tags
 }
 `,
 		&retval,

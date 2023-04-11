@@ -17,3 +17,5 @@ bindings:
     type: string
   Login:
     type: string
+  JSON:
+    type: string

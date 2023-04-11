@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/spf13/cobra"
 
 	"github.com/zeet-dev/cli/pkg/api"
@@ -49,6 +50,7 @@ func displayBlueprintListTable(blueprints []*api.BlueprintSummary) {
 		"ID",
 		"Name",
 		"Description",
+		"Slug",
 		"Type",
 	})
 
@@ -56,11 +58,14 @@ func displayBlueprintListTable(blueprints []*api.BlueprintSummary) {
 		tw.AppendRow(table.Row{
 			fmt.Sprintf("%s", b.Id),
 			b.DisplayName,
-			b.Description,
+			text.WrapSoft(b.Description, 40),
+			b.Slug,
 			fmt.Sprintf("%s", b.Type),
 		})
 	}
 
 	tw.SetTitle("Blueprints")
+	tw.SetStyle(table.StyleRounded)
+	tw.Style().Options.SeparateRows = true
 	fmt.Println(tw.Render())
 }

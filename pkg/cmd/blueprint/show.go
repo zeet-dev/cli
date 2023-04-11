@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/fatih/color"
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
@@ -56,11 +57,25 @@ func runBlueprintShow(opts *BlueprintShowOptions) error {
 }
 
 func displayBlueprint(b *api.BlueprintSummary) {
+	jsonFormatter := text.NewJSONTransformer("", "  ")
 	tw := table.NewWriter()
+
 	tw.AppendRow(table.Row{"ID", b.Id})
+	tw.AppendRow(table.Row{"Slug", b.Slug})
 	tw.AppendRow(table.Row{"Name", b.DisplayName})
 	tw.AppendRow(table.Row{"Description", b.Description})
 	tw.AppendRow(table.Row{"Type", b.Type})
+	tw.AppendRow(table.Row{"Project Count", b.ProjectCount})
+	tw.AppendRow(table.Row{"Input Schema", jsonFormatter(b.RichInputSchema)})
+
+	for _, t := range b.Tags {
+		tw.AppendRow(table.Row{"Tags", t})
+	}
+
+	tw.SetColumnConfigs([]table.ColumnConfig{
+		{Number: 1, AutoMerge: true},
+	})
+	tw.SetStyle(table.StyleRounded)
 
 	fmt.Println(tw.Render())
 }
