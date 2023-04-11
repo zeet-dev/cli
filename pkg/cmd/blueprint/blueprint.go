@@ -14,6 +14,7 @@ func NewBlueprintCmd(f *cmdutil.Factory) *cobra.Command {
 
 	cmd.AddCommand(NewBlueprintListCmd(f))
 	cmd.AddCommand(NewBlueprintShowCmd(f))
+	cmd.AddCommand(NewBlueprintDeleteCmd(f))
 
 	return cmd
 }

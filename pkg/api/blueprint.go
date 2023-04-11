@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
@@ -44,6 +45,23 @@ func (c *Client) GetBlueprint(ctx context.Context, id uuid.UUID) (*BlueprintSumm
 	}
 
 	return out, err
+}
+
+func (c *Client) DeleteBlueprint(ctx context.Context, id uuid.UUID) error {
+	_ = `# @genqlient
+		mutation deleteBlueprint($id: UUID!) {
+			deleteBlueprint(id: $id)
+		}`
+
+	res, err := deleteBlueprint(ctx, c.gql, id)
+	if err != nil {
+		return err
+	}
+	if !res.DeleteBlueprint {
+		return fmt.Errorf("Failed to delete blueprint")
+	}
+
+	return nil
 }
 
 func (c *Client) ListBlueprints(ctx context.Context, pageInput PageInput) (*BlueprintConnection, error) {
