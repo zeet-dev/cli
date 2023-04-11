@@ -11,6 +11,124 @@ import (
 	"github.com/google/uuid"
 )
 
+// BlueprintConnection includes the requested fields of the GraphQL type BlueprintConnection.
+type BlueprintConnection struct {
+	TotalCount int                                 `json:"totalCount"`
+	PageInfo   PageInfo                            `json:"pageInfo"`
+	Nodes      []BlueprintConnectionNodesBlueprint `json:"nodes"`
+}
+
+// GetTotalCount returns BlueprintConnection.TotalCount, and is useful for accessing the field via an interface.
+func (v *BlueprintConnection) GetTotalCount() int { return v.TotalCount }
+
+// GetPageInfo returns BlueprintConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *BlueprintConnection) GetPageInfo() PageInfo { return v.PageInfo }
+
+// GetNodes returns BlueprintConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *BlueprintConnection) GetNodes() []BlueprintConnectionNodesBlueprint { return v.Nodes }
+
+// BlueprintConnectionNodesBlueprint includes the requested fields of the GraphQL type Blueprint.
+type BlueprintConnectionNodesBlueprint struct {
+	BlueprintSummary `json:"-"`
+}
+
+// GetId returns BlueprintConnectionNodesBlueprint.Id, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetId() uuid.UUID { return v.BlueprintSummary.Id }
+
+// GetSlug returns BlueprintConnectionNodesBlueprint.Slug, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetSlug() string { return v.BlueprintSummary.Slug }
+
+// GetDisplayName returns BlueprintConnectionNodesBlueprint.DisplayName, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetDisplayName() string {
+	return v.BlueprintSummary.DisplayName
+}
+
+// GetDescription returns BlueprintConnectionNodesBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetDescription() string {
+	return v.BlueprintSummary.Description
+}
+
+// GetType returns BlueprintConnectionNodesBlueprint.Type, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetType() BlueprintType { return v.BlueprintSummary.Type }
+
+// GetProjectCount returns BlueprintConnectionNodesBlueprint.ProjectCount, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetProjectCount() int {
+	return v.BlueprintSummary.ProjectCount
+}
+
+// GetRichInputSchema returns BlueprintConnectionNodesBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetRichInputSchema() string {
+	return v.BlueprintSummary.RichInputSchema
+}
+
+// GetTags returns BlueprintConnectionNodesBlueprint.Tags, and is useful for accessing the field via an interface.
+func (v *BlueprintConnectionNodesBlueprint) GetTags() []string { return v.BlueprintSummary.Tags }
+
+func (v *BlueprintConnectionNodesBlueprint) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*BlueprintConnectionNodesBlueprint
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.BlueprintConnectionNodesBlueprint = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.BlueprintSummary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalBlueprintConnectionNodesBlueprint struct {
+	Id uuid.UUID `json:"id"`
+
+	Slug string `json:"slug"`
+
+	DisplayName string `json:"displayName"`
+
+	Description string `json:"description"`
+
+	Type BlueprintType `json:"type"`
+
+	ProjectCount int `json:"projectCount"`
+
+	RichInputSchema string `json:"richInputSchema"`
+
+	Tags []string `json:"tags"`
+}
+
+func (v *BlueprintConnectionNodesBlueprint) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *BlueprintConnectionNodesBlueprint) __premarshalJSON() (*__premarshalBlueprintConnectionNodesBlueprint, error) {
+	var retval __premarshalBlueprintConnectionNodesBlueprint
+
+	retval.Id = v.BlueprintSummary.Id
+	retval.Slug = v.BlueprintSummary.Slug
+	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Description = v.BlueprintSummary.Description
+	retval.Type = v.BlueprintSummary.Type
+	retval.ProjectCount = v.BlueprintSummary.ProjectCount
+	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
+	retval.Tags = v.BlueprintSummary.Tags
+	return &retval, nil
+}
+
 // BlueprintSummary includes the GraphQL fields of Blueprint requested by the fragment BlueprintSummary.
 type BlueprintSummary struct {
 	Id              uuid.UUID     `json:"id"`
@@ -233,6 +351,53 @@ const (
 	JobRunStateJobRunPendingApproval JobRunState = "JOB_RUN_PENDING_APPROVAL"
 )
 
+// PageInfo includes the requested fields of the GraphQL type PageInfo.
+type PageInfo struct {
+	StartCursor     string `json:"startCursor"`
+	EndCursor       string `json:"endCursor"`
+	HasNextPage     bool   `json:"hasNextPage"`
+	HasPreviousPage bool   `json:"hasPreviousPage"`
+}
+
+// GetStartCursor returns PageInfo.StartCursor, and is useful for accessing the field via an interface.
+func (v *PageInfo) GetStartCursor() string { return v.StartCursor }
+
+// GetEndCursor returns PageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *PageInfo) GetEndCursor() string { return v.EndCursor }
+
+// GetHasNextPage returns PageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *PageInfo) GetHasNextPage() bool { return v.HasNextPage }
+
+// GetHasPreviousPage returns PageInfo.HasPreviousPage, and is useful for accessing the field via an interface.
+func (v *PageInfo) GetHasPreviousPage() bool { return v.HasPreviousPage }
+
+type PageInput struct {
+	First  int    `json:"first"`
+	Last   int    `json:"last"`
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Filter string `json:"filter"`
+	Sort   string `json:"sort"`
+}
+
+// GetFirst returns PageInput.First, and is useful for accessing the field via an interface.
+func (v *PageInput) GetFirst() int { return v.First }
+
+// GetLast returns PageInput.Last, and is useful for accessing the field via an interface.
+func (v *PageInput) GetLast() int { return v.Last }
+
+// GetAfter returns PageInput.After, and is useful for accessing the field via an interface.
+func (v *PageInput) GetAfter() string { return v.After }
+
+// GetBefore returns PageInput.Before, and is useful for accessing the field via an interface.
+func (v *PageInput) GetBefore() string { return v.Before }
+
+// GetFilter returns PageInput.Filter, and is useful for accessing the field via an interface.
+func (v *PageInput) GetFilter() string { return v.Filter }
+
+// GetSort returns PageInput.Sort, and is useful for accessing the field via an interface.
+func (v *PageInput) GetSort() string { return v.Sort }
+
 // __GetCloudAWSInput is used internally by genqlient
 type __GetCloudAWSInput struct {
 	Id uuid.UUID `json:"id"`
@@ -327,11 +492,15 @@ func (v *__getBlueprintInput) GetBlueprintID() uuid.UUID { return v.BlueprintID 
 
 // __getBlueprintsInput is used internally by genqlient
 type __getBlueprintsInput struct {
-	UserId uuid.UUID `json:"userId"`
+	UserId    uuid.UUID `json:"userId"`
+	PageInput PageInput `json:"pageInput"`
 }
 
 // GetUserId returns __getBlueprintsInput.UserId, and is useful for accessing the field via an interface.
 func (v *__getBlueprintsInput) GetUserId() uuid.UUID { return v.UserId }
+
+// GetPageInput returns __getBlueprintsInput.PageInput, and is useful for accessing the field via an interface.
+func (v *__getBlueprintsInput) GetPageInput() PageInput { return v.PageInput }
 
 // __getBuildLogsInput is used internally by genqlient
 type __getBuildLogsInput struct {
@@ -813,133 +982,11 @@ func (v *getBlueprintsResponse) GetUser() getBlueprintsUser { return v.User }
 
 // getBlueprintsUser includes the requested fields of the GraphQL type User.
 type getBlueprintsUser struct {
-	Blueprints getBlueprintsUserBlueprintsBlueprintConnection `json:"blueprints"`
+	Blueprints BlueprintConnection `json:"blueprints"`
 }
 
 // GetBlueprints returns getBlueprintsUser.Blueprints, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUser) GetBlueprints() getBlueprintsUserBlueprintsBlueprintConnection {
-	return v.Blueprints
-}
-
-// getBlueprintsUserBlueprintsBlueprintConnection includes the requested fields of the GraphQL type BlueprintConnection.
-type getBlueprintsUserBlueprintsBlueprintConnection struct {
-	Nodes []getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint `json:"nodes"`
-}
-
-// GetNodes returns getBlueprintsUserBlueprintsBlueprintConnection.Nodes, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnection) GetNodes() []getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint {
-	return v.Nodes
-}
-
-// getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint includes the requested fields of the GraphQL type Blueprint.
-type getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint struct {
-	BlueprintSummary `json:"-"`
-}
-
-// GetId returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Id, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetId() uuid.UUID {
-	return v.BlueprintSummary.Id
-}
-
-// GetSlug returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Slug, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetSlug() string {
-	return v.BlueprintSummary.Slug
-}
-
-// GetDisplayName returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.DisplayName, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDisplayName() string {
-	return v.BlueprintSummary.DisplayName
-}
-
-// GetDescription returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Description, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetDescription() string {
-	return v.BlueprintSummary.Description
-}
-
-// GetType returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Type, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetType() BlueprintType {
-	return v.BlueprintSummary.Type
-}
-
-// GetProjectCount returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.ProjectCount, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetProjectCount() int {
-	return v.BlueprintSummary.ProjectCount
-}
-
-// GetRichInputSchema returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetRichInputSchema() string {
-	return v.BlueprintSummary.RichInputSchema
-}
-
-// GetTags returns getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint.Tags, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) GetTags() []string {
-	return v.BlueprintSummary.Tags
-}
-
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) UnmarshalJSON(b []byte) error {
-
-	if string(b) == "null" {
-		return nil
-	}
-
-	var firstPass struct {
-		*getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint
-		graphql.NoUnmarshalJSON
-	}
-	firstPass.getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint = v
-
-	err := json.Unmarshal(b, &firstPass)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(
-		b, &v.BlueprintSummary)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-type __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint struct {
-	Id uuid.UUID `json:"id"`
-
-	Slug string `json:"slug"`
-
-	DisplayName string `json:"displayName"`
-
-	Description string `json:"description"`
-
-	Type BlueprintType `json:"type"`
-
-	ProjectCount int `json:"projectCount"`
-
-	RichInputSchema string `json:"richInputSchema"`
-
-	Tags []string `json:"tags"`
-}
-
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) MarshalJSON() ([]byte, error) {
-	premarshaled, err := v.__premarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(premarshaled)
-}
-
-func (v *getBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint) __premarshalJSON() (*__premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint, error) {
-	var retval __premarshalgetBlueprintsUserBlueprintsBlueprintConnectionNodesBlueprint
-
-	retval.Id = v.BlueprintSummary.Id
-	retval.Slug = v.BlueprintSummary.Slug
-	retval.DisplayName = v.BlueprintSummary.DisplayName
-	retval.Description = v.BlueprintSummary.Description
-	retval.Type = v.BlueprintSummary.Type
-	retval.ProjectCount = v.BlueprintSummary.ProjectCount
-	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
-	retval.Tags = v.BlueprintSummary.Tags
-	return &retval, nil
-}
+func (v *getBlueprintsUser) GetBlueprints() BlueprintConnection { return v.Blueprints }
 
 // getBuildLogsCurrentUser includes the requested fields of the GraphQL type User.
 type getBuildLogsCurrentUser struct {
@@ -1974,9 +2021,11 @@ func getBlueprints(
 	ctx context.Context,
 	client graphql.Client,
 	userId uuid.UUID,
+	pageInput PageInput,
 ) (*getBlueprintsResponse, error) {
 	__input := __getBlueprintsInput{
-		UserId: userId,
+		UserId:    userId,
+		PageInput: pageInput,
 	}
 	var err error
 
@@ -1985,9 +2034,16 @@ func getBlueprints(
 		ctx,
 		"getBlueprints",
 		`
-query getBlueprints ($userId: ID!) {
+query getBlueprints ($userId: ID!, $pageInput: PageInput!) {
 	user(id: $userId) {
-		blueprints {
+		blueprints(page: $pageInput) {
+			totalCount
+			pageInfo {
+				startCursor
+				endCursor
+				hasNextPage
+				hasPreviousPage
+			}
 			nodes {
 				... BlueprintSummary
 			}

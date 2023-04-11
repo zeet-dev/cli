@@ -46,13 +46,20 @@ func (c *Client) GetBlueprint(ctx context.Context, id uuid.UUID) (*BlueprintSumm
 	return out, err
 }
 
-func (c *Client) ListBlueprints(ctx context.Context) ([]*BlueprintSummary, error) {
-	out := make([]*BlueprintSummary, 0)
-
+func (c *Client) ListBlueprints(ctx context.Context, pageInput PageInput) (*BlueprintConnection, error) {
 	_ = `# @genqlient
-		query getBlueprints($userId: ID!) {
+		query getBlueprints($userId: ID!, $pageInput: PageInput!) {
 			user(id: $userId) {
-				blueprints {
+				# @genqlient(typename: "BlueprintConnection")
+				blueprints(page: $pageInput) {
+					totalCount
+					# @genqlient(typename: "PageInfo")
+					pageInfo {
+						startCursor
+						endCursor
+						hasNextPage
+						hasPreviousPage
+					}
 					nodes {
 						...BlueprintSummary
 					}
@@ -65,16 +72,8 @@ func (c *Client) ListBlueprints(ctx context.Context) ([]*BlueprintSummary, error
 		return nil, err
 	}
 
-	res, err := getBlueprints(ctx, c.gql, user.Id)
-	nodes := res.User.Blueprints.Nodes
+	res, err := getBlueprints(ctx, c.gql, user.Id, pageInput)
+	bp := &res.User.Blueprints
 
-	for _, n := range nodes {
-		bps := &BlueprintSummary{}
-		if err := copier.Copy(bps, n.BlueprintSummary); err != nil {
-			return nil, err
-		}
-		out = append(out, bps)
-	}
-
-	return out, err
+	return bp, err
 }
