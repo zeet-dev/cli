@@ -3989,6 +3989,7 @@ type User implements ProfileOwner & ProjectOwner {
   azureAccount(id: UUID!): AzureAccount
   azureAccounts: [AzureAccount!]
   blueprints(page: PageInput): BlueprintConnection
+  blueprint(id: UUID!): Blueprint
   projectV3(id: UUID!): ProjectV3
   projectV3s(filter: FilterInput!): ProjectV3Connection
   projectV3DriverActionExecutions(filter: FilterInput!): BlueprintDriverActionExecutionConnection

@@ -3,19 +3,49 @@ package api
 import (
 	"context"
 
+	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 )
 
-func (c *Client) ListBlueprints(ctx context.Context) ([]*BlueprintSummary, error) {
-	out := make([]*BlueprintSummary, 0)
-
-	_ = `# @genqlient
+// Shared fragment
+var _ = `# @genqlient
 		fragment BlueprintSummary on Blueprint {
 			id
 			description
 			displayName
 			type
-		}
+		}`
+
+func (c *Client) GetBlueprint(ctx context.Context, id uuid.UUID) (*BlueprintSummary, error) {
+	out := &BlueprintSummary{}
+
+	_ = `# @genqlient
+		query getBlueprint($userID: ID!, $blueprintID: UUID!) {
+			user(id: $userID) {
+				blueprint(id: $blueprintID) {
+					...BlueprintSummary
+				}
+			}
+		}`
+
+	user, err := c.GetCurrentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+
+	res, err := getBlueprint(ctx, c.gql, user.Id, id)
+	if err := copier.Copy(out, res.User.Blueprint.BlueprintSummary); err != nil {
+		return nil, err
+	}
+
+	return out, err
+}
+
+func (c *Client) ListBlueprints(ctx context.Context) ([]*BlueprintSummary, error) {
+	out := make([]*BlueprintSummary, 0)
+
+	_ = `# @genqlient
 		query getBlueprints($userId: ID!) {
 			user(id: $userId) {
 				blueprints {

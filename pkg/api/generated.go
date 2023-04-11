@@ -297,6 +297,18 @@ func (v *__deployRepoBranchInput) GetBranch() string { return v.Branch }
 // GetProjectId returns __deployRepoBranchInput.ProjectId, and is useful for accessing the field via an interface.
 func (v *__deployRepoBranchInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
+// __getBlueprintInput is used internally by genqlient
+type __getBlueprintInput struct {
+	UserID      uuid.UUID `json:"userID"`
+	BlueprintID uuid.UUID `json:"blueprintID"`
+}
+
+// GetUserID returns __getBlueprintInput.UserID, and is useful for accessing the field via an interface.
+func (v *__getBlueprintInput) GetUserID() uuid.UUID { return v.UserID }
+
+// GetBlueprintID returns __getBlueprintInput.BlueprintID, and is useful for accessing the field via an interface.
+func (v *__getBlueprintInput) GetBlueprintID() uuid.UUID { return v.BlueprintID }
+
 // __getBlueprintsInput is used internally by genqlient
 type __getBlueprintsInput struct {
 	UserId uuid.UUID `json:"userId"`
@@ -661,6 +673,92 @@ type deployRepoBranchResponse struct {
 // GetDeployRepoBranch returns deployRepoBranchResponse.DeployRepoBranch, and is useful for accessing the field via an interface.
 func (v *deployRepoBranchResponse) GetDeployRepoBranch() deployRepoBranchDeployRepoBranchRepo {
 	return v.DeployRepoBranch
+}
+
+// getBlueprintResponse is returned by getBlueprint on success.
+type getBlueprintResponse struct {
+	User getBlueprintUser `json:"user"`
+}
+
+// GetUser returns getBlueprintResponse.User, and is useful for accessing the field via an interface.
+func (v *getBlueprintResponse) GetUser() getBlueprintUser { return v.User }
+
+// getBlueprintUser includes the requested fields of the GraphQL type User.
+type getBlueprintUser struct {
+	Blueprint getBlueprintUserBlueprint `json:"blueprint"`
+}
+
+// GetBlueprint returns getBlueprintUser.Blueprint, and is useful for accessing the field via an interface.
+func (v *getBlueprintUser) GetBlueprint() getBlueprintUserBlueprint { return v.Blueprint }
+
+// getBlueprintUserBlueprint includes the requested fields of the GraphQL type Blueprint.
+type getBlueprintUserBlueprint struct {
+	BlueprintSummary `json:"-"`
+}
+
+// GetId returns getBlueprintUserBlueprint.Id, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetId() uuid.UUID { return v.BlueprintSummary.Id }
+
+// GetDescription returns getBlueprintUserBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetDescription() string { return v.BlueprintSummary.Description }
+
+// GetDisplayName returns getBlueprintUserBlueprint.DisplayName, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetDisplayName() string { return v.BlueprintSummary.DisplayName }
+
+// GetType returns getBlueprintUserBlueprint.Type, and is useful for accessing the field via an interface.
+func (v *getBlueprintUserBlueprint) GetType() BlueprintType { return v.BlueprintSummary.Type }
+
+func (v *getBlueprintUserBlueprint) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*getBlueprintUserBlueprint
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.getBlueprintUserBlueprint = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.BlueprintSummary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalgetBlueprintUserBlueprint struct {
+	Id uuid.UUID `json:"id"`
+
+	Description string `json:"description"`
+
+	DisplayName string `json:"displayName"`
+
+	Type BlueprintType `json:"type"`
+}
+
+func (v *getBlueprintUserBlueprint) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *getBlueprintUserBlueprint) __premarshalJSON() (*__premarshalgetBlueprintUserBlueprint, error) {
+	var retval __premarshalgetBlueprintUserBlueprint
+
+	retval.Id = v.BlueprintSummary.Id
+	retval.Description = v.BlueprintSummary.Description
+	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Type = v.BlueprintSummary.Type
+	return &retval, nil
 }
 
 // getBlueprintsResponse is returned by getBlueprints on success.
@@ -1749,6 +1847,43 @@ mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 			privateEndpoint
 		}
 	}
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func getBlueprint(
+	ctx context.Context,
+	client graphql.Client,
+	userID uuid.UUID,
+	blueprintID uuid.UUID,
+) (*getBlueprintResponse, error) {
+	__input := __getBlueprintInput{
+		UserID:      userID,
+		BlueprintID: blueprintID,
+	}
+	var err error
+
+	var retval getBlueprintResponse
+	err = client.MakeRequest(
+		ctx,
+		"getBlueprint",
+		`
+query getBlueprint ($userID: ID!, $blueprintID: UUID!) {
+	user(id: $userID) {
+		blueprint(id: $blueprintID) {
+			... BlueprintSummary
+		}
+	}
+}
+fragment BlueprintSummary on Blueprint {
+	id
+	description
+	displayName
+	type
 }
 `,
 		&retval,
