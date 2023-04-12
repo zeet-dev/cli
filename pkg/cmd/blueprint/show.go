@@ -66,7 +66,10 @@ func displayBlueprint(b *api.BlueprintSummary) {
 	tw.AppendRow(table.Row{"Description", b.Description})
 	tw.AppendRow(table.Row{"Type", b.Type})
 	tw.AppendRow(table.Row{"Project Count", b.ProjectCount})
-	tw.AppendRow(table.Row{"Input Schema", jsonFormatter(b.RichInputSchema)})
+
+	if b.RichInputSchema != "" {
+		tw.AppendRow(table.Row{"Input Schema", jsonFormatter(b.RichInputSchema)})
+	}
 
 	for _, t := range b.Tags {
 		tw.AppendRow(table.Row{"Tags", t})

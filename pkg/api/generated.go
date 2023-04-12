@@ -458,6 +458,14 @@ func (v *__buildRepoInput) GetBranch() string { return v.Branch }
 // GetNoCache returns __buildRepoInput.NoCache, and is useful for accessing the field via an interface.
 func (v *__buildRepoInput) GetNoCache() bool { return v.NoCache }
 
+// __deleteBlueprintInput is used internally by genqlient
+type __deleteBlueprintInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __deleteBlueprintInput.Id, and is useful for accessing the field via an interface.
+func (v *__deleteBlueprintInput) GetId() uuid.UUID { return v.Id }
+
 // __deleteInput is used internally by genqlient
 type __deleteInput struct {
 	Id uuid.UUID `json:"id"`
@@ -799,6 +807,14 @@ type buildRepoResponse struct {
 
 // GetBuildRepo returns buildRepoResponse.BuildRepo, and is useful for accessing the field via an interface.
 func (v *buildRepoResponse) GetBuildRepo() buildRepoBuildRepo { return v.BuildRepo }
+
+// deleteBlueprintResponse is returned by deleteBlueprint on success.
+type deleteBlueprintResponse struct {
+	DeleteBlueprint bool `json:"deleteBlueprint"`
+}
+
+// GetDeleteBlueprint returns deleteBlueprintResponse.DeleteBlueprint, and is useful for accessing the field via an interface.
+func (v *deleteBlueprintResponse) GetDeleteBlueprint() bool { return v.DeleteBlueprint }
 
 // deleteResponse is returned by delete on success.
 type deleteResponse struct {
@@ -1933,6 +1949,31 @@ func delete(
 		`
 mutation delete ($id: ID!) {
 	deleteRepo(id: $id)
+}
+`,
+		&retval,
+		&__input,
+	)
+	return &retval, err
+}
+
+func deleteBlueprint(
+	ctx context.Context,
+	client graphql.Client,
+	id uuid.UUID,
+) (*deleteBlueprintResponse, error) {
+	__input := __deleteBlueprintInput{
+		Id: id,
+	}
+	var err error
+
+	var retval deleteBlueprintResponse
+	err = client.MakeRequest(
+		ctx,
+		"deleteBlueprint",
+		`
+mutation deleteBlueprint ($id: UUID!) {
+	deleteBlueprint(id: $id)
 }
 `,
 		&retval,
