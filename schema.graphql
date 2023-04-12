@@ -2,6 +2,8 @@ directive @enforceUserAction(action: UserAction!) on FIELD_DEFINITION
 
 directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
+directive @goModel(model: String, models: [String!]) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
+
 """
 The @specifiedBy built-in directive is used within the type system definition
 language to provide a scalar specification URL for specifying the behavior of
@@ -21,9 +23,22 @@ input AcceleratorSpecInput {
   tpuTfVersion: String
 }
 
+input AdapterStatusCriterion {
+  value: [String]
+}
+
 input AddAWSAccountInput {
   userID: UUID!
   accountID: String!
+}
+
+input AddAzureAccountInput {
+  userID: UUID!
+  name: String
+  subscriptionID: String!
+  tenantID: String!
+  clientID: String!
+  clientSecret: String!
 }
 
 input AddCDNInput {
@@ -90,6 +105,18 @@ input AddTeamMemberInput {
   role: TeamMemberRole!
 }
 
+input AddVultrAccountInput {
+  userID: UUID!
+  name: String!
+  accessToken: String!
+}
+
+type AlternativeImage {
+  reference: String
+  tag: String
+  name: String
+}
+
 type APIKey {
   id: UUID!
   token: String!
@@ -116,6 +143,7 @@ type Autoscaling {
   maxReplicas: Int!
   coolDownPeriod: Int
   triggers: [AutoscalingTrigger!]
+  kedaScaledObjectSpec: String
 }
 
 input AutoscalingInput {
@@ -123,6 +151,7 @@ input AutoscalingInput {
   maxReplicas: Int!
   coolDownPeriod: Int
   triggers: [AutoscalingTriggerInput!]
+  kedaScaledObjectSpec: String
 }
 
 type AutoscalingTrigger {
@@ -238,6 +267,13 @@ input awsPolicyJsonInput {
   policyName: String
 }
 
+type AwsRegionStatus {
+  enabled: Boolean!
+  region: String!
+  regionName: String
+  message: String
+}
+
 type AwsResource {
   arn: String!
   type: String!
@@ -266,6 +302,263 @@ type AwsUser {
   username: String!
   awsAccountId: String!
   attachedAwsPolicies: [AttachedAwsIamPolicy]!
+}
+
+type AzureAccount {
+  id: UUID!
+  name: String!
+  state: CloudAccountState!
+  connected: Boolean
+  subscriptionID: String
+  tenantID: String
+  clientID: String
+  clusters: [Cluster!]
+  projects(input: ProjectsInput): ProjectConnection
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type Blueprint {
+  id: UUID!
+  slug: String!
+  displayName: String!
+  published: Boolean!
+  type: BlueprintType!
+  isOfficial: Boolean
+  enabled: Boolean
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  configuration: BlueprintConfiguration
+  variables: [BlueprintVariableSpec!]!
+  projectCount: Int!
+  richInputSchema: JSON
+  owner: BlueprintOwner
+}
+
+union BlueprintConfiguration = BlueprintTerraformConfiguration | BlueprintManifestConfiguration | BlueprintHelmConfiguration
+
+input BlueprintConfigurationInput {
+  terraform: BlueprintTerraformConfigurationInput
+  manifest: BlueprintManifestConfigurationInput
+  helm: BlueprintHelmConfigurationInput
+}
+
+input BlueprintConfigurationUpdate {
+  terraform: BlueprintTerraformConfigurationUpdate
+}
+
+type BlueprintConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [Blueprint!]!
+}
+
+enum BlueprintDriver {
+  TERRAFORM
+  KUBERNETES_MANIFEST
+  HELM
+}
+
+enum BlueprintDriverAction {
+  PLAN_DESTROY
+  PLAN
+  APPROVE
+  APPLY
+}
+
+type BlueprintDriverActionExecution {
+  id: UUID!
+  driver: BlueprintDriver!
+  action: BlueprintDriverAction!
+  createdAt: Time!
+  updatedAt: Time!
+  planExecution: BlueprintDriverActionExecution
+  jobRun: JobRun
+}
+
+type BlueprintDriverActionExecutionConnection {
+  pageInfo: PageInfo!
+  nodes: [BlueprintDriverActionExecution!]!
+}
+
+input BlueprintDriverActionInput {
+  projectID: UUID!
+  driver: BlueprintDriver!
+  action: BlueprintDriverAction!
+
+  """
+  Action-dependent input for the action execution
+  
+  Because GraphQL does not support Input Unions, this field cannot be statically type-checked.
+  To document the structure for this field, we publish the input types in this schema.
+  For example, if you are issuing the APPLY action to the TERRAFORM driver, look for TerraformPlanActionParameters.
+  """
+  parameters: Object
+}
+
+type BlueprintDriverActionResult {
+  execution: BlueprintDriverActionExecution
+}
+
+type BlueprintHelmConfiguration {
+  source: Source
+}
+
+input BlueprintHelmConfigurationInput {
+  releaseName: String!
+  source: SourceInput
+}
+
+input BlueprintHelmConfigurationUpdate {
+  source: SourceInput
+}
+
+type BlueprintManifestConfiguration {
+  source: Source
+  useKustomize: Boolean
+}
+
+input BlueprintManifestConfigurationInput {
+  source: SourceInput
+  useKustomize: Boolean
+}
+
+input BlueprintManifestConfigurationUpdate {
+  source: SourceInput
+  useKustomize: Boolean
+}
+
+type BlueprintOwner implements ProfileOwner {
+  login: Login!
+  name: String!
+  avatar: URL
+}
+
+type BlueprintsMarketplace {
+  blueprints(page: PageInput): BlueprintConnection
+  blueprint(owner: Login!, slug: String!): Blueprint
+}
+
+type BlueprintTerraformConfiguration {
+  registrySource: String
+  moduleVersionConstraint: String
+  githubSource: String
+}
+
+input BlueprintTerraformConfigurationInput {
+  registrySource: String
+  moduleVersionConstraint: String
+  githubSource: String
+  gitIntegration: GitSourceIntegrationInput
+}
+
+input BlueprintTerraformConfigurationUpdate {
+  gitIntegration: GitSourceIntegrationInput
+}
+
+enum BlueprintType {
+  TERRAFORM
+  KUBERNETES_MANIFEST
+  HELM
+  ZEET_KUBERNETES
+  ZEET_AWS_LAMBDA
+  ZEET_GCP_CLOUD_RUN
+}
+
+union BlueprintVariable = BlueprintVariableString | BlueprintVariableBoolean | BlueprintVariableInt | BlueprintVariableFloat | BlueprintVariableJSON
+
+type BlueprintVariableBoolean {
+  id: UUID!
+  variableSpecID: UUID
+  name: String!
+  value: Boolean!
+}
+
+type BlueprintVariableFloat {
+  id: UUID!
+  variableSpecID: UUID
+  name: String!
+  value: Float!
+}
+
+"""
+A ProjectV3's BlueprintVariable represent key-value pairs: each a variable name and its value.
+These variables can either reference a variable spec, as defined by the Blueprint, or they can be declared
+as "custom variables" for the ProjectV3.
+
+To reference a variable spec, specify either variableSpecID or the variableName that corresponds to a variable spec.
+
+To declare a custom variable, specify the variableName and the variableType.
+If there is a variableSpec with the same name, the variableType will be ignored, and the variableSpec will take precedence.
+
+All BlueprintVariables must specify their value. The VariableValueInput is serialized as a string, and is parsed
+server-side according to the variableType.
+"""
+input BlueprintVariableInput {
+  """
+  ID of the corresponding variable spec. Must be present if variableName is not specified.
+  """
+  variableSpecID: UUID
+
+  """
+  Name of the corresponding variable spec, or name to use when declaring a variable without referencing a variable spec.
+  Must be present if variableSpecID is not specified.
+  """
+  variableName: String
+
+  """
+  The variable value. Always a string value, which will be parsed according to the variableType, determined either
+  by the referenced variableSpec, or the provided variableType
+  """
+  value: VariableValueInput!
+
+  """
+  Type specification is required when variable is being declared without referencing a variable spec.
+  """
+  variableType: BlueprintVariableType
+}
+
+type BlueprintVariableInt {
+  id: UUID!
+  variableSpecID: UUID
+  name: String!
+  value: Int!
+}
+
+type BlueprintVariableJSON {
+  id: UUID!
+  variableSpecID: UUID
+  name: String!
+  value: JSON!
+}
+
+type BlueprintVariableSpec {
+  id: UUID!
+  name: String!
+  type: BlueprintVariableType!
+  required: Boolean!
+}
+
+input BlueprintVariableSpecInput {
+  name: String!
+  type: BlueprintVariableType!
+  required: Boolean!
+}
+
+type BlueprintVariableString {
+  id: UUID!
+  variableSpecID: UUID
+  name: String!
+  value: String!
+}
+
+enum BlueprintVariableType {
+  STRING
+  BOOLEAN
+  INTEGER
+  FLOAT
+  JSON
 }
 
 input BranchInput {
@@ -301,6 +594,8 @@ type BuildMethod {
   runCommand: String
   releaseCommand: String
   nodejsVersion: String
+  pythonVersion: String
+  golangVersion: String
 }
 
 type BuildStage implements IPipelineStage {
@@ -309,6 +604,7 @@ type BuildStage implements IPipelineStage {
   metrics(name: String!): [Metric!]
   job: JobRun
   build: Build
+  buildTemplates: [BuildTemplate!]
 }
 
 enum BuildState {
@@ -316,6 +612,26 @@ enum BuildState {
   BUILD_IN_PROGRESS
   BUILD_FAILED
   BUILD_SUCCEEDED
+}
+
+enum BuildTarget {
+  NULL_REGISTRY
+  CLUSTER_REGISTRY
+  CONTAINER_REGISTRY
+}
+
+input BuildTargetInput {
+  buildTarget: BuildTarget!
+  clusterID: UUID
+}
+
+type BuildTemplate {
+  type: BuildTemplateType!
+  output: String
+}
+
+enum BuildTemplateType {
+  DOCKERFILE
 }
 
 enum BuildType {
@@ -422,7 +738,7 @@ interface CISource {
   description: String
 }
 
-union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount | CoreWeaveAccount
+union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount | VultrAccount
 
 enum CloudAccountState {
   WAITING
@@ -499,8 +815,10 @@ type Cluster {
   cwAccount: CoreWeaveAccount
   linodeAccount: LinodeAccount
   cloudAccount: CloudAccount
+  vultrAccount: VultrAccount
   namespace: String
   domain: String
+  isExternal: Boolean
   ingressIP: String
   ingressDNS: String
   clusterIssuers: [String!]
@@ -512,10 +830,32 @@ type Cluster {
   containerCacheRepository: String
   containerRegistry: ContainerRegistry
   projects(input: ProjectsInput): ProjectConnection
+  customDomains: [ClusterCustomDomain!]
+
+  """All configured cluster add-ons, whether currently enabled or disabled"""
+  addOns: [ClusterAddOn!]
   createdAt: Time!
   updatedAt: Time!
   network: Network
   machines: [Machine!]
+}
+
+type ClusterAddOn {
+  slug: String!
+  state: ClusterAddOnState!
+  helmValues: YAML
+}
+
+enum ClusterAddOnState {
+  ENABLED
+  DISABLED
+}
+
+type ClusterCustomDomain {
+  id: UUID!
+  cluster: Cluster
+  repo: Repo
+  customDomain: CustomDomain
 }
 
 type ClusterDomains {
@@ -566,6 +906,20 @@ enum ContainerRegistryCredentialProvider {
   ECR
   GCR
   DOCR
+}
+
+type ContainerRegistrySource {
+  registryID: UUID
+  registryURL: URL
+  repository: String!
+  tag: String
+}
+
+input ContainerRegistrySourceInput {
+  registryID: UUID
+  registryURL: URL
+  repository: String!
+  tag: String
 }
 
 type ContainerResourcesSpec {
@@ -633,12 +987,24 @@ input CreateAPIKeyInput {
   name: String!
 }
 
+input CreateBlueprintInput {
+  userID: UUID!
+  slug: String!
+  displayName: String!
+  published: Boolean!
+  type: BlueprintType!
+  configuration: BlueprintConfigurationInput
+  variables: [BlueprintVariableSpecInput!]!
+  richInputSchema: JSON
+}
+
 input CreateClusterInput {
   userID: UUID!
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
   linodeAccountID: UUID
+  vultrAccountID: UUID
   name: String!
   region: String!
 }
@@ -661,11 +1027,38 @@ input CreateDatadogIntegrationInput {
   apiKey: String!
 }
 
+input CreateEventIntegrationInput {
+  userID: UUID!
+  eventType: EventIntegrationType!
+  clusterID: UUID
+}
+
+input CreateGitlabIntegrationInput {
+  userID: UUID!
+  name: String
+  apiUrl: URL
+  accessToken: String!
+}
+
 input CreateIPFSServiceInput {
   userID: UUID!
   name: String!
   awsAccountID: UUID!
   clusterID: UUID!
+}
+
+input CreateManifestAppInput {
+  userID: UUID!
+  projectID: UUID
+  environmentName: String
+  environmentID: UUID
+  name: String!
+  deployTarget: ProjectDeployInput!
+  namespace: String
+  githubConnection: GithubConnectionInput
+  gitRepository: String
+  manifests: [String!]
+  manifestValue: String
 }
 
 input CreateProjectDockerInput {
@@ -683,6 +1076,7 @@ input CreateProjectDockerInput {
   volumes: JSON
   cpu: String
   memory: String
+  ephemeralStorage: Float
   dedicated: Boolean
   gpu: String
   enabled: Boolean
@@ -709,9 +1103,12 @@ input CreateProjectGitInput {
   projectName: String
   environmentName: String
   url: String!
+  productionBranch: String
+  buildTarget: BuildTargetInput
   deployTarget: ProjectDeployInput
   build: ProjectBuildInput
   deployService: Boolean
+  deployJob: Boolean
   manualDeploy: Boolean
   autoRetry: Boolean
   autoRollback: Boolean
@@ -776,11 +1173,17 @@ input CreateProjectInput {
   environmentID: UUID
   projectName: String
   environmentName: String
-  installation: ID!
-  owner: String!
-  repo: String!
+  installation: ID
+  owner: String
+  repo: String
+  gitRepository: String
+  githubConnection: GithubConnectionInput
+  gitlabConnection: GitlabConnectionInput
+  buildTarget: BuildTargetInput
   deployTarget: ProjectDeployInput
+  productionBranch: String
   deployService: Boolean
+  deployJob: Boolean
   manualDeploy: Boolean
   autoRetry: Boolean
   autoRollback: Boolean
@@ -835,6 +1238,50 @@ input CreateProjectV2Input {
   name: String!
 }
 
+input CreateProjectV3Input {
+  blueprintID: UUID!
+  userID: UUID!
+  name: String!
+  requirePlanApproval: Boolean
+  blueprintConfiguration: BlueprintConfigurationInput
+  variables: [BlueprintVariableInput!]!
+  terraformConfiguration: TerraformProjectV3ConfigurationInput
+  manifestConfiguration: ManifestProjectV3ConfigurationInput
+  helmConfiguration: HelmProjectV3ConfigurationInput
+  projectID: UUID
+  projectName: String
+  environmentID: UUID
+  environmentName: String
+}
+
+input CreateRepoPipelineLinkInput {
+  sourceRepoID: UUID!
+  sourceEvent: RepoEvent!
+  targetRepoID: UUID
+  targetEnvironmentID: UUID
+  targetAction: RepoAction!
+}
+
+input CreateResourceAlphaInput {
+  userID: UUID!
+  projectID: UUID
+  projectName: String
+  environmentID: UUID
+  environmentName: String
+  name: String!
+  appID: String
+  enabled: Boolean
+  workflow: ResourceWorkflowInput
+  branch: ResourceBranchInput
+  source: SourceInput
+  build: ResourceBuildInput
+  kubernetes: ResourceKubernetesInput
+  serverless: ResourceServerlessInput
+  terraform: ResourceTerraformInput
+  database: ResourceDatabaseInput
+  blueprintID: UUID
+}
+
 input CreateTeamInput {
   name: String!
   login: String
@@ -873,7 +1320,9 @@ input DatabaseDeployTargetInput {
   gcpAccountID: UUID
   doAccountID: UUID
   linodeAccountID: UUID
+  vultrAccountID: UUID
   clusterID: UUID
+  region: String
 }
 
 enum DatabaseEngineType {
@@ -890,7 +1339,7 @@ type DatabaseLink {
   repo: Repo!
   database: Repo!
   envPrefix: String
-  envs: [EnvVar!]!
+  envs: [EnvVar!]
 }
 
 input DatabaseOptions {
@@ -919,10 +1368,18 @@ type DatadogIntegration implements Integration {
 
 type DatadogLogIntegration {
   key: String!
+  host: String
 }
 
 input DatadogLogIntegrationInput {
   key: String!
+  host: String
+}
+
+input DeployableDriverActionExecutionFilter {
+  ids: MultiEntityCriterion
+  actionTypes: DriverActionTypeCriterion
+  resourceIds: MultiEntityCriterion
 }
 
 type Deployment {
@@ -941,6 +1398,7 @@ type Deployment {
   releaseStage: PipelineStage
   deployStage: PipelineStage
   deleteStage: PipelineStage
+  deployTemplates: [DeployTemplate]
   logs: [LogEntry!]
   repo: Repo
   deployStatus: DeployStatus
@@ -957,6 +1415,7 @@ type Deployment {
   updatedAt: Time!
   release: Release
   deployStep: PipelineStep
+  alternativeImages: [AlternativeImage!]
   events: [Event!]!
   runtime: Runtime
   terraformOperation: TerraformOperation
@@ -995,6 +1454,14 @@ input DeployRepoBranchInput {
   branch: String!
 }
 
+enum DeployRuntime {
+  AWS_LAMBDA
+  AWS_ECS
+  GCP_CLOUD_RUN
+  KUBERNETES
+  KNATIVE
+}
+
 type DeployStatus {
   active: Boolean!
   publicIPs: [String!]
@@ -1022,6 +1489,23 @@ enum DeployTarget {
   AWS_CDK
   AWS_CLOUDFORMATION
   GCP_CLOUD_RUN
+}
+
+type DeployTemplate {
+  type: DeployTemplateType!
+  output: String
+}
+
+enum DeployTemplateType {
+  YAML
+}
+
+enum DeployType {
+  KUBERNETES
+  KNATIVE
+  HELM
+  KUBECTL
+  KUBERNETES_UNSTRUCTURED
 }
 
 input DetachAwsPolicyToUser {
@@ -1057,6 +1541,12 @@ type DiscordWebhookIntegration implements Integration {
   createdAt: Time!
   updatedAt: Time!
   url: String
+}
+
+input dispatchRepoGroupActionInput {
+  groupID: UUID
+  selector: LabelSelectorsInput
+  action: RepoActionInput!
 }
 
 type DNSRecord {
@@ -1113,6 +1603,11 @@ type DockerRepository implements CISource {
   volumes: [VolumeSpec!]
 }
 
+input DriverActionTypeCriterion {
+  value: [BlueprintDriverAction]
+  operator: FilterCriterionOperatorType
+}
+
 input DuplicateProjectInput {
   id: UUID!
   enabled: Boolean!
@@ -1126,6 +1621,11 @@ input DuplicateRepoInput {
   repoID: UUID!
   name: String!
   environmentID: UUID!
+}
+
+type EnvironmentOverview {
+  deploymentStatus: DeploymentStatus
+  count: Int
 }
 
 type EnvVar {
@@ -1189,10 +1689,62 @@ type Event {
   lastSeenAt: Time!
 }
 
+type EventIntegration {
+  id: UUID!
+  eventType: EventIntegrationType!
+  integrationKey: String!
+  integrationUrl: URL!
+  clusterID: UUID
+}
+
+enum EventIntegrationType {
+  SNS
+}
+
 enum EventType {
   INFO
   WARNING
   ERROR
+}
+
+input FilterCriterion {
+  userFilter: UserFilter
+  resourceFilter: ResourceFilter
+  repoFilter: RepoFilter
+  deployableDriverActionExecutionFilter: DeployableDriverActionExecutionFilter
+  resourceAdapterFilter: ResourceAdapterFilter
+}
+
+enum FilterCriterionOperatorType {
+  EQUALS
+  NOT_EQUALS
+  INCLUDES
+  EXCLUDES
+  STARTS
+  ENDS
+  CONTAINS
+}
+
+input FilterExpression {
+  operator: FilterExpressionOperator
+  filters: [FilterNode!]
+}
+
+enum FilterExpressionOperator {
+  AND
+  OR
+  NOT
+}
+
+input FilterInput {
+  sort: SortInput
+  page: PageInput
+  filter: FilterNode!
+}
+
+input FilterNode {
+  expression: FilterExpression
+  criterion: FilterCriterion
 }
 
 type GCPAccount {
@@ -1227,6 +1779,12 @@ type GCPLinks {
   gke: String
 }
 
+input GCSBucketBackendInput {
+  gcpAccountID: UUID!
+  bucketName: String!
+  location: String
+}
+
 type GitBranch {
   id: ID!
   name: String!
@@ -1239,6 +1797,10 @@ type GitCommit {
   abbreviatedOid: String!
   message: String!
   createdAt: Time!
+}
+
+type GithubCommitResult {
+  processing: Boolean!
 }
 
 input GithubConnectionInput {
@@ -1260,7 +1822,7 @@ type GithubLinks {
   commitURL: String
 }
 
-type GitHubRepoIntegration {
+type GitHubRepoIntegration implements GitRepoIntegration {
   id: UUID!
   githubConnectionID: Int
   githubRepository: GitHubRepository
@@ -1314,10 +1876,73 @@ enum GithubUserType {
   Organization
 }
 
+input GitlabConnectionInput {
+  gitlabIntegrationID: UUID!
+  projectPath: String
+}
+
+type GitlabIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  apiUrl: URL!
+  accessTokenPrefix: String
+  webhookUrl: URL!
+  webhookToken: String!
+}
+
+type GitlabRepoIntegration implements GitRepoIntegration {
+  id: UUID!
+  gitlabIntegration: GitlabIntegration
+  gitlabRepository: GitlabRepository
+  autoDeployBranch: Boolean!
+  autoStopBranch: Boolean!
+  autoStopPullRequest: Boolean!
+  branchIgnore: String!
+  branchStopIgnore: String!
+}
+
+input GitlabRepoIntegrationInput {
+  gitlabConnection: GitlabConnectionInput
+  autoDeployBranch: Boolean
+  autoStopBranch: Boolean
+  autoStopPullRequest: Boolean
+  branchIgnore: String
+  branchStopIgnore: String
+}
+
+type GitlabRepository implements GitRepository & CISource {
+  id: ID!
+  provider: GitProvider!
+  providerID: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+  defaultBranch: GitBranch
+  branches: [GitBranch!]
+  isFork: Boolean!
+  isPrivate: Boolean!
+  updatedAt: Time!
+  primaryLanguage: String
+}
+
 enum GitProvider {
   GITHUB
   GITLAB
   BITBUCKET
+}
+
+interface GitRepoIntegration {
+  autoDeployBranch: Boolean!
+  autoStopBranch: Boolean!
+  autoStopPullRequest: Boolean!
+  branchIgnore: String!
+  branchStopIgnore: String!
 }
 
 interface GitRepository {
@@ -1334,6 +1959,32 @@ interface GitRepository {
   isPrivate: Boolean!
   updatedAt: Time!
   primaryLanguage: String
+}
+
+type GitSource {
+  repository: String!
+  ref: String
+  path: String
+  integration: GitSourceIntegration
+}
+
+input GitSourceInput {
+  repository: String!
+  ref: String
+  path: String
+  integration: GitSourceIntegrationInput
+}
+
+type GitSourceIntegration {
+  githubInstallationID: Int
+  githubIntegrationID: UUID
+  gitlabIntegrationID: UUID
+}
+
+input GitSourceIntegrationInput {
+  githubInstallationID: Int
+  githubIntegrationID: UUID
+  gitlabIntegrationID: UUID
 }
 
 input GPUInput {
@@ -1376,6 +2027,16 @@ type HelmChartConnection {
   pageInfo: PageInfo!
 }
 
+type HelmProjectV3Configuration {
+  clusterID: UUID!
+  namespace: String
+}
+
+input HelmProjectV3ConfigurationInput {
+  clusterID: UUID!
+  namespace: String
+}
+
 type HelmRelease {
   id: String!
   chart: HelmChart!
@@ -1388,6 +2049,18 @@ type HelmRepository {
   name: String
   organization_name: String
   chart(name: String!): HelmChart!
+}
+
+type HelmRepositorySource {
+  repositoryURL: URL!
+  chart: String!
+  version: String
+}
+
+input HelmRepositorySourceInput {
+  repositoryURL: URL!
+  chart: String!
+  version: String
 }
 
 type HTTPProbe {
@@ -1412,6 +2085,7 @@ enum IntegrationType {
   DISCORD
   DISCORD_WEBHOOK
   DATADOG
+  GITLAB
 }
 
 input InviteTeamMemberInput {
@@ -1455,6 +2129,7 @@ type JobRun {
   metrics(name: String!): [Metric!]
   errorMessage: String
   createdAt: Time
+  updatedAt: Time
   build: Build
 }
 
@@ -1469,6 +2144,7 @@ enum JobRunState {
   JOB_RUN_RUNNING
   JOB_RUN_FAILED
   JOB_RUN_SUCCEEDED
+  JOB_RUN_PENDING_APPROVAL
 }
 
 scalar JSON
@@ -1484,6 +2160,7 @@ input KanikoFlagsInput {
 type KubernetesCustomization {
   nodeSelector: MapString
   hostNetwork: Boolean
+  podSpecPatch: YAML
   serviceAccountName: String
   podAnnotations: MapString
   serviceAnnotations: MapString
@@ -1494,6 +2171,7 @@ type KubernetesCustomization {
 input KubernetesCustomizationInput {
   nodeSelector: JSON
   hostNetwork: Boolean
+  podSpecPatch: YAML
   podAnnotations: JSON
   serviceAnnotations: JSON
   ingressAnnotations: JSON
@@ -1514,6 +2192,35 @@ type KubernetesSecretMount {
 input KubernetesSecretMountInput {
   secretName: String!
   mountPath: String!
+}
+
+enum LabelSelectorOperator {
+  In
+  NotIn
+  Exists
+  DoesNotExist
+}
+
+type LabelSelectorRequirement {
+  key: String!
+  operator: LabelSelectorOperator!
+  values: [String!]
+}
+
+input LabelSelectorRequirementInput {
+  key: String!
+  operator: LabelSelectorOperator!
+  values: [String!]
+}
+
+type LabelSelectors {
+  matchLabels: MapString
+  matchExpressions: [LabelSelectorRequirement!]
+}
+
+input LabelSelectorsInput {
+  matchLabels: MapString
+  matchExpressions: [LabelSelectorRequirementInput!]
 }
 
 input LinkCloudToClusterInput {
@@ -1563,6 +2270,8 @@ type LogEntry {
   text: String!
   timestamp: Time
 }
+
+scalar Login
 
 type Logs {
   id: ID!
@@ -1614,6 +2323,22 @@ type Machine {
   projects(input: ProjectsInput): ProjectConnection
 }
 
+type Manifest {
+  manifests: [String!]
+  manifestValue: String
+  kustomizeDirs: [String!]
+}
+
+type ManifestProjectV3Configuration {
+  clusterID: UUID!
+  namespace: String
+}
+
+input ManifestProjectV3ConfigurationInput {
+  clusterID: UUID!
+  namespace: String
+}
+
 scalar Map
 
 scalar MapString
@@ -1629,6 +2354,10 @@ input MoveRepoInput {
   environmentName: String
   environmentID: UUID
   name: String
+}
+
+input MultiEntityCriterion {
+  value: [UUID!]
 }
 
 type Mutation {
@@ -1650,10 +2379,15 @@ type Mutation {
   addAWSAccount(input: AddAWSAccountInput!): AWSAccount!
   verifyAWSAccount(id: UUID!): AWSAccount!
   removeAWSAccount(id: UUID!): Boolean!
+  updateAWSAccount(input: UpdateAWSAccountInput!): Boolean!
   connectUserToIam(input: ConnectUserToIamInput!): Boolean!
   disconnectUserFromIam(id: UUID!): Boolean!
   attachAwsPolicyToUser(input: AttachAwsPolicyToUser!): Boolean!
   detachAwsPolicyToUser(input: DetachAwsPolicyToUser!): Boolean!
+  checkAwsRegionConnection(awsAccountID: UUID!, region: String!): AwsRegionStatus!
+  addAzureAccount(input: AddAzureAccountInput!): AzureAccount!
+  updateAzureAccount(input: UpdateAzureAccountInput!): Boolean!
+  removeAzureAccount(id: UUID!): Boolean!
   updateBranch(input: UpdateBranchInput!): RepoBranchV2!
   addCDN(input: AddCDNInput!): CDN!
   updateCDN(input: UpdateCDNInput!): CDN!
@@ -1669,20 +2403,36 @@ type Mutation {
   addContainerRegistry(input: AddContainerRegistryInput!): ContainerRegistry!
   removeContainerRegistry(id: UUID!): Boolean!
   addCoreWeaveAccount(input: AddCoreWeaveAccountInput!): CoreWeaveAccount!
+  updateCoreWeaveAccount(input: UpdateCoreWeaveAccountInput!): Boolean!
   removeCoreWeaveAccount(id: UUID!): Boolean!
-  createDatabase(input: CreateDatabaseInput!): Repo!
+  createDatabase(input: CreateDatabaseInput): Repo!
   linkDatabase(input: LinkDatabaseInput!): Repo!
   unlinkDatabase(id: UUID!): Boolean
   updateDatabaseLink(input: updateDatabaseLinkInput!): Repo!
+  createBlueprint(input: CreateBlueprintInput!): Blueprint!
+  updateBlueprint(blueprintID: UUID!, input: UpdateBlueprintInput!): Blueprint!
+  deleteBlueprint(id: UUID!): Boolean!
+  updateMarketplaceBlueprint(input: UpdateMarketplaceBlueprintInput!): Blueprint!
+  createProjectV3(input: CreateProjectV3Input!): ProjectV3!
+  updateProjectV3(projectID: UUID!, input: UpdateProjectV3Input!): ProjectV3!
+  deleteProjectV3(id: UUID!): Boolean!
+  configureGitopsForProjectV3(input: ProjectV3GitopsInput!): ProjectV3!
+  commitProjectV3ToGithubRepo(projectID: UUID!): GithubCommitResult!
+  executeBlueprintDriverAction(input: BlueprintDriverActionInput!): BlueprintDriverActionResult!
   addDOAccount(input: AddDOAccountInput!): DOAccount!
+  updateDOAccount(input: UpdateDOAccountInput!): Boolean!
   removeDOAccount(id: UUID!): Boolean!
   addRepoCustomDomain(input: AddRepoCustomDomainInput!): Repo!
   removeRepoCustomDomain(input: RemoveRepoCustomDomainInput!): Repo!
   updateRepoCustomDomain(input: UpdateRepoCustomDomainInput!): Repo!
   reissueCustomDomainCertificate(input: ReissueCustomDomainCertificateInput!): Repo!
+  createEventIntegration(input: CreateEventIntegrationInput!): EventIntegration!
   addGCPAccount(input: AddGCPAccountInput!): GCPAccount!
+  updateGCPAccount(input: UpdateGCPAccountInput!): Boolean!
   removeGCPAccount(id: UUID!): Boolean!
-  createProjectHelm(input: CreateProjectHelmInput!): Repo!
+  createGitlabIntegration(input: CreateGitlabIntegrationInput!): GitlabIntegration!
+  updateGitlabIntegration(input: UpdateGitlabIntegrationInput!): GitlabIntegration!
+  createProjectHelm(input: CreateProjectHelmInput): Repo!
   createSlackWebhookIntegration(input: CreateWebhookIntegrationInput!): SlackWebhookIntegration!
   updateSlackWebhookIntegration(input: UpdateWebhookIntegrationInput!): SlackWebhookIntegration!
   createDiscordWebhookIntegration(input: CreateWebhookIntegrationInput!): DiscordWebhookIntegration!
@@ -1692,7 +2442,9 @@ type Mutation {
   createIPFSService(input: CreateIPFSServiceInput!): IPFSService!
   runJob(input: RunJobInput!): JobRun!
   addLinodeAccount(input: AddLinodeAccountInput!): LinodeAccount!
+  updateLinodeAccount(input: UpdateLinodeAccountInput!): Boolean!
   removeLinodeAccount(id: UUID!): Boolean!
+  createManifestApp(input: CreateManifestAppInput): Repo!
   createProjectV2(input: CreateProjectV2Input!): Project!
   updateProjectV2(input: UpdateProjectV2Input!): Project!
   deleteProjectV2(id: UUID!): Boolean!
@@ -1700,6 +2452,7 @@ type Mutation {
   updateProjectEnvironment(input: UpdateProjectEnvironmentInput!): ProjectEnvironment!
   deleteProjectEnvironment(id: UUID!): Boolean!
   moveRepoToProjectEnvironment(input: MoveRepoInput!): Repo!
+  dispatchRepoGroupAction(input: dispatchRepoGroupActionInput!): Boolean
   duplicateProject(input: DuplicateProjectInput!): Repo!
   duplicateRepo(input: DuplicateRepoInput!): Repo!
   deleteProjectBranch(id: UUID!, branch: String!): Boolean!
@@ -1709,9 +2462,13 @@ type Mutation {
   removeProbe(input: RemoveProbeInput!): Repo!
   removeLogShipper(id: UUID!): Boolean!
   migrateGithubConnection(id: UUID!, installationID: String!): Repo!
-  createProject(input: CreateProjectInput!): Repo!
-  createProjectDocker(input: CreateProjectDockerInput!): Repo!
-  createProjectGit(input: CreateProjectGitInput!): Repo!
+  createProject(input: CreateProjectInput): Repo!
+  createProjectDocker(input: CreateProjectDockerInput): Repo!
+  createProjectGit(input: CreateProjectGitInput): Repo!
+  createResourceAlpha(input: CreateResourceAlphaInput!): Repo!
+  createRepoPipelineLink(input: CreateRepoPipelineLinkInput!): RepoPipelineLink!
+  updateRepoPipelineLink(input: UpdateRepoPipelineLinkInput!): RepoPipelineLink!
+  deleteRepoPipelineLink(id: UUID!): Boolean
   createTeam(input: CreateTeamInput!): Team!
   deleteTeam(id: UUID!): Boolean!
   updateTeam(input: UpdateTeamInput!): Team!
@@ -1725,9 +2482,12 @@ type Mutation {
   uploadDockerCompose(contents: String!): Template!
   createProjectsFromTemplate(input: CreateProjectsFromTemplateInput!): [Repo!]!
   freezeRepo(id: UUID!): Template!
-  createProjectTerraform(input: CreateProjectTerraformInput!): Repo!
+  createProjectTerraform(input: CreateProjectTerraformInput): Repo!
   updateUser(input: UpdateUserInput!): User!
   deleteUser: Boolean!
+  addVultrAccount(input: AddVultrAccountInput!): VultrAccount!
+  updateVultrAccount(input: UpdateVultrAccountInput!): Boolean!
+  removeVultrAccount(id: UUID!): Boolean!
   createWeb3Challenge(input: CreateWeb3ChallengeInput!): Web3Challenge!
   signInWithWeb3(input: SignInWithWeb3Input!): UserAuth!
 }
@@ -1741,6 +2501,8 @@ type Network {
   clusters: [Cluster!]
   machines: [Machine]
 }
+
+scalar Object
 
 type PageInfo {
   startCursor: String!
@@ -1757,6 +2519,8 @@ input PageInput {
   filter: String
   sort: String
 }
+
+scalar PermissibleMutation
 
 type PipelineStage implements IPipelineStage {
   id: UUID!
@@ -1846,7 +2610,7 @@ input ProbeInput {
 }
 
 interface ProfileOwner {
-  login: String!
+  login: Login!
   name: String!
   avatar: URL
 }
@@ -1875,6 +2639,8 @@ input ProjectBuildInput {
   runCommand: String
   staticPath: String
   nodejsVersion: String
+  pythonVersion: String
+  golangVersion: String
 }
 
 type ProjectCollaborator {
@@ -1905,10 +2671,13 @@ type ProjectConnection {
 
 input ProjectDeployInput {
   deployTarget: DeployTarget!
+  deployType: DeployType
+  deployRuntime: DeployRuntime
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
   linodeAccountID: UUID
+  vultrAccountID: UUID
   clusterID: UUID
   region: String
 }
@@ -1925,6 +2694,8 @@ type ProjectEnvironment {
   defaultRepo: Repo
   repo(id: UUID, name: String): Repo
   repos: [Repo!]!
+  repoConnection(page: PageInput, repoFilter: repoFilterInput): RepoConnection!
+  overview: [EnvironmentOverview]
   project: Project
   createdAt: Time!
   updatedAt: Time!
@@ -1952,6 +2723,84 @@ type ProjectTemplate {
   volumes: [VolumeSpec!]
   gpu: Int
   dedicated: Boolean
+}
+
+type ProjectV3 {
+  id: UUID!
+  name: String!
+  blueprintID: UUID!
+  requirePlanApproval: Boolean!
+  variables: [BlueprintVariable!]!
+  project: Project
+  projectEnvironment: ProjectEnvironment
+  configuration: ProjectV3Configuration
+  workflows: [ProjectV3Workflow!]
+}
+
+type ProjectV3Adapter {
+  id: UUID!
+  repo: Repo
+  projectV3: ProjectV3
+  name: String!
+  status: ProjectV3AdapterStatus
+  project: Project
+  projectEnvironment: ProjectEnvironment
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type ProjectV3AdapterConnection {
+  nodes: [ProjectV3Adapter!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+enum ProjectV3AdapterStatus {
+  UNKNOWN
+  DRAFT
+  PAUSED
+  JOB_RUN_STARTING
+  JOB_RUN_RUNNING
+  JOB_RUN_FAILED
+  JOB_RUN_SUCCEEDED
+  JOB_RUN_CANCELLED
+  JOB_RUN_PENDING_APPROVAL
+  DEPLOY_PENDING
+  DEPLOY_IN_PROGRESS
+  DEPLOY_FAILED
+  DEPLOY_SUCCEEDED
+  DEPLOY_STOPPED
+  DEPLOY_HEALTHY
+  DEPLOY_CRASHING
+  BUILD_PENDING
+  BUILD_IN_PROGRESS
+  BUILD_FAILED
+  BUILD_SUCCEEDED
+  BUILD_ABORTED
+}
+
+union ProjectV3Configuration = TerraformProjectV3Configuration | HelmProjectV3Configuration | ManifestProjectV3Configuration
+
+type ProjectV3Connection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [ProjectV3!]!
+}
+
+input ProjectV3GitopsInput {
+  projectID: UUID!
+  githubConnectionID: Int!
+  githubRepoOwner: String!
+  githubRepoName: String!
+  githubRepoID: String!
+  subdirectoryPath: String
+}
+
+type ProjectV3Workflow {
+  state: JobRunState!
+  jobs: [BlueprintDriverActionExecution!]
+  createdAt: Time!
+  updatedAt: Time!
 }
 
 type Prometheus {
@@ -1982,6 +2831,8 @@ type Query {
   prices: Prices!
   awsCostByService(awsAccountId: UUID!, where: CostByServiceWhere!): [Cost!]!
   awsCostUsage2(awsAccountId: UUID!, where: CostUsageWhere!): [Cost!]!
+  blueprint(id: UUID!): Blueprint
+  blueprintsMarketplace: BlueprintsMarketplace
   searchHelmCharts(input: SearchHelmChartsInput!): HelmChartConnection!
   helmRepository(url: String!): HelmRepository!
   template(id: UUID, slug: String, url: String): Template!
@@ -2050,12 +2901,14 @@ type Repo {
   autoRetry: Boolean
   autoRollback: Boolean
   buildMethod: BuildMethod
+  buildMethodSuggestions: [BuildMethod!]
   noBuildCache: Boolean
   kanikoFlags: KanikoFlags
   resources: ContainerResourcesSpec
   buildResources: ContainerResourcesSpec
   branchResources: ContainerResourcesSpec
   serverlessResources: ServerlessResourceSpec
+  serverlessRegion: String
   readinessProbe: Probe
   livenessProbe: Probe
   startupProbe: Probe
@@ -2073,6 +2926,7 @@ type Repo {
   productionDeployment: Deployment
   githubRepository: GitHubRepository
   githubIntegration: GitHubRepoIntegration
+  gitlabIntegration: GitlabRepoIntegration
   helmChart: HelmChart
   helmValues: String
   terraformVersion: String
@@ -2085,6 +2939,7 @@ type Repo {
   logShipper: LogShipper
   kubernetesCustomization: KubernetesCustomization
   deployTarget: DeployTarget
+  deployType: DeployType
   canDeploy: Boolean
   cluster: Cluster
   awsAccount: AWSAccount
@@ -2093,11 +2948,13 @@ type Repo {
   gcpServiceAccount: String
   deployStrategy: DeployStrategy
   deployService: Boolean
+  deployJob: Boolean
   cronJobSchedule: String
   jobRun(id: UUID!): JobRun!
   jobRuns: JobRunConnection
   hasBuildStage: Boolean
   hasDeployStage: Boolean
+  alternativeImageTagTemplates: [String!]
   containerRegistry: ContainerRegistry
   databaseProvider: DatabaseProviderType
   databaseEngine: DatabaseEngineType
@@ -2108,6 +2965,7 @@ type Repo {
   disableReason: DisableReason
   datadogApmEnabled: Boolean
   pipelineCluster: Cluster
+  defaultIngressDomain: String
   project: Project
   projectEnvironment: ProjectEnvironment
   owner: User!
@@ -2127,7 +2985,18 @@ type Repo {
   clusterIssuerName: String
   path: String!
   fullPath: String!
+  manifest: Manifest
+  pipelineLinks: [RepoPipelineLink!]
   machines: [Machine!]
+}
+
+enum RepoAction {
+  DEPLOY
+}
+
+input RepoActionInput {
+  action: RepoAction!
+  setImage: String
 }
 
 type RepoBranch {
@@ -2160,12 +3029,49 @@ type RepoBranchV2 {
   image: String
   namespace: String
   kappID: String
+  patchedPodSpec: String
+  renderPodSpec(patch: String): String
   awsLinks: AWSLinks
   gcpLinks: GCPLinks
   repo: Repo
   createdAt: Time!
   updatedAt: Time!
   resources: [CloudResource!]
+}
+
+type RepoConnection {
+  totalCount: Int!
+  nodes: [Repo!]!
+  pageInfo: PageInfo!
+}
+
+enum RepoEvent {
+  BUILD_SUCCEEDED
+  DEPLOY_SUCCEEDED
+}
+
+input RepoFilter {
+  status: RepoStatusCriterion
+}
+
+input repoFilterInput {
+  deploymentStatus: [DeploymentStatus]
+}
+
+type RepoGroup {
+  id: UUID!
+  name: String
+  description: String
+  selector: LabelSelectors
+  repos: [Repo!]
+}
+
+type RepoPipelineLink {
+  id: UUID!
+  source: Repo!
+  sourceEvent: RepoEvent!
+  targetGroup: RepoGroup!
+  targetAction: RepoAction!
 }
 
 input ReposInput {
@@ -2190,6 +3096,123 @@ enum RepoSourceType {
   DOCKER_HUB
   HELM
   TERRAFORM
+}
+
+input RepoStatusCriterion {
+  value: String
+  operator: FilterCriterionOperatorType
+}
+
+input ResourceAdapterFilter {
+  ids: MultiEntityCriterion
+  repoIds: MultiEntityCriterion
+  resourceIds: MultiEntityCriterion
+  deployableIds: MultiEntityCriterion
+  name: StringCriterion
+  status: AdapterStatusCriterion
+  projectName: StringCriterion
+  environmentName: StringCriterion
+}
+
+input ResourceBranchInput {
+  productionBranch: String
+  autoDeployBranch: Boolean
+  autoStopBranch: Boolean
+  branchIgnore: String
+  branchStopIgnore: String
+}
+
+input ResourceBuildInput {
+  build: ProjectBuildInput
+  buildTarget: BuildTargetInput
+  buildResources: ContainerResourcesSpecInput
+  kanikoFlags: KanikoFlagsInput
+  noBuildCache: Boolean
+  containerRegistryID: UUID
+  containerCacheRepository: String
+  containerRepository: String
+}
+
+input ResourceDatabaseInput {
+  deployTarget: DatabaseDeployTargetInput!
+  engine: DatabaseEngineType!
+  version: String!
+  options: DatabaseOptions
+}
+
+input ResourceFilter {
+  ids: MultiEntityCriterion
+  deployableIds: MultiEntityCriterion
+  userIds: MultiEntityCriterion
+}
+
+input ResourceKubernetesAppInput {
+  deployJob: Boolean
+  deployService: Boolean
+  releaseCommand: String
+  envs: [EnvVarInput!]
+  runCommand: String
+  volumes: [VolumeInput!]
+  secretMounts: [KubernetesSecretMountInput!]
+  ports: [PortInput!]
+  defaultIngressDomain: String
+  staticIP: Boolean
+  resources: ContainerResourcesSpecInput
+  branchResources: ContainerResourcesSpecInput
+  replication: [ReplicationInput]
+  autoscaling: AutoscalingInput
+  logShipper: LogShipperInput
+  datadogApmEnabled: Boolean
+  prometheusScrape: PrometheusScrapeInput
+  deployStrategy: DeployStrategy
+  preStopSleep: Int
+  terminationGracePeriodSeconds: Int
+  readinessProbe: ProbeInput
+  livenessProbe: ProbeInput
+  startupProbe: ProbeInput
+  awsIamRole: String
+  gcpServiceAccount: String
+  customization: KubernetesCustomizationInput
+}
+
+input ResourceKubernetesHelmInput {
+  releaseName: String
+  values: YAML
+  valuesFiles: [String]
+}
+
+input ResourceKubernetesInput {
+  deployTarget: ProjectDeployInput
+  namespace: String
+  app: ResourceKubernetesAppInput
+  manifest: ResourceKubernetesManifestInput
+  helm: ResourceKubernetesHelmInput
+}
+
+input ResourceKubernetesManifestInput {
+  manifestValue: YAML
+  manifests: [String]
+  kustomizeDirs: [String]
+}
+
+input ResourceServerlessInput {
+  deployService: Boolean
+  deployTarget: ProjectDeployInput
+  envs: [EnvVarInput]
+  ports: [PortInput!]
+  serverlessResources: ServerlessResourcesSpecInput
+}
+
+input ResourceTerraformInput {
+  deployTarget: ProjectDeployInput
+  variables: JSON
+}
+
+input ResourceWorkflowInput {
+  autoRetry: Boolean
+  autoRollback: Boolean
+  manualDeploy: Boolean
+  pipelineClusterID: UUID
 }
 
 type RightSizingInstance {
@@ -2226,10 +3249,17 @@ type RightSizingUtilization {
 input RunJobInput {
   id: UUID!
   runCommand: String
+  envs: [EnvVarInput!]
   build: Boolean
 }
 
 union Runtime = CloudRuntime | KubernetesRuntime
+
+input S3BucketBackendInput {
+  awsAccountID: UUID!
+  bucketName: String!
+  region: String!
+}
 
 enum SavingsPlanPaymentOption {
   NO_UPFRONT
@@ -2345,6 +3375,35 @@ type SlackWebhookIntegration implements Integration {
   url: String
 }
 
+enum SortDirection {
+  ASC
+  DESC
+}
+
+input SortInput {
+  direction: SortDirection
+  field: String
+}
+
+type Source {
+  git: GitSource
+  terraformRegistry: TerraformRegistrySource
+  helmRepository: HelmRepositorySource
+  containerRegistry: ContainerRegistrySource
+}
+
+input SourceInput {
+  git: GitSourceInput
+  terraformRegistry: TerraformRegistrySourceInput
+  helmRepository: HelmRepositorySourceInput
+  containerRegistry: ContainerRegistrySourceInput
+}
+
+input StringCriterion {
+  value: String
+  operator: FilterCriterionOperatorType
+}
+
 type StripePrice {
   id: ID!
   product: StripeProduct!
@@ -2420,7 +3479,7 @@ type TCPProbe {
 
 type Team implements ProfileOwner & ProjectOwner {
   id: UUID!
-  login: String!
+  login: Login!
   name: String!
   avatar: URL
   user: User!
@@ -2467,6 +3526,18 @@ type TemplateStats {
   stars: Int!
 }
 
+"""Input values for Terraform APPLY actions"""
+input TerraformApplyActionParameters {
+  """Zeet ID for the driver action execution of a Terraform PLAN action"""
+  planID: UUID!
+}
+
+"""Input values for Terraform APPROVE actions"""
+input TerraformApproveActionParameters {
+  """Zeet ID for the driver action execution of a Terraform PLAN action"""
+  planID: UUID!
+}
+
 type TerraformModule {
   id: ID!
   owner: String
@@ -2508,10 +3579,69 @@ enum TerraformOperationState {
   SUCCEEDED
 }
 
+"""Input values for Terraform PLAN actions"""
+input TerraformPlanActionParameters {
+  """Zeet ID for a connected AWS Account"""
+  awsAccountID: UUID
+
+  """Zeet ID for a connected GCP Account"""
+  gcpAccountID: UUID
+
+  """Zeet ID for a connected DigitalOcean Account"""
+  doAccountID: UUID
+
+  """Region name, when applicable"""
+  region: String
+}
+
+"""Input values for Terraform PLAN_DESTROY actions"""
+input TerraformPlanDestroyActionParameters {
+  """Zeet ID for a connected AWS Account"""
+  awsAccountID: UUID
+
+  """Zeet ID for a connected GCP Account"""
+  gcpAccountID: UUID
+
+  """Zeet ID for a connected DigitalOcean Account"""
+  doAccountID: UUID
+
+  """Region name, when applicable"""
+  region: String
+}
+
+type TerraformProjectV3Configuration {
+  stateBackend: TerraformStateBackend!
+}
+
+input TerraformProjectV3ConfigurationInput {
+  stateBackend: TerraformStateBackendInput!
+}
+
 type TerraformRegistry {
   id: ID!
   url: URL
   module(id: ID!): TerraformModule!
+}
+
+type TerraformRegistrySource {
+  source: String!
+  version: String
+}
+
+input TerraformRegistrySourceInput {
+  source: String!
+  version: String
+}
+
+type TerraformStateBackend {
+  awsAccount: UUID
+  gcpAccount: UUID
+  region: String
+}
+
+input TerraformStateBackendInput {
+  s3Bucket: S3BucketBackendInput
+  gcsBucket: GCSBucketBackendInput
 }
 
 scalar Time
@@ -2543,6 +3673,28 @@ input TransferProjectInput {
   to: ID!
 }
 
+input UpdateAWSAccountInput {
+  id: UUID!
+  name: String
+}
+
+input UpdateAzureAccountInput {
+  id: UUID!
+  name: String
+  subscriptionID: String
+  tenantID: String
+  clientID: String
+  clientSecret: String
+}
+
+input UpdateBlueprintInput {
+  displayName: String
+  published: Boolean
+  slug: String
+  configuration: BlueprintConfigurationUpdate
+  richInputSchema: JSON
+}
+
 input UpdateBranchInput {
   id: UUID
   repoID: UUID
@@ -2558,6 +3710,12 @@ input UpdateCDNInput {
   domains: [String!]
 }
 
+input UpdateClusterAddOn {
+  slug: String!
+  state: ClusterAddOnState!
+  helmValues: YAML
+}
+
 input UpdateClusterDomainInput {
   domain: String!
   clusterID: UUID!
@@ -2566,9 +3724,23 @@ input UpdateClusterDomainInput {
 input UpdateClusterInput {
   id: UUID!
   kubeconfig: Upload
+  name: String
   containerRepository: String
   containerCacheRepository: String
   containerRegistryID: UUID
+
+  """
+  The new configuration for cluster add-ons. When this field is provided (i.e. not-null), it must include
+  _all_ cluster add-ons present in `Cluster.addOns`, even if some of the add-ons are not being modified.
+  
+  This is because once an add-on is added to a cluster, it cannot be _removed_, only _disabled_.
+  """
+  addOns: [UpdateClusterAddOn!]
+}
+
+input UpdateCoreWeaveAccountInput {
+  id: UUID!
+  name: String
 }
 
 input updateDatabaseLinkInput {
@@ -2576,15 +3748,44 @@ input updateDatabaseLinkInput {
   envPrefix: String
 }
 
+input UpdateDOAccountInput {
+  id: UUID!
+  name: String
+}
+
+input UpdateGCPAccountInput {
+  id: UUID!
+  name: String
+}
+
+input UpdateGitlabIntegrationInput {
+  id: UUID!
+  name: String
+  apiUrl: URL
+  accessToken: String
+}
+
 input UpdateIPFSServiceInput {
   id: UUID!
   accessToken: String
+}
+
+input UpdateLinodeAccountInput {
+  id: UUID!
+  name: String
+}
+
+input UpdateMarketplaceBlueprintInput {
+  userID: UUID!
+  blueprintID: UUID!
+  enabled: Boolean
 }
 
 input UpdateProjectDangerInput {
   id: UUID!
   namespace: String
   appID: String
+  defaultIngressDomain: String
   deployTarget: ProjectDeployInput
 }
 
@@ -2600,16 +3801,21 @@ input UpdateProjectInput {
   name: String
   dockerImage: String
   githubIntegration: GitHubRepoIntegrationInput
+  gitlabIntegration: GitlabRepoIntegrationInput
   buildType: String
   dockerfilePath: String
+  dockerfileText: String
   workingDirectory: String
   buildCommand: String
   runCommand: String
   staticPath: String
   releaseCommand: String
   nodejsVersion: String
+  pythonVersion: String
+  golangVersion: String
   noBuildCache: Boolean
   kanikoFlags: KanikoFlagsInput
+  alternativeImageTagTemplates: [String!]
   volumes: JSON
   ports: JSON
   replication: [ReplicationInput!]
@@ -2635,14 +3841,20 @@ input UpdateProjectInput {
   helmValues: String
   terraformVersion: String
   terraformVariables: String
+  manifests: [String!]
+  manifestValue: String
+  manifest: ResourceKubernetesManifestInput
   awsIamRole: String
   gcpServiceAccount: String
   clusterIssuerName: String
   logShipper: LogShipperInput
   deployService: Boolean
+  deployJob: Boolean
   cronJobSchedule: String
   productionBranch: String
-  containerRegistry: UUID
+  containerRepository: String
+  containerCacheRepository: String
+  containerRegistryID: UUID
   nodeSelector: JSON
   secretMounts: [KubernetesSecretMountInput!]
   kubernetesCustomization: KubernetesCustomizationInput
@@ -2669,11 +3881,27 @@ input UpdateProjectV2Input {
   envs: [EnvVarInput!]
 }
 
+input UpdateProjectV3Input {
+  name: String
+  requirePlanApproval: Boolean
+  variables: [BlueprintVariableInput!]
+  projectID: UUID
+  environmentID: UUID
+}
+
 input UpdateRepoCustomDomainInput {
   id: UUID!
   disableCertManager: Boolean
   certManagerChallengerType: CertManagerChallengeType
   syncDomainID: UUID
+}
+
+input UpdateRepoPipelineLinkInput {
+  id: UUID!
+  sourceEvent: RepoEvent
+  targetRepoID: UUID
+  targetEnvironmentID: UUID
+  targetAction: RepoAction
 }
 
 input UpdateTeamInput {
@@ -2700,6 +3928,11 @@ input UpdateUserInput {
   email: String
 }
 
+input UpdateVultrAccountInput {
+  id: UUID!
+  name: String
+}
+
 input UpdateWebhookIntegrationInput {
   userID: UUID!
   id: UUID!
@@ -2712,7 +3945,7 @@ scalar URL
 
 type User implements ProfileOwner & ProjectOwner {
   id: ID!
-  login: String!
+  login: Login!
   name: String!
   avatar: URL
   isTeam: Boolean
@@ -2753,6 +3986,8 @@ type User implements ProfileOwner & ProjectOwner {
   doAccounts: [DOAccount!]
   linodeAccount(id: UUID!): LinodeAccount
   linodeAccounts: [LinodeAccount!]
+  vultrAccount(id: UUID!): VultrAccount
+  vultrAccounts: [VultrAccount!]
   coreweaveAccount(id: UUID!): CoreWeaveAccount
   coreweaveAccounts: [CoreWeaveAccount!]
   cloudAccount(id: ID!): CloudAccount
@@ -2764,6 +3999,16 @@ type User implements ProfileOwner & ProjectOwner {
   containerRegistries: [ContainerRegistry!]
   integrations: [Integration!]
   ipfsServices: [IPFSService!]
+  azureAccount(id: UUID!): AzureAccount
+  azureAccounts: [AzureAccount!]
+  blueprints(page: PageInput): BlueprintConnection
+  blueprint(id: UUID!): Blueprint
+  projectV3(id: UUID!): ProjectV3
+  projectV3s(filter: FilterInput!): ProjectV3Connection
+  projectV3DriverActionExecutions(filter: FilterInput!): BlueprintDriverActionExecutionConnection
+  projectV3Adapters(filter: FilterInput!): ProjectV3AdapterConnection
+  eventIntegrations: [EventIntegration!]
+  permissions: UserPermissionsConnection
 }
 
 enum UserAction {
@@ -2775,11 +4020,25 @@ type UserAuth {
   authToken: String!
 }
 
+input UserFilter {
+  ids: MultiEntityCriterion
+}
+
 type UserIamConnection {
   userId: String!
   awsIamArn: String!
   awsAccountId: String!
   id: UUID!
+}
+
+type UserPermissionsConnection {
+  principal: User
+  user(userID: UUID!): UserPermissionsUserConnection
+}
+
+type UserPermissionsUserConnection {
+  user: User
+  mutations: [PermissibleMutation!]!
 }
 
 type UserTeamEdge {
@@ -2790,6 +4049,8 @@ type UserTeamEdge {
 }
 
 scalar UUID
+
+scalar VariableValueInput
 
 type Volume {
   id: ID!
@@ -2804,6 +4065,19 @@ input VolumeInput {
 type VolumeSpec {
   size: Int!
   mountPath: String!
+}
+
+type VultrAccount {
+  id: UUID!
+  name: String!
+  state: CloudAccountState!
+  accessToken: String
+  connected: Boolean
+  clusters: [Cluster!]
+  projects(input: ProjectsInput): ProjectConnection
+  createdAt: Time!
+  updatedAt: Time!
+  networks: [Network!]
 }
 
 type Web3Challenge {

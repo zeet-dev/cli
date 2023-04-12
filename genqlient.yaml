@@ -15,3 +15,7 @@ bindings:
   # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
   Upload:
     type: string
+  Login:
+    type: string
+  JSON:
+    type: string

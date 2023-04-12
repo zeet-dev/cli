@@ -13,6 +13,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zeet-dev/cli/internal/config"
+	"github.com/zeet-dev/cli/pkg/cmd/blueprint"
 	"github.com/zeet-dev/cli/pkg/cmd/build"
 	"github.com/zeet-dev/cli/pkg/cmd/cloud"
 	"github.com/zeet-dev/cli/pkg/cmd/cluster"
@@ -35,6 +36,9 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 	rootCmd.AddCommand(NewLoginCmd(f))
 	rootCmd.AddCommand(NewLogoutCmd(f))
 	rootCmd.AddCommand(NewLogsCmd(f))
+
+	// Blueprint Commands
+	rootCmd.AddCommand(blueprint.NewBlueprintCmd(f))
 
 	// Project Commands
 	rootCmd.AddCommand(NewDeployCmd(f))
