@@ -11,6 +11,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type AdapterStatusCriterion struct {
+	Value []string `json:"value"`
+}
+
+// GetValue returns AdapterStatusCriterion.Value, and is useful for accessing the field via an interface.
+func (v *AdapterStatusCriterion) GetValue() []string { return v.Value }
+
 // BlueprintConnection includes the requested fields of the GraphQL type BlueprintConnection.
 type BlueprintConnection struct {
 	TotalCount int                                 `json:"totalCount"`
@@ -129,6 +136,15 @@ func (v *BlueprintConnectionNodesBlueprint) __premarshalJSON() (*__premarshalBlu
 	return &retval, nil
 }
 
+type BlueprintDriverAction string
+
+const (
+	BlueprintDriverActionPlanDestroy BlueprintDriverAction = "PLAN_DESTROY"
+	BlueprintDriverActionPlan        BlueprintDriverAction = "PLAN"
+	BlueprintDriverActionApprove     BlueprintDriverAction = "APPROVE"
+	BlueprintDriverActionApply       BlueprintDriverAction = "APPLY"
+)
+
 // BlueprintSummary includes the GraphQL fields of Blueprint requested by the fragment BlueprintSummary.
 type BlueprintSummary struct {
 	Id              uuid.UUID     `json:"id"`
@@ -205,7 +221,27 @@ const (
 	ClusterProviderDoks      ClusterProvider = "DOKS"
 	ClusterProviderCoreweave ClusterProvider = "COREWEAVE"
 	ClusterProviderLke       ClusterProvider = "LKE"
+	ClusterProviderVke       ClusterProvider = "VKE"
 )
+
+type DeployableDriverActionExecutionFilter struct {
+	Ids         MultiEntityCriterion      `json:"ids"`
+	ActionTypes DriverActionTypeCriterion `json:"actionTypes"`
+	ResourceIds MultiEntityCriterion      `json:"resourceIds"`
+}
+
+// GetIds returns DeployableDriverActionExecutionFilter.Ids, and is useful for accessing the field via an interface.
+func (v *DeployableDriverActionExecutionFilter) GetIds() MultiEntityCriterion { return v.Ids }
+
+// GetActionTypes returns DeployableDriverActionExecutionFilter.ActionTypes, and is useful for accessing the field via an interface.
+func (v *DeployableDriverActionExecutionFilter) GetActionTypes() DriverActionTypeCriterion {
+	return v.ActionTypes
+}
+
+// GetResourceIds returns DeployableDriverActionExecutionFilter.ResourceIds, and is useful for accessing the field via an interface.
+func (v *DeployableDriverActionExecutionFilter) GetResourceIds() MultiEntityCriterion {
+	return v.ResourceIds
+}
 
 type DeploymentStatus string
 
@@ -225,6 +261,17 @@ const (
 	DeploymentStatusDeployCrashing    DeploymentStatus = "DEPLOY_CRASHING"
 )
 
+type DriverActionTypeCriterion struct {
+	Value    []BlueprintDriverAction     `json:"value"`
+	Operator FilterCriterionOperatorType `json:"operator"`
+}
+
+// GetValue returns DriverActionTypeCriterion.Value, and is useful for accessing the field via an interface.
+func (v *DriverActionTypeCriterion) GetValue() []BlueprintDriverAction { return v.Value }
+
+// GetOperator returns DriverActionTypeCriterion.Operator, and is useful for accessing the field via an interface.
+func (v *DriverActionTypeCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+
 type EnvVarInput struct {
 	Name   string `json:"name"`
 	Value  string `json:"value"`
@@ -239,6 +286,90 @@ func (v *EnvVarInput) GetValue() string { return v.Value }
 
 // GetSealed returns EnvVarInput.Sealed, and is useful for accessing the field via an interface.
 func (v *EnvVarInput) GetSealed() bool { return v.Sealed }
+
+type FilterCriterion struct {
+	UserFilter                            UserFilter                            `json:"userFilter"`
+	ResourceFilter                        ResourceFilter                        `json:"resourceFilter"`
+	RepoFilter                            RepoFilter                            `json:"repoFilter"`
+	DeployableDriverActionExecutionFilter DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter"`
+	ResourceAdapterFilter                 ResourceAdapterFilter                 `json:"resourceAdapterFilter"`
+}
+
+// GetUserFilter returns FilterCriterion.UserFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetUserFilter() UserFilter { return v.UserFilter }
+
+// GetResourceFilter returns FilterCriterion.ResourceFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetResourceFilter() ResourceFilter { return v.ResourceFilter }
+
+// GetRepoFilter returns FilterCriterion.RepoFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetRepoFilter() RepoFilter { return v.RepoFilter }
+
+// GetDeployableDriverActionExecutionFilter returns FilterCriterion.DeployableDriverActionExecutionFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetDeployableDriverActionExecutionFilter() DeployableDriverActionExecutionFilter {
+	return v.DeployableDriverActionExecutionFilter
+}
+
+// GetResourceAdapterFilter returns FilterCriterion.ResourceAdapterFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetResourceAdapterFilter() ResourceAdapterFilter {
+	return v.ResourceAdapterFilter
+}
+
+type FilterCriterionOperatorType string
+
+const (
+	FilterCriterionOperatorTypeEquals    FilterCriterionOperatorType = "EQUALS"
+	FilterCriterionOperatorTypeNotEquals FilterCriterionOperatorType = "NOT_EQUALS"
+	FilterCriterionOperatorTypeIncludes  FilterCriterionOperatorType = "INCLUDES"
+	FilterCriterionOperatorTypeExcludes  FilterCriterionOperatorType = "EXCLUDES"
+	FilterCriterionOperatorTypeStarts    FilterCriterionOperatorType = "STARTS"
+	FilterCriterionOperatorTypeEnds      FilterCriterionOperatorType = "ENDS"
+	FilterCriterionOperatorTypeContains  FilterCriterionOperatorType = "CONTAINS"
+)
+
+type FilterExpression struct {
+	Operator FilterExpressionOperator `json:"operator"`
+	Filters  []FilterNode             `json:"filters"`
+}
+
+// GetOperator returns FilterExpression.Operator, and is useful for accessing the field via an interface.
+func (v *FilterExpression) GetOperator() FilterExpressionOperator { return v.Operator }
+
+// GetFilters returns FilterExpression.Filters, and is useful for accessing the field via an interface.
+func (v *FilterExpression) GetFilters() []FilterNode { return v.Filters }
+
+type FilterExpressionOperator string
+
+const (
+	FilterExpressionOperatorAnd FilterExpressionOperator = "AND"
+	FilterExpressionOperatorOr  FilterExpressionOperator = "OR"
+	FilterExpressionOperatorNot FilterExpressionOperator = "NOT"
+)
+
+type FilterInput struct {
+	Sort   *SortInput `json:"sort"`
+	Page   PageInput  `json:"page"`
+	Filter FilterNode `json:"filter"`
+}
+
+// GetSort returns FilterInput.Sort, and is useful for accessing the field via an interface.
+func (v *FilterInput) GetSort() *SortInput { return v.Sort }
+
+// GetPage returns FilterInput.Page, and is useful for accessing the field via an interface.
+func (v *FilterInput) GetPage() PageInput { return v.Page }
+
+// GetFilter returns FilterInput.Filter, and is useful for accessing the field via an interface.
+func (v *FilterInput) GetFilter() FilterNode { return v.Filter }
+
+type FilterNode struct {
+	Expression *FilterExpression `json:"expression"`
+	Criterion  *FilterCriterion  `json:"criterion"`
+}
+
+// GetExpression returns FilterNode.Expression, and is useful for accessing the field via an interface.
+func (v *FilterNode) GetExpression() *FilterExpression { return v.Expression }
+
+// GetCriterion returns FilterNode.Criterion, and is useful for accessing the field via an interface.
+func (v *FilterNode) GetCriterion() *FilterCriterion { return v.Criterion }
 
 // GetCloudAWSCurrentUser includes the requested fields of the GraphQL type User.
 type GetCloudAWSCurrentUser struct {
@@ -382,6 +513,13 @@ const (
 	JobRunStateJobRunPendingApproval JobRunState = "JOB_RUN_PENDING_APPROVAL"
 )
 
+type MultiEntityCriterion struct {
+	Value []uuid.UUID `json:"value"`
+}
+
+// GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
+func (v *MultiEntityCriterion) GetValue() []uuid.UUID { return v.Value }
+
 // PageInfo includes the requested fields of the GraphQL type PageInfo.
 type PageInfo struct {
 	StartCursor     string `json:"startCursor"`
@@ -428,6 +566,202 @@ func (v *PageInput) GetFilter() string { return v.Filter }
 
 // GetSort returns PageInput.Sort, and is useful for accessing the field via an interface.
 func (v *PageInput) GetSort() string { return v.Sort }
+
+// ProjectV3AdapterConnection includes the requested fields of the GraphQL type ProjectV3AdapterConnection.
+type ProjectV3AdapterConnection struct {
+	TotalCount int                                               `json:"totalCount"`
+	PageInfo   PageInfo                                          `json:"pageInfo"`
+	Nodes      []ProjectV3AdapterConnectionNodesProjectV3Adapter `json:"nodes"`
+}
+
+// GetTotalCount returns ProjectV3AdapterConnection.TotalCount, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnection) GetTotalCount() int { return v.TotalCount }
+
+// GetPageInfo returns ProjectV3AdapterConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnection) GetPageInfo() PageInfo { return v.PageInfo }
+
+// GetNodes returns ProjectV3AdapterConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnection) GetNodes() []ProjectV3AdapterConnectionNodesProjectV3Adapter {
+	return v.Nodes
+}
+
+// ProjectV3AdapterConnectionNodesProjectV3Adapter includes the requested fields of the GraphQL type ProjectV3Adapter.
+type ProjectV3AdapterConnectionNodesProjectV3Adapter struct {
+	ProjectV3AdapterSummary `json:"-"`
+}
+
+// GetId returns ProjectV3AdapterConnectionNodesProjectV3Adapter.Id, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetId() uuid.UUID {
+	return v.ProjectV3AdapterSummary.Id
+}
+
+// GetName returns ProjectV3AdapterConnectionNodesProjectV3Adapter.Name, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetName() string {
+	return v.ProjectV3AdapterSummary.Name
+}
+
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*ProjectV3AdapterConnectionNodesProjectV3Adapter
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.ProjectV3AdapterConnectionNodesProjectV3Adapter = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ProjectV3AdapterSummary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalProjectV3AdapterConnectionNodesProjectV3Adapter struct {
+	Id uuid.UUID `json:"id"`
+
+	Name string `json:"name"`
+}
+
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) __premarshalJSON() (*__premarshalProjectV3AdapterConnectionNodesProjectV3Adapter, error) {
+	var retval __premarshalProjectV3AdapterConnectionNodesProjectV3Adapter
+
+	retval.Id = v.ProjectV3AdapterSummary.Id
+	retval.Name = v.ProjectV3AdapterSummary.Name
+	return &retval, nil
+}
+
+// ProjectV3AdapterSummary includes the GraphQL fields of ProjectV3Adapter requested by the fragment ProjectV3AdapterSummary.
+type ProjectV3AdapterSummary struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns ProjectV3AdapterSummary.Id, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummary) GetId() uuid.UUID { return v.Id }
+
+// GetName returns ProjectV3AdapterSummary.Name, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummary) GetName() string { return v.Name }
+
+type RepoFilter struct {
+	Status RepoStatusCriterion `json:"status"`
+}
+
+// GetStatus returns RepoFilter.Status, and is useful for accessing the field via an interface.
+func (v *RepoFilter) GetStatus() RepoStatusCriterion { return v.Status }
+
+type RepoStatusCriterion struct {
+	Value    string                      `json:"value"`
+	Operator FilterCriterionOperatorType `json:"operator"`
+}
+
+// GetValue returns RepoStatusCriterion.Value, and is useful for accessing the field via an interface.
+func (v *RepoStatusCriterion) GetValue() string { return v.Value }
+
+// GetOperator returns RepoStatusCriterion.Operator, and is useful for accessing the field via an interface.
+func (v *RepoStatusCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+
+type ResourceAdapterFilter struct {
+	Ids             MultiEntityCriterion   `json:"ids"`
+	RepoIds         MultiEntityCriterion   `json:"repoIds"`
+	ResourceIds     MultiEntityCriterion   `json:"resourceIds"`
+	DeployableIds   MultiEntityCriterion   `json:"deployableIds"`
+	Name            StringCriterion        `json:"name"`
+	Status          AdapterStatusCriterion `json:"status"`
+	ProjectName     StringCriterion        `json:"projectName"`
+	EnvironmentName StringCriterion        `json:"environmentName"`
+}
+
+// GetIds returns ResourceAdapterFilter.Ids, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetIds() MultiEntityCriterion { return v.Ids }
+
+// GetRepoIds returns ResourceAdapterFilter.RepoIds, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetRepoIds() MultiEntityCriterion { return v.RepoIds }
+
+// GetResourceIds returns ResourceAdapterFilter.ResourceIds, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetResourceIds() MultiEntityCriterion { return v.ResourceIds }
+
+// GetDeployableIds returns ResourceAdapterFilter.DeployableIds, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetDeployableIds() MultiEntityCriterion { return v.DeployableIds }
+
+// GetName returns ResourceAdapterFilter.Name, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetName() StringCriterion { return v.Name }
+
+// GetStatus returns ResourceAdapterFilter.Status, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetStatus() AdapterStatusCriterion { return v.Status }
+
+// GetProjectName returns ResourceAdapterFilter.ProjectName, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetProjectName() StringCriterion { return v.ProjectName }
+
+// GetEnvironmentName returns ResourceAdapterFilter.EnvironmentName, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetEnvironmentName() StringCriterion { return v.EnvironmentName }
+
+type ResourceFilter struct {
+	Ids           MultiEntityCriterion `json:"ids"`
+	DeployableIds MultiEntityCriterion `json:"deployableIds"`
+	UserIds       MultiEntityCriterion `json:"userIds"`
+}
+
+// GetIds returns ResourceFilter.Ids, and is useful for accessing the field via an interface.
+func (v *ResourceFilter) GetIds() MultiEntityCriterion { return v.Ids }
+
+// GetDeployableIds returns ResourceFilter.DeployableIds, and is useful for accessing the field via an interface.
+func (v *ResourceFilter) GetDeployableIds() MultiEntityCriterion { return v.DeployableIds }
+
+// GetUserIds returns ResourceFilter.UserIds, and is useful for accessing the field via an interface.
+func (v *ResourceFilter) GetUserIds() MultiEntityCriterion { return v.UserIds }
+
+type SortDirection string
+
+const (
+	SortDirectionAsc  SortDirection = "ASC"
+	SortDirectionDesc SortDirection = "DESC"
+)
+
+type SortInput struct {
+	Direction SortDirection `json:"direction"`
+	Field     string        `json:"field"`
+}
+
+// GetDirection returns SortInput.Direction, and is useful for accessing the field via an interface.
+func (v *SortInput) GetDirection() SortDirection { return v.Direction }
+
+// GetField returns SortInput.Field, and is useful for accessing the field via an interface.
+func (v *SortInput) GetField() string { return v.Field }
+
+type StringCriterion struct {
+	Value    string                      `json:"value"`
+	Operator FilterCriterionOperatorType `json:"operator"`
+}
+
+// GetValue returns StringCriterion.Value, and is useful for accessing the field via an interface.
+func (v *StringCriterion) GetValue() string { return v.Value }
+
+// GetOperator returns StringCriterion.Operator, and is useful for accessing the field via an interface.
+func (v *StringCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+
+type UserFilter struct {
+	Ids MultiEntityCriterion `json:"ids"`
+}
+
+// GetIds returns UserFilter.Ids, and is useful for accessing the field via an interface.
+func (v *UserFilter) GetIds() MultiEntityCriterion { return v.Ids }
 
 // __GetCloudAWSInput is used internally by genqlient
 type __GetCloudAWSInput struct {
@@ -656,6 +990,18 @@ type __getProjectPathInput struct {
 
 // GetId returns __getProjectPathInput.Id, and is useful for accessing the field via an interface.
 func (v *__getProjectPathInput) GetId() uuid.UUID { return v.Id }
+
+// __getProjectV3sInput is used internally by genqlient
+type __getProjectV3sInput struct {
+	UserId uuid.UUID   `json:"userId"`
+	Filter FilterInput `json:"filter"`
+}
+
+// GetUserId returns __getProjectV3sInput.UserId, and is useful for accessing the field via an interface.
+func (v *__getProjectV3sInput) GetUserId() uuid.UUID { return v.UserId }
+
+// GetFilter returns __getProjectV3sInput.Filter, and is useful for accessing the field via an interface.
+func (v *__getProjectV3sInput) GetFilter() FilterInput { return v.Filter }
 
 // __getRepoInput is used internally by genqlient
 type __getRepoInput struct {
@@ -1623,6 +1969,24 @@ type getProjectPathResponse struct {
 // GetRepo returns getProjectPathResponse.Repo, and is useful for accessing the field via an interface.
 func (v *getProjectPathResponse) GetRepo() getProjectPathRepo { return v.Repo }
 
+// getProjectV3sResponse is returned by getProjectV3s on success.
+type getProjectV3sResponse struct {
+	User getProjectV3sUser `json:"user"`
+}
+
+// GetUser returns getProjectV3sResponse.User, and is useful for accessing the field via an interface.
+func (v *getProjectV3sResponse) GetUser() getProjectV3sUser { return v.User }
+
+// getProjectV3sUser includes the requested fields of the GraphQL type User.
+type getProjectV3sUser struct {
+	ProjectV3Adapters ProjectV3AdapterConnection `json:"projectV3Adapters"`
+}
+
+// GetProjectV3Adapters returns getProjectV3sUser.ProjectV3Adapters, and is useful for accessing the field via an interface.
+func (v *getProjectV3sUser) GetProjectV3Adapters() ProjectV3AdapterConnection {
+	return v.ProjectV3Adapters
+}
+
 // getRepoRepo includes the requested fields of the GraphQL type Repo.
 type getRepoRepo struct {
 	Id uuid.UUID `json:"id"`
@@ -1890,16 +2254,9 @@ func GetCloudAWS(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*GetCloudAWSResponse, error) {
-	__input := __GetCloudAWSInput{
-		Id: id,
-	}
-	var err error
-
-	var retval GetCloudAWSResponse
-	err = client.MakeRequest(
-		ctx,
-		"GetCloudAWS",
-		`
+	req := &graphql.Request{
+		OpName: "GetCloudAWS",
+		Query: `
 query GetCloudAWS ($id: UUID!) {
 	currentUser {
 		awsAccount(id: $id) {
@@ -1910,10 +2267,22 @@ query GetCloudAWS ($id: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__GetCloudAWSInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetCloudAWSResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func GetCloudDigitalOcean(
@@ -1921,16 +2290,9 @@ func GetCloudDigitalOcean(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*GetCloudDigitalOceanResponse, error) {
-	__input := __GetCloudDigitalOceanInput{
-		Id: id,
-	}
-	var err error
-
-	var retval GetCloudDigitalOceanResponse
-	err = client.MakeRequest(
-		ctx,
-		"GetCloudDigitalOcean",
-		`
+	req := &graphql.Request{
+		OpName: "GetCloudDigitalOcean",
+		Query: `
 query GetCloudDigitalOcean ($id: UUID!) {
 	currentUser {
 		doAccount(id: $id) {
@@ -1940,10 +2302,22 @@ query GetCloudDigitalOcean ($id: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__GetCloudDigitalOceanInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetCloudDigitalOceanResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func GetCloudGCP(
@@ -1951,16 +2325,9 @@ func GetCloudGCP(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*GetCloudGCPResponse, error) {
-	__input := __GetCloudGCPInput{
-		Id: id,
-	}
-	var err error
-
-	var retval GetCloudGCPResponse
-	err = client.MakeRequest(
-		ctx,
-		"GetCloudGCP",
-		`
+	req := &graphql.Request{
+		OpName: "GetCloudGCP",
+		Query: `
 query GetCloudGCP ($id: UUID!) {
 	currentUser {
 		gcpAccount(id: $id) {
@@ -1971,10 +2338,22 @@ query GetCloudGCP ($id: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__GetCloudGCPInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetCloudGCPResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func GetCloudLinode(
@@ -1982,16 +2361,9 @@ func GetCloudLinode(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*GetCloudLinodeResponse, error) {
-	__input := __GetCloudLinodeInput{
-		Id: id,
-	}
-	var err error
-
-	var retval GetCloudLinodeResponse
-	err = client.MakeRequest(
-		ctx,
-		"GetCloudLinode",
-		`
+	req := &graphql.Request{
+		OpName: "GetCloudLinode",
+		Query: `
 query GetCloudLinode ($id: UUID!) {
 	currentUser {
 		linodeAccount(id: $id) {
@@ -2001,10 +2373,22 @@ query GetCloudLinode ($id: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__GetCloudLinodeInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data GetCloudLinodeResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func buildRepo(
@@ -2014,18 +2398,9 @@ func buildRepo(
 	branch string,
 	noCache bool,
 ) (*buildRepoResponse, error) {
-	__input := __buildRepoInput{
-		Id:      id,
-		Branch:  branch,
-		NoCache: noCache,
-	}
-	var err error
-
-	var retval buildRepoResponse
-	err = client.MakeRequest(
-		ctx,
-		"buildRepo",
-		`
+	req := &graphql.Request{
+		OpName: "buildRepo",
+		Query: `
 mutation buildRepo ($id: ID!, $branch: String, $noCache: Boolean) {
 	buildRepo(id: $id, branch: $branch, noCache: $noCache) {
 		deployments {
@@ -2038,10 +2413,24 @@ mutation buildRepo ($id: ID!, $branch: String, $noCache: Boolean) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__buildRepoInput{
+			Id:      id,
+			Branch:  branch,
+			NoCache: noCache,
+		},
+	}
+	var err error
+
+	var data buildRepoResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func buildRepoDefaultBranch(
@@ -2050,17 +2439,9 @@ func buildRepoDefaultBranch(
 	id uuid.UUID,
 	noCache bool,
 ) (*buildRepoDefaultBranchResponse, error) {
-	__input := __buildRepoDefaultBranchInput{
-		Id:      id,
-		NoCache: noCache,
-	}
-	var err error
-
-	var retval buildRepoDefaultBranchResponse
-	err = client.MakeRequest(
-		ctx,
-		"buildRepoDefaultBranch",
-		`
+	req := &graphql.Request{
+		OpName: "buildRepoDefaultBranch",
+		Query: `
 mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 	buildRepo(id: $id, noCache: $noCache) {
 		deployments {
@@ -2073,10 +2454,23 @@ mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__buildRepoDefaultBranchInput{
+			Id:      id,
+			NoCache: noCache,
+		},
+	}
+	var err error
+
+	var data buildRepoDefaultBranchResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func delete(
@@ -2084,24 +2478,29 @@ func delete(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*deleteResponse, error) {
-	__input := __deleteInput{
-		Id: id,
-	}
-	var err error
-
-	var retval deleteResponse
-	err = client.MakeRequest(
-		ctx,
-		"delete",
-		`
+	req := &graphql.Request{
+		OpName: "delete",
+		Query: `
 mutation delete ($id: ID!) {
 	deleteRepo(id: $id)
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__deleteInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data deleteResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func deleteBlueprint(
@@ -2109,24 +2508,29 @@ func deleteBlueprint(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*deleteBlueprintResponse, error) {
-	__input := __deleteBlueprintInput{
-		Id: id,
-	}
-	var err error
-
-	var retval deleteBlueprintResponse
-	err = client.MakeRequest(
-		ctx,
-		"deleteBlueprint",
-		`
+	req := &graphql.Request{
+		OpName: "deleteBlueprint",
+		Query: `
 mutation deleteBlueprint ($id: UUID!) {
 	deleteBlueprint(id: $id)
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__deleteBlueprintInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data deleteBlueprintResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func deployRepoBranch(
@@ -2135,17 +2539,9 @@ func deployRepoBranch(
 	branch string,
 	projectId uuid.UUID,
 ) (*deployRepoBranchResponse, error) {
-	__input := __deployRepoBranchInput{
-		Branch:    branch,
-		ProjectId: projectId,
-	}
-	var err error
-
-	var retval deployRepoBranchResponse
-	err = client.MakeRequest(
-		ctx,
-		"deployRepoBranch",
-		`
+	req := &graphql.Request{
+		OpName: "deployRepoBranch",
+		Query: `
 mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 	deployRepoBranch(input: {id:$projectId,branch:$branch}) {
 		deployments {
@@ -2158,10 +2554,23 @@ mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__deployRepoBranchInput{
+			Branch:    branch,
+			ProjectId: projectId,
+		},
+	}
+	var err error
+
+	var data deployRepoBranchResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getBlueprint(
@@ -2170,17 +2579,9 @@ func getBlueprint(
 	userID uuid.UUID,
 	blueprintID uuid.UUID,
 ) (*getBlueprintResponse, error) {
-	__input := __getBlueprintInput{
-		UserID:      userID,
-		BlueprintID: blueprintID,
-	}
-	var err error
-
-	var retval getBlueprintResponse
-	err = client.MakeRequest(
-		ctx,
-		"getBlueprint",
-		`
+	req := &graphql.Request{
+		OpName: "getBlueprint",
+		Query: `
 query getBlueprint ($userID: ID!, $blueprintID: UUID!) {
 	user(id: $userID) {
 		blueprint(id: $blueprintID) {
@@ -2199,10 +2600,23 @@ fragment BlueprintSummary on Blueprint {
 	tags
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getBlueprintInput{
+			UserID:      userID,
+			BlueprintID: blueprintID,
+		},
+	}
+	var err error
+
+	var data getBlueprintResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getBlueprints(
@@ -2211,17 +2625,9 @@ func getBlueprints(
 	userId uuid.UUID,
 	pageInput PageInput,
 ) (*getBlueprintsResponse, error) {
-	__input := __getBlueprintsInput{
-		UserId:    userId,
-		PageInput: pageInput,
-	}
-	var err error
-
-	var retval getBlueprintsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getBlueprints",
-		`
+	req := &graphql.Request{
+		OpName: "getBlueprints",
+		Query: `
 query getBlueprints ($userId: ID!, $pageInput: PageInput!) {
 	user(id: $userId) {
 		blueprints(page: $pageInput) {
@@ -2249,10 +2655,23 @@ fragment BlueprintSummary on Blueprint {
 	tags
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getBlueprintsInput{
+			UserId:    userId,
+			PageInput: pageInput,
+		},
+	}
+	var err error
+
+	var data getBlueprintsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getBuildLogs(
@@ -2260,16 +2679,9 @@ func getBuildLogs(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getBuildLogsResponse, error) {
-	__input := __getBuildLogsInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getBuildLogsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getBuildLogs",
-		`
+	req := &graphql.Request{
+		OpName: "getBuildLogs",
+		Query: `
 query getBuildLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2285,10 +2697,22 @@ query getBuildLogs ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getBuildLogsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getBuildLogsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getClusterKubeconfig(
@@ -2296,16 +2720,9 @@ func getClusterKubeconfig(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getClusterKubeconfigResponse, error) {
-	__input := __getClusterKubeconfigInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getClusterKubeconfigResponse
-	err = client.MakeRequest(
-		ctx,
-		"getClusterKubeconfig",
-		`
+	req := &graphql.Request{
+		OpName: "getClusterKubeconfig",
+		Query: `
 query getClusterKubeconfig ($id: UUID!) {
 	currentUser {
 		cluster(id: $id) {
@@ -2316,23 +2733,31 @@ query getClusterKubeconfig ($id: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getClusterKubeconfigInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getClusterKubeconfigResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getCurrentUser(
 	ctx context.Context,
 	client graphql.Client,
 ) (*getCurrentUserResponse, error) {
-	var err error
-
-	var retval getCurrentUserResponse
-	err = client.MakeRequest(
-		ctx,
-		"getCurrentUser",
-		`
+	req := &graphql.Request{
+		OpName: "getCurrentUser",
+		Query: `
 query getCurrentUser {
 	currentUser {
 		id
@@ -2340,10 +2765,19 @@ query getCurrentUser {
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data getCurrentUserResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getDeploymentInfo(
@@ -2351,16 +2785,9 @@ func getDeploymentInfo(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getDeploymentInfoResponse, error) {
-	__input := __getDeploymentInfoInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getDeploymentInfoResponse
-	err = client.MakeRequest(
-		ctx,
-		"getDeploymentInfo",
-		`
+	req := &graphql.Request{
+		OpName: "getDeploymentInfo",
+		Query: `
 query getDeploymentInfo ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2373,10 +2800,22 @@ query getDeploymentInfo ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getDeploymentInfoInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getDeploymentInfoResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getDeploymentLogs(
@@ -2384,16 +2823,9 @@ func getDeploymentLogs(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getDeploymentLogsResponse, error) {
-	__input := __getDeploymentLogsInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getDeploymentLogsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getDeploymentLogs",
-		`
+	req := &graphql.Request{
+		OpName: "getDeploymentLogs",
+		Query: `
 query getDeploymentLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2409,10 +2841,22 @@ query getDeploymentLogs ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getDeploymentLogsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getDeploymentLogsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getDeploymentReplicaStatus(
@@ -2420,16 +2864,9 @@ func getDeploymentReplicaStatus(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getDeploymentReplicaStatusResponse, error) {
-	__input := __getDeploymentReplicaStatusInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getDeploymentReplicaStatusResponse
-	err = client.MakeRequest(
-		ctx,
-		"getDeploymentReplicaStatus",
-		`
+	req := &graphql.Request{
+		OpName: "getDeploymentReplicaStatus",
+		Query: `
 query getDeploymentReplicaStatus ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2444,10 +2881,22 @@ query getDeploymentReplicaStatus ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getDeploymentReplicaStatusInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getDeploymentReplicaStatusResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getEnvVars(
@@ -2455,16 +2904,9 @@ func getEnvVars(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getEnvVarsResponse, error) {
-	__input := __getEnvVarsInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getEnvVarsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getEnvVars",
-		`
+	req := &graphql.Request{
+		OpName: "getEnvVars",
+		Query: `
 query getEnvVars ($id: ID!) {
 	currentUser {
 		repo(id: $id) {
@@ -2476,10 +2918,22 @@ query getEnvVars ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getEnvVarsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getEnvVarsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getJob(
@@ -2488,17 +2942,9 @@ func getJob(
 	projectID uuid.UUID,
 	jobID uuid.UUID,
 ) (*getJobResponse, error) {
-	__input := __getJobInput{
-		ProjectID: projectID,
-		JobID:     jobID,
-	}
-	var err error
-
-	var retval getJobResponse
-	err = client.MakeRequest(
-		ctx,
-		"getJob",
-		`
+	req := &graphql.Request{
+		OpName: "getJob",
+		Query: `
 query getJob ($projectID: UUID!, $jobID: UUID!) {
 	repo(id: $projectID) {
 		jobRun(id: $jobID) {
@@ -2508,10 +2954,23 @@ query getJob ($projectID: UUID!, $jobID: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getJobInput{
+			ProjectID: projectID,
+			JobID:     jobID,
+		},
+	}
+	var err error
+
+	var data getJobResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getJobLogs(
@@ -2520,17 +2979,9 @@ func getJobLogs(
 	repoID uuid.UUID,
 	jobID uuid.UUID,
 ) (*getJobLogsResponse, error) {
-	__input := __getJobLogsInput{
-		RepoID: repoID,
-		JobID:  jobID,
-	}
-	var err error
-
-	var retval getJobLogsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getJobLogs",
-		`
+	req := &graphql.Request{
+		OpName: "getJobLogs",
+		Query: `
 query getJobLogs ($repoID: UUID!, $jobID: UUID!) {
 	repo(id: $repoID) {
 		jobRun(id: $jobID) {
@@ -2544,10 +2995,23 @@ query getJobLogs ($repoID: UUID!, $jobID: UUID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getJobLogsInput{
+			RepoID: repoID,
+			JobID:  jobID,
+		},
+	}
+	var err error
+
+	var data getJobLogsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getLatestDeployment(
@@ -2556,17 +3020,9 @@ func getLatestDeployment(
 	project string,
 	branch string,
 ) (*getLatestDeploymentResponse, error) {
-	__input := __getLatestDeploymentInput{
-		Project: project,
-		Branch:  branch,
-	}
-	var err error
-
-	var retval getLatestDeploymentResponse
-	err = client.MakeRequest(
-		ctx,
-		"getLatestDeployment",
-		`
+	req := &graphql.Request{
+		OpName: "getLatestDeployment",
+		Query: `
 query getLatestDeployment ($project: String, $branch: String) {
 	repo(path: $project) {
 		branch(name: $branch) {
@@ -2581,10 +3037,23 @@ query getLatestDeployment ($project: String, $branch: String) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getLatestDeploymentInput{
+			Project: project,
+			Branch:  branch,
+		},
+	}
+	var err error
+
+	var data getLatestDeploymentResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getProductionBranch(
@@ -2592,16 +3061,9 @@ func getProductionBranch(
 	client graphql.Client,
 	repoId uuid.UUID,
 ) (*getProductionBranchResponse, error) {
-	__input := __getProductionBranchInput{
-		RepoId: repoId,
-	}
-	var err error
-
-	var retval getProductionBranchResponse
-	err = client.MakeRequest(
-		ctx,
-		"getProductionBranch",
-		`
+	req := &graphql.Request{
+		OpName: "getProductionBranch",
+		Query: `
 query getProductionBranch ($repoId: ID!) {
 	currentUser {
 		repo(id: $repoId) {
@@ -2613,10 +3075,22 @@ query getProductionBranch ($repoId: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getProductionBranchInput{
+			RepoId: repoId,
+		},
+	}
+	var err error
+
+	var data getProductionBranchResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getProductionDeployment(
@@ -2624,16 +3098,9 @@ func getProductionDeployment(
 	client graphql.Client,
 	project string,
 ) (*getProductionDeploymentResponse, error) {
-	__input := __getProductionDeploymentInput{
-		Project: project,
-	}
-	var err error
-
-	var retval getProductionDeploymentResponse
-	err = client.MakeRequest(
-		ctx,
-		"getProductionDeployment",
-		`
+	req := &graphql.Request{
+		OpName: "getProductionDeployment",
+		Query: `
 query getProductionDeployment ($project: String!) {
 	repo(path: $project) {
 		productionDeployment {
@@ -2645,10 +3112,22 @@ query getProductionDeployment ($project: String!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getProductionDeploymentInput{
+			Project: project,
+		},
+	}
+	var err error
+
+	var data getProductionDeploymentResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getProjectByPath(
@@ -2656,26 +3135,31 @@ func getProjectByPath(
 	client graphql.Client,
 	path string,
 ) (*getProjectByPathResponse, error) {
-	__input := __getProjectByPathInput{
-		Path: path,
-	}
-	var err error
-
-	var retval getProjectByPathResponse
-	err = client.MakeRequest(
-		ctx,
-		"getProjectByPath",
-		`
+	req := &graphql.Request{
+		OpName: "getProjectByPath",
+		Query: `
 query getProjectByPath ($path: String) {
 	repo(path: $path) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getProjectByPathInput{
+			Path: path,
+		},
+	}
+	var err error
+
+	var data getProjectByPathResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getProjectPath(
@@ -2683,26 +3167,80 @@ func getProjectPath(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getProjectPathResponse, error) {
-	__input := __getProjectPathInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getProjectPathResponse
-	err = client.MakeRequest(
-		ctx,
-		"getProjectPath",
-		`
+	req := &graphql.Request{
+		OpName: "getProjectPath",
+		Query: `
 query getProjectPath ($id: UUID!) {
 	repo(id: $id) {
 		fullPath
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getProjectPathInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getProjectPathResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
+}
+
+func getProjectV3s(
+	ctx context.Context,
+	client graphql.Client,
+	userId uuid.UUID,
+	filter FilterInput,
+) (*getProjectV3sResponse, error) {
+	req := &graphql.Request{
+		OpName: "getProjectV3s",
+		Query: `
+query getProjectV3s ($userId: ID!, $filter: FilterInput!) {
+	user(id: $userId) {
+		projectV3Adapters(filter: $filter) {
+			totalCount
+			pageInfo {
+				startCursor
+				endCursor
+				hasNextPage
+				hasPreviousPage
+			}
+			nodes {
+				... ProjectV3AdapterSummary
+			}
+		}
+	}
+}
+fragment ProjectV3AdapterSummary on ProjectV3Adapter {
+	id
+	name
+}
+`,
+		Variables: &__getProjectV3sInput{
+			UserId: userId,
+			Filter: filter,
+		},
+	}
+	var err error
+
+	var data getProjectV3sResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
 }
 
 func getRepo(
@@ -2710,26 +3248,31 @@ func getRepo(
 	client graphql.Client,
 	path string,
 ) (*getRepoResponse, error) {
-	__input := __getRepoInput{
-		Path: path,
-	}
-	var err error
-
-	var retval getRepoResponse
-	err = client.MakeRequest(
-		ctx,
-		"getRepo",
-		`
+	req := &graphql.Request{
+		OpName: "getRepo",
+		Query: `
 query getRepo ($path: String!) {
 	repo(path: $path) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getRepoInput{
+			Path: path,
+		},
+	}
+	var err error
+
+	var data getRepoResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func getRuntimeLogs(
@@ -2737,16 +3280,9 @@ func getRuntimeLogs(
 	client graphql.Client,
 	id uuid.UUID,
 ) (*getRuntimeLogsResponse, error) {
-	__input := __getRuntimeLogsInput{
-		Id: id,
-	}
-	var err error
-
-	var retval getRuntimeLogsResponse
-	err = client.MakeRequest(
-		ctx,
-		"getRuntimeLogs",
-		`
+	req := &graphql.Request{
+		OpName: "getRuntimeLogs",
+		Query: `
 query getRuntimeLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2758,23 +3294,31 @@ query getRuntimeLogs ($id: ID!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__getRuntimeLogsInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data getRuntimeLogsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func listClusters(
 	ctx context.Context,
 	client graphql.Client,
 ) (*listClustersResponse, error) {
-	var err error
-
-	var retval listClustersResponse
-	err = client.MakeRequest(
-		ctx,
-		"listClusters",
-		`
+	req := &graphql.Request{
+		OpName: "listClusters",
+		Query: `
 query listClusters {
 	currentUser {
 		clusters {
@@ -2788,10 +3332,19 @@ query listClusters {
 	}
 }
 `,
-		&retval,
-		nil,
+	}
+	var err error
+
+	var data listClustersResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func listClustersForTeam(
@@ -2799,16 +3352,9 @@ func listClustersForTeam(
 	client graphql.Client,
 	path string,
 ) (*listClustersForTeamResponse, error) {
-	__input := __listClustersForTeamInput{
-		Path: path,
-	}
-	var err error
-
-	var retval listClustersForTeamResponse
-	err = client.MakeRequest(
-		ctx,
-		"listClustersForTeam",
-		`
+	req := &graphql.Request{
+		OpName: "listClustersForTeam",
+		Query: `
 query listClustersForTeam ($path: String) {
 	team(path: $path) {
 		user {
@@ -2824,10 +3370,22 @@ query listClustersForTeam ($path: String) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__listClustersForTeamInput{
+			Path: path,
+		},
+	}
+	var err error
+
+	var data listClustersForTeamResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func runJob(
@@ -2837,18 +3395,9 @@ func runJob(
 	command string,
 	build bool,
 ) (*runJobResponse, error) {
-	__input := __runJobInput{
-		Id:      id,
-		Command: command,
-		Build:   build,
-	}
-	var err error
-
-	var retval runJobResponse
-	err = client.MakeRequest(
-		ctx,
-		"runJob",
-		`
+	req := &graphql.Request{
+		OpName: "runJob",
+		Query: `
 mutation runJob ($id: UUID!, $command: String!, $build: Boolean!) {
 	runJob(input: {id:$id,runCommand:$command,build:$build}) {
 		state
@@ -2856,10 +3405,24 @@ mutation runJob ($id: UUID!, $command: String!, $build: Boolean!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__runJobInput{
+			Id:      id,
+			Command: command,
+			Build:   build,
+		},
+	}
+	var err error
+
+	var data runJobResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func setEnvVars(
@@ -2868,17 +3431,9 @@ func setEnvVars(
 	id uuid.UUID,
 	envs []EnvVarInput,
 ) (*setEnvVarsResponse, error) {
-	__input := __setEnvVarsInput{
-		Id:   id,
-		Envs: envs,
-	}
-	var err error
-
-	var retval setEnvVarsResponse
-	err = client.MakeRequest(
-		ctx,
-		"setEnvVars",
-		`
+	req := &graphql.Request{
+		OpName: "setEnvVars",
+		Query: `
 mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 	setRepoEnvs(input: {id:$id,envs:$envs}) {
 		envs {
@@ -2887,10 +3442,23 @@ mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__setEnvVarsInput{
+			Id:   id,
+			Envs: envs,
+		},
+	}
+	var err error
+
+	var data setEnvVarsResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func updateBranch(
@@ -2901,29 +3469,34 @@ func updateBranch(
 	projectID uuid.UUID,
 	branchName string,
 ) (*updateBranchResponse, error) {
-	__input := __updateBranchInput{
-		Image:      image,
-		Deploy:     deploy,
-		ProjectID:  projectID,
-		BranchName: branchName,
-	}
-	var err error
-
-	var retval updateBranchResponse
-	err = client.MakeRequest(
-		ctx,
-		"updateBranch",
-		`
+	req := &graphql.Request{
+		OpName: "updateBranch",
+		Query: `
 mutation updateBranch ($image: String!, $deploy: Boolean, $projectID: UUID!, $branchName: String!) {
 	updateBranch(input: {image:$image,deploy:$deploy,repoID:$projectID,name:$branchName}) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__updateBranchInput{
+			Image:      image,
+			Deploy:     deploy,
+			ProjectID:  projectID,
+			BranchName: branchName,
+		},
+	}
+	var err error
+
+	var data updateBranchResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func updateCluster(
@@ -2932,27 +3505,32 @@ func updateCluster(
 	id uuid.UUID,
 	file string,
 ) (*updateClusterResponse, error) {
-	__input := __updateClusterInput{
-		Id:   id,
-		File: file,
-	}
-	var err error
-
-	var retval updateClusterResponse
-	err = client.MakeRequest(
-		ctx,
-		"updateCluster",
-		`
+	req := &graphql.Request{
+		OpName: "updateCluster",
+		Query: `
 mutation updateCluster ($id: UUID!, $file: Upload!) {
 	updateCluster(input: {id:$id,kubeconfig:$file}) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__updateClusterInput{
+			Id:   id,
+			File: file,
+		},
+	}
+	var err error
+
+	var data updateClusterResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
 
 func updateProject(
@@ -2961,25 +3539,30 @@ func updateProject(
 	projectID uuid.UUID,
 	image string,
 ) (*updateProjectResponse, error) {
-	__input := __updateProjectInput{
-		ProjectID: projectID,
-		Image:     image,
-	}
-	var err error
-
-	var retval updateProjectResponse
-	err = client.MakeRequest(
-		ctx,
-		"updateProject",
-		`
+	req := &graphql.Request{
+		OpName: "updateProject",
+		Query: `
 mutation updateProject ($projectID: ID!, $image: String!) {
 	updateProject(input: {id:$projectID,dockerImage:$image}) {
 		id
 	}
 }
 `,
-		&retval,
-		&__input,
+		Variables: &__updateProjectInput{
+			ProjectID: projectID,
+			Image:     image,
+		},
+	}
+	var err error
+
+	var data updateProjectResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
 	)
-	return &retval, err
+
+	return &data, err
 }
