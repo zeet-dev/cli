@@ -36,9 +36,9 @@ func runProjectList(opts *ProjectListOptions) error {
 			return nil, nil, nil, 0, err
 		}
 
-		filter := api.FilterInput{
-			Page: *pageInput,
-			Filter: api.FilterNode{},
+		filter := &api.FilterInput{
+			Page: pageInput,
+			Filter: &api.FilterNode{},
 		}
 
 		result, err := client.ListProjectV3s(ctx, filter)
@@ -62,7 +62,7 @@ func runProjectList(opts *ProjectListOptions) error {
 			})
 		}
 
-		return &title, rows, &info, result.TotalCount, nil
+		return &title, rows, info, *result.TotalCount, nil
 	}
 
 	return display.DisplayPaginatedTable(fetch)

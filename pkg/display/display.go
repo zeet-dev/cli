@@ -28,20 +28,21 @@ func DisplayPaginatedTable(fetch FetchFunction) (error) {
 		if err != nil {
 			return err
 		}
+		info := *pageInfo
 
 		PrintTabularData(title, rows)
 
-		start, err := strconv.Atoi(pageInfo.StartCursor)
+		start, err := strconv.Atoi(info.StartCursor)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("Showing %d-%s of %d.\n", start + 1, pageInfo.EndCursor, totalCount)
+		fmt.Printf("Showing %d-%s of %d.\n", start + 1, info.EndCursor, totalCount)
 
 		prompt := ""
-		if pageInfo.HasNextPage {
+		if info.HasNextPage {
 			prompt = prompt + "[n]ext page | "
 		}
-		if pageInfo.HasPreviousPage {
+		if info.HasPreviousPage {
 			prompt = prompt + "[p]revious page | "
 		}
 		if prompt != "" {
@@ -62,11 +63,11 @@ func DisplayPaginatedTable(fetch FetchFunction) (error) {
 		case "q":
 			return nil
 		case "n":
-			if pageInfo.HasNextPage {
-				pageInput.After = pageInfo.EndCursor
+			if info.HasNextPage {
+				pageInput.After = info.EndCursor
 			}
 		case "p":
-			if pageInfo.HasPreviousPage {
+			if info.HasPreviousPage {
 				pageInput.After = strconv.Itoa(start - pageInput.First)
 			}
 		}
