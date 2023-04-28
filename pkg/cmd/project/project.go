@@ -13,6 +13,7 @@ func NewProjectCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.AddCommand(NewProjectListCmd(f))
+	cmd.AddCommand(NewProjectShowCmd(f))
 
 	return cmd
 }

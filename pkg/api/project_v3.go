@@ -2,6 +2,9 @@ package api
 
 import (
 	"context"
+
+	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 )
 
 // Shared fragment
@@ -59,4 +62,33 @@ func (c *Client) ListProjectV3s(ctx context.Context, filterInput *FilterInput) (
 		adapters := res.User.ProjectV3Adapters
 
 		return adapters, err
+}
+
+func (c *Client) GetProjectV3(ctx context.Context, projectId uuid.UUID) (*ProjectV3AdapterSummary, error) {
+	filter := &FilterInput{
+		Page: &PageInput{
+			First: 1,
+			After: "0",
+		},
+		Filter: &FilterNode{
+			Criterion: &FilterCriterion{
+				ResourceAdapterFilter: &ResourceAdapterFilter{
+					Ids: &MultiEntityCriterion{
+						Value: []*uuid.UUID{
+							&projectId,
+						},
+					},
+				},
+			},
+		},
+	}
+
+	conn, err := c.ListProjectV3s(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	adapter := &ProjectV3AdapterSummary{}
+	err = copier.Copy(adapter, conn.Nodes[0])
+	return adapter, err
 }

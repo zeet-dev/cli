@@ -12,11 +12,11 @@ import (
 )
 
 type AdapterStatusCriterion struct {
-	Value []string `json:"value"`
+	Value []*string `json:"value"`
 }
 
 // GetValue returns AdapterStatusCriterion.Value, and is useful for accessing the field via an interface.
-func (v *AdapterStatusCriterion) GetValue() []string { return v.Value }
+func (v *AdapterStatusCriterion) GetValue() []*string { return v.Value }
 
 // BlueprintConnection includes the requested fields of the GraphQL type BlueprintConnection.
 type BlueprintConnection struct {
@@ -225,21 +225,21 @@ const (
 )
 
 type DeployableDriverActionExecutionFilter struct {
-	Ids         MultiEntityCriterion      `json:"ids"`
-	ActionTypes DriverActionTypeCriterion `json:"actionTypes"`
-	ResourceIds MultiEntityCriterion      `json:"resourceIds"`
+	Ids         *MultiEntityCriterion      `json:"ids"`
+	ActionTypes *DriverActionTypeCriterion `json:"actionTypes"`
+	ResourceIds *MultiEntityCriterion      `json:"resourceIds"`
 }
 
 // GetIds returns DeployableDriverActionExecutionFilter.Ids, and is useful for accessing the field via an interface.
-func (v *DeployableDriverActionExecutionFilter) GetIds() MultiEntityCriterion { return v.Ids }
+func (v *DeployableDriverActionExecutionFilter) GetIds() *MultiEntityCriterion { return v.Ids }
 
 // GetActionTypes returns DeployableDriverActionExecutionFilter.ActionTypes, and is useful for accessing the field via an interface.
-func (v *DeployableDriverActionExecutionFilter) GetActionTypes() DriverActionTypeCriterion {
+func (v *DeployableDriverActionExecutionFilter) GetActionTypes() *DriverActionTypeCriterion {
 	return v.ActionTypes
 }
 
 // GetResourceIds returns DeployableDriverActionExecutionFilter.ResourceIds, and is useful for accessing the field via an interface.
-func (v *DeployableDriverActionExecutionFilter) GetResourceIds() MultiEntityCriterion {
+func (v *DeployableDriverActionExecutionFilter) GetResourceIds() *MultiEntityCriterion {
 	return v.ResourceIds
 }
 
@@ -262,15 +262,15 @@ const (
 )
 
 type DriverActionTypeCriterion struct {
-	Value    []BlueprintDriverAction     `json:"value"`
-	Operator FilterCriterionOperatorType `json:"operator"`
+	Value    []*BlueprintDriverAction     `json:"value"`
+	Operator *FilterCriterionOperatorType `json:"operator"`
 }
 
 // GetValue returns DriverActionTypeCriterion.Value, and is useful for accessing the field via an interface.
-func (v *DriverActionTypeCriterion) GetValue() []BlueprintDriverAction { return v.Value }
+func (v *DriverActionTypeCriterion) GetValue() []*BlueprintDriverAction { return v.Value }
 
 // GetOperator returns DriverActionTypeCriterion.Operator, and is useful for accessing the field via an interface.
-func (v *DriverActionTypeCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+func (v *DriverActionTypeCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
 type EnvVarInput struct {
 	Name   string `json:"name"`
@@ -288,29 +288,29 @@ func (v *EnvVarInput) GetValue() string { return v.Value }
 func (v *EnvVarInput) GetSealed() bool { return v.Sealed }
 
 type FilterCriterion struct {
-	UserFilter                            UserFilter                            `json:"userFilter"`
-	ResourceFilter                        ResourceFilter                        `json:"resourceFilter"`
-	RepoFilter                            RepoFilter                            `json:"repoFilter"`
-	DeployableDriverActionExecutionFilter DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter"`
-	ResourceAdapterFilter                 ResourceAdapterFilter                 `json:"resourceAdapterFilter"`
+	UserFilter                            *UserFilter                            `json:"userFilter"`
+	ResourceFilter                        *ResourceFilter                        `json:"resourceFilter"`
+	RepoFilter                            *RepoFilter                            `json:"repoFilter"`
+	DeployableDriverActionExecutionFilter *DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter"`
+	ResourceAdapterFilter                 *ResourceAdapterFilter                 `json:"resourceAdapterFilter"`
 }
 
 // GetUserFilter returns FilterCriterion.UserFilter, and is useful for accessing the field via an interface.
-func (v *FilterCriterion) GetUserFilter() UserFilter { return v.UserFilter }
+func (v *FilterCriterion) GetUserFilter() *UserFilter { return v.UserFilter }
 
 // GetResourceFilter returns FilterCriterion.ResourceFilter, and is useful for accessing the field via an interface.
-func (v *FilterCriterion) GetResourceFilter() ResourceFilter { return v.ResourceFilter }
+func (v *FilterCriterion) GetResourceFilter() *ResourceFilter { return v.ResourceFilter }
 
 // GetRepoFilter returns FilterCriterion.RepoFilter, and is useful for accessing the field via an interface.
-func (v *FilterCriterion) GetRepoFilter() RepoFilter { return v.RepoFilter }
+func (v *FilterCriterion) GetRepoFilter() *RepoFilter { return v.RepoFilter }
 
 // GetDeployableDriverActionExecutionFilter returns FilterCriterion.DeployableDriverActionExecutionFilter, and is useful for accessing the field via an interface.
-func (v *FilterCriterion) GetDeployableDriverActionExecutionFilter() DeployableDriverActionExecutionFilter {
+func (v *FilterCriterion) GetDeployableDriverActionExecutionFilter() *DeployableDriverActionExecutionFilter {
 	return v.DeployableDriverActionExecutionFilter
 }
 
 // GetResourceAdapterFilter returns FilterCriterion.ResourceAdapterFilter, and is useful for accessing the field via an interface.
-func (v *FilterCriterion) GetResourceAdapterFilter() ResourceAdapterFilter {
+func (v *FilterCriterion) GetResourceAdapterFilter() *ResourceAdapterFilter {
 	return v.ResourceAdapterFilter
 }
 
@@ -327,15 +327,15 @@ const (
 )
 
 type FilterExpression struct {
-	Operator FilterExpressionOperator `json:"operator"`
-	Filters  []FilterNode             `json:"filters"`
+	Operator *FilterExpressionOperator `json:"operator"`
+	Filters  []*FilterNode             `json:"filters"`
 }
 
 // GetOperator returns FilterExpression.Operator, and is useful for accessing the field via an interface.
-func (v *FilterExpression) GetOperator() FilterExpressionOperator { return v.Operator }
+func (v *FilterExpression) GetOperator() *FilterExpressionOperator { return v.Operator }
 
 // GetFilters returns FilterExpression.Filters, and is useful for accessing the field via an interface.
-func (v *FilterExpression) GetFilters() []FilterNode { return v.Filters }
+func (v *FilterExpression) GetFilters() []*FilterNode { return v.Filters }
 
 type FilterExpressionOperator string
 
@@ -346,19 +346,19 @@ const (
 )
 
 type FilterInput struct {
-	Sort   *SortInput `json:"sort"`
-	Page   PageInput  `json:"page"`
-	Filter FilterNode `json:"filter"`
+	Sort   *SortInput  `json:"sort"`
+	Page   *PageInput  `json:"page"`
+	Filter *FilterNode `json:"filter"`
 }
 
 // GetSort returns FilterInput.Sort, and is useful for accessing the field via an interface.
 func (v *FilterInput) GetSort() *SortInput { return v.Sort }
 
 // GetPage returns FilterInput.Page, and is useful for accessing the field via an interface.
-func (v *FilterInput) GetPage() PageInput { return v.Page }
+func (v *FilterInput) GetPage() *PageInput { return v.Page }
 
 // GetFilter returns FilterInput.Filter, and is useful for accessing the field via an interface.
-func (v *FilterInput) GetFilter() FilterNode { return v.Filter }
+func (v *FilterInput) GetFilter() *FilterNode { return v.Filter }
 
 type FilterNode struct {
 	Expression *FilterExpression `json:"expression"`
@@ -514,11 +514,11 @@ const (
 )
 
 type MultiEntityCriterion struct {
-	Value []uuid.UUID `json:"value"`
+	Value []*uuid.UUID `json:"value"`
 }
 
 // GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
-func (v *MultiEntityCriterion) GetValue() []uuid.UUID { return v.Value }
+func (v *MultiEntityCriterion) GetValue() []*uuid.UUID { return v.Value }
 
 // PageInfo includes the requested fields of the GraphQL type PageInfo.
 type PageInfo struct {
@@ -569,19 +569,19 @@ func (v *PageInput) GetSort() string { return v.Sort }
 
 // ProjectV3AdapterConnection includes the requested fields of the GraphQL type ProjectV3AdapterConnection.
 type ProjectV3AdapterConnection struct {
-	TotalCount int                                               `json:"totalCount"`
-	PageInfo   PageInfo                                          `json:"pageInfo"`
-	Nodes      []ProjectV3AdapterConnectionNodesProjectV3Adapter `json:"nodes"`
+	TotalCount *int                                               `json:"totalCount"`
+	PageInfo   *PageInfo                                          `json:"pageInfo"`
+	Nodes      []*ProjectV3AdapterConnectionNodesProjectV3Adapter `json:"nodes"`
 }
 
 // GetTotalCount returns ProjectV3AdapterConnection.TotalCount, and is useful for accessing the field via an interface.
-func (v *ProjectV3AdapterConnection) GetTotalCount() int { return v.TotalCount }
+func (v *ProjectV3AdapterConnection) GetTotalCount() *int { return v.TotalCount }
 
 // GetPageInfo returns ProjectV3AdapterConnection.PageInfo, and is useful for accessing the field via an interface.
-func (v *ProjectV3AdapterConnection) GetPageInfo() PageInfo { return v.PageInfo }
+func (v *ProjectV3AdapterConnection) GetPageInfo() *PageInfo { return v.PageInfo }
 
 // GetNodes returns ProjectV3AdapterConnection.Nodes, and is useful for accessing the field via an interface.
-func (v *ProjectV3AdapterConnection) GetNodes() []ProjectV3AdapterConnectionNodesProjectV3Adapter {
+func (v *ProjectV3AdapterConnection) GetNodes() []*ProjectV3AdapterConnectionNodesProjectV3Adapter {
 	return v.Nodes
 }
 
@@ -598,6 +598,16 @@ func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetId() uuid.UUID {
 // GetName returns ProjectV3AdapterConnectionNodesProjectV3Adapter.Name, and is useful for accessing the field via an interface.
 func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetName() string {
 	return v.ProjectV3AdapterSummary.Name
+}
+
+// GetProjectV3 returns ProjectV3AdapterConnectionNodesProjectV3Adapter.ProjectV3, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetProjectV3() ProjectV3AdapterSummaryProjectV3 {
+	return v.ProjectV3AdapterSummary.ProjectV3
+}
+
+// GetRepo returns ProjectV3AdapterConnectionNodesProjectV3Adapter.Repo, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) GetRepo() ProjectV3AdapterSummaryRepo {
+	return v.ProjectV3AdapterSummary.Repo
 }
 
 func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) UnmarshalJSON(b []byte) error {
@@ -629,6 +639,10 @@ type __premarshalProjectV3AdapterConnectionNodesProjectV3Adapter struct {
 	Id uuid.UUID `json:"id"`
 
 	Name string `json:"name"`
+
+	ProjectV3 ProjectV3AdapterSummaryProjectV3 `json:"projectV3"`
+
+	Repo ProjectV3AdapterSummaryRepo `json:"repo"`
 }
 
 func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) MarshalJSON() ([]byte, error) {
@@ -644,13 +658,17 @@ func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) __premarshalJSON() (*_
 
 	retval.Id = v.ProjectV3AdapterSummary.Id
 	retval.Name = v.ProjectV3AdapterSummary.Name
+	retval.ProjectV3 = v.ProjectV3AdapterSummary.ProjectV3
+	retval.Repo = v.ProjectV3AdapterSummary.Repo
 	return &retval, nil
 }
 
 // ProjectV3AdapterSummary includes the GraphQL fields of ProjectV3Adapter requested by the fragment ProjectV3AdapterSummary.
 type ProjectV3AdapterSummary struct {
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	Id        uuid.UUID                        `json:"id"`
+	Name      string                           `json:"name"`
+	ProjectV3 ProjectV3AdapterSummaryProjectV3 `json:"projectV3"`
+	Repo      ProjectV3AdapterSummaryRepo      `json:"repo"`
 }
 
 // GetId returns ProjectV3AdapterSummary.Id, and is useful for accessing the field via an interface.
@@ -659,73 +677,103 @@ func (v *ProjectV3AdapterSummary) GetId() uuid.UUID { return v.Id }
 // GetName returns ProjectV3AdapterSummary.Name, and is useful for accessing the field via an interface.
 func (v *ProjectV3AdapterSummary) GetName() string { return v.Name }
 
+// GetProjectV3 returns ProjectV3AdapterSummary.ProjectV3, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummary) GetProjectV3() ProjectV3AdapterSummaryProjectV3 { return v.ProjectV3 }
+
+// GetRepo returns ProjectV3AdapterSummary.Repo, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummary) GetRepo() ProjectV3AdapterSummaryRepo { return v.Repo }
+
+// ProjectV3AdapterSummaryProjectV3 includes the requested fields of the GraphQL type ProjectV3.
+type ProjectV3AdapterSummaryProjectV3 struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns ProjectV3AdapterSummaryProjectV3.Id, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummaryProjectV3) GetId() uuid.UUID { return v.Id }
+
+// GetName returns ProjectV3AdapterSummaryProjectV3.Name, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummaryProjectV3) GetName() string { return v.Name }
+
+// ProjectV3AdapterSummaryRepo includes the requested fields of the GraphQL type Repo.
+type ProjectV3AdapterSummaryRepo struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns ProjectV3AdapterSummaryRepo.Id, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummaryRepo) GetId() uuid.UUID { return v.Id }
+
+// GetName returns ProjectV3AdapterSummaryRepo.Name, and is useful for accessing the field via an interface.
+func (v *ProjectV3AdapterSummaryRepo) GetName() string { return v.Name }
+
 type RepoFilter struct {
-	Status RepoStatusCriterion `json:"status"`
+	Status *RepoStatusCriterion `json:"status"`
 }
 
 // GetStatus returns RepoFilter.Status, and is useful for accessing the field via an interface.
-func (v *RepoFilter) GetStatus() RepoStatusCriterion { return v.Status }
+func (v *RepoFilter) GetStatus() *RepoStatusCriterion { return v.Status }
 
 type RepoStatusCriterion struct {
-	Value    string                      `json:"value"`
-	Operator FilterCriterionOperatorType `json:"operator"`
+	Value    *string                      `json:"value"`
+	Operator *FilterCriterionOperatorType `json:"operator"`
 }
 
 // GetValue returns RepoStatusCriterion.Value, and is useful for accessing the field via an interface.
-func (v *RepoStatusCriterion) GetValue() string { return v.Value }
+func (v *RepoStatusCriterion) GetValue() *string { return v.Value }
 
 // GetOperator returns RepoStatusCriterion.Operator, and is useful for accessing the field via an interface.
-func (v *RepoStatusCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+func (v *RepoStatusCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
 type ResourceAdapterFilter struct {
-	Ids             MultiEntityCriterion   `json:"ids"`
-	RepoIds         MultiEntityCriterion   `json:"repoIds"`
-	ResourceIds     MultiEntityCriterion   `json:"resourceIds"`
-	DeployableIds   MultiEntityCriterion   `json:"deployableIds"`
-	Name            StringCriterion        `json:"name"`
-	Status          AdapterStatusCriterion `json:"status"`
-	ProjectName     StringCriterion        `json:"projectName"`
-	EnvironmentName StringCriterion        `json:"environmentName"`
+	Ids             *MultiEntityCriterion   `json:"ids"`
+	RepoIds         *MultiEntityCriterion   `json:"repoIds"`
+	ResourceIds     *MultiEntityCriterion   `json:"resourceIds"`
+	DeployableIds   *MultiEntityCriterion   `json:"deployableIds"`
+	Name            *StringCriterion        `json:"name"`
+	Status          *AdapterStatusCriterion `json:"status"`
+	ProjectName     *StringCriterion        `json:"projectName"`
+	EnvironmentName *StringCriterion        `json:"environmentName"`
 }
 
 // GetIds returns ResourceAdapterFilter.Ids, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetIds() MultiEntityCriterion { return v.Ids }
+func (v *ResourceAdapterFilter) GetIds() *MultiEntityCriterion { return v.Ids }
 
 // GetRepoIds returns ResourceAdapterFilter.RepoIds, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetRepoIds() MultiEntityCriterion { return v.RepoIds }
+func (v *ResourceAdapterFilter) GetRepoIds() *MultiEntityCriterion { return v.RepoIds }
 
 // GetResourceIds returns ResourceAdapterFilter.ResourceIds, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetResourceIds() MultiEntityCriterion { return v.ResourceIds }
+func (v *ResourceAdapterFilter) GetResourceIds() *MultiEntityCriterion { return v.ResourceIds }
 
 // GetDeployableIds returns ResourceAdapterFilter.DeployableIds, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetDeployableIds() MultiEntityCriterion { return v.DeployableIds }
+func (v *ResourceAdapterFilter) GetDeployableIds() *MultiEntityCriterion { return v.DeployableIds }
 
 // GetName returns ResourceAdapterFilter.Name, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetName() StringCriterion { return v.Name }
+func (v *ResourceAdapterFilter) GetName() *StringCriterion { return v.Name }
 
 // GetStatus returns ResourceAdapterFilter.Status, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetStatus() AdapterStatusCriterion { return v.Status }
+func (v *ResourceAdapterFilter) GetStatus() *AdapterStatusCriterion { return v.Status }
 
 // GetProjectName returns ResourceAdapterFilter.ProjectName, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetProjectName() StringCriterion { return v.ProjectName }
+func (v *ResourceAdapterFilter) GetProjectName() *StringCriterion { return v.ProjectName }
 
 // GetEnvironmentName returns ResourceAdapterFilter.EnvironmentName, and is useful for accessing the field via an interface.
-func (v *ResourceAdapterFilter) GetEnvironmentName() StringCriterion { return v.EnvironmentName }
+func (v *ResourceAdapterFilter) GetEnvironmentName() *StringCriterion { return v.EnvironmentName }
 
 type ResourceFilter struct {
-	Ids           MultiEntityCriterion `json:"ids"`
-	DeployableIds MultiEntityCriterion `json:"deployableIds"`
-	UserIds       MultiEntityCriterion `json:"userIds"`
+	Ids           *MultiEntityCriterion `json:"ids"`
+	DeployableIds *MultiEntityCriterion `json:"deployableIds"`
+	UserIds       *MultiEntityCriterion `json:"userIds"`
 }
 
 // GetIds returns ResourceFilter.Ids, and is useful for accessing the field via an interface.
-func (v *ResourceFilter) GetIds() MultiEntityCriterion { return v.Ids }
+func (v *ResourceFilter) GetIds() *MultiEntityCriterion { return v.Ids }
 
 // GetDeployableIds returns ResourceFilter.DeployableIds, and is useful for accessing the field via an interface.
-func (v *ResourceFilter) GetDeployableIds() MultiEntityCriterion { return v.DeployableIds }
+func (v *ResourceFilter) GetDeployableIds() *MultiEntityCriterion { return v.DeployableIds }
 
 // GetUserIds returns ResourceFilter.UserIds, and is useful for accessing the field via an interface.
-func (v *ResourceFilter) GetUserIds() MultiEntityCriterion { return v.UserIds }
+func (v *ResourceFilter) GetUserIds() *MultiEntityCriterion { return v.UserIds }
 
 type SortDirection string
 
@@ -735,33 +783,33 @@ const (
 )
 
 type SortInput struct {
-	Direction SortDirection `json:"direction"`
-	Field     string        `json:"field"`
+	Direction *SortDirection `json:"direction"`
+	Field     *string        `json:"field"`
 }
 
 // GetDirection returns SortInput.Direction, and is useful for accessing the field via an interface.
-func (v *SortInput) GetDirection() SortDirection { return v.Direction }
+func (v *SortInput) GetDirection() *SortDirection { return v.Direction }
 
 // GetField returns SortInput.Field, and is useful for accessing the field via an interface.
-func (v *SortInput) GetField() string { return v.Field }
+func (v *SortInput) GetField() *string { return v.Field }
 
 type StringCriterion struct {
-	Value    string                      `json:"value"`
-	Operator FilterCriterionOperatorType `json:"operator"`
+	Value    *string                      `json:"value"`
+	Operator *FilterCriterionOperatorType `json:"operator"`
 }
 
 // GetValue returns StringCriterion.Value, and is useful for accessing the field via an interface.
-func (v *StringCriterion) GetValue() string { return v.Value }
+func (v *StringCriterion) GetValue() *string { return v.Value }
 
 // GetOperator returns StringCriterion.Operator, and is useful for accessing the field via an interface.
-func (v *StringCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
+func (v *StringCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
 type UserFilter struct {
-	Ids MultiEntityCriterion `json:"ids"`
+	Ids *MultiEntityCriterion `json:"ids"`
 }
 
 // GetIds returns UserFilter.Ids, and is useful for accessing the field via an interface.
-func (v *UserFilter) GetIds() MultiEntityCriterion { return v.Ids }
+func (v *UserFilter) GetIds() *MultiEntityCriterion { return v.Ids }
 
 // __GetCloudAWSInput is used internally by genqlient
 type __GetCloudAWSInput struct {
@@ -993,15 +1041,15 @@ func (v *__getProjectPathInput) GetId() uuid.UUID { return v.Id }
 
 // __getProjectV3sInput is used internally by genqlient
 type __getProjectV3sInput struct {
-	UserId uuid.UUID   `json:"userId"`
-	Filter FilterInput `json:"filter"`
+	UserId *uuid.UUID   `json:"userId"`
+	Filter *FilterInput `json:"filter"`
 }
 
 // GetUserId returns __getProjectV3sInput.UserId, and is useful for accessing the field via an interface.
-func (v *__getProjectV3sInput) GetUserId() uuid.UUID { return v.UserId }
+func (v *__getProjectV3sInput) GetUserId() *uuid.UUID { return v.UserId }
 
 // GetFilter returns __getProjectV3sInput.Filter, and is useful for accessing the field via an interface.
-func (v *__getProjectV3sInput) GetFilter() FilterInput { return v.Filter }
+func (v *__getProjectV3sInput) GetFilter() *FilterInput { return v.Filter }
 
 // __getRepoInput is used internally by genqlient
 type __getRepoInput struct {
@@ -1971,19 +2019,19 @@ func (v *getProjectPathResponse) GetRepo() getProjectPathRepo { return v.Repo }
 
 // getProjectV3sResponse is returned by getProjectV3s on success.
 type getProjectV3sResponse struct {
-	User getProjectV3sUser `json:"user"`
+	User *getProjectV3sUser `json:"user"`
 }
 
 // GetUser returns getProjectV3sResponse.User, and is useful for accessing the field via an interface.
-func (v *getProjectV3sResponse) GetUser() getProjectV3sUser { return v.User }
+func (v *getProjectV3sResponse) GetUser() *getProjectV3sUser { return v.User }
 
 // getProjectV3sUser includes the requested fields of the GraphQL type User.
 type getProjectV3sUser struct {
-	ProjectV3Adapters ProjectV3AdapterConnection `json:"projectV3Adapters"`
+	ProjectV3Adapters *ProjectV3AdapterConnection `json:"projectV3Adapters"`
 }
 
 // GetProjectV3Adapters returns getProjectV3sUser.ProjectV3Adapters, and is useful for accessing the field via an interface.
-func (v *getProjectV3sUser) GetProjectV3Adapters() ProjectV3AdapterConnection {
+func (v *getProjectV3sUser) GetProjectV3Adapters() *ProjectV3AdapterConnection {
 	return v.ProjectV3Adapters
 }
 
@@ -3197,8 +3245,8 @@ query getProjectPath ($id: UUID!) {
 func getProjectV3s(
 	ctx context.Context,
 	client graphql.Client,
-	userId uuid.UUID,
-	filter FilterInput,
+	userId *uuid.UUID,
+	filter *FilterInput,
 ) (*getProjectV3sResponse, error) {
 	req := &graphql.Request{
 		OpName: "getProjectV3s",
@@ -3222,6 +3270,14 @@ query getProjectV3s ($userId: ID!, $filter: FilterInput!) {
 fragment ProjectV3AdapterSummary on ProjectV3Adapter {
 	id
 	name
+	projectV3 {
+		id
+		name
+	}
+	repo {
+		id
+		name
+	}
 }
 `,
 		Variables: &__getProjectV3sInput{
