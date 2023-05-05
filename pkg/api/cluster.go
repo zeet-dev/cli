@@ -69,3 +69,66 @@ func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) 
 		Kubeconfig: res.CurrentUser.Cluster.Kubeconfig,
 	}, nil
 }
+
+type ListClustersResponse struct {
+	ID   uuid.UUID
+	Name string
+}
+
+func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersResponse, error) {
+	_ = `# @genqlient
+		query listClusters {
+		  currentUser {
+			clusters {
+			  id
+			  name
+			}
+		  }
+		}
+	`
+
+	_ = `# @genqlient
+	query listClustersForTeam($path: String) {
+		team(path: $path) {
+			user {
+				clusters {
+					id
+					name
+				}
+			}
+	    }
+	}
+	`
+
+	if path != "" {
+		res, err := listClustersForTeam(ctx, c.gql, path)
+		if err != nil {
+			return nil, err
+		}
+
+		out := make([]ListClustersResponse, len(res.Team.User.Clusters))
+		for i, cluster := range res.Team.User.Clusters {
+			out[i] = ListClustersResponse{
+				ID:   cluster.Id,
+				Name: cluster.Name,
+			}
+		}
+
+		return out, nil
+	}
+
+	res, err := listClusters(ctx, c.gql)
+	if err != nil {
+		return nil, err
+	}
+
+	out := make([]ListClustersResponse, len(res.CurrentUser.Clusters))
+	for i, cluster := range res.CurrentUser.Clusters {
+		out[i] = ListClustersResponse{
+			ID:   cluster.Id,
+			Name: cluster.Name,
+		}
+	}
+
+	return out, nil
+}
