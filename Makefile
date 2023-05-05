@@ -7,3 +7,9 @@ gen-go:
 	go generate ./...
 gen:
 	go run github.com/Khan/genqlient
+
+build:
+	go build -o ./bin/ ./cmd/zeet
+
+link-dev:
+	ln -s $(shell pwd)/bin/zeet ~/bin/zeet
