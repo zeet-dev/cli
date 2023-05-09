@@ -2,6 +2,8 @@ package api
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
@@ -115,7 +117,11 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 	if path != "" {
 		res, err := listClustersForTeam(ctx, c.gql, path)
 		if err != nil {
-			return nil, err
+			if len(res.Team.User.Clusters) > 0 {
+				fmt.Fprintf(os.Stderr, "Warning: %s\n", err.Error())
+			} else {
+				return nil, err
+			}
 		}
 
 		out := make([]ListClustersResponse, len(res.Team.User.Clusters))
@@ -135,7 +141,11 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 
 	res, err := listClusters(ctx, c.gql)
 	if err != nil {
-		return nil, err
+		if len(res.CurrentUser.Clusters) > 0 {
+			fmt.Fprintf(os.Stderr, "Warning: %s\n", err.Error())
+		} else {
+			return nil, err
+		}
 	}
 
 	out := make([]ListClustersResponse, len(res.CurrentUser.Clusters))
