@@ -71,8 +71,12 @@ func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) 
 }
 
 type ListClustersResponse struct {
-	ID   uuid.UUID
-	Name string
+	ID              uuid.UUID
+	Name            string
+	CloudProvider   string
+	ClusterProvider string
+	Region          string
+	Conencted       bool
 }
 
 func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersResponse, error) {
@@ -82,6 +86,10 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 			clusters {
 			  id
 			  name
+			  cloudProvider
+			  clusterProvider
+			  region
+			  connected
 			}
 		  }
 		}
@@ -94,6 +102,10 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 				clusters {
 					id
 					name
+					cloudProvider
+					clusterProvider
+					region
+					connected
 				}
 			}
 	    }
@@ -109,8 +121,12 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 		out := make([]ListClustersResponse, len(res.Team.User.Clusters))
 		for i, cluster := range res.Team.User.Clusters {
 			out[i] = ListClustersResponse{
-				ID:   cluster.Id,
-				Name: cluster.Name,
+				ID:              cluster.Id,
+				Name:            cluster.Name,
+				CloudProvider:   string(cluster.CloudProvider),
+				ClusterProvider: string(cluster.ClusterProvider),
+				Region:          cluster.Region,
+				Conencted:       cluster.Connected,
 			}
 		}
 
@@ -125,8 +141,12 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 	out := make([]ListClustersResponse, len(res.CurrentUser.Clusters))
 	for i, cluster := range res.CurrentUser.Clusters {
 		out[i] = ListClustersResponse{
-			ID:   cluster.Id,
-			Name: cluster.Name,
+			ID:              cluster.Id,
+			Name:            cluster.Name,
+			CloudProvider:   string(cluster.CloudProvider),
+			ClusterProvider: string(cluster.ClusterProvider),
+			Region:          cluster.Region,
+			Conencted:       cluster.Connected,
 		}
 	}
 

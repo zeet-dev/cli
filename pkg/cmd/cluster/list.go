@@ -58,7 +58,7 @@ func runClusterList(opts *ClusterListOptions) error {
 	switch opts.OutputFormat {
 	case "text":
 		for _, cluster := range clusters {
-			fmt.Fprintln(opts.IO.Out, cluster.ID, cluster.Name)
+			fmt.Fprintln(opts.IO.Out, cluster.ID, cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Conencted)
 		}
 	case "json":
 		output, err := json.MarshalIndent(clusters, "", "  ")
@@ -81,11 +81,15 @@ func runClusterList(opts *ClusterListOptions) error {
 		t.AppendHeader(table.Row{
 			text.FgGreen.Sprint("ID"),
 			text.FgGreen.Sprint("Name"),
+			text.FgGreen.Sprint("Cloud Provider"),
+			text.FgGreen.Sprint("Cluster Provider"),
+			text.FgGreen.Sprint("Region"),
+			text.FgGreen.Sprint("Connected"),
 		})
 
 		for _, cluster := range clusters {
 			t.AppendRows([]table.Row{
-				{cluster.ID.String(), cluster.Name},
+				{cluster.ID.String(), cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Conencted},
 			})
 		}
 

@@ -176,6 +176,37 @@ const (
 	BlueprintTypeZeetGcpCloudRun    BlueprintType = "ZEET_GCP_CLOUD_RUN"
 )
 
+type CloudProvider string
+
+const (
+	CloudProviderUnknown   CloudProvider = "UNKNOWN"
+	CloudProviderZeet      CloudProvider = "ZEET"
+	CloudProviderAws       CloudProvider = "AWS"
+	CloudProviderAzure     CloudProvider = "AZURE"
+	CloudProviderGcp       CloudProvider = "GCP"
+	CloudProviderAlibaba   CloudProvider = "ALIBABA"
+	CloudProviderOci       CloudProvider = "OCI"
+	CloudProviderIbm       CloudProvider = "IBM"
+	CloudProviderTencent   CloudProvider = "TENCENT"
+	CloudProviderDo        CloudProvider = "DO"
+	CloudProviderCoreweave CloudProvider = "COREWEAVE"
+	CloudProviderOvh       CloudProvider = "OVH"
+	CloudProviderLinode    CloudProvider = "LINODE"
+	CloudProviderVultr     CloudProvider = "VULTR"
+	CloudProviderScaleway  CloudProvider = "SCALEWAY"
+)
+
+type ClusterProvider string
+
+const (
+	ClusterProviderGeneric   ClusterProvider = "GENERIC"
+	ClusterProviderEks       ClusterProvider = "EKS"
+	ClusterProviderGke       ClusterProvider = "GKE"
+	ClusterProviderDoks      ClusterProvider = "DOKS"
+	ClusterProviderCoreweave ClusterProvider = "COREWEAVE"
+	ClusterProviderLke       ClusterProvider = "LKE"
+)
+
 type DeploymentStatus string
 
 const (
@@ -1662,8 +1693,12 @@ func (v *listClustersCurrentUser) GetClusters() []listClustersCurrentUserCluster
 
 // listClustersCurrentUserClustersCluster includes the requested fields of the GraphQL type Cluster.
 type listClustersCurrentUserClustersCluster struct {
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	Id              uuid.UUID       `json:"id"`
+	Name            string          `json:"name"`
+	CloudProvider   CloudProvider   `json:"cloudProvider"`
+	ClusterProvider ClusterProvider `json:"clusterProvider"`
+	Region          string          `json:"region"`
+	Connected       bool            `json:"connected"`
 }
 
 // GetId returns listClustersCurrentUserClustersCluster.Id, and is useful for accessing the field via an interface.
@@ -1671,6 +1706,22 @@ func (v *listClustersCurrentUserClustersCluster) GetId() uuid.UUID { return v.Id
 
 // GetName returns listClustersCurrentUserClustersCluster.Name, and is useful for accessing the field via an interface.
 func (v *listClustersCurrentUserClustersCluster) GetName() string { return v.Name }
+
+// GetCloudProvider returns listClustersCurrentUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
+func (v *listClustersCurrentUserClustersCluster) GetCloudProvider() CloudProvider {
+	return v.CloudProvider
+}
+
+// GetClusterProvider returns listClustersCurrentUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
+func (v *listClustersCurrentUserClustersCluster) GetClusterProvider() ClusterProvider {
+	return v.ClusterProvider
+}
+
+// GetRegion returns listClustersCurrentUserClustersCluster.Region, and is useful for accessing the field via an interface.
+func (v *listClustersCurrentUserClustersCluster) GetRegion() string { return v.Region }
+
+// GetConnected returns listClustersCurrentUserClustersCluster.Connected, and is useful for accessing the field via an interface.
+func (v *listClustersCurrentUserClustersCluster) GetConnected() bool { return v.Connected }
 
 // listClustersForTeamResponse is returned by listClustersForTeam on success.
 type listClustersForTeamResponse struct {
@@ -1700,8 +1751,12 @@ func (v *listClustersForTeamTeamUser) GetClusters() []listClustersForTeamTeamUse
 
 // listClustersForTeamTeamUserClustersCluster includes the requested fields of the GraphQL type Cluster.
 type listClustersForTeamTeamUserClustersCluster struct {
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	Id              uuid.UUID       `json:"id"`
+	Name            string          `json:"name"`
+	CloudProvider   CloudProvider   `json:"cloudProvider"`
+	ClusterProvider ClusterProvider `json:"clusterProvider"`
+	Region          string          `json:"region"`
+	Connected       bool            `json:"connected"`
 }
 
 // GetId returns listClustersForTeamTeamUserClustersCluster.Id, and is useful for accessing the field via an interface.
@@ -1709,6 +1764,22 @@ func (v *listClustersForTeamTeamUserClustersCluster) GetId() uuid.UUID { return 
 
 // GetName returns listClustersForTeamTeamUserClustersCluster.Name, and is useful for accessing the field via an interface.
 func (v *listClustersForTeamTeamUserClustersCluster) GetName() string { return v.Name }
+
+// GetCloudProvider returns listClustersForTeamTeamUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
+func (v *listClustersForTeamTeamUserClustersCluster) GetCloudProvider() CloudProvider {
+	return v.CloudProvider
+}
+
+// GetClusterProvider returns listClustersForTeamTeamUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
+func (v *listClustersForTeamTeamUserClustersCluster) GetClusterProvider() ClusterProvider {
+	return v.ClusterProvider
+}
+
+// GetRegion returns listClustersForTeamTeamUserClustersCluster.Region, and is useful for accessing the field via an interface.
+func (v *listClustersForTeamTeamUserClustersCluster) GetRegion() string { return v.Region }
+
+// GetConnected returns listClustersForTeamTeamUserClustersCluster.Connected, and is useful for accessing the field via an interface.
+func (v *listClustersForTeamTeamUserClustersCluster) GetConnected() bool { return v.Connected }
 
 // listClustersResponse is returned by listClusters on success.
 type listClustersResponse struct {
@@ -2709,6 +2780,10 @@ query listClusters {
 		clusters {
 			id
 			name
+			cloudProvider
+			clusterProvider
+			region
+			connected
 		}
 	}
 }
@@ -2740,6 +2815,10 @@ query listClustersForTeam ($path: String) {
 			clusters {
 				id
 				name
+				cloudProvider
+				clusterProvider
+				region
+				connected
 			}
 		}
 	}
