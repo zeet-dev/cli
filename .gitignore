@@ -21,3 +21,5 @@
 dist/
 
 .idea/
+
+/bin
