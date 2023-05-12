@@ -78,7 +78,7 @@ type ListClustersResponse struct {
 	CloudProvider   string
 	ClusterProvider string
 	Region          string
-	Conencted       bool
+	Connected       bool
 }
 
 func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersResponse, error) {
@@ -132,7 +132,7 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 				CloudProvider:   string(cluster.CloudProvider),
 				ClusterProvider: string(cluster.ClusterProvider),
 				Region:          cluster.Region,
-				Conencted:       cluster.Connected,
+				Connected:       cluster.Connected,
 			}
 		}
 
@@ -156,7 +156,7 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 			CloudProvider:   string(cluster.CloudProvider),
 			ClusterProvider: string(cluster.ClusterProvider),
 			Region:          cluster.Region,
-			Conencted:       cluster.Connected,
+			Connected:       cluster.Connected,
 		}
 	}
 

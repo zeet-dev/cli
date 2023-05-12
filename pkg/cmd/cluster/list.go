@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
@@ -58,19 +57,17 @@ func runClusterList(opts *ClusterListOptions) error {
 	switch opts.OutputFormat {
 	case "text":
 		for _, cluster := range clusters {
-			fmt.Fprintln(opts.IO.Out, cluster.ID, cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Conencted)
+			fmt.Fprintln(opts.IO.Out, cluster.ID, cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected)
 		}
 	case "json":
 		output, err := json.MarshalIndent(clusters, "", "  ")
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
 			return err
 		}
 		fmt.Fprintln(opts.IO.Out, string(output))
 	case "yaml":
 		output, err := yaml.Marshal(clusters)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
 			return err
 		}
 		fmt.Fprintln(opts.IO.Out, string(output))
@@ -89,7 +86,7 @@ func runClusterList(opts *ClusterListOptions) error {
 
 		for _, cluster := range clusters {
 			t.AppendRows([]table.Row{
-				{cluster.ID.String(), cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Conencted},
+				{cluster.ID.String(), cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected},
 			})
 		}
 
