@@ -15,6 +15,7 @@ func NewClusterCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(NewKubeconfigSetCmd(f))
 	cmd.AddCommand(NewKubeconfigGetCmd(f))
 	cmd.AddCommand(NewClusterLoginCmd(f))
+	cmd.AddCommand(NewClusterListCmd(f))
 
 	return cmd
 }

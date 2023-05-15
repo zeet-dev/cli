@@ -51,7 +51,7 @@ func NewAWSLoginCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmd.PersistentFlags().BoolVarP(&eval, "eval", "e", false, "eval $(zeet [args])")
-	cmd.Flags().BoolVarP(&console, "open", "o", false, "open AWS console")
+	cmd.Flags().BoolVarP(&console, "open", "", false, "open AWS console")
 
 	return cmd
 }
