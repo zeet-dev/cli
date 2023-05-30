@@ -346,6 +346,8 @@ input BlueprintConfigurationInput {
 
 input BlueprintConfigurationUpdate {
   terraform: BlueprintTerraformConfigurationUpdate
+  helm: BlueprintHelmConfigurationUpdate
+  kubernetesManifest: BlueprintManifestConfigurationUpdate
 }
 
 type BlueprintConnection {
@@ -401,12 +403,56 @@ type BlueprintDriverActionResult {
   execution: BlueprintDriverActionExecution
 }
 
+"""
+CAUTION: Experimental!
+
+Provides a similar interface to the ProjectV3Workflow type.
+"""
+type BlueprintDriverWorkflow {
+  id: UUID!
+  status: ProjectV3WorkflowStatus!
+
+  """
+  The sequence of actions in the workflow. Useful for identifying the presence of a PROJECT_DELETE step.
+  """
+  stepActions: [BlueprintDriverWorkflowStepAction!]!
+
+  """
+  The driver action execution records. NOTE: will not have a record for PROJECT_DELETE.
+  """
+  jobs: [BlueprintDriverActionExecution!] @deprecated(reason: "this field will be replaced")
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+input BlueprintDriverWorkflowInput {
+  """The driver to execute the actions"""
+  driver: BlueprintDriver!
+
+  """
+  The steps to execute. This list must not be empty, and must represent a valid workflow.
+  
+  - Plan-type actions must come first.
+  - An Approval action must follow a Plan-type action.
+  - An Apply action may follow a Plan-type or Approval action.
+  - The "Project Delete" action must follow an Apply action, and the workflow must begin with the "Plan Destroy" action
+  """
+  steps: [BlueprintDriverWorkflowStepAction!]!
+}
+
+enum BlueprintDriverWorkflowStepAction {
+  DRIVER_PLAN_DESTROY
+  DRIVER_PLAN
+  DRIVER_APPROVE
+  DRIVER_APPLY
+  PROJECT_DELETE
+}
+
 type BlueprintHelmConfiguration {
   source: Source
 }
 
 input BlueprintHelmConfigurationInput {
-  releaseName: String!
   source: SourceInput
 }
 
@@ -544,6 +590,14 @@ input BlueprintVariableSpecInput {
   name: String!
   type: BlueprintVariableType!
   required: Boolean!
+}
+
+input BlueprintVariableSpecUpdate {
+  id: UUID
+  name: String!
+  type: BlueprintVariableType!
+  required: Boolean!
+  remove: Boolean
 }
 
 type BlueprintVariableString {
@@ -738,7 +792,7 @@ interface CISource {
   description: String
 }
 
-union CloudAccount = AWSAccount | GCPAccount | DOAccount | LinodeAccount | VultrAccount
+union CloudAccount = AWSAccount | GCPAccount | DOAccount | CoreWeaveAccount | LinodeAccount | VultrAccount | AzureAccount
 
 enum CloudAccountState {
   WAITING
@@ -816,6 +870,7 @@ type Cluster {
   linodeAccount: LinodeAccount
   cloudAccount: CloudAccount
   vultrAccount: VultrAccount
+  azureAccount: AzureAccount
   namespace: String
   domain: String
   isExternal: Boolean
@@ -871,6 +926,7 @@ enum ClusterProvider {
   DOKS
   COREWEAVE
   LKE
+  VKE
 }
 
 enum ClusterState {
@@ -996,6 +1052,9 @@ input CreateBlueprintInput {
   configuration: BlueprintConfigurationInput
   variables: [BlueprintVariableSpecInput!]!
   richInputSchema: JSON
+  description: String
+  tags: [String!]
+  logoUrl: String
 }
 
 input CreateClusterInput {
@@ -1005,8 +1064,10 @@ input CreateClusterInput {
   doAccountID: UUID
   linodeAccountID: UUID
   vultrAccountID: UUID
+  azureAccountID: UUID
   name: String!
   region: String!
+  isExternal: Boolean
 }
 
 input CreateDatabaseInput {
@@ -1612,15 +1673,17 @@ input DuplicateProjectInput {
   id: UUID!
   enabled: Boolean!
   name: String!
-  projectID: UUID
-  environmentName: String
-  environmentID: UUID
-}
 
-input DuplicateRepoInput {
-  repoID: UUID!
-  name: String!
-  environmentID: UUID!
+  """Duplicate repo to existing project"""
+  projectID: UUID
+
+  """Creates a new environment by name"""
+  environmentName: String
+
+  """
+  Put the new repo in an existing environment within the specified project
+  """
+  environmentID: UUID
 }
 
 type EnvironmentOverview {
@@ -1781,8 +1844,14 @@ type GCPLinks {
 
 input GCSBucketBackendInput {
   gcpAccountID: UUID!
+  location: String!
   bucketName: String!
-  location: String
+}
+
+type GCSBucketConfiguration {
+  gcpAccountID: UUID!
+  location: String!
+  bucketName: String!
 }
 
 type GitBranch {
@@ -1815,7 +1884,28 @@ type GitHubInstallation {
   appID: Int!
   account: GitHubUser!
   repositorySelection: String!
+  integrationType: GithubIntegrationType!
+  targetType: String!
   repositories: [GitHubRepository!]
+}
+
+type GithubIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  login: String!
+  appID: Int!
+  installationID: Int!
+  targetType: String!
+}
+
+enum GithubIntegrationType {
+  User
+  Team
 }
 
 type GithubLinks {
@@ -2030,11 +2120,15 @@ type HelmChartConnection {
 type HelmProjectV3Configuration {
   clusterID: UUID!
   namespace: String
+  releaseName: String!
+  values: YAML
 }
 
 input HelmProjectV3ConfigurationInput {
   clusterID: UUID!
   namespace: String
+  releaseName: String!
+  values: YAML
 }
 
 type HelmRelease {
@@ -2086,6 +2180,7 @@ enum IntegrationType {
   DISCORD_WEBHOOK
   DATADOG
   GITLAB
+  GITHUB
 }
 
 input InviteTeamMemberInput {
@@ -2418,7 +2513,21 @@ type Mutation {
   deleteProjectV3(id: UUID!): Boolean!
   configureGitopsForProjectV3(input: ProjectV3GitopsInput!): ProjectV3!
   commitProjectV3ToGithubRepo(projectID: UUID!): GithubCommitResult!
+
+  """
+  DEPRECATED: use 'submitBlueprintDriverWorkflow' instead"
+  @deprecated(reason: "single-action execution for blueprint drivers is replaced
+  by driver workflows. use the 'submitBlueprintDriverWorkflow' mutation instead")
+  """
   executeBlueprintDriverAction(input: BlueprintDriverActionInput!): BlueprintDriverActionResult!
+
+  """
+  CAUTION: Experimental!
+  
+  Submits a driver workflow to the workflow queue.
+  Driver workflows are immutable: steps cannot be added after a workflow has been submitted.
+  """
+  submitBlueprintDriverWorkflow(projectID: UUID!, input: BlueprintDriverWorkflowInput!): BlueprintDriverWorkflow
   addDOAccount(input: AddDOAccountInput!): DOAccount!
   updateDOAccount(input: UpdateDOAccountInput!): Boolean!
   removeDOAccount(id: UUID!): Boolean!
@@ -2453,8 +2562,11 @@ type Mutation {
   deleteProjectEnvironment(id: UUID!): Boolean!
   moveRepoToProjectEnvironment(input: MoveRepoInput!): Repo!
   dispatchRepoGroupAction(input: dispatchRepoGroupActionInput!): Boolean
+
+  """
+  Create a copy of a repo, optionally specifying the target project and project environment
+  """
   duplicateProject(input: DuplicateProjectInput!): Repo!
-  duplicateRepo(input: DuplicateRepoInput!): Repo!
   deleteProjectBranch(id: UUID!, branch: String!): Boolean!
   rollbackProjectToDeployment(projectID: UUID!, deploymentID: UUID!): Repo!
   updateProject(input: UpdateProjectInput!): Repo!
@@ -2734,7 +2846,18 @@ type ProjectV3 {
   project: Project
   projectEnvironment: ProjectEnvironment
   configuration: ProjectV3Configuration
-  workflows: [ProjectV3Workflow!]
+
+  """
+  Provides a view over driver action executions, grouping together Plan-type
+  actions with their Approve and Apply steps (if they exist)
+  """
+  workflows: [ProjectV3Workflow!] @deprecated(reason: "use 'driverWorkflows' instead")
+
+  """
+  Driver workflows submitted for this project.
+  NOTE: this field will not surface actions executed via the deprecated 'executeBlueprintDriverAction' mutation.
+  """
+  driverWorkflows: [BlueprintDriverWorkflow!]
 }
 
 type ProjectV3Adapter {
@@ -2759,6 +2882,7 @@ enum ProjectV3AdapterStatus {
   UNKNOWN
   DRAFT
   PAUSED
+  INACTIVE
   JOB_RUN_STARTING
   JOB_RUN_RUNNING
   JOB_RUN_FAILED
@@ -2777,6 +2901,9 @@ enum ProjectV3AdapterStatus {
   BUILD_FAILED
   BUILD_SUCCEEDED
   BUILD_ABORTED
+  CONTAINER_PULLING
+  HEALTH_CHECKING
+  NODE_PROVISIONING
 }
 
 union ProjectV3Configuration = TerraformProjectV3Configuration | HelmProjectV3Configuration | ManifestProjectV3Configuration
@@ -2796,11 +2923,22 @@ input ProjectV3GitopsInput {
   subdirectoryPath: String
 }
 
+"""DEPRECATED: prefer BlueprintDriverWorkflow type instead."""
 type ProjectV3Workflow {
-  state: JobRunState!
+  state: JobRunState! @deprecated(reason: "use `status` property instead.")
+  status: ProjectV3WorkflowStatus!
   jobs: [BlueprintDriverActionExecution!]
   createdAt: Time!
   updatedAt: Time!
+}
+
+enum ProjectV3WorkflowStatus {
+  STARTING
+  RUNNING
+  FAILED
+  SUCCEEDED
+  PENDING_APPROVAL
+  PENDING_MANUAL_ACTION
 }
 
 type Prometheus {
@@ -3257,8 +3395,16 @@ union Runtime = CloudRuntime | KubernetesRuntime
 
 input S3BucketBackendInput {
   awsAccountID: UUID!
-  bucketName: String!
   region: String!
+  bucketName: String!
+  key: String
+}
+
+type S3BucketConfiguration {
+  awsAccountID: UUID!
+  region: String!
+  bucketName: String!
+  key: String
 }
 
 enum SavingsPlanPaymentOption {
@@ -3559,6 +3705,35 @@ type TerraformModuleConnection {
   pageInfo: PageInfo!
 }
 
+type TerraformModuleSource {
+  """
+  Any valid Terraform Module source: https://developer.hashicorp.com/terraform/language/modules/sources
+  """
+  source: String!
+
+  """The version field is only applicable to Terraform Registry sources"""
+  version: String
+
+  """
+  Configuring an integration provides authentication to retrieve the module from private sources
+  """
+  integration: TerraformModuleSourceIntegration
+}
+
+input TerraformModuleSourceInput {
+  source: String!
+  version: String
+  integration: TerraformModuleSourceIntegrationInput
+}
+
+type TerraformModuleSourceIntegration {
+  git: GitSourceIntegration
+}
+
+input TerraformModuleSourceIntegrationInput {
+  git: GitSourceIntegrationInput
+}
+
 type TerraformOperation {
   id: UUID!
   state: TerraformOperationState!
@@ -3579,7 +3754,13 @@ enum TerraformOperationState {
   SUCCEEDED
 }
 
-"""Input values for Terraform PLAN actions"""
+"""
+[DEPRECATED] Input values for Terraform PLAN actions.
+Provider should be configured for the project, i.e. TerraformProjectV3ConfigurationInput,
+When the project has a provider configured, these action parameters will be rejected.
+
+This input is deprecated, and will not be supported for executing Plan actions in the v1 API.
+"""
 input TerraformPlanActionParameters {
   """Zeet ID for a connected AWS Account"""
   awsAccountID: UUID
@@ -3594,7 +3775,13 @@ input TerraformPlanActionParameters {
   region: String
 }
 
-"""Input values for Terraform PLAN_DESTROY actions"""
+"""
+[DEPRECATED] Input values for Terraform PLAN_DESTROY actions.
+Provider should be configured for the project, i.e. TerraformProjectV3ConfigurationInput,
+When the project has a provider configured, these action parameters will be rejected.
+
+This input is deprecated, and will not be supported for executing Plan actions in the v1 API.
+"""
 input TerraformPlanDestroyActionParameters {
   """Zeet ID for a connected AWS Account"""
   awsAccountID: UUID
@@ -3610,11 +3797,49 @@ input TerraformPlanDestroyActionParameters {
 }
 
 type TerraformProjectV3Configuration {
+  moduleName: String
   stateBackend: TerraformStateBackend!
+  provider: TerraformProvider
 }
 
 input TerraformProjectV3ConfigurationInput {
+  moduleName: String
   stateBackend: TerraformStateBackendInput!
+
+  """
+  Terraform Provider configuration: Maps a zeet-connected cloud account to a terraform provider.
+  This parameter is optional for backwards compatability. New Projects should specify their provider at creation,
+  instead of specifying the provider for each PLAN/PLAN_DESTROY action.
+  
+  This parameter will be required in the v1 API, and specifying provider "per-plan" will not be supported.
+  """
+  provider: TerraformProviderInput
+}
+
+"""
+The Zeet-connected cloud account which will be mapped to a terraform provider
+"""
+type TerraformProvider {
+  awsAccount: AWSAccount
+  gcpAccount: GCPAccount
+  doAccount: DOAccount
+
+  """Region name, when applicable"""
+  region: String
+}
+
+input TerraformProviderInput {
+  """Zeet ID for a connected AWS Account"""
+  awsAccountID: UUID
+
+  """Zeet ID for a connected GCP Account"""
+  gcpAccountID: UUID
+
+  """Zeet ID for a connected DigitalOcean Account"""
+  doAccountID: UUID
+
+  """Region name, when applicable"""
+  region: String
 }
 
 type TerraformRegistry {
@@ -3634,9 +3859,16 @@ input TerraformRegistrySourceInput {
 }
 
 type TerraformStateBackend {
+  """DEPRECATED."""
   awsAccount: UUID
+
+  """DEPRECATED."""
   gcpAccount: UUID
+
+  """DEPRECATED."""
   region: String
+  s3Bucket: S3BucketConfiguration
+  gcsBucket: GCSBucketConfiguration
 }
 
 input TerraformStateBackendInput {
@@ -3692,7 +3924,18 @@ input UpdateBlueprintInput {
   published: Boolean
   slug: String
   configuration: BlueprintConfigurationUpdate
+
+  """
+  Update the variables. Supports partial updates: only specify the variables that you wish to update.
+    To modify or remove an existing variable, you must specify the variable's ID.
+  
+    If ID is not present, the variable will be created (and the "remove" field will be ignored).
+  """
+  variables: [BlueprintVariableSpecUpdate!]
   richInputSchema: JSON
+  description: String
+  tags: [String!]
+  logoUrl: String
 }
 
 input UpdateBranchInput {
@@ -3759,10 +4002,11 @@ input UpdateGCPAccountInput {
 }
 
 input UpdateGitlabIntegrationInput {
+  userID: UUID!
   id: UUID!
   name: String
   apiUrl: URL
-  accessToken: String
+  accessToken: String!
 }
 
 input UpdateIPFSServiceInput {
@@ -3792,6 +4036,7 @@ input UpdateProjectDangerInput {
 input UpdateProjectEnvironmentInput {
   id: UUID!
   name: String
+  redeployRepoIDs: [UUID!]
   envs: [EnvVarInput!]
 }
 
@@ -3887,6 +4132,10 @@ input UpdateProjectV3Input {
   variables: [BlueprintVariableInput!]
   projectID: UUID
   environmentID: UUID
+  blueprintConfiguration: BlueprintConfigurationInput
+  terraformConfiguration: TerraformProjectV3ConfigurationInput
+  manifestConfiguration: ManifestProjectV3ConfigurationInput
+  helmConfiguration: HelmProjectV3ConfigurationInput
 }
 
 input UpdateRepoCustomDomainInput {

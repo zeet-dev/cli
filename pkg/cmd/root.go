@@ -18,6 +18,7 @@ import (
 	"github.com/zeet-dev/cli/pkg/cmd/cloud"
 	"github.com/zeet-dev/cli/pkg/cmd/cluster"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
+	"github.com/zeet-dev/cli/pkg/cmd/project"
 )
 
 var defaultConfigName = "config.yaml"
@@ -39,6 +40,9 @@ func NewRootCmd(f *cmdutil.Factory) *cobra.Command {
 
 	// Blueprint Commands
 	rootCmd.AddCommand(blueprint.NewBlueprintCmd(f))
+
+	// Project v3 Commands
+	rootCmd.AddCommand(project.NewProjectCmd(f))
 
 	// Project Commands
 	rootCmd.AddCommand(NewDeployCmd(f))
