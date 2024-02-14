@@ -20,20 +20,29 @@ type response struct {
 	Errors gqlerror.List `json:"errors"`
 }
 
+type UploadClient struct {
+	client *http.Client
+	path   string
+}
+
+func NewUploadClient(client *http.Client, path string) *UploadClient {
+	return &UploadClient{client: client, path: path}
+}
+
 // Our graphql client doesn't support file uploads, so this function is a manual workaround which uses http
-func uploadFile(client *http.Client, path string, query string, variables interface{}, fileVariable string, file []byte, retval interface{}) error {
+func (c *UploadClient) UploadFile(query string, variables interface{}, fileVariable string, file []byte, retval interface{}) error {
 	contentType, buf, err := makeForm(query, variables, fileVariable, file)
 	if err != nil {
 		return err
 	}
 
-	req, err := http.NewRequest("POST", path, buf)
+	req, err := http.NewRequest("POST", c.path, buf)
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Content-Type", contentType)
 
-	resp, err := client.Do(req)
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return err
 	}

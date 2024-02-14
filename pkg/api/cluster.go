@@ -29,7 +29,7 @@ func (c *Client) UpdateClusterKubeconfig(ctx context.Context, clusterId uuid.UUI
 		Id   uuid.UUID `json:"id"`
 	}
 	var res updateClusterResponse
-	err := uploadFile(c.http, c.path, query, input{File: kubeconfig, Id: clusterId}, "file", kubeconfig, res)
+	err := c.upload.UploadFile(query, input{File: kubeconfig, Id: clusterId}, "file", kubeconfig, res)
 	if err != nil {
 		return nil, err
 	}
