@@ -20,7 +20,7 @@ func (c *Client) GetCurrentUser(ctx context.Context) (*User, error) {
 		  }
 		}
 	`
-	res, err := getCurrentUser(ctx, c.gql)
+	res, err := GetCurrentUserQuery(ctx, c.gql)
 	if err != nil {
 		return nil, err
 	}

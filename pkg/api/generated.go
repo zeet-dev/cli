@@ -145,6 +145,13 @@ const (
 	BlueprintDriverActionApply       BlueprintDriverAction = "APPLY"
 )
 
+type BlueprintMetadataFilter struct {
+	Name *StringCriterion `json:"name"`
+}
+
+// GetName returns BlueprintMetadataFilter.Name, and is useful for accessing the field via an interface.
+func (v *BlueprintMetadataFilter) GetName() *StringCriterion { return v.Name }
+
 // BlueprintSummary includes the GraphQL fields of Blueprint requested by the fragment BlueprintSummary.
 type BlueprintSummary struct {
 	Id              uuid.UUID     `json:"id"`
@@ -191,6 +198,13 @@ const (
 	BlueprintTypeZeetAwsLambda      BlueprintType = "ZEET_AWS_LAMBDA"
 	BlueprintTypeZeetGcpCloudRun    BlueprintType = "ZEET_GCP_CLOUD_RUN"
 )
+
+type BooleanCriterion struct {
+	Value *bool `json:"value"`
+}
+
+// GetValue returns BooleanCriterion.Value, and is useful for accessing the field via an interface.
+func (v *BooleanCriterion) GetValue() *bool { return v.Value }
 
 type CloudProvider string
 
@@ -293,6 +307,7 @@ type FilterCriterion struct {
 	RepoFilter                            *RepoFilter                            `json:"repoFilter"`
 	DeployableDriverActionExecutionFilter *DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter"`
 	ResourceAdapterFilter                 *ResourceAdapterFilter                 `json:"resourceAdapterFilter"`
+	BlueprintMetadataFilter               *BlueprintMetadataFilter               `json:"blueprintMetadataFilter"`
 }
 
 // GetUserFilter returns FilterCriterion.UserFilter, and is useful for accessing the field via an interface.
@@ -312,6 +327,11 @@ func (v *FilterCriterion) GetDeployableDriverActionExecutionFilter() *Deployable
 // GetResourceAdapterFilter returns FilterCriterion.ResourceAdapterFilter, and is useful for accessing the field via an interface.
 func (v *FilterCriterion) GetResourceAdapterFilter() *ResourceAdapterFilter {
 	return v.ResourceAdapterFilter
+}
+
+// GetBlueprintMetadataFilter returns FilterCriterion.BlueprintMetadataFilter, and is useful for accessing the field via an interface.
+func (v *FilterCriterion) GetBlueprintMetadataFilter() *BlueprintMetadataFilter {
+	return v.BlueprintMetadataFilter
 }
 
 type FilterCriterionOperatorType string
@@ -665,6 +685,7 @@ func (v *ProjectV3AdapterConnectionNodesProjectV3Adapter) __premarshalJSON() (*_
 
 // ProjectV3AdapterSummary includes the GraphQL fields of ProjectV3Adapter requested by the fragment ProjectV3AdapterSummary.
 type ProjectV3AdapterSummary struct {
+	// - v0.ProjectAdapterID or v1.ProjectID
 	Id        uuid.UUID                        `json:"id"`
 	Name      string                           `json:"name"`
 	ProjectV3 ProjectV3AdapterSummaryProjectV3 `json:"projectV3"`
@@ -685,6 +706,7 @@ func (v *ProjectV3AdapterSummary) GetRepo() ProjectV3AdapterSummaryRepo { return
 
 // ProjectV3AdapterSummaryProjectV3 includes the requested fields of the GraphQL type ProjectV3.
 type ProjectV3AdapterSummaryProjectV3 struct {
+	// - v0.ProjectV3ID
 	Id   uuid.UUID `json:"id"`
 	Name string    `json:"name"`
 }
@@ -697,6 +719,7 @@ func (v *ProjectV3AdapterSummaryProjectV3) GetName() string { return v.Name }
 
 // ProjectV3AdapterSummaryRepo includes the requested fields of the GraphQL type Repo.
 type ProjectV3AdapterSummaryRepo struct {
+	// - v0.RepoID
 	Id   uuid.UUID `json:"id"`
 	Name string    `json:"name"`
 }
@@ -734,6 +757,8 @@ type ResourceAdapterFilter struct {
 	Status          *AdapterStatusCriterion `json:"status"`
 	ProjectName     *StringCriterion        `json:"projectName"`
 	EnvironmentName *StringCriterion        `json:"environmentName"`
+	// Active=true or Paused=false
+	Active *BooleanCriterion `json:"active"`
 }
 
 // GetIds returns ResourceAdapterFilter.Ids, and is useful for accessing the field via an interface.
@@ -759,6 +784,9 @@ func (v *ResourceAdapterFilter) GetProjectName() *StringCriterion { return v.Pro
 
 // GetEnvironmentName returns ResourceAdapterFilter.EnvironmentName, and is useful for accessing the field via an interface.
 func (v *ResourceAdapterFilter) GetEnvironmentName() *StringCriterion { return v.EnvironmentName }
+
+// GetActive returns ResourceAdapterFilter.Active, and is useful for accessing the field via an interface.
+func (v *ResourceAdapterFilter) GetActive() *BooleanCriterion { return v.Active }
 
 type ResourceFilter struct {
 	Ids           *MultiEntityCriterion `json:"ids"`
@@ -1911,6 +1939,7 @@ func (v *getProductionBranchCurrentUser) GetRepo() getProductionBranchCurrentUse
 
 // getProductionBranchCurrentUserRepo includes the requested fields of the GraphQL type Repo.
 type getProductionBranchCurrentUserRepo struct {
+	// - v0.RepoID
 	Id                 uuid.UUID                                                        `json:"id"`
 	ProductionBranchV2 getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 `json:"productionBranchV2"`
 }
@@ -1987,6 +2016,7 @@ func (v *getProductionDeploymentResponse) GetRepo() getProductionDeploymentRepo 
 
 // getProjectByPathRepo includes the requested fields of the GraphQL type Repo.
 type getProjectByPathRepo struct {
+	// - v0.RepoID
 	Id uuid.UUID `json:"id"`
 }
 
@@ -2037,6 +2067,7 @@ func (v *getProjectV3sUser) GetProjectV3Adapters() *ProjectV3AdapterConnection {
 
 // getRepoRepo includes the requested fields of the GraphQL type Repo.
 type getRepoRepo struct {
+	// - v0.RepoID
 	Id uuid.UUID `json:"id"`
 }
 
@@ -2291,20 +2322,15 @@ func (v *updateProjectResponse) GetUpdateProject() updateProjectUpdateProjectRep
 
 // updateProjectUpdateProjectRepo includes the requested fields of the GraphQL type Repo.
 type updateProjectUpdateProjectRepo struct {
+	// - v0.RepoID
 	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns updateProjectUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
 func (v *updateProjectUpdateProjectRepo) GetId() uuid.UUID { return v.Id }
 
-func GetCloudAWS(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*GetCloudAWSResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetCloudAWS",
-		Query: `
+// The query or mutation executed by GetCloudAWS.
+const GetCloudAWS_Operation = `
 query GetCloudAWS ($id: UUID!) {
 	currentUser {
 		awsAccount(id: $id) {
@@ -2314,33 +2340,36 @@ query GetCloudAWS ($id: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetCloudAWSQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*GetCloudAWSResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "GetCloudAWS",
+		Query:  GetCloudAWS_Operation,
 		Variables: &__GetCloudAWSInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data GetCloudAWSResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetCloudAWSResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func GetCloudDigitalOcean(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*GetCloudDigitalOceanResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetCloudDigitalOcean",
-		Query: `
+// The query or mutation executed by GetCloudDigitalOcean.
+const GetCloudDigitalOcean_Operation = `
 query GetCloudDigitalOcean ($id: UUID!) {
 	currentUser {
 		doAccount(id: $id) {
@@ -2349,33 +2378,36 @@ query GetCloudDigitalOcean ($id: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetCloudDigitalOceanQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*GetCloudDigitalOceanResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "GetCloudDigitalOcean",
+		Query:  GetCloudDigitalOcean_Operation,
 		Variables: &__GetCloudDigitalOceanInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data GetCloudDigitalOceanResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetCloudDigitalOceanResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func GetCloudGCP(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*GetCloudGCPResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetCloudGCP",
-		Query: `
+// The query or mutation executed by GetCloudGCP.
+const GetCloudGCP_Operation = `
 query GetCloudGCP ($id: UUID!) {
 	currentUser {
 		gcpAccount(id: $id) {
@@ -2385,33 +2417,36 @@ query GetCloudGCP ($id: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetCloudGCPQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*GetCloudGCPResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "GetCloudGCP",
+		Query:  GetCloudGCP_Operation,
 		Variables: &__GetCloudGCPInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data GetCloudGCPResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetCloudGCPResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func GetCloudLinode(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*GetCloudLinodeResponse, error) {
-	req := &graphql.Request{
-		OpName: "GetCloudLinode",
-		Query: `
+// The query or mutation executed by GetCloudLinode.
+const GetCloudLinode_Operation = `
 query GetCloudLinode ($id: UUID!) {
 	currentUser {
 		linodeAccount(id: $id) {
@@ -2420,35 +2455,36 @@ query GetCloudLinode ($id: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetCloudLinodeQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*GetCloudLinodeResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "GetCloudLinode",
+		Query:  GetCloudLinode_Operation,
 		Variables: &__GetCloudLinodeInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data GetCloudLinodeResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ GetCloudLinodeResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func buildRepo(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-	branch string,
-	noCache bool,
-) (*buildRepoResponse, error) {
-	req := &graphql.Request{
-		OpName: "buildRepo",
-		Query: `
+// The query or mutation executed by buildRepo.
+const buildRepo_Operation = `
 mutation buildRepo ($id: ID!, $branch: String, $noCache: Boolean) {
 	buildRepo(id: $id, branch: $branch, noCache: $noCache) {
 		deployments {
@@ -2460,36 +2496,40 @@ mutation buildRepo ($id: ID!, $branch: String, $noCache: Boolean) {
 		}
 	}
 }
-`,
+`
+
+func BuildRepoMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	branch string,
+	noCache bool,
+) (*buildRepoResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "buildRepo",
+		Query:  buildRepo_Operation,
 		Variables: &__buildRepoInput{
 			Id:      id,
 			Branch:  branch,
 			NoCache: noCache,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data buildRepoResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ buildRepoResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func buildRepoDefaultBranch(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-	noCache bool,
-) (*buildRepoDefaultBranchResponse, error) {
-	req := &graphql.Request{
-		OpName: "buildRepoDefaultBranch",
-		Query: `
+// The query or mutation executed by buildRepoDefaultBranch.
+const buildRepoDefaultBranch_Operation = `
 mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 	buildRepo(id: $id, noCache: $noCache) {
 		deployments {
@@ -2501,95 +2541,104 @@ mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 		}
 	}
 }
-`,
+`
+
+func BuildRepoDefaultBranchMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	noCache bool,
+) (*buildRepoDefaultBranchResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "buildRepoDefaultBranch",
+		Query:  buildRepoDefaultBranch_Operation,
 		Variables: &__buildRepoDefaultBranchInput{
 			Id:      id,
 			NoCache: noCache,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data buildRepoDefaultBranchResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ buildRepoDefaultBranchResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func delete(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*deleteResponse, error) {
-	req := &graphql.Request{
-		OpName: "delete",
-		Query: `
+// The query or mutation executed by delete.
+const delete_Operation = `
 mutation delete ($id: ID!) {
 	deleteRepo(id: $id)
 }
-`,
+`
+
+func DeleteMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*deleteResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "delete",
+		Query:  delete_Operation,
 		Variables: &__deleteInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data deleteResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ deleteResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func deleteBlueprint(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*deleteBlueprintResponse, error) {
-	req := &graphql.Request{
-		OpName: "deleteBlueprint",
-		Query: `
+// The query or mutation executed by deleteBlueprint.
+const deleteBlueprint_Operation = `
 mutation deleteBlueprint ($id: UUID!) {
 	deleteBlueprint(id: $id)
 }
-`,
+`
+
+func DeleteBlueprintMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*deleteBlueprintResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "deleteBlueprint",
+		Query:  deleteBlueprint_Operation,
 		Variables: &__deleteBlueprintInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data deleteBlueprintResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ deleteBlueprintResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func deployRepoBranch(
-	ctx context.Context,
-	client graphql.Client,
-	branch string,
-	projectId uuid.UUID,
-) (*deployRepoBranchResponse, error) {
-	req := &graphql.Request{
-		OpName: "deployRepoBranch",
-		Query: `
+// The query or mutation executed by deployRepoBranch.
+const deployRepoBranch_Operation = `
 mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 	deployRepoBranch(input: {id:$projectId,branch:$branch}) {
 		deployments {
@@ -2601,35 +2650,38 @@ mutation deployRepoBranch ($branch: String!, $projectId: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func DeployRepoBranchMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	branch string,
+	projectId uuid.UUID,
+) (*deployRepoBranchResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "deployRepoBranch",
+		Query:  deployRepoBranch_Operation,
 		Variables: &__deployRepoBranchInput{
 			Branch:    branch,
 			ProjectId: projectId,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data deployRepoBranchResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ deployRepoBranchResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getBlueprint(
-	ctx context.Context,
-	client graphql.Client,
-	userID uuid.UUID,
-	blueprintID uuid.UUID,
-) (*getBlueprintResponse, error) {
-	req := &graphql.Request{
-		OpName: "getBlueprint",
-		Query: `
+// The query or mutation executed by getBlueprint.
+const getBlueprint_Operation = `
 query getBlueprint ($userID: ID!, $blueprintID: UUID!) {
 	user(id: $userID) {
 		blueprint(id: $blueprintID) {
@@ -2647,35 +2699,38 @@ fragment BlueprintSummary on Blueprint {
 	richInputSchema
 	tags
 }
-`,
+`
+
+func GetBlueprintQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	userID uuid.UUID,
+	blueprintID uuid.UUID,
+) (*getBlueprintResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getBlueprint",
+		Query:  getBlueprint_Operation,
 		Variables: &__getBlueprintInput{
 			UserID:      userID,
 			BlueprintID: blueprintID,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getBlueprintResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getBlueprintResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getBlueprints(
-	ctx context.Context,
-	client graphql.Client,
-	userId uuid.UUID,
-	pageInput PageInput,
-) (*getBlueprintsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getBlueprints",
-		Query: `
+// The query or mutation executed by getBlueprints.
+const getBlueprints_Operation = `
 query getBlueprints ($userId: ID!, $pageInput: PageInput!) {
 	user(id: $userId) {
 		blueprints(page: $pageInput) {
@@ -2702,34 +2757,38 @@ fragment BlueprintSummary on Blueprint {
 	richInputSchema
 	tags
 }
-`,
+`
+
+func GetBlueprintsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	userId uuid.UUID,
+	pageInput PageInput,
+) (*getBlueprintsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getBlueprints",
+		Query:  getBlueprints_Operation,
 		Variables: &__getBlueprintsInput{
 			UserId:    userId,
 			PageInput: pageInput,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getBlueprintsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getBlueprintsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getBuildLogs(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getBuildLogsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getBuildLogs",
-		Query: `
+// The query or mutation executed by getBuildLogs.
+const getBuildLogs_Operation = `
 query getBuildLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2744,33 +2803,36 @@ query getBuildLogs ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetBuildLogsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getBuildLogsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getBuildLogs",
+		Query:  getBuildLogs_Operation,
 		Variables: &__getBuildLogsInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getBuildLogsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getBuildLogsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getClusterKubeconfig(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getClusterKubeconfigResponse, error) {
-	req := &graphql.Request{
-		OpName: "getClusterKubeconfig",
-		Query: `
+// The query or mutation executed by getClusterKubeconfig.
+const getClusterKubeconfig_Operation = `
 query getClusterKubeconfig ($id: UUID!) {
 	currentUser {
 		cluster(id: $id) {
@@ -2780,62 +2842,68 @@ query getClusterKubeconfig ($id: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetClusterKubeconfigQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getClusterKubeconfigResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getClusterKubeconfig",
+		Query:  getClusterKubeconfig_Operation,
 		Variables: &__getClusterKubeconfigInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getClusterKubeconfigResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getClusterKubeconfigResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getCurrentUser(
-	ctx context.Context,
-	client graphql.Client,
-) (*getCurrentUserResponse, error) {
-	req := &graphql.Request{
-		OpName: "getCurrentUser",
-		Query: `
+// The query or mutation executed by getCurrentUser.
+const getCurrentUser_Operation = `
 query getCurrentUser {
 	currentUser {
 		id
 		login
 	}
 }
-`,
+`
+
+func GetCurrentUserQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+) (*getCurrentUserResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getCurrentUser",
+		Query:  getCurrentUser_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data getCurrentUserResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getCurrentUserResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getDeploymentInfo(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentInfoResponse, error) {
-	req := &graphql.Request{
-		OpName: "getDeploymentInfo",
-		Query: `
+// The query or mutation executed by getDeploymentInfo.
+const getDeploymentInfo_Operation = `
 query getDeploymentInfo ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2847,33 +2915,36 @@ query getDeploymentInfo ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetDeploymentInfoQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getDeploymentInfoResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getDeploymentInfo",
+		Query:  getDeploymentInfo_Operation,
 		Variables: &__getDeploymentInfoInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getDeploymentInfoResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getDeploymentInfoResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getDeploymentLogs(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentLogsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getDeploymentLogs",
-		Query: `
+// The query or mutation executed by getDeploymentLogs.
+const getDeploymentLogs_Operation = `
 query getDeploymentLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2888,33 +2959,36 @@ query getDeploymentLogs ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetDeploymentLogsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getDeploymentLogsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getDeploymentLogs",
+		Query:  getDeploymentLogs_Operation,
 		Variables: &__getDeploymentLogsInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getDeploymentLogsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getDeploymentLogsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getDeploymentReplicaStatus(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentReplicaStatusResponse, error) {
-	req := &graphql.Request{
-		OpName: "getDeploymentReplicaStatus",
-		Query: `
+// The query or mutation executed by getDeploymentReplicaStatus.
+const getDeploymentReplicaStatus_Operation = `
 query getDeploymentReplicaStatus ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -2928,33 +3002,36 @@ query getDeploymentReplicaStatus ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetDeploymentReplicaStatusQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getDeploymentReplicaStatusResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getDeploymentReplicaStatus",
+		Query:  getDeploymentReplicaStatus_Operation,
 		Variables: &__getDeploymentReplicaStatusInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getDeploymentReplicaStatusResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getDeploymentReplicaStatusResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getEnvVars(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getEnvVarsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getEnvVars",
-		Query: `
+// The query or mutation executed by getEnvVars.
+const getEnvVars_Operation = `
 query getEnvVars ($id: ID!) {
 	currentUser {
 		repo(id: $id) {
@@ -2965,34 +3042,36 @@ query getEnvVars ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetEnvVarsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getEnvVarsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getEnvVars",
+		Query:  getEnvVars_Operation,
 		Variables: &__getEnvVarsInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getEnvVarsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getEnvVarsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getJob(
-	ctx context.Context,
-	client graphql.Client,
-	projectID uuid.UUID,
-	jobID uuid.UUID,
-) (*getJobResponse, error) {
-	req := &graphql.Request{
-		OpName: "getJob",
-		Query: `
+// The query or mutation executed by getJob.
+const getJob_Operation = `
 query getJob ($projectID: UUID!, $jobID: UUID!) {
 	repo(id: $projectID) {
 		jobRun(id: $jobID) {
@@ -3001,35 +3080,38 @@ query getJob ($projectID: UUID!, $jobID: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetJobQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	projectID uuid.UUID,
+	jobID uuid.UUID,
+) (*getJobResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getJob",
+		Query:  getJob_Operation,
 		Variables: &__getJobInput{
 			ProjectID: projectID,
 			JobID:     jobID,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getJobResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getJobResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getJobLogs(
-	ctx context.Context,
-	client graphql.Client,
-	repoID uuid.UUID,
-	jobID uuid.UUID,
-) (*getJobLogsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getJobLogs",
-		Query: `
+// The query or mutation executed by getJobLogs.
+const getJobLogs_Operation = `
 query getJobLogs ($repoID: UUID!, $jobID: UUID!) {
 	repo(id: $repoID) {
 		jobRun(id: $jobID) {
@@ -3042,35 +3124,38 @@ query getJobLogs ($repoID: UUID!, $jobID: UUID!) {
 		}
 	}
 }
-`,
+`
+
+func GetJobLogsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	repoID uuid.UUID,
+	jobID uuid.UUID,
+) (*getJobLogsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getJobLogs",
+		Query:  getJobLogs_Operation,
 		Variables: &__getJobLogsInput{
 			RepoID: repoID,
 			JobID:  jobID,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getJobLogsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getJobLogsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getLatestDeployment(
-	ctx context.Context,
-	client graphql.Client,
-	project string,
-	branch string,
-) (*getLatestDeploymentResponse, error) {
-	req := &graphql.Request{
-		OpName: "getLatestDeployment",
-		Query: `
+// The query or mutation executed by getLatestDeployment.
+const getLatestDeployment_Operation = `
 query getLatestDeployment ($project: String, $branch: String) {
 	repo(path: $project) {
 		branch(name: $branch) {
@@ -3084,34 +3169,38 @@ query getLatestDeployment ($project: String, $branch: String) {
 		}
 	}
 }
-`,
+`
+
+func GetLatestDeploymentQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	project string,
+	branch string,
+) (*getLatestDeploymentResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getLatestDeployment",
+		Query:  getLatestDeployment_Operation,
 		Variables: &__getLatestDeploymentInput{
 			Project: project,
 			Branch:  branch,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getLatestDeploymentResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getLatestDeploymentResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getProductionBranch(
-	ctx context.Context,
-	client graphql.Client,
-	repoId uuid.UUID,
-) (*getProductionBranchResponse, error) {
-	req := &graphql.Request{
-		OpName: "getProductionBranch",
-		Query: `
+// The query or mutation executed by getProductionBranch.
+const getProductionBranch_Operation = `
 query getProductionBranch ($repoId: ID!) {
 	currentUser {
 		repo(id: $repoId) {
@@ -3122,33 +3211,36 @@ query getProductionBranch ($repoId: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetProductionBranchQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	repoId uuid.UUID,
+) (*getProductionBranchResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getProductionBranch",
+		Query:  getProductionBranch_Operation,
 		Variables: &__getProductionBranchInput{
 			RepoId: repoId,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getProductionBranchResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getProductionBranchResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getProductionDeployment(
-	ctx context.Context,
-	client graphql.Client,
-	project string,
-) (*getProductionDeploymentResponse, error) {
-	req := &graphql.Request{
-		OpName: "getProductionDeployment",
-		Query: `
+// The query or mutation executed by getProductionDeployment.
+const getProductionDeployment_Operation = `
 query getProductionDeployment ($project: String!) {
 	repo(path: $project) {
 		productionDeployment {
@@ -3159,98 +3251,106 @@ query getProductionDeployment ($project: String!) {
 		}
 	}
 }
-`,
+`
+
+func GetProductionDeploymentQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	project string,
+) (*getProductionDeploymentResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getProductionDeployment",
+		Query:  getProductionDeployment_Operation,
 		Variables: &__getProductionDeploymentInput{
 			Project: project,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getProductionDeploymentResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getProductionDeploymentResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getProjectByPath(
-	ctx context.Context,
-	client graphql.Client,
-	path string,
-) (*getProjectByPathResponse, error) {
-	req := &graphql.Request{
-		OpName: "getProjectByPath",
-		Query: `
+// The query or mutation executed by getProjectByPath.
+const getProjectByPath_Operation = `
 query getProjectByPath ($path: String) {
 	repo(path: $path) {
 		id
 	}
 }
-`,
+`
+
+func GetProjectByPathQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	path string,
+) (*getProjectByPathResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getProjectByPath",
+		Query:  getProjectByPath_Operation,
 		Variables: &__getProjectByPathInput{
 			Path: path,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getProjectByPathResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getProjectByPathResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getProjectPath(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getProjectPathResponse, error) {
-	req := &graphql.Request{
-		OpName: "getProjectPath",
-		Query: `
+// The query or mutation executed by getProjectPath.
+const getProjectPath_Operation = `
 query getProjectPath ($id: UUID!) {
 	repo(id: $id) {
 		fullPath
 	}
 }
-`,
+`
+
+func GetProjectPathQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getProjectPathResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getProjectPath",
+		Query:  getProjectPath_Operation,
 		Variables: &__getProjectPathInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getProjectPathResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getProjectPathResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getProjectV3s(
-	ctx context.Context,
-	client graphql.Client,
-	userId *uuid.UUID,
-	filter *FilterInput,
-) (*getProjectV3sResponse, error) {
-	req := &graphql.Request{
-		OpName: "getProjectV3s",
-		Query: `
+// The query or mutation executed by getProjectV3s.
+const getProjectV3s_Operation = `
 query getProjectV3s ($userId: ID!, $filter: FilterInput!) {
 	user(id: $userId) {
 		projectV3Adapters(filter: $filter) {
@@ -3279,66 +3379,73 @@ fragment ProjectV3AdapterSummary on ProjectV3Adapter {
 		name
 	}
 }
-`,
+`
+
+func GetProjectV3sQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	userId *uuid.UUID,
+	filter *FilterInput,
+) (*getProjectV3sResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getProjectV3s",
+		Query:  getProjectV3s_Operation,
 		Variables: &__getProjectV3sInput{
 			UserId: userId,
 			Filter: filter,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getProjectV3sResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getProjectV3sResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getRepo(
-	ctx context.Context,
-	client graphql.Client,
-	path string,
-) (*getRepoResponse, error) {
-	req := &graphql.Request{
-		OpName: "getRepo",
-		Query: `
+// The query or mutation executed by getRepo.
+const getRepo_Operation = `
 query getRepo ($path: String!) {
 	repo(path: $path) {
 		id
 	}
 }
-`,
+`
+
+func GetRepoQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	path string,
+) (*getRepoResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getRepo",
+		Query:  getRepo_Operation,
 		Variables: &__getRepoInput{
 			Path: path,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getRepoResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getRepoResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func getRuntimeLogs(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-) (*getRuntimeLogsResponse, error) {
-	req := &graphql.Request{
-		OpName: "getRuntimeLogs",
-		Query: `
+// The query or mutation executed by getRuntimeLogs.
+const getRuntimeLogs_Operation = `
 query getRuntimeLogs ($id: ID!) {
 	currentUser {
 		deployment(id: $id) {
@@ -3349,32 +3456,36 @@ query getRuntimeLogs ($id: ID!) {
 		}
 	}
 }
-`,
+`
+
+func GetRuntimeLogsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*getRuntimeLogsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getRuntimeLogs",
+		Query:  getRuntimeLogs_Operation,
 		Variables: &__getRuntimeLogsInput{
 			Id: id,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data getRuntimeLogsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ getRuntimeLogsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func listClusters(
-	ctx context.Context,
-	client graphql.Client,
-) (*listClustersResponse, error) {
-	req := &graphql.Request{
-		OpName: "listClusters",
-		Query: `
+// The query or mutation executed by listClusters.
+const listClusters_Operation = `
 query listClusters {
 	currentUser {
 		clusters {
@@ -3387,30 +3498,32 @@ query listClusters {
 		}
 	}
 }
-`,
+`
+
+func ListClustersQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+) (*listClustersResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "listClusters",
+		Query:  listClusters_Operation,
 	}
-	var err error
+	var err_ error
 
-	var data listClustersResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ listClustersResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func listClustersForTeam(
-	ctx context.Context,
-	client graphql.Client,
-	path string,
-) (*listClustersForTeamResponse, error) {
-	req := &graphql.Request{
-		OpName: "listClustersForTeam",
-		Query: `
+// The query or mutation executed by listClustersForTeam.
+const listClustersForTeam_Operation = `
 query listClustersForTeam ($path: String) {
 	team(path: $path) {
 		user {
@@ -3425,71 +3538,76 @@ query listClustersForTeam ($path: String) {
 		}
 	}
 }
-`,
+`
+
+func ListClustersForTeamQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	path string,
+) (*listClustersForTeamResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "listClustersForTeam",
+		Query:  listClustersForTeam_Operation,
 		Variables: &__listClustersForTeamInput{
 			Path: path,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data listClustersForTeamResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ listClustersForTeamResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func runJob(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-	command string,
-	build bool,
-) (*runJobResponse, error) {
-	req := &graphql.Request{
-		OpName: "runJob",
-		Query: `
+// The query or mutation executed by runJob.
+const runJob_Operation = `
 mutation runJob ($id: UUID!, $command: String!, $build: Boolean!) {
 	runJob(input: {id:$id,runCommand:$command,build:$build}) {
 		state
 		id
 	}
 }
-`,
+`
+
+func RunJobMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	command string,
+	build bool,
+) (*runJobResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "runJob",
+		Query:  runJob_Operation,
 		Variables: &__runJobInput{
 			Id:      id,
 			Command: command,
 			Build:   build,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data runJobResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ runJobResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func setEnvVars(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-	envs []EnvVarInput,
-) (*setEnvVarsResponse, error) {
-	req := &graphql.Request{
-		OpName: "setEnvVars",
-		Query: `
+// The query or mutation executed by setEnvVars.
+const setEnvVars_Operation = `
 mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 	setRepoEnvs(input: {id:$id,envs:$envs}) {
 		envs {
@@ -3497,43 +3615,56 @@ mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 		}
 	}
 }
-`,
+`
+
+func SetEnvVarsMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	envs []EnvVarInput,
+) (*setEnvVarsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "setEnvVars",
+		Query:  setEnvVars_Operation,
 		Variables: &__setEnvVarsInput{
 			Id:   id,
 			Envs: envs,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data setEnvVarsResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ setEnvVarsResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func updateBranch(
-	ctx context.Context,
-	client graphql.Client,
-	image string,
-	deploy bool,
-	projectID uuid.UUID,
-	branchName string,
-) (*updateBranchResponse, error) {
-	req := &graphql.Request{
-		OpName: "updateBranch",
-		Query: `
+// The query or mutation executed by updateBranch.
+const updateBranch_Operation = `
 mutation updateBranch ($image: String!, $deploy: Boolean, $projectID: UUID!, $branchName: String!) {
 	updateBranch(input: {image:$image,deploy:$deploy,repoID:$projectID,name:$branchName}) {
 		id
 	}
 }
-`,
+`
+
+func UpdateBranchMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	image string,
+	deploy bool,
+	projectID uuid.UUID,
+	branchName string,
+) (*updateBranchResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "updateBranch",
+		Query:  updateBranch_Operation,
 		Variables: &__updateBranchInput{
 			Image:      image,
 			Deploy:     deploy,
@@ -3541,84 +3672,90 @@ mutation updateBranch ($image: String!, $deploy: Boolean, $projectID: UUID!, $br
 			BranchName: branchName,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data updateBranchResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ updateBranchResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func updateCluster(
-	ctx context.Context,
-	client graphql.Client,
-	id uuid.UUID,
-	file string,
-) (*updateClusterResponse, error) {
-	req := &graphql.Request{
-		OpName: "updateCluster",
-		Query: `
+// The query or mutation executed by updateCluster.
+const updateCluster_Operation = `
 mutation updateCluster ($id: UUID!, $file: Upload!) {
 	updateCluster(input: {id:$id,kubeconfig:$file}) {
 		id
 	}
 }
-`,
+`
+
+func UpdateClusterMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	file string,
+) (*updateClusterResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "updateCluster",
+		Query:  updateCluster_Operation,
 		Variables: &__updateClusterInput{
 			Id:   id,
 			File: file,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data updateClusterResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ updateClusterResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }
 
-func updateProject(
-	ctx context.Context,
-	client graphql.Client,
-	projectID uuid.UUID,
-	image string,
-) (*updateProjectResponse, error) {
-	req := &graphql.Request{
-		OpName: "updateProject",
-		Query: `
+// The query or mutation executed by updateProject.
+const updateProject_Operation = `
 mutation updateProject ($projectID: ID!, $image: String!) {
 	updateProject(input: {id:$projectID,dockerImage:$image}) {
 		id
 	}
 }
-`,
+`
+
+func UpdateProjectMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	projectID uuid.UUID,
+	image string,
+) (*updateProjectResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "updateProject",
+		Query:  updateProject_Operation,
 		Variables: &__updateProjectInput{
 			ProjectID: projectID,
 			Image:     image,
 		},
 	}
-	var err error
+	var err_ error
 
-	var data updateProjectResponse
-	resp := &graphql.Response{Data: &data}
+	var data_ updateProjectResponse
+	resp_ := &graphql.Response{Data: &data_}
 
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
 	)
 
-	return &data, err
+	return &data_, err_
 }

@@ -19,7 +19,7 @@ func (c *Client) GetCloudAWS(ctx context.Context, cloudID uuid.UUID) (*GetCloudA
 		}
 	`
 
-	return GetCloudAWS(ctx, c.gql, cloudID)
+	return GetCloudAWSQuery(ctx, c.gql, cloudID)
 }
 
 func (c *Client) GetCloudGCP(ctx context.Context, cloudID uuid.UUID) (*GetCloudGCPResponse, error) {
@@ -35,7 +35,7 @@ func (c *Client) GetCloudGCP(ctx context.Context, cloudID uuid.UUID) (*GetCloudG
 		}
 	`
 
-	return GetCloudGCP(ctx, c.gql, cloudID)
+	return GetCloudGCPQuery(ctx, c.gql, cloudID)
 }
 
 func (c *Client) GetCloudLinode(ctx context.Context, cloudID uuid.UUID) (*GetCloudLinodeResponse, error) {
@@ -50,7 +50,7 @@ func (c *Client) GetCloudLinode(ctx context.Context, cloudID uuid.UUID) (*GetClo
 		}
 	`
 
-	return GetCloudLinode(ctx, c.gql, cloudID)
+	return GetCloudLinodeQuery(ctx, c.gql, cloudID)
 }
 
 func (c *Client) GetCloudDigitalOcean(ctx context.Context, cloudID uuid.UUID) (*GetCloudDigitalOceanResponse, error) {
@@ -65,5 +65,5 @@ func (c *Client) GetCloudDigitalOcean(ctx context.Context, cloudID uuid.UUID) (*
 		}
 	`
 
-	return GetCloudDigitalOcean(ctx, c.gql, cloudID)
+	return GetCloudDigitalOceanQuery(ctx, c.gql, cloudID)
 }

@@ -53,15 +53,15 @@ func (c *Client) ListProjectV3s(ctx context.Context, filterInput *FilterInput) (
 			}
 		}`
 
-		user, err := c.GetCurrentUser(ctx)
-		if err != nil {
-			return nil, err
-		}
+	user, err := c.GetCurrentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
 
-		res, err := getProjectV3s(ctx, c.gql, &user.Id, filterInput)
-		adapters := res.User.ProjectV3Adapters
+	res, err := GetProjectV3sQuery(ctx, c.gql, &user.Id, filterInput)
+	adapters := res.User.ProjectV3Adapters
 
-		return adapters, err
+	return adapters, err
 }
 
 func (c *Client) GetProjectV3(ctx context.Context, projectId uuid.UUID) (*ProjectV3AdapterSummary, error) {

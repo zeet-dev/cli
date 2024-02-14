@@ -57,7 +57,7 @@ func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch s
 	out := &Deployment{}
 
 	if branch == "" {
-		res, err := buildRepoDefaultBranch(ctx, c.gql, projectID, noCache)
+		res, err := BuildRepoDefaultBranchMutation(ctx, c.gql, projectID, noCache)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +65,7 @@ func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch s
 			return nil, err
 		}
 	} else {
-		res, err := buildRepo(ctx, c.gql, projectID, branch, noCache)
+		res, err := BuildRepoMutation(ctx, c.gql, projectID, branch, noCache)
 		if err != nil {
 			return nil, err
 		}
@@ -92,7 +92,7 @@ func (c *Client) DeployProjectBranch(ctx context.Context, projectID uuid.UUID, b
 		}
 	`
 	out := &Deployment{}
-	res, err := deployRepoBranch(ctx, c.gql, branch, projectID)
+	res, err := DeployRepoBranchMutation(ctx, c.gql, branch, projectID)
 	if err != nil {
 		return nil, err
 	}
@@ -122,7 +122,7 @@ func (c *Client) GetBuildLogs(ctx context.Context, deployID uuid.UUID) (out []Lo
 		}
 	`
 
-	res, err := getBuildLogs(ctx, c.gql, deployID)
+	res, err := GetBuildLogsQuery(ctx, c.gql, deployID)
 	if err != nil {
 		return
 	}
@@ -148,7 +148,7 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		  }
 		}
 	`
-	res, err := getDeploymentLogs(ctx, c.gql, deployID)
+	res, err := GetDeploymentLogsQuery(ctx, c.gql, deployID)
 	if err != nil {
 		return
 	}
@@ -170,7 +170,7 @@ func (c *Client) GetRuntimeLogs(ctx context.Context, deployID uuid.UUID) (out []
 		  }
 		}
 	`
-	res, err := getRuntimeLogs(ctx, c.gql, deployID)
+	res, err := GetRuntimeLogsQuery(ctx, c.gql, deployID)
 	if err != nil {
 		return
 	}
@@ -195,7 +195,7 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 		  }
 		}
 	`
-	res, err := getDeploymentInfo(ctx, c.gql, deploymentID)
+	res, err := GetDeploymentInfoQuery(ctx, c.gql, deploymentID)
 	if err != nil {
 		return nil, err
 	}
@@ -222,7 +222,7 @@ func (c *Client) GetDeploymentStatus(ctx context.Context, deploymentID uuid.UUID
 		  }
 		}
 	`
-	res, err := getDeploymentReplicaStatus(ctx, c.gql, deploymentID)
+	res, err := GetDeploymentReplicaStatusQuery(ctx, c.gql, deploymentID)
 	if err != nil {
 		return nil, err
 	}
@@ -246,7 +246,7 @@ func (c *Client) GetProductionDeployment(ctx context.Context, project string) (*
 			}
 		}
 	`
-	res, err := getProductionDeployment(ctx, c.gql, project)
+	res, err := GetProductionDeploymentQuery(ctx, c.gql, project)
 	if err != nil {
 		return nil, err
 	}
@@ -273,7 +273,7 @@ func (c *Client) GetLatestDeployment(ctx context.Context, project string, branch
 			}
 		}
 	`
-	res, err := getLatestDeployment(ctx, c.gql, project, branch)
+	res, err := GetLatestDeploymentQuery(ctx, c.gql, project, branch)
 	if err != nil {
 		return nil, err
 	}

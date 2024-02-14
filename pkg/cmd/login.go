@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 Zeet, Inc - All Rights Reserved
-
 */
 package cmd
 
@@ -17,6 +16,8 @@ import (
 	"github.com/zeet-dev/cli/pkg/api"
 	"github.com/zeet-dev/cli/pkg/cmdutil"
 	"github.com/zeet-dev/cli/pkg/iostreams"
+	zeetv0 "github.com/zeet-dev/cli/pkg/sdk/v0"
+	zeetv1 "github.com/zeet-dev/cli/pkg/sdk/v1"
 	"golang.org/x/term"
 )
 
@@ -63,8 +64,10 @@ func runLogin(opts *LoginOptions) error {
 	accessToken := cfg.GetString("auth.access_token")
 
 	if accessToken != "" && !opts.Overwrite {
-		if user, err := apiClient.GetCurrentUser(context.Background()); err == nil {
-			fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
+		user, err := zeetv0.CurrentUserQuery(context.Background(), apiClient.Client())
+		// already logged in
+		if err == nil {
+			fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.CurrentUser.Login)
 			fmt.Fprintf(opts.IO.Out, "Login as a different user? [y/N]: ")
 
 			reader := bufio.NewReader(os.Stdin)
@@ -108,11 +111,11 @@ func runLogin(opts *LoginOptions) error {
 		return err
 	}
 
-	user, err := apiClient.GetCurrentUser(context.Background())
+	user, err := zeetv1.CurrentUserQuery(context.Background(), apiClient.ClientV1())
 	if err != nil {
 		return err
 	}
-	fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.Login)
+	fmt.Fprintln(opts.IO.Out, "You are logged in as: "+user.CurrentUser.Login)
 
 	if err := cfg.WriteConfig(); err != nil {
 		return err

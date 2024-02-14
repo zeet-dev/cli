@@ -24,7 +24,7 @@ func (c *Client) RunJob(ctx context.Context, projectID uuid.UUID, command string
 		  }
 		}
 	`
-	res, err := runJob(ctx, c.gql, projectID, command, build)
+	res, err := RunJobMutation(ctx, c.gql, projectID, command, build)
 	if err != nil {
 		return out, err
 	}
@@ -53,7 +53,7 @@ func (c *Client) GetJobLogs(ctx context.Context, repoID uuid.UUID, jobID uuid.UU
 		  }
 		}
 	`
-	res, err := getJobLogs(ctx, c.gql, repoID, jobID)
+	res, err := GetJobLogsQuery(ctx, c.gql, repoID, jobID)
 	if err != nil {
 		return out, err
 	}
@@ -78,7 +78,7 @@ func (c *Client) GetJob(ctx context.Context, projectID uuid.UUID, jobID uuid.UUI
 			}
 		}
 	`
-	res, err := getJob(ctx, c.gql, projectID, jobID)
+	res, err := GetJobQuery(ctx, c.gql, projectID, jobID)
 	if err != nil {
 		return out, err
 	}
