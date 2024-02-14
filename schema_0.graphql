@@ -1194,13 +1194,14 @@ enum ClusterAddOnState {
 }
 
 type ClusterComponent {
-  name: String!
   type: ClusterComponentType!
-  status: ClusterComponentEjectedStatus!
-  project: ProjectV3Adapter
-  helmMetadata: HelmClusterComponentMetadata
+  name: String!
   isInstalledByZeet: Boolean!
   exists: Boolean!
+  status: ClusterComponentEjectedStatus!
+  helmMetadata: HelmClusterComponentMetadata
+  terraformMetadata: TerraformClusterComponentMetadata
+  project: ProjectV3Adapter
 }
 
 enum ClusterComponentEjectedStatus {
@@ -1210,6 +1211,7 @@ enum ClusterComponentEjectedStatus {
 
 enum ClusterComponentType {
   HELM
+  TERRAFORM
 }
 
 type ClusterCustomDomain {
@@ -3070,6 +3072,14 @@ enum MetricType {
   MEMORY
   NETWORK
   STORAGE
+  FUNCTION_INVOCATION
+  FUNCTION_ERROR
+  FUNCTION_DURATION
+  FUNCTION_CONCURRENT
+  REQUEST_COUNT
+  INSTANCE_COUNT
+  CPU_UTILIZATION
+  MEMORY_UTILIZATION
 }
 
 input MoveRepoInput {
@@ -4895,6 +4905,10 @@ input TerraformAutomaticOutputConfigurationInput {
   disabled: Boolean
   sensitive: Boolean
   excluded: [String!]
+}
+
+type TerraformClusterComponentMetadata {
+  jobRunState: JobRunState!
 }
 
 type TerraformModule {

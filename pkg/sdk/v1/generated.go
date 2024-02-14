@@ -818,6 +818,20 @@ func (v *CloudResourceOwnersResourceOwner) GetName() string { return v.Name }
 // GetType returns CloudResourceOwnersResourceOwner.Type, and is useful for accessing the field via an interface.
 func (v *CloudResourceOwnersResourceOwner) GetType() ResourceType { return v.Type }
 
+type ClusterComponentEjectedStatus string
+
+const (
+	ClusterComponentEjectedStatusNotFound ClusterComponentEjectedStatus = "NOT_FOUND"
+	ClusterComponentEjectedStatusDetected ClusterComponentEjectedStatus = "DETECTED"
+)
+
+type ClusterComponentType string
+
+const (
+	ClusterComponentTypeHelm      ClusterComponentType = "HELM"
+	ClusterComponentTypeTerraform ClusterComponentType = "TERRAFORM"
+)
+
 // ClusterDetailV1 includes the GraphQL fields of Cluster requested by the fragment ClusterDetailV1.
 type ClusterDetailV1 struct {
 	Id            uuid.UUID     `json:"id"`
@@ -3059,6 +3073,16 @@ func (v *DeploymentConfigurationTerraformInput) GetTarget() TerraformTargetConfi
 	return v.Target
 }
 
+type DriverWorkflowStepActionType string
+
+const (
+	DriverWorkflowStepActionTypeDriverPlanDestroy DriverWorkflowStepActionType = "DRIVER_PLAN_DESTROY"
+	DriverWorkflowStepActionTypeDriverPlan        DriverWorkflowStepActionType = "DRIVER_PLAN"
+	DriverWorkflowStepActionTypeDriverApprove     DriverWorkflowStepActionType = "DRIVER_APPROVE"
+	DriverWorkflowStepActionTypeDriverApply       DriverWorkflowStepActionType = "DRIVER_APPLY"
+	DriverWorkflowStepActionTypeProjectDelete     DriverWorkflowStepActionType = "PROJECT_DELETE"
+)
+
 type DuplicateProjectInput struct {
 	GroupId      uuid.UUID `json:"groupId"`
 	GroupName    string    `json:"groupName"`
@@ -3081,6 +3105,29 @@ func (v *DuplicateProjectInput) GetSubGroupName() string { return v.SubGroupName
 
 // GetName returns DuplicateProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *DuplicateProjectInput) GetName() string { return v.Name }
+
+type EjectClusterComponentInput struct {
+	Name         string               `json:"name"`
+	Type         ClusterComponentType `json:"type"`
+	GroupName    string               `json:"groupName"`
+	SubGroupName string               `json:"subGroupName"`
+	ProjectName  string               `json:"projectName"`
+}
+
+// GetName returns EjectClusterComponentInput.Name, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentInput) GetName() string { return v.Name }
+
+// GetType returns EjectClusterComponentInput.Type, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentInput) GetType() ClusterComponentType { return v.Type }
+
+// GetGroupName returns EjectClusterComponentInput.GroupName, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentInput) GetGroupName() string { return v.GroupName }
+
+// GetSubGroupName returns EjectClusterComponentInput.SubGroupName, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentInput) GetSubGroupName() string { return v.SubGroupName }
+
+// GetProjectName returns EjectClusterComponentInput.ProjectName, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentInput) GetProjectName() string { return v.ProjectName }
 
 type EnvVarInput struct {
 	Name   string `json:"name"`
@@ -4088,11 +4135,19 @@ func (v *ManifestTargetConfigurationInput) GetNamespace() string { return v.Name
 type MetricType string
 
 const (
-	MetricTypeQuery   MetricType = "QUERY"
-	MetricTypeCpu     MetricType = "CPU"
-	MetricTypeMemory  MetricType = "MEMORY"
-	MetricTypeNetwork MetricType = "NETWORK"
-	MetricTypeStorage MetricType = "STORAGE"
+	MetricTypeQuery              MetricType = "QUERY"
+	MetricTypeCpu                MetricType = "CPU"
+	MetricTypeMemory             MetricType = "MEMORY"
+	MetricTypeNetwork            MetricType = "NETWORK"
+	MetricTypeStorage            MetricType = "STORAGE"
+	MetricTypeFunctionInvocation MetricType = "FUNCTION_INVOCATION"
+	MetricTypeFunctionError      MetricType = "FUNCTION_ERROR"
+	MetricTypeFunctionDuration   MetricType = "FUNCTION_DURATION"
+	MetricTypeFunctionConcurrent MetricType = "FUNCTION_CONCURRENT"
+	MetricTypeRequestCount       MetricType = "REQUEST_COUNT"
+	MetricTypeInstanceCount      MetricType = "INSTANCE_COUNT"
+	MetricTypeCpuUtilization     MetricType = "CPU_UTILIZATION"
+	MetricTypeMemoryUtilization  MetricType = "MEMORY_UTILIZATION"
 )
 
 type ObservabilityResourceSelectorInput struct {
@@ -7907,6 +7962,21 @@ const (
 	WorkflowExecutionTypeDriverAction WorkflowExecutionType = "DRIVER_ACTION"
 )
 
+type WorkflowRunDefinitionInput struct {
+	Steps  []WorkflowRunStepDefinitionInput `json:"steps"`
+	Source SourceInput                      `json:"source"`
+	Branch WorkflowBranchDefinitionInput    `json:"branch"`
+}
+
+// GetSteps returns WorkflowRunDefinitionInput.Steps, and is useful for accessing the field via an interface.
+func (v *WorkflowRunDefinitionInput) GetSteps() []WorkflowRunStepDefinitionInput { return v.Steps }
+
+// GetSource returns WorkflowRunDefinitionInput.Source, and is useful for accessing the field via an interface.
+func (v *WorkflowRunDefinitionInput) GetSource() SourceInput { return v.Source }
+
+// GetBranch returns WorkflowRunDefinitionInput.Branch, and is useful for accessing the field via an interface.
+func (v *WorkflowRunDefinitionInput) GetBranch() WorkflowBranchDefinitionInput { return v.Branch }
+
 // WorkflowRunDetail includes the GraphQL fields of WorkflowRun requested by the fragment WorkflowRunDetail.
 type WorkflowRunDetail struct {
 	WorkflowRunListItem `json:"-"`
@@ -11528,6 +11598,46 @@ const (
 	WorkflowRunStatusAborted    WorkflowRunStatus = "ABORTED"
 )
 
+type WorkflowRunStepDefinitionInput struct {
+	Action         WorkflowStepActionType                  `json:"action"`
+	DependsOn      []int                                   `json:"dependsOn"`
+	Disabled       bool                                    `json:"disabled"`
+	MatchingRule   WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule"`
+	SequenceNumber int                                     `json:"sequenceNumber"`
+	Metadata       WorkflowRunStepDefinitionMetadataInput  `json:"metadata"`
+}
+
+// GetAction returns WorkflowRunStepDefinitionInput.Action, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetAction() WorkflowStepActionType { return v.Action }
+
+// GetDependsOn returns WorkflowRunStepDefinitionInput.DependsOn, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetDependsOn() []int { return v.DependsOn }
+
+// GetDisabled returns WorkflowRunStepDefinitionInput.Disabled, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetDisabled() bool { return v.Disabled }
+
+// GetMatchingRule returns WorkflowRunStepDefinitionInput.MatchingRule, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetMatchingRule() WorkflowStepDefinitionMatchingRuleInput {
+	return v.MatchingRule
+}
+
+// GetSequenceNumber returns WorkflowRunStepDefinitionInput.SequenceNumber, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetSequenceNumber() int { return v.SequenceNumber }
+
+// GetMetadata returns WorkflowRunStepDefinitionInput.Metadata, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionInput) GetMetadata() WorkflowRunStepDefinitionMetadataInput {
+	return v.Metadata
+}
+
+type WorkflowRunStepDefinitionMetadataInput struct {
+	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps"`
+}
+
+// GetDeploySteps returns WorkflowRunStepDefinitionMetadataInput.DeploySteps, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDefinitionMetadataInput) GetDeploySteps() []DriverWorkflowStepActionType {
+	return v.DeploySteps
+}
+
 // WorkflowRunStepDetail includes the GraphQL fields of WorkflowRunStep requested by the fragment WorkflowRunStepDetail.
 //
 // WorkflowRunStepDetail is implemented by the following types:
@@ -12880,6 +12990,7 @@ type WorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                      `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                          `json:"executionType"`
+	ExecutionError string                                                                         `json:"executionError"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -12926,6 +13037,11 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) GetExecutionId() uui
 // GetExecutionType returns WorkflowRunStepDetailWorkflowRunStepsBuildRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns WorkflowRunStepDetailWorkflowRunStepsBuildRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) UnmarshalJSON(b []byte) error {
@@ -12987,6 +13103,8 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -13027,6 +13145,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) __premarshalJSON() (
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -13042,6 +13161,7 @@ type WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct {
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                      `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                          `json:"executionType"`
+	ExecutionError string                                                                         `json:"executionError"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -13090,6 +13210,11 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) GetExecutionI
 // GetExecutionType returns WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) UnmarshalJSON(b []byte) error {
@@ -13151,6 +13276,8 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -13191,6 +13318,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) __premarshalJ
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -13206,6 +13334,7 @@ type WorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                      `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                          `json:"executionType"`
+	ExecutionError string                                                                         `json:"executionError"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -13252,6 +13381,11 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) GetExecutionId() uu
 // GetExecutionType returns WorkflowRunStepDetailWorkflowRunStepsDeployRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns WorkflowRunStepDetailWorkflowRunStepsDeployRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) UnmarshalJSON(b []byte) error {
@@ -13313,6 +13447,8 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -13353,6 +13489,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) __premarshalJSON() 
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -13368,6 +13505,7 @@ type WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                      `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                          `json:"executionType"`
+	ExecutionError string                                                                         `json:"executionError"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -13414,6 +13552,11 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) GetExecutionId() u
 // GetExecutionType returns WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) UnmarshalJSON(b []byte) error {
@@ -13475,6 +13618,8 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -13515,6 +13660,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) __premarshalJSON()
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -13530,6 +13676,7 @@ type WorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                      `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                          `json:"executionType"`
+	ExecutionError string                                                                         `json:"executionError"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -13576,6 +13723,11 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) GetExecutionId() uuid.
 // GetExecutionType returns WorkflowRunStepDetailWorkflowRunStepsJobRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns WorkflowRunStepDetailWorkflowRunStepsJobRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) UnmarshalJSON(b []byte) error {
@@ -13637,6 +13789,8 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -13677,6 +13831,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) __premarshalJSON() (*_
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -13710,6 +13865,8 @@ type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep interface {
 	GetExecutionId() uuid.UUID
 	// GetExecutionType returns the interface-field "executionType" from its implementation.
 	GetExecutionType() WorkflowExecutionType
+	// GetExecutionError returns the interface-field "executionError" from its implementation.
+	GetExecutionError() string
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
@@ -14357,6 +14514,18 @@ func (v *__duplicateProjectInput) GetId() uuid.UUID { return v.Id }
 // GetInput returns __duplicateProjectInput.Input, and is useful for accessing the field via an interface.
 func (v *__duplicateProjectInput) GetInput() DuplicateProjectInput { return v.Input }
 
+// __ejectClusterComponentInput is used internally by genqlient
+type __ejectClusterComponentInput struct {
+	ClusterId uuid.UUID                  `json:"clusterId"`
+	Input     EjectClusterComponentInput `json:"input"`
+}
+
+// GetClusterId returns __ejectClusterComponentInput.ClusterId, and is useful for accessing the field via an interface.
+func (v *__ejectClusterComponentInput) GetClusterId() uuid.UUID { return v.ClusterId }
+
+// GetInput returns __ejectClusterComponentInput.Input, and is useful for accessing the field via an interface.
+func (v *__ejectClusterComponentInput) GetInput() EjectClusterComponentInput { return v.Input }
+
 // __generateDownloadableLogLinkForWorkflowRunStepInput is used internally by genqlient
 type __generateDownloadableLogLinkForWorkflowRunStepInput struct {
 	ActionStepId uuid.UUID `json:"actionStepId"`
@@ -14693,11 +14862,15 @@ func (v *__resourcesWithMetricsInput) GetSelector() ObservabilityResourceSelecto
 
 // __submitWorkflowRunInput is used internally by genqlient
 type __submitWorkflowRunInput struct {
-	WorkflowId uuid.UUID `json:"workflowId"`
+	WorkflowId uuid.UUID                  `json:"workflowId"`
+	Definition WorkflowRunDefinitionInput `json:"definition"`
 }
 
 // GetWorkflowId returns __submitWorkflowRunInput.WorkflowId, and is useful for accessing the field via an interface.
 func (v *__submitWorkflowRunInput) GetWorkflowId() uuid.UUID { return v.WorkflowId }
+
+// GetDefinition returns __submitWorkflowRunInput.Definition, and is useful for accessing the field via an interface.
+func (v *__submitWorkflowRunInput) GetDefinition() WorkflowRunDefinitionInput { return v.Definition }
 
 // __unlinkProjectInput is used internally by genqlient
 type __unlinkProjectInput struct {
@@ -16985,6 +17158,30 @@ type duplicateProjectResponse struct {
 // GetDuplicateProject returns duplicateProjectResponse.DuplicateProject, and is useful for accessing the field via an interface.
 func (v *duplicateProjectResponse) GetDuplicateProject() duplicateProjectDuplicateProject {
 	return v.DuplicateProject
+}
+
+// ejectClusterComponentEjectClusterComponent includes the requested fields of the GraphQL type ClusterComponent.
+type ejectClusterComponentEjectClusterComponent struct {
+	Name   string                        `json:"name"`
+	Status ClusterComponentEjectedStatus `json:"status"`
+}
+
+// GetName returns ejectClusterComponentEjectClusterComponent.Name, and is useful for accessing the field via an interface.
+func (v *ejectClusterComponentEjectClusterComponent) GetName() string { return v.Name }
+
+// GetStatus returns ejectClusterComponentEjectClusterComponent.Status, and is useful for accessing the field via an interface.
+func (v *ejectClusterComponentEjectClusterComponent) GetStatus() ClusterComponentEjectedStatus {
+	return v.Status
+}
+
+// ejectClusterComponentResponse is returned by ejectClusterComponent on success.
+type ejectClusterComponentResponse struct {
+	EjectClusterComponent ejectClusterComponentEjectClusterComponent `json:"ejectClusterComponent"`
+}
+
+// GetEjectClusterComponent returns ejectClusterComponentResponse.EjectClusterComponent, and is useful for accessing the field via an interface.
+func (v *ejectClusterComponentResponse) GetEjectClusterComponent() ejectClusterComponentEjectClusterComponent {
+	return v.EjectClusterComponent
 }
 
 // generateDownloadableLogLinkForWorkflowRunStepResponse is returned by generateDownloadableLogLinkForWorkflowRunStep on success.
@@ -22828,6 +23025,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                   `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                       `json:"executionType"`
+	ExecutionError string                                                                                                                      `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -22878,6 +23076,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) UnmarshalJSON(b []byte) error {
@@ -22939,6 +23142,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -22979,6 +23184,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -22994,6 +23200,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                   `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                       `json:"executionType"`
+	ExecutionError string                                                                                                                      `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -23044,6 +23251,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) UnmarshalJSON(b []byte) error {
@@ -23105,6 +23317,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -23145,6 +23359,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -23160,6 +23375,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                   `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                       `json:"executionType"`
+	ExecutionError string                                                                                                                      `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23210,6 +23426,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) UnmarshalJSON(b []byte) error {
@@ -23271,6 +23492,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -23311,6 +23534,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -23326,6 +23550,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                   `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                       `json:"executionType"`
+	ExecutionError string                                                                                                                      `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23376,6 +23601,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) UnmarshalJSON(b []byte) error {
@@ -23437,6 +23667,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -23477,6 +23709,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -23492,6 +23725,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                   `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                       `json:"executionType"`
+	ExecutionError string                                                                                                                      `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23542,6 +23776,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) UnmarshalJSON(b []byte) error {
@@ -23603,6 +23842,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -23643,6 +23884,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -23676,6 +23918,8 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	GetExecutionId() uuid.UUID
 	// GetExecutionType returns the interface-field "executionType" from its implementation.
 	GetExecutionType() WorkflowExecutionType
+	// GetExecutionError returns the interface-field "executionError" from its implementation.
+	GetExecutionError() string
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
@@ -24170,6 +24414,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                    `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                        `json:"executionType"`
+	ExecutionError string                                                                                                                       `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24220,6 +24465,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) UnmarshalJSON(b []byte) error {
@@ -24281,6 +24531,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -24321,6 +24573,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -24336,6 +24589,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                    `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                        `json:"executionType"`
+	ExecutionError string                                                                                                                       `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -24386,6 +24640,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) UnmarshalJSON(b []byte) error {
@@ -24447,6 +24706,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -24487,6 +24748,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -24502,6 +24764,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                    `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                        `json:"executionType"`
+	ExecutionError string                                                                                                                       `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24552,6 +24815,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) UnmarshalJSON(b []byte) error {
@@ -24613,6 +24881,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -24653,6 +24923,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -24668,6 +24939,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                    `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                        `json:"executionType"`
+	ExecutionError string                                                                                                                       `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24718,6 +24990,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) UnmarshalJSON(b []byte) error {
@@ -24779,6 +25056,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -24819,6 +25098,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -24834,6 +25114,7 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
 	ExecutionId    uuid.UUID                                                                                                                    `json:"executionId"`
 	ExecutionType  WorkflowExecutionType                                                                                                        `json:"executionType"`
+	ExecutionError string                                                                                                                       `json:"executionError"`
 }
 
 // GetTypename returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24884,6 +25165,11 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 // GetExecutionType returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep.ExecutionType, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) GetExecutionType() WorkflowExecutionType {
 	return v.ExecutionType
+}
+
+// GetExecutionError returns workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep.ExecutionError, and is useful for accessing the field via an interface.
+func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) GetExecutionError() string {
+	return v.ExecutionError
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) UnmarshalJSON(b []byte) error {
@@ -24945,6 +25231,8 @@ type __premarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 	ExecutionId uuid.UUID `json:"executionId"`
 
 	ExecutionType WorkflowExecutionType `json:"executionType"`
+
+	ExecutionError string `json:"executionError"`
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -24985,6 +25273,7 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 	retval.UpdatedAt = v.UpdatedAt
 	retval.ExecutionId = v.ExecutionId
 	retval.ExecutionType = v.ExecutionType
+	retval.ExecutionError = v.ExecutionError
 	return &retval, nil
 }
 
@@ -25018,6 +25307,8 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	GetExecutionId() uuid.UUID
 	// GetExecutionType returns the interface-field "executionType" from its implementation.
 	GetExecutionType() WorkflowExecutionType
+	// GetExecutionError returns the interface-field "executionError" from its implementation.
+	GetExecutionError() string
 }
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
@@ -26712,6 +27003,44 @@ func DuplicateProjectMutation(
 	return &data_, err_
 }
 
+// The query or mutation executed by ejectClusterComponent.
+const ejectClusterComponent_Operation = `
+mutation ejectClusterComponent ($clusterId: UUID!, $input: EjectClusterComponentInput!) @api(name: v1) {
+	ejectClusterComponent(clusterId: $clusterId, input: $input) {
+		name
+		status
+	}
+}
+`
+
+func EjectClusterComponentMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	clusterId uuid.UUID,
+	input EjectClusterComponentInput,
+) (*ejectClusterComponentResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "ejectClusterComponent",
+		Query:  ejectClusterComponent_Operation,
+		Variables: &__ejectClusterComponentInput{
+			ClusterId: clusterId,
+			Input:     input,
+		},
+	}
+	var err_ error
+
+	var data_ ejectClusterComponentResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by generateDownloadableLogLinkForWorkflowRunStep.
 const generateDownloadableLogLinkForWorkflowRunStep_Operation = `
 mutation generateDownloadableLogLinkForWorkflowRunStep ($actionStepId: UUID!) @api(name: v1) {
@@ -27987,6 +28316,7 @@ fragment WorkflowRunStepDetail on WorkflowRunStep {
 				updatedAt
 				executionId
 				executionType
+				executionError
 			}
 		}
 	}
@@ -28175,6 +28505,7 @@ fragment WorkflowRunStepDetail on WorkflowRunStep {
 				updatedAt
 				executionId
 				executionType
+				executionError
 			}
 		}
 	}
@@ -28795,8 +29126,8 @@ func ResourcesWithMetricsQuery(
 
 // The query or mutation executed by submitWorkflowRun.
 const submitWorkflowRun_Operation = `
-mutation submitWorkflowRun ($workflowId: UUID!) @api(name: v1) {
-	submitWorkflow(input: {workflowId:$workflowId}) {
+mutation submitWorkflowRun ($workflowId: UUID!, $definition: WorkflowRunDefinitionInput) @api(name: v1) {
+	submitWorkflow(input: {workflowId:$workflowId,definition:$definition}) {
 		id
 	}
 }
@@ -28806,12 +29137,14 @@ func SubmitWorkflowRunMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	workflowId uuid.UUID,
+	definition WorkflowRunDefinitionInput,
 ) (*submitWorkflowRunResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "submitWorkflowRun",
 		Query:  submitWorkflowRun_Operation,
 		Variables: &__submitWorkflowRunInput{
 			WorkflowId: workflowId,
+			Definition: definition,
 		},
 	}
 	var err_ error
@@ -29238,6 +29571,7 @@ fragment WorkflowRunStepDetail on WorkflowRunStep {
 				updatedAt
 				executionId
 				executionType
+				executionError
 			}
 		}
 	}
@@ -29400,6 +29734,7 @@ query workflowRunStepNestedDetail ($teamId: UUID!, $projectId: UUID!, $runId: UU
 									updatedAt
 									executionId
 									executionType
+									executionError
 								}
 							}
 						}
@@ -29424,6 +29759,7 @@ query workflowRunStepNestedDetail ($teamId: UUID!, $projectId: UUID!, $runId: UU
 									updatedAt
 									executionId
 									executionType
+									executionError
 								}
 							}
 						}

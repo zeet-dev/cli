@@ -797,13 +797,14 @@ type ClusterCertManager {
 }
 
 type ClusterComponent {
-  name: String!
   type: ClusterComponentType!
-  status: ClusterComponentEjectedStatus!
-  helmMetadata: HelmClusterComponentMetadata
-  project: Project
+  name: String!
   isInstalledByZeet: Boolean!
   exists: Boolean!
+  status: ClusterComponentEjectedStatus!
+  helmMetadata: HelmClusterComponentMetadata
+  terraformMetadata: TerraformClusterComponentMetadata
+  project: Project
 }
 
 enum ClusterComponentEjectedStatus {
@@ -813,6 +814,7 @@ enum ClusterComponentEjectedStatus {
 
 enum ClusterComponentType {
   HELM
+  TERRAFORM
 }
 
 type ClusterConfiguration implements RevisableEntity {
@@ -1430,6 +1432,14 @@ input DuplicateProjectInput {
 }
 
 scalar Duration
+
+input EjectClusterComponentInput {
+  name: String!
+  type: ClusterComponentType!
+  groupName: String!
+  subGroupName: String!
+  projectName: String!
+}
 
 type EndpointResource implements Resource {
   id: ID!
@@ -2289,6 +2299,14 @@ enum MetricType {
   MEMORY
   NETWORK
   STORAGE
+  FUNCTION_INVOCATION
+  FUNCTION_ERROR
+  FUNCTION_DURATION
+  FUNCTION_CONCURRENT
+  REQUEST_COUNT
+  INSTANCE_COUNT
+  CPU_UTILIZATION
+  MEMORY_UTILIZATION
 }
 
 input MultiEntityCriterion {
@@ -2323,6 +2341,7 @@ type Mutation {
   """Add an existing cluster to your Zeet Account"""
   addCluster(input: AddClusterInput!): Cluster!
   linkCloudToCluster(input: LinkCloudToClusterInput!): Cluster!
+  ejectClusterComponent(clusterId: UUID!, input: EjectClusterComponentInput!): ClusterComponent!
   addContainerRegistry(input: AddContainerRegistryInput!): ContainerRegistry!
   removeContainerRegistry(id: UUID!): Boolean!
   createGroup(input: CreateGroupInput!): Group!
@@ -3037,6 +3056,10 @@ input TerraformAutomaticOutputConfigurationInput {
   disabled: Boolean
   sensitive: Boolean
   excluded: [String!]
+}
+
+type TerraformClusterComponentMetadata {
+  jobRunState: JobRunState!
 }
 
 type TerraformModuleSource {
