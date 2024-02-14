@@ -1,6 +1,6 @@
 module github.com/zeet-dev/cli
 
-go 1.18
+go 1.19
 
 require (
 	github.com/Khan/genqlient v0.5.0
@@ -82,4 +82,4 @@ require (
 	k8s.io/utils v0.0.0-20211116205334-6203023598ed
 )
 
-replace github.com/Khan/genqlient => ../genqlient
+replace github.com/Khan/genqlient => github.com/zeet-dev/genqlient v0.0.0-20240214181521-7a7b77a60388

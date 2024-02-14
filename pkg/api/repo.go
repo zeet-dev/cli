@@ -8,7 +8,7 @@ import (
 )
 
 type Repo struct {
-	ID     uuid.UUID `copier:"Id"`
+	ID uuid.UUID `copier:"Id"`
 }
 
 func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID) error {
@@ -18,7 +18,7 @@ func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID) error {
 		}
 	`
 
-	_, err := delete(ctx, c.gql, repoID)
+	_, err := DeleteMutation(ctx, c.gql, repoID)
 	return err
 }
 
@@ -40,7 +40,7 @@ func (c *Client) SetEnvVars(ctx context.Context, repoID uuid.UUID, vars map[stri
 		  }
 		}
 	`
-	_, err := setEnvVars(ctx, c.gql, repoID, inp)
+	_, err := SetEnvVarsMutation(ctx, c.gql, repoID, inp)
 	return err
 }
 
@@ -57,7 +57,7 @@ func (c *Client) GetEnvVars(ctx context.Context, repoID uuid.UUID) (map[string]s
 		  }
 		}
 	`
-	res, err := getEnvVars(ctx, c.gql, repoID)
+	res, err := GetEnvVarsQuery(ctx, c.gql, repoID)
 	if err != nil {
 		return nil, err
 	}
@@ -80,7 +80,7 @@ func (c *Client) GetRepo(ctx context.Context, path string) (*Repo, error) {
 		  }
 		}
 	`
-	res, err := getRepo(ctx, c.gql, path)
+	res, err := GetRepoQuery(ctx, c.gql, path)
 	if err := copier.Copy(out, res.Repo); err != nil {
 		return nil, err
 	}

@@ -561,31 +561,31 @@ func (v *PageInfo) GetHasNextPage() bool { return v.HasNextPage }
 func (v *PageInfo) GetHasPreviousPage() bool { return v.HasPreviousPage }
 
 type PageInput struct {
-	First  int     `json:"first"`
-	Last   *int    `json:"last"`
-	After  string  `json:"after"`
-	Before *string `json:"before"`
-	Filter *string `json:"filter"`
-	Sort   *string `json:"sort"`
+	First  int    `json:"first"`
+	Last   int    `json:"last"`
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Filter string `json:"filter"`
+	Sort   string `json:"sort"`
 }
 
 // GetFirst returns PageInput.First, and is useful for accessing the field via an interface.
 func (v *PageInput) GetFirst() int { return v.First }
 
 // GetLast returns PageInput.Last, and is useful for accessing the field via an interface.
-func (v *PageInput) GetLast() *int { return v.Last }
+func (v *PageInput) GetLast() int { return v.Last }
 
 // GetAfter returns PageInput.After, and is useful for accessing the field via an interface.
 func (v *PageInput) GetAfter() string { return v.After }
 
 // GetBefore returns PageInput.Before, and is useful for accessing the field via an interface.
-func (v *PageInput) GetBefore() *string { return v.Before }
+func (v *PageInput) GetBefore() string { return v.Before }
 
 // GetFilter returns PageInput.Filter, and is useful for accessing the field via an interface.
-func (v *PageInput) GetFilter() *string { return v.Filter }
+func (v *PageInput) GetFilter() string { return v.Filter }
 
 // GetSort returns PageInput.Sort, and is useful for accessing the field via an interface.
-func (v *PageInput) GetSort() *string { return v.Sort }
+func (v *PageInput) GetSort() string { return v.Sort }
 
 // ProjectV3AdapterConnection includes the requested fields of the GraphQL type ProjectV3AdapterConnection.
 type ProjectV3AdapterConnection struct {

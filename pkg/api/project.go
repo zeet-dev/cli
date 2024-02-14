@@ -21,7 +21,7 @@ func (c *Client) GetProjectByPath(ctx context.Context, project string) (*Project
 		  }
 		}
 	`
-	res, err := getProjectByPath(ctx, c.gql, project)
+	res, err := GetProjectByPathQuery(ctx, c.gql, project)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (c *Client) GetProjectPath(ctx context.Context, id uuid.UUID) (string, erro
           }
 		}
 	`
-	res, err := getProjectPath(ctx, c.gql, id)
+	res, err := GetProjectPathQuery(ctx, c.gql, id)
 	if err != nil {
 		return "", err
 	}
@@ -61,7 +61,7 @@ func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (
 		  }
 		}
 	`
-	res, err := getProductionBranch(ctx, c.gql, projectID)
+	res, err := GetProductionBranchQuery(ctx, c.gql, projectID)
 	if err != nil {
 		return "", err
 	}
@@ -77,7 +77,7 @@ func (c *Client) UpdateBranch(ctx context.Context, projectID uuid.UUID, image st
 		  }
 		}
 	`
-	_, err := updateBranch(ctx, c.gql, image, deploy, projectID, branchName)
+	_, err := UpdateBranchMutation(ctx, c.gql, image, deploy, projectID, branchName)
 	if err != nil {
 		return err
 	}
@@ -93,7 +93,7 @@ func (c *Client) UpdateProject(ctx context.Context, projectID uuid.UUID, image s
 		  }
 		}
 	`
-	_, err := updateProject(ctx, c.gql, projectID, image)
+	_, err := UpdateProjectMutation(ctx, c.gql, projectID, image)
 	if err != nil {
 		return err
 	}

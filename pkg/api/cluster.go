@@ -60,7 +60,7 @@ func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) 
 		}
 	`
 
-	res, err := getClusterKubeconfig(ctx, c.gql, clusterID)
+	res, err := GetClusterKubeconfigQuery(ctx, c.gql, clusterID)
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +115,7 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 	`
 
 	if path != "" {
-		res, err := listClustersForTeam(ctx, c.gql, path)
+		res, err := ListClustersForTeamQuery(ctx, c.gql, path)
 		if err != nil {
 			if len(res.Team.User.Clusters) > 0 {
 				fmt.Fprintf(os.Stderr, "Warning: %s\n", err.Error())
@@ -139,7 +139,7 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 		return out, nil
 	}
 
-	res, err := listClusters(ctx, c.gql)
+	res, err := ListClustersQuery(ctx, c.gql)
 	if err != nil {
 		if len(res.CurrentUser.Clusters) > 0 {
 			fmt.Fprintf(os.Stderr, "Warning: %s\n", err.Error())

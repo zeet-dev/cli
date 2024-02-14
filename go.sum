@@ -414,6 +414,8 @@ github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9de
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 github.com/yuin/goldmark v1.4.0/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
+github.com/zeet-dev/genqlient v0.0.0-20240214181521-7a7b77a60388 h1:oMOV/LxvnCl1NNV1q7zr/WvL5hr2EPn3CyAqZLRGCDc=
+github.com/zeet-dev/genqlient v0.0.0-20240214181521-7a7b77a60388/go.mod h1:CxlUi7/HTxw3SETFpvQTVBHHqWPvTHMQtrMVwbBklgw=
 github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9 h1:2f3aYcnXtEEIHwlPXmxgjWAPXKvAAMcQepf3EEL4y3Y=
 github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9/go.mod h1:FAYtQyFtIVN2rmHXRrvMuvC9NzhZ/Mq1lz4Ib84z2Uk=
 go.etcd.io/etcd/api/v3 v3.5.0/go.mod h1:cbVKeC6lCfl7j/8jBhAK6aIYO9XOjdptoxU/nLQcPvs=
