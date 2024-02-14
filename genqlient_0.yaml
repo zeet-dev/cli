@@ -2,14 +2,19 @@
 # https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 schema: schema_0.graphql
 operations:
-  - "pkg/**/*.go"
-generated: pkg/api/generated.go
+  - "../../zeet/captain/packages/web-api/graphql/v0/common.gql"
+  - "../../zeet/captain/packages/web-api/graphql/v0/*/*.gql"
+generated: pkg/sdk/v0/generated.go
 allow_broken_features: true
 bindings:
+  YAML:
+    type: string
   UUID:
     type: github.com/google/uuid.UUID
   Time:
     type: time.Time
+  Duration:
+    type: time.Duration
   ID:
     type: github.com/google/uuid.UUID
   # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
@@ -23,3 +28,8 @@ bindings:
     type: string
   MapString:
     type: map[string]string
+  VariableValueInput:
+    type: string
+  PermissibleMutation:
+    type: string
+optional: pointer

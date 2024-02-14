@@ -1,6 +1,16 @@
+"""
+The @defer directive may be specified on a fragment spread to imply
+de-prioritization, that causes the fragment to be omitted in the initial
+response, and delivered as a subsequent response afterward. A query with @defer
+directive will cause the request to potentially return multiple responses, where
+non-deferred data is delivered in the initial response and data deferred
+delivered in a subsequent response. @include and @skip take precedence over @defer.
+"""
+directive @defer(if: Boolean = true, label: String) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
 directive @enforceUserAction(action: UserAction!) on FIELD_DEFINITION
 
-directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+directive @goField(forceResolver: Boolean, name: String, omittable: Boolean) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 directive @goModel(model: String, models: [String!]) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
 
@@ -54,6 +64,7 @@ input AddClusterInput {
   gcpAccountID: UUID
   name: String
   region: String
+  isPlaceholder: Boolean
 }
 
 input AddContainerRegistryInput {
@@ -71,6 +82,7 @@ input AddCoreWeaveAccountInput {
 
 input AddDOAccountInput {
   userID: UUID!
+  name: String
   accessToken: String!
 }
 
@@ -82,6 +94,7 @@ input AddGCPAccountInput {
 
 input AddLinodeAccountInput {
   userID: UUID!
+  name: String
   accessToken: String!
 }
 
@@ -115,6 +128,16 @@ type AlternativeImage {
   reference: String
   tag: String
   name: String
+}
+
+type ApiAccess implements Product {
+  name: String
+  description: String
+  sku: ID!
+  displayPrice: String
+  usage: [Usage!]!
+  benefits: [String!]!
+  productTypeMetadata: ProductTypeMetadata
 }
 
 type APIKey {
@@ -183,6 +206,7 @@ type AWSAccount {
   cloudFormationReadOnlyURL: String!
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   iamUsers: [AwsUser!]
@@ -291,6 +315,42 @@ type AwsResourcesOutput {
   nextToken: String
 }
 
+type AwsSamGeneratorConfiguration {
+  envVars: [EnvVar!]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
+}
+
+input AwsSamGeneratorConfigurationInput {
+  envVars: [EnvVarInput]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
+}
+
+type AwsSamProjectV3Configuration {
+  awsAccountId: UUID!
+  awsRegion: String
+  stackName: String!
+  generator: AwsSamGeneratorConfiguration
+}
+
+input AwsSamProjectV3ConfigurationInput {
+  awsAccountId: UUID!
+  awsRegion: String
+  stackName: String!
+  generator: AwsSamGeneratorConfigurationInput
+}
+
 type AwsServiceCostItem {
   service: String!
   total: AwsCostTotal!
@@ -314,8 +374,87 @@ type AzureAccount {
   clientID: String
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
+}
+
+type BetterStackIntegration {
+  token: String!
+}
+
+input BetterStackIntegrationInput {
+  token: String!
+}
+
+"""
+A sentinel value returned when we are not able to facilitate self-service for a desired action
+"""
+enum BillingActionNotAllowed {
+  """Please contact Zeet Support for assistance"""
+  CONTACT_US
+
+  """You are not authorized to perform this billing action"""
+  CONTACT_BILLING_ADMINISTRATOR
+}
+
+type BillingOverview {
+  currentProducts: [Product!]
+  externalLinks: ExternalBillingProviderLinks
+  subscriptionUsageAllowed: SubscriptionUsageAllowed!
+  subscriptionFeatures: SubscriptionFeatures!
+}
+
+type BitbucketAccount {
+  username: String!
+}
+
+type BitbucketIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  apiUrl: URL!
+  authType: BitbucketIntegrationAuthType!
+  webhookUrl: URL!
+  webhookToken: String!
+  connected: Boolean
+  account: BitbucketAccount
+}
+
+enum BitbucketIntegrationAuthType {
+  ACCESS_TOKEN
+  OAUTH2
+}
+
+type BitbucketRepoIntegration implements GitRepoIntegration {
+  id: UUID!
+  bitbucketIntegration: BitbucketIntegration
+  bitbucketRepository: BitbucketRepository
+  autoDeployBranch: Boolean!
+  autoStopBranch: Boolean!
+  autoStopPullRequest: Boolean!
+  branchIgnore: String!
+  branchStopIgnore: String!
+}
+
+type BitbucketRepository implements GitRepository & CISource {
+  id: ID!
+  provider: GitProvider!
+  providerID: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+  defaultBranch: GitBranch
+  branches: [GitBranch!]
+  isFork: Boolean!
+  isPrivate: Boolean!
+  updatedAt: Time!
+  primaryLanguage: String
 }
 
 type Blueprint {
@@ -326,6 +465,7 @@ type Blueprint {
   type: BlueprintType!
   isOfficial: Boolean
   enabled: Boolean
+  docsUrl: String
   description: String
   tags: [String!]!
   logoUrl: String
@@ -333,6 +473,7 @@ type Blueprint {
   variables: [BlueprintVariableSpec!]!
   projectCount: Int!
   richInputSchema: JSON
+  allowedCloudProviders: [CloudProvider!]!
   owner: BlueprintOwner
 }
 
@@ -373,10 +514,11 @@ type BlueprintDriverActionExecution {
   id: UUID!
   driver: BlueprintDriver!
   action: BlueprintDriverAction!
-  createdAt: Time!
-  updatedAt: Time!
   planExecution: BlueprintDriverActionExecution
   jobRun: JobRun
+  approvedAt: Time
+  createdAt: Time!
+  updatedAt: Time!
 }
 
 type BlueprintDriverActionExecutionConnection {
@@ -385,6 +527,7 @@ type BlueprintDriverActionExecutionConnection {
 }
 
 input BlueprintDriverActionInput {
+  """- v0.ProjectV3ID"""
   projectID: UUID!
   driver: BlueprintDriver!
   action: BlueprintDriverAction!
@@ -415,12 +558,13 @@ type BlueprintDriverWorkflow {
   """
   The sequence of actions in the workflow. Useful for identifying the presence of a PROJECT_DELETE step.
   """
-  stepActions: [BlueprintDriverWorkflowStepAction!]!
+  stepActions: [BlueprintDriverWorkflowStepAction!]! @deprecated(reason: "this field is replaced by 'steps'")
 
   """
   The driver action execution records. NOTE: will not have a record for PROJECT_DELETE.
   """
-  jobs: [BlueprintDriverActionExecution!] @deprecated(reason: "this field will be replaced")
+  jobs: [BlueprintDriverActionExecution!] @deprecated(reason: "this field is replaced by 'steps'")
+  steps: [BlueprintDriverWorkflowStep!]!
   createdAt: Time!
   updatedAt: Time!
 }
@@ -440,12 +584,27 @@ input BlueprintDriverWorkflowInput {
   steps: [BlueprintDriverWorkflowStepAction!]!
 }
 
+type BlueprintDriverWorkflowStep {
+  action: BlueprintDriverWorkflowStepAction!
+  status: BlueprintDriverWorkflowStepStatus!
+  execution: BlueprintDriverActionExecution
+}
+
 enum BlueprintDriverWorkflowStepAction {
   DRIVER_PLAN_DESTROY
   DRIVER_PLAN
   DRIVER_APPROVE
   DRIVER_APPLY
   PROJECT_DELETE
+}
+
+enum BlueprintDriverWorkflowStepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  ERROR
+  ABORTED
 }
 
 type BlueprintHelmConfiguration {
@@ -463,6 +622,7 @@ input BlueprintHelmConfigurationUpdate {
 type BlueprintManifestConfiguration {
   source: Source
   useKustomize: Boolean
+  generator: KubernetesManifestGeneratorConfiguration
 }
 
 input BlueprintManifestConfigurationInput {
@@ -475,6 +635,83 @@ input BlueprintManifestConfigurationUpdate {
   useKustomize: Boolean
 }
 
+type BlueprintMetadata {
+  id: UUID!
+  slug: String!
+  name: String!
+  displayName: String!
+  type: BlueprintType!
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  metatags: [BlueprintMetadataMetaTag]
+  version: String
+  versions: [BlueprintMetadataVersion!]!
+  availableVersions: [String!]!
+  latestVersion: String
+  applicationVersion: String
+  organizationName: String
+  organizationDisplayName: String
+  createdAt: Time
+  updatedAt: Time
+}
+
+type BlueprintMetadataConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BlueprintMetadata!]!
+}
+
+input BlueprintMetadataFilter {
+  name: StringCriterion
+}
+
+type BlueprintMetadataMetaTag {
+  name: String!
+  value: String!
+}
+
+type BlueprintMetadataVersion {
+  prerelease: Boolean
+  version: String!
+  timestamp: Time
+}
+
+enum BlueprintOutputDataSource {
+  INPUT
+  OUTPUT
+  RESOURCE
+}
+
+input BlueprintOutputSchema {
+  entries: [BlueprintOutputSchemaEntry!]
+}
+
+input BlueprintOutputSchemaEntry {
+  id: UUID
+  name: String
+  displayName: String
+  type: VariableType
+  dataSource: BlueprintOutputDataSource
+  dataPath: String
+  transformations: [BlueprintOutputTransformationType!]
+  transformationContext: BlueprintOutputTransformationContext
+}
+
+input BlueprintOutputTransformationContext {
+  yaml: BlueprintOutputTransformationYamlContext
+}
+
+enum BlueprintOutputTransformationType {
+  CLUSTER_IP
+  YAML
+  DECODE_BASE64
+}
+
+input BlueprintOutputTransformationYamlContext {
+  path: String!
+}
+
 type BlueprintOwner implements ProfileOwner {
   login: Login!
   name: String!
@@ -484,12 +721,17 @@ type BlueprintOwner implements ProfileOwner {
 type BlueprintsMarketplace {
   blueprints(page: PageInput): BlueprintConnection
   blueprint(owner: Login!, slug: String!): Blueprint
+  blueprintMetadata(owner: Login, slug: String!, version: String): BlueprintMetadata
+  blueprintMetadataList(filter: FilterInput!): BlueprintMetadataConnection
 }
 
 type BlueprintTerraformConfiguration {
-  registrySource: String
-  moduleVersionConstraint: String
-  githubSource: String
+  registrySource: String @deprecated(reason: "use moduleSource field instead")
+  moduleVersionConstraint: String @deprecated(reason: "use moduleSource field instead")
+  githubSource: String @deprecated(reason: "use moduleSource field instead")
+  moduleSource: TerraformModuleSource
+  outputConfiguration: TerraformOutputConfiguration
+  terraformVersion: String
 }
 
 input BlueprintTerraformConfigurationInput {
@@ -497,10 +739,17 @@ input BlueprintTerraformConfigurationInput {
   moduleVersionConstraint: String
   githubSource: String
   gitIntegration: GitSourceIntegrationInput
+  moduleSource: TerraformModuleSourceInput
+  outputConfiguration: TerraformOutputConfigurationInput
+  terraformVersion: String
 }
 
 input BlueprintTerraformConfigurationUpdate {
   gitIntegration: GitSourceIntegrationInput
+  registrySource: String
+  moduleVersionConstraint: String
+  githubSource: String
+  moduleSource: TerraformModuleSourceInput
 }
 
 enum BlueprintType {
@@ -615,6 +864,10 @@ enum BlueprintVariableType {
   JSON
 }
 
+input BooleanCriterion {
+  value: Boolean!
+}
+
 input BranchInput {
   active: Boolean
 }
@@ -700,6 +953,30 @@ enum BuildType {
   ELIXIR_PHOENIX
   GOLANG_MODULES
   HEROKUISH
+}
+
+input CancelJobInput {
+  id: UUID!
+}
+
+enum CatalogProductStatus {
+  CURRENT
+  UPGRADE
+  DOWNGRADE
+}
+
+type CatalogProductView {
+  product: Product!
+  description: String
+
+  """
+  Indicates if this is part of the current subscription, or represents an upgrade or downgrade over the current product.
+  Null if no user is being queried.
+  """
+  status: CatalogProductStatus
+
+  """Whether this product is available for self-service purchasing."""
+  available: Boolean!
 }
 
 type CDN {
@@ -859,6 +1136,7 @@ type Cluster {
   name: String!
   region: String
   state: ClusterState!
+  status: ClusterStatus
   private: Boolean!
   connected: Boolean
   cloudProvider: CloudProvider
@@ -874,6 +1152,8 @@ type Cluster {
   namespace: String
   domain: String
   isExternal: Boolean
+  isEjected: Boolean
+  terraformProjectUrl: String
   ingressIP: String
   ingressDNS: String
   clusterIssuers: [String!]
@@ -885,12 +1165,19 @@ type Cluster {
   containerCacheRepository: String
   containerRegistry: ContainerRegistry
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   customDomains: [ClusterCustomDomain!]
 
   """All configured cluster add-ons, whether currently enabled or disabled"""
   addOns: [ClusterAddOn!]
   createdAt: Time!
   updatedAt: Time!
+  stateBackend: TerraformStateBackend
+  deployJob: JobRun
+  destroyJob: JobRun
+  serverVersion: String!
+  supportsEphemeralContainer: Boolean!
+  components: [ClusterComponent]
   network: Network
   machines: [Machine!]
 }
@@ -904,6 +1191,25 @@ type ClusterAddOn {
 enum ClusterAddOnState {
   ENABLED
   DISABLED
+}
+
+type ClusterComponent {
+  name: String!
+  type: ClusterComponentType!
+  status: ClusterComponentEjectedStatus!
+  project: ProjectV3Adapter
+  helmMetadata: HelmClusterComponentMetadata
+  isInstalledByZeet: Boolean!
+  exists: Boolean!
+}
+
+enum ClusterComponentEjectedStatus {
+  NOT_FOUND
+  DETECTED
+}
+
+enum ClusterComponentType {
+  HELM
 }
 
 type ClusterCustomDomain {
@@ -938,10 +1244,33 @@ enum ClusterState {
   ERROR_DELETING
 }
 
+enum ClusterStatus {
+  PENDING
+  CREATING
+  HEALTHY
+  DELETING
+  ERROR
+  ERROR_DELETING
+  UNREACHABLE
+}
+
+type ComplexLogs {
+  previous: [LogEntry!]
+  current: [LogEntry!]
+  expired: Boolean!
+}
+
 input ConnectUserToIamInput {
   userID: UUID!
   awsIamArn: String
   awsAccountId: String
+}
+
+"""
+A sentinel value returned when we are not able to facilitate self-service for a desired action
+"""
+enum ContactUs {
+  CONTACT_US @deprecated(reason: "Use BillingActionNotAllowed instead.")
 }
 
 type Container {
@@ -1013,6 +1342,7 @@ type CoreWeaveAccount {
   namespace: String
   connected: Boolean
   clusters: [Cluster!]
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]
@@ -1043,6 +1373,12 @@ input CreateAPIKeyInput {
   name: String!
 }
 
+input CreateBitbucketIntegrationInput {
+  userID: UUID!
+  name: String
+  accessToken: String!
+}
+
 input CreateBlueprintInput {
   userID: UUID!
   slug: String!
@@ -1065,15 +1401,21 @@ input CreateClusterInput {
   linodeAccountID: UUID
   vultrAccountID: UUID
   azureAccountID: UUID
+  coreweaveAccountID: UUID
   name: String!
   region: String!
   isExternal: Boolean
+  gcpClusterCreationOptions: GcpClusterCreationOptions
 }
 
 input CreateDatabaseInput {
   userID: UUID!
   name: String!
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   projectName: String
   environmentName: String
@@ -1086,6 +1428,15 @@ input CreateDatabaseInput {
 input CreateDatadogIntegrationInput {
   userID: UUID!
   apiKey: String!
+}
+
+input CreateEmailIntegrationInput {
+  userID: UUID!
+  emailAddress: String!
+}
+
+input CreateEphemeralContainerInput {
+  image: String!
 }
 
 input CreateEventIntegrationInput {
@@ -1110,8 +1461,12 @@ input CreateIPFSServiceInput {
 
 input CreateManifestAppInput {
   userID: UUID!
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
   environmentName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   name: String!
   deployTarget: ProjectDeployInput!
@@ -1125,7 +1480,11 @@ input CreateManifestAppInput {
 input CreateProjectDockerInput {
   userID: UUID
   name: String
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   projectName: String
   environmentName: String
@@ -1145,6 +1504,7 @@ input CreateProjectDockerInput {
 }
 
 input CreateProjectEnvironmentInput {
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID!
   name: String!
   repos: [UUID!]
@@ -1159,7 +1519,11 @@ input CreateProjectFromProjectTemplateInput {
 input CreateProjectGitInput {
   userID: UUID
   name: String
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   projectName: String
   environmentName: String
@@ -1209,8 +1573,12 @@ input CreateProjectGitInput {
 
 input CreateProjectHelmInput {
   userID: UUID!
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
   environmentName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   name: String!
   deployTarget: ProjectDeployInput!
@@ -1230,7 +1598,11 @@ input CreateProjectHelmInput {
 input CreateProjectInput {
   userID: UUID
   name: String
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   projectName: String
   environmentName: String
@@ -1309,10 +1681,17 @@ input CreateProjectV3Input {
   terraformConfiguration: TerraformProjectV3ConfigurationInput
   manifestConfiguration: ManifestProjectV3ConfigurationInput
   helmConfiguration: HelmProjectV3ConfigurationInput
+  awsSamConfiguration: AwsSamProjectV3ConfigurationInput
+  gcpCloudRunConfiguration: GcpCloudRunProjectV3ConfigurationInput
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
   projectName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   environmentName: String
+  isDeployV2: Boolean
 }
 
 input CreateRepoPipelineLinkInput {
@@ -1325,8 +1704,12 @@ input CreateRepoPipelineLinkInput {
 
 input CreateResourceAlphaInput {
   userID: UUID!
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
   projectName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   environmentName: String
   name: String!
@@ -1360,6 +1743,13 @@ input CreateWeb3ChallengeInput {
 input CreateWebhookIntegrationInput {
   userID: UUID!
   url: String!
+}
+
+type CrispAuth {
+  email: String!
+  hmac: String!
+  participants: String!
+  nickname: String!
 }
 
 type CustomDomain {
@@ -1452,6 +1842,11 @@ type Deployment {
   privateEndpoint: String
   loadBalancers: [LoadBalancer!]
   errorMessage: String
+
+  """
+  An optional structured error, containing more information than the simple 'errorMessage'
+  """
+  deploymentError: DeploymentError
   branch: String
   build: Build
   buildStage: BuildStage
@@ -1461,6 +1856,7 @@ type Deployment {
   deleteStage: PipelineStage
   deployTemplates: [DeployTemplate]
   logs: [LogEntry!]
+  logsV2: ComplexLogs
   repo: Repo
   deployStatus: DeployStatus
   containers: [Container!]
@@ -1477,15 +1873,50 @@ type Deployment {
   release: Release
   deployStep: PipelineStep
   alternativeImages: [AlternativeImage!]
+  ephemeralContainers: [EphemeralContainer]
+  alert(id: UUID!): DeploymentAlert
+  metricsV2(metricType: MetricType!, deploymentID: UUID!, queryOptions: MetricQueryOptions): [MetricStream!]
+
+  """
+  List the history of alerts for this deployment.
+  
+  The `page` input only supports `first`, and one of `before` or `after`. Default is 10 most recent alerts.
+  """
+  alerts(page: PageInput): DeploymentAlertConnection
   events: [Event!]!
   runtime: Runtime
   terraformOperation: TerraformOperation
+}
+
+interface DeploymentAlert {
+  createdAt: Time!
+  resolvedAt: Time
+}
+
+type DeploymentAlertConnection {
+  nodes: [DeploymentAlert!]!
+  pageInfo: PageInfo!
 }
 
 type DeploymentConnection {
   totalCount: Int!
   nodes: [Deployment!]!
   pageInfo: PageInfo!
+}
+
+type DeploymentError {
+  message: String!
+  errorID: String
+  errorCode: String
+}
+
+type DeploymentPodCrashAlert implements DeploymentAlert {
+  id: UUID!
+  namespace: String
+  podName: String
+  previousPodLogs: Logs
+  createdAt: Time!
+  resolvedAt: Time
 }
 
 input DeploymentsInput {
@@ -1531,6 +1962,7 @@ type DeployStatus {
   runningReplicas: Int!
   readyReplicas: Int!
   errorMessage: String
+  troubleshooting: Troubleshooting
 }
 
 enum DeployStrategy {
@@ -1593,7 +2025,7 @@ type DiscordIntegration implements Integration {
   updatedAt: Time!
 }
 
-type DiscordWebhookIntegration implements Integration {
+type DiscordWebhookIntegration implements Integration & NotificationIntegration {
   id: UUID!
   type: IntegrationType!
   name: String!
@@ -1602,6 +2034,7 @@ type DiscordWebhookIntegration implements Integration {
   createdAt: Time!
   updatedAt: Time!
   url: String
+  notificationSettings: NotificationIntegrationSettings
 }
 
 input dispatchRepoGroupActionInput {
@@ -1633,6 +2066,7 @@ type DOAccount {
   connected: Boolean
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]
@@ -1669,12 +2103,24 @@ input DriverActionTypeCriterion {
   operator: FilterCriterionOperatorType
 }
 
+input DuplicateBlueprintInput {
+  id: UUID!
+  userID: UUID!
+  name: String!
+  slug: String!
+  published: Boolean!
+}
+
 input DuplicateProjectInput {
+  """- v0.RepoID"""
   id: UUID!
   enabled: Boolean!
   name: String!
 
-  """Duplicate repo to existing project"""
+  """
+  Duplicate repo to existing project
+  - v0.ProjectID or v1.GroupID
+  """
   projectID: UUID
 
   """Creates a new environment by name"""
@@ -1682,13 +2128,52 @@ input DuplicateProjectInput {
 
   """
   Put the new repo in an existing environment within the specified project
+  - v0.EnvironmentID or v1.SubGroupID
   """
   environmentID: UUID
+}
+
+input DuplicateProjectV3Input {
+  """- v0.ProjectV3ID"""
+  id: UUID!
+  name: String!
+
+  """- v0.ProjectID or v1.GroupID"""
+  projectID: UUID
+  projectName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
+  environmentID: UUID
+  environmentName: String
+}
+
+scalar Duration
+
+type EmailIntegration implements Integration & NotificationIntegration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  emailAddress: String!
+
+  """
+  An email integration must be confirmed by the recipient before it can be considered active.
+  """
+  activated: Boolean
+  notificationSettings: NotificationIntegrationSettings
 }
 
 type EnvironmentOverview {
   deploymentStatus: DeploymentStatus
   count: Int
+}
+
+type EnvironmentOverviewV2 {
+  deploymentStatus: ProjectV3AdapterStatus!
+  count: Int!
 }
 
 type EnvVar {
@@ -1718,6 +2203,7 @@ enum EnvVarSourceType {
   ENVIRONMENT
   CLUSTER
   DATABASE
+  PROJECT_LINK
 }
 
 type EnvVarTemplate {
@@ -1730,6 +2216,12 @@ type EnvVarTemplate {
   locked: Boolean!
   hidden: Boolean!
   options: [String!]
+}
+
+type EphemeralContainer {
+  name: String!
+  image: String!
+  ready: Boolean!
 }
 
 enum ErrorCode {
@@ -1770,12 +2262,27 @@ enum EventType {
   ERROR
 }
 
+type ExternalBillingProviderLinks {
+  invoiceHistory: UrlOrContactUs!
+  managePaymentMethod: UrlOrContactUs!
+  downgrade: UrlOrContactUs!
+  help: UrlOrContactUs!
+}
+
+enum FeatureKey {
+  ADVANCED_AUTOSCALING
+  DATADOG_APM
+  STATIC_EGRESS
+  SUPPORT_CENTER
+}
+
 input FilterCriterion {
   userFilter: UserFilter
   resourceFilter: ResourceFilter
   repoFilter: RepoFilter
   deployableDriverActionExecutionFilter: DeployableDriverActionExecutionFilter
   resourceAdapterFilter: ResourceAdapterFilter
+  blueprintMetadataFilter: BlueprintMetadataFilter
 }
 
 enum FilterCriterionOperatorType {
@@ -1821,6 +2328,7 @@ type GCPAccount {
   credentials: String
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]
@@ -1830,6 +2338,41 @@ enum GCPAccountState {
   WAITING
   SUCCESS
   ERROR
+}
+
+type GcpCloudRunGeneratorConfiguration {
+  envVars: [EnvVar!]
+  name: String!
+  httpPort: String
+  containerMemory: Float
+  containerCpu: Float
+  runCommand: String
+}
+
+input GcpCloudRunGeneratorConfigurationInput {
+  envVars: [EnvVarInput]
+  name: String!
+  httpPort: String
+  containerMemory: Float
+  containerCpu: Float
+  runCommand: String
+}
+
+type GcpCloudRunProjectV3Configuration {
+  gcpAccountId: UUID!
+  gcpRegion: String
+  generator: GcpCloudRunGeneratorConfiguration
+}
+
+input GcpCloudRunProjectV3ConfigurationInput {
+  gcpAccountId: UUID!
+  gcpRegion: String
+  generator: GcpCloudRunGeneratorConfigurationInput
+}
+
+input GcpClusterCreationOptions {
+  enableL4: Boolean!
+  enableA100: Boolean!
 }
 
 type GCPLinks {
@@ -1846,12 +2389,14 @@ input GCSBucketBackendInput {
   gcpAccountID: UUID!
   location: String!
   bucketName: String!
+  prefix: String
 }
 
 type GCSBucketConfiguration {
   gcpAccountID: UUID!
   location: String!
   bucketName: String!
+  prefix: String
 }
 
 type GitBranch {
@@ -2069,12 +2614,19 @@ type GitSourceIntegration {
   githubInstallationID: Int
   githubIntegrationID: UUID
   gitlabIntegrationID: UUID
+  bitbucketIntegrationID: UUID
 }
 
 input GitSourceIntegrationInput {
   githubInstallationID: Int
   githubIntegrationID: UUID
   gitlabIntegrationID: UUID
+  bitbucketIntegrationID: UUID
+}
+
+enum GitSubmodulesType {
+  NONE
+  RECURSIVE
 }
 
 input GPUInput {
@@ -2115,6 +2667,15 @@ type HelmChartConnection {
   totalCount: Int!
   nodes: [HelmChart!]!
   pageInfo: PageInfo!
+}
+
+type HelmClusterComponentMetadata {
+  values: String!
+  namespace: String!
+  releaseName: String!
+  chartName: String!
+  chartVersion: String!
+  chartRepoGuess: String
 }
 
 type HelmProjectV3Configuration {
@@ -2181,6 +2742,8 @@ enum IntegrationType {
   DATADOG
   GITLAB
   GITHUB
+  EMAIL
+  BITBUCKET
 }
 
 input InviteTeamMemberInput {
@@ -2226,6 +2789,7 @@ type JobRun {
   createdAt: Time
   updatedAt: Time
   build: Build
+  deployment: Deployment
 }
 
 type JobRunConnection {
@@ -2256,6 +2820,7 @@ type KubernetesCustomization {
   nodeSelector: MapString
   hostNetwork: Boolean
   podSpecPatch: YAML
+  ingressSpecPatch: YAML
   serviceAccountName: String
   podAnnotations: MapString
   serviceAnnotations: MapString
@@ -2267,10 +2832,33 @@ input KubernetesCustomizationInput {
   nodeSelector: JSON
   hostNetwork: Boolean
   podSpecPatch: YAML
+  ingressSpecPatch: YAML
   podAnnotations: JSON
   serviceAnnotations: JSON
   ingressAnnotations: JSON
   clusterIssuerName: String
+}
+
+type KubernetesManifestGeneratorConfiguration {
+  envVars: [EnvVar!]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
+}
+
+input KubernetesManifestGeneratorConfigurationInput {
+  envVars: [EnvVarInput!]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
 }
 
 type KubernetesRuntime {
@@ -2341,6 +2929,7 @@ type LinodeAccount {
   connected: Boolean
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]
@@ -2372,6 +2961,7 @@ type Logs {
   id: ID!
   cursor: String
   completed: Boolean!
+  expired: Boolean!
   entries: [LogEntry!]
 }
 
@@ -2381,6 +2971,7 @@ type LogShipper {
   syslog: SyslogIntegration
   logDNA: LogDNAIntegration
   datadog: DatadogLogIntegration
+  betterstack: BetterStackIntegration
 }
 
 input LogShipperInput {
@@ -2389,6 +2980,7 @@ input LogShipperInput {
   syslog: SyslogIntegrationInput
   logDNA: LogDNAIntegrationInput
   datadog: DatadogLogIntegrationInput
+  betterstack: BetterStackIntegrationInput
 }
 
 enum LogShipperType {
@@ -2396,6 +2988,7 @@ enum LogShipperType {
   SYSLOG
   LOGDNA
   DATADOG
+  BETTERSTACK
 }
 
 type LogzIntegration {
@@ -2432,6 +3025,7 @@ type ManifestProjectV3Configuration {
 input ManifestProjectV3ConfigurationInput {
   clusterID: UUID!
   namespace: String
+  generator: KubernetesManifestGeneratorConfigurationInput
 }
 
 scalar Map
@@ -2443,10 +3037,49 @@ type Metric {
   value: Float
 }
 
+type MetricEntry {
+  timestamp: Time!
+  value: Float
+}
+
+enum MetricLabelType {
+  POD
+  CONTAINER
+}
+
+input MetricQueryOptions {
+  range: ObservabilityRange!
+  groupBy: [MetricLabelType!]
+}
+
+type MetricStream {
+  type: MetricType
+  query: String!
+  entries: [MetricEntry!]
+  labels: [MetricStreamLabel!]
+}
+
+type MetricStreamLabel {
+  label: MetricLabelType!
+  value: String!
+}
+
+enum MetricType {
+  QUERY
+  CPU
+  MEMORY
+  NETWORK
+  STORAGE
+}
+
 input MoveRepoInput {
   id: UUID!
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
   environmentName: String
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
   name: String
 }
@@ -2459,6 +3092,7 @@ type Mutation {
   enableRepo(id: ID!): Repo!
   disableRepo(id: ID!): Repo!
   deleteRepo(id: ID!): Boolean!
+  unlinkRepo(id: ID!): Boolean!
   buildRepo(id: ID!, branch: String, noCache: Boolean): Repo!
   abortBuild(id: UUID!): Repo!
   deployRepo(id: ID!): Repo!
@@ -2483,6 +3117,14 @@ type Mutation {
   addAzureAccount(input: AddAzureAccountInput!): AzureAccount!
   updateAzureAccount(input: UpdateAzureAccountInput!): Boolean!
   removeAzureAccount(id: UUID!): Boolean!
+
+  """
+  Modify the user's subscription using the subscriptionCart, and initiate
+  recurring billing for the user's payment method on file.
+  """
+  purchaseSubscription(forUserID: UUID!, subscriptionCart: SubscriptionCart!): SubscriptionPurchaseResponse!
+  createBitbucketIntegration(input: CreateBitbucketIntegrationInput!): BitbucketIntegration!
+  updateBitbucketIntegration(input: UpdateBitbucketIntegrationInput!): BitbucketIntegration!
   updateBranch(input: UpdateBranchInput!): RepoBranchV2!
   addCDN(input: AddCDNInput!): CDN!
   updateCDN(input: UpdateCDNInput!): CDN!
@@ -2491,6 +3133,7 @@ type Mutation {
   ensureCloudqueryEnabled(awsAccountId: UUID!): Boolean!
   createCluster(input: CreateClusterInput!): Cluster!
   deleteCluster(id: UUID!): Boolean!
+  unlinkCluster(id: UUID!): Boolean!
   updateCluster(input: UpdateClusterInput!): Cluster!
   addCluster(input: AddClusterInput!): Cluster!
   linkCloudToCluster(input: LinkCloudToClusterInput!): Cluster!
@@ -2506,12 +3149,26 @@ type Mutation {
   updateDatabaseLink(input: updateDatabaseLinkInput!): Repo!
   createBlueprint(input: CreateBlueprintInput!): Blueprint!
   updateBlueprint(blueprintID: UUID!, input: UpdateBlueprintInput!): Blueprint!
+  duplicateBlueprint(input: DuplicateBlueprintInput!): Blueprint!
   deleteBlueprint(id: UUID!): Boolean!
   updateMarketplaceBlueprint(input: UpdateMarketplaceBlueprintInput!): Blueprint!
+  maybeCreateBlueprintFromMetadata(slug: String!, version: String!): Blueprint!
   createProjectV3(input: CreateProjectV3Input!): ProjectV3!
+  duplicateProjectV3(input: DuplicateProjectV3Input!): ProjectV3!
+
+  """- projectID: v0.ProjectV3ID"""
   updateProjectV3(projectID: UUID!, input: UpdateProjectV3Input!): ProjectV3!
+
+  """- id: v0.ProjectV3ID"""
   deleteProjectV3(id: UUID!): Boolean!
+
+  """
+  Converts an existing Zeet Repo into a Blueprint-based project. Only supports some repo types.
+  """
+  migrateRepoToProjectV3(repoID: UUID!): ProjectV3!
   configureGitopsForProjectV3(input: ProjectV3GitopsInput!): ProjectV3!
+
+  """- projectID: v0.ProjectV3ID"""
   commitProjectV3ToGithubRepo(projectID: UUID!): GithubCommitResult!
 
   """
@@ -2526,8 +3183,13 @@ type Mutation {
   
   Submits a driver workflow to the workflow queue.
   Driver workflows are immutable: steps cannot be added after a workflow has been submitted.
+  - projectID: v0.ProjectV3ID
   """
-  submitBlueprintDriverWorkflow(projectID: UUID!, input: BlueprintDriverWorkflowInput!): BlueprintDriverWorkflow
+  submitBlueprintDriverWorkflow(projectID: UUID!, input: BlueprintDriverWorkflowInput!): BlueprintDriverWorkflow @deprecated(reason: "use the new 'submitWorkflow' from v1 api")
+  approveBlueprintDriverWorkflow(workflowID: UUID!): BlueprintDriverWorkflow
+  abortBlueprintDriverWorkflow(workflowID: UUID!): UUID
+  createEphemeralContainer(deploymentId: UUID!, input: CreateEphemeralContainerInput!): EphemeralContainer!
+  generateDownloadableLogLink(deploymentID: UUID!): String!
   addDOAccount(input: AddDOAccountInput!): DOAccount!
   updateDOAccount(input: UpdateDOAccountInput!): Boolean!
   removeDOAccount(id: UUID!): Boolean!
@@ -2543,13 +3205,29 @@ type Mutation {
   updateGitlabIntegration(input: UpdateGitlabIntegrationInput!): GitlabIntegration!
   createProjectHelm(input: CreateProjectHelmInput): Repo!
   createSlackWebhookIntegration(input: CreateWebhookIntegrationInput!): SlackWebhookIntegration!
+
+  """Always creates a new slack webhook integration."""
+  createSlackWebhookIntegrationV2(input: CreateWebhookIntegrationInput!): SlackWebhookIntegration!
   updateSlackWebhookIntegration(input: UpdateWebhookIntegrationInput!): SlackWebhookIntegration!
   createDiscordWebhookIntegration(input: CreateWebhookIntegrationInput!): DiscordWebhookIntegration!
+
+  """Always creates a new discord webhook integration."""
+  createDiscordWebhookIntegrationV2(input: CreateWebhookIntegrationInput!): DiscordWebhookIntegration!
   updateDiscordWebhookIntegration(input: UpdateWebhookIntegrationInput!): DiscordWebhookIntegration!
   createDatadogIntegration(input: CreateDatadogIntegrationInput!): DatadogIntegration!
+  createEmailIntegration(input: CreateEmailIntegrationInput!): EmailIntegration!
   removeUserIntegration(input: RemoveUserIntegrationInput!): Boolean!
+
+  """
+  Updates notification settings, in two ways:
+  1. when integrationID is NOT specified: configures global settings for the user
+  OR
+  2. when integrationID IS specified: configures per-integration settings
+  """
+  updateNotificationIntegrationSettings(userID: UUID!, integrationID: UUID, input: NotificationIntegrationSettingsInput!): NotificationIntegrationSettings
   createIPFSService(input: CreateIPFSServiceInput!): IPFSService!
   runJob(input: RunJobInput!): JobRun!
+  cancelJob(input: CancelJobInput!): JobRun!
   addLinodeAccount(input: AddLinodeAccountInput!): LinodeAccount!
   updateLinodeAccount(input: UpdateLinodeAccountInput!): Boolean!
   removeLinodeAccount(id: UUID!): Boolean!
@@ -2567,17 +3245,26 @@ type Mutation {
   Create a copy of a repo, optionally specifying the target project and project environment
   """
   duplicateProject(input: DuplicateProjectInput!): Repo!
+
+  """- id: v0.RepoID"""
   deleteProjectBranch(id: UUID!, branch: String!): Boolean!
+
+  """- projectID: v0.RepoID"""
   rollbackProjectToDeployment(projectID: UUID!, deploymentID: UUID!): Repo!
   updateProject(input: UpdateProjectInput!): Repo!
   updateProjectDanger(input: UpdateProjectDangerInput!): Repo!
   removeProbe(input: RemoveProbeInput!): Repo!
+
+  """- id: v0.RepoID"""
   removeLogShipper(id: UUID!): Boolean!
+
+  """- id: v0.RepoID"""
   migrateGithubConnection(id: UUID!, installationID: String!): Repo!
   createProject(input: CreateProjectInput): Repo!
   createProjectDocker(input: CreateProjectDockerInput): Repo!
   createProjectGit(input: CreateProjectGitInput): Repo!
   createResourceAlpha(input: CreateResourceAlphaInput!): Repo!
+  updateResourceAlpha(repoID: UUID!, input: UpdateResourceAlphaInput!): Repo!
   createRepoPipelineLink(input: CreateRepoPipelineLinkInput!): RepoPipelineLink!
   updateRepoPipelineLink(input: UpdateRepoPipelineLinkInput!): RepoPipelineLink!
   deleteRepoPipelineLink(id: UUID!): Boolean
@@ -2614,7 +3301,184 @@ type Network {
   machines: [Machine]
 }
 
+"""
+A notification condition represents a test of some attribute against a target value. A NotificationCondition is evaluated
+to a true/false value, and can be combined via  NotificationConditionGroup.
+
+For example: {operator: EQUALS, key: PROJECT_ID, value: "abc-123"} will test a
+given notification for `event.project_id == "abc-123"`
+"""
+type NotificationCondition {
+  """The method by which the key is tested relative to the target value"""
+  operator: NotificationConditionOperator
+
+  """The key to test using the operator and value"""
+  key: NotificationConditionKey
+
+  """
+  The required value to satisfy the operator against the specific key.
+  The type of this will depend on the key and the operator, for example: {operator: EQUALS, key: PROJECT_ID}
+  will expect a string value.
+  
+  For example, if the IN operator is used with the PROJECT_ID key, the value will be a a json array: ["abc-123", "def-456"]
+  """
+  value: JSON
+}
+
+"""Represents the logical combination of one or more conditions"""
+type NotificationConditionGroup {
+  """The operator used to combine the conditions"""
+  operator: NotificationConditionGroupOperator
+
+  """
+  The child conditions and/or condition groups to be evaluated using the specified operator.
+  WARNING: Only 1 NotificationCondition is currently supported
+  """
+  conditions: [NotificationConditionProvider!]!
+}
+
+input NotificationConditionGroupInput {
+  operator: NotificationConditionGroupOperator!
+  conditions: [NotificationConditionInput!]!
+}
+
+enum NotificationConditionGroupOperator {
+  """
+  The condition group is satisfied when ALL child conditions are satisfied
+  """
+  ALL
+
+  """
+  The condition group is satisfied when ANY of the child conditions are satisfied.
+  WARNING: Not yet supported
+  """
+  ANY
+}
+
+input NotificationConditionInput {
+  operator: NotificationConditionOperator!
+  key: NotificationConditionKey!
+  value: JSON!
+}
+
+"""The set of available condition keys"""
+enum NotificationConditionKey {
+  """
+  This is the id of the project (called a 'Group' in v1 API) which the notification originated from.
+  """
+  PROJECT_ID
+
+  """
+  This is the id of the project environment (called a 'SubGroup' in v1) which the notification originated from.
+  """
+  PROJECT_ENVIRONMENT_ID
+
+  """
+  This is the id of the ProjectV3Adapter ('Project' in v1 API) which the notification originated from.
+  """
+  PROJECT_V3_ADAPTER_ID
+}
+
+enum NotificationConditionOperator {
+  """The equality (==) operator, i.e. <key> == <value>"""
+  EQUALS
+}
+
+"""
+Conditions can be provided as either a singular condition or a group of combined conditions.
+When a notification is triggered by Zeet, a NotificationConditionProvider, if
+configured, will be evaluated against the notification's attributes.
+If the NotificationConditionProvider is satisfied (i.e. evaluates to 'true'),
+then the notification will be forwarded to the target integration.
+"""
+union NotificationConditionProvider = NotificationCondition | NotificationConditionGroup
+
+"""
+The definition for notification conditions or notification.
+
+An instance of this input type can represent one of the following:
+- a single condition group: the 'groups' list is not empty, and the operator is not present
+- a combination of condition groups: the 'groups' list contains multiple members, and the operator is present
+- a single condition: the 'condition' field is present
+- clearing any configured conditions: the noConditions field is present and set to true
+"""
+input NotificationConditionProviderInput {
+  operator: NotificationConditionGroupOperator
+  groups: [NotificationConditionGroupInput!]
+  condition: NotificationConditionInput
+  noConditions: Boolean
+}
+
+"""A destination for Zeet notifications."""
+interface NotificationIntegration {
+  """
+  A notification integration can independently configure notification settings.
+  When null, this integration will use the user's
+  notificationIntegrationSettings.
+  
+  NOTE: These settings are NOT individually "merged" with the user's
+  notificationIntegrationSettings, either the integration's settings are used,
+  or the user's settings are used as a fallback.
+  """
+  notificationSettings: NotificationIntegrationSettings
+}
+
+type NotificationIntegrationSettings {
+  """Enable/Disable build notifications"""
+  build: Boolean
+
+  """Enable/Disable deploy notifications"""
+  deploy: Boolean
+
+  """Enable/Disable kubernetes pod crash notifications"""
+  podCrash: Boolean
+
+  """
+  The condition that must be satisfied for a notification to be forwarded to this integration.
+  A null value indicates all configured notifications will be forwarded.
+  
+  Conditions apply to _all_ configured notification types. To apply different
+  conditions independently to each notification type,
+  create a separate notification integration for each notification type, and apply the desired conditions to each.
+  
+  NOTE: Conditions cannot be configured "globally" for a user.
+  """
+  conditions: NotificationConditionProvider
+}
+
+input NotificationIntegrationSettingsInput {
+  """
+  Enable/Disable build notifications, null causes no change to current setting
+  
+  NOTE: not applicable to "global" settings, only applicable to integration-specific settings
+  """
+  build: Boolean
+
+  """
+  Enable/Disable deploy notifications, null causes no change to current setting
+  
+  NOTE: not applicable to "global" settings, only applicable to integration-specific settings
+  """
+  deploy: Boolean
+
+  """
+  Enable/Disable kubernetes pod crash notifications, null causes no change to current setting
+  """
+  podCrash: Boolean
+
+  """
+  NOTE: Conditions cannot be configured "globally" for a user. Conditions may only be configured for a specific integration.
+  """
+  conditions: NotificationConditionProviderInput
+}
+
 scalar Object
+
+input ObservabilityRange {
+  start: Time!
+  end: Time
+  step: Duration
+}
 
 type PageInfo {
   startCursor: String!
@@ -2658,9 +3522,19 @@ enum PlanBillingPeriod {
 }
 
 enum PlanTier {
-  LEGACY
+  LEGACY @deprecated(reason: "LEGACY plan tier is no longer supported")
   BASIC
   PRO
+}
+
+type PlanTierV2 implements Product {
+  name: String
+  description: String
+  sku: ID!
+  displayPrice: String
+  usage: [Usage!]!
+  benefits: [String!]!
+  productTypeMetadata: ProductTypeMetadata
 }
 
 type Port {
@@ -2721,6 +3595,91 @@ input ProbeInput {
   timeoutSeconds: Int
 }
 
+interface Product {
+  productTypeMetadata: ProductTypeMetadata
+  name: String
+  description: String
+
+  """
+  A string used to communicate the price of this product. No currency or format should be assumed.
+  """
+  displayPrice: String
+  sku: ID!
+
+  """Any usage governed by this Product."""
+  usage: [Usage!]!
+
+  """Any benefit descriptions."""
+  benefits: [String!]!
+}
+
+type ProductCatalog {
+  """
+  Shows all available products in the catalog. When no user is specified, it shows all available products.
+  When a user is specified, the response can be enriched with information from their current subscription (if one exists).
+  """
+  products(forUserID: UUID): [ProductCatalogSection!]!
+
+  """
+  Returns a preview of the new invoice that would result from modifying the
+  user's existing subscription based on the subscriptionCart.
+  
+  This query should be checked before attempting purchaseSubscription with the same cart.
+  """
+  previewSubscription(forUserID: UUID!, subscriptionCart: SubscriptionCart!): SubscriptionPurchasePreview!
+}
+
+"""
+A section of the product catalog, showing products of a single type (Plan Tier, Support Tier, etc)
+"""
+type ProductCatalogSection {
+  sectionName: String!
+
+  """Metadata for the product type this section is for"""
+  productTypeMetadata: ProductTypeMetadata
+
+  """All available products, regardless of the current subscription."""
+  allProducts: [CatalogProductView!]!
+}
+
+type ProductPurchasePreview {
+  """
+  The section name that the products in this preview would appear under in the product catalog.
+  """
+  sectionName: String!
+
+  """Metadata for the product type of the two products in this preview."""
+  productTypeMetadata: ProductTypeMetadata
+
+  """
+  The current product on the subscription that is possibly being replaced by newProduct.
+  """
+  currentProduct: Product
+
+  """
+  The product that will replace currentProduct, or currentProduct if no change is being made.
+  """
+  newProduct: Product
+
+  """
+  The status of newProduct relative to the currentProduct (i.e. downgrade/no change/upgrade)
+  """
+  newProductStatus: CatalogProductStatus
+}
+
+enum ProductType {
+  PLAN_TIER
+  PROJECT_PACK
+  SUPPORT_TIER
+  API_ACCESS
+}
+
+type ProductTypeMetadata {
+  productType: ProductType
+  displayName: String
+  pricingPageAnchor: String
+}
+
 interface ProfileOwner {
   login: Login!
   name: String!
@@ -2728,17 +3687,22 @@ interface ProfileOwner {
 }
 
 type Project {
+  """- v0.ProjectID or v1.GroupID"""
   id: UUID!
   name: String!
   envs: [EnvVar!]
   isMultiRepo: Boolean!
   defaultEnvironment: ProjectEnvironment!
+
+  """- id: v0.EnvironmentID or v1.SubGroupID"""
   environment(id: UUID, name: String): ProjectEnvironment!
   environments: [ProjectEnvironment!]!
   defaultRepo: Repo
   repo(id: UUID, name: String): Repo
   repos: [Repo!]!
   owner: User!
+  active: Boolean!
+  revisions(page: PageInput): ProjectRevisionConnection
   createdAt: Time!
   updatedAt: Time!
 }
@@ -2781,6 +3745,41 @@ type ProjectConnection {
   nodes: [Project!]!
 }
 
+input ProjectConnector {
+  type: ProjectConnectorType
+  fields: [ProjectConnectorField!]
+}
+
+input ProjectConnectorField {
+  name: String
+  displayName: String
+  type: VariableType
+  value: String
+}
+
+input ProjectConnectorSchema {
+  entries: [ProjectConnectorSchemaEntry!]
+}
+
+input ProjectConnectorSchemaEntry {
+  type: ProjectConnectorType
+  fields: [ProjectConnectorSchemaField!]
+}
+
+input ProjectConnectorSchemaField {
+  name: String
+  displayName: String
+  type: ProjectConnectorSchemaFieldType
+}
+
+enum ProjectConnectorSchemaFieldType {
+  OUTPUT
+}
+
+enum ProjectConnectorType {
+  DATABASE_CONNECTION
+}
+
 input ProjectDeployInput {
   deployTarget: DeployTarget!
   deployType: DeployType
@@ -2800,6 +3799,7 @@ type ProjectEdge {
 }
 
 type ProjectEnvironment {
+  """- v0.EnvironmentID or v1.SubGroupID"""
   id: UUID!
   name: String!
   envs: [EnvVar!]
@@ -2808,17 +3808,57 @@ type ProjectEnvironment {
   repos: [Repo!]!
   repoConnection(page: PageInput, repoFilter: repoFilterInput): RepoConnection!
   overview: [EnvironmentOverview]
+  overviewV2: [EnvironmentOverviewV2]
+  projectV3Adapters: ProjectV3AdapterConnection
+  revisions(page: PageInput): ProjectEnvironmentRevisionConnection
   project: Project
   createdAt: Time!
   updatedAt: Time!
+}
+
+type ProjectEnvironmentRevision implements RevisableEntity {
+  revisionData: JSON!
+  revisionMetadata: RevisionMetadata!
+}
+
+type ProjectEnvironmentRevisionConnection implements RevisionConnection {
+  totalCount: Int!
+  nodes: [ProjectEnvironmentRevision!]!
+  pageInfo: PageInfo!
 }
 
 interface ProjectOwner {
   projects(input: ProjectsInput): ProjectConnection!
 }
 
+type ProjectPack implements Product {
+  name: String
+  description: String
+  sku: ID!
+  displayPrice: String
+  usage: [Usage!]!
+  benefits: [String!]!
+  productTypeMetadata: ProductTypeMetadata
+}
+
+type ProjectRevision implements RevisableEntity {
+  revisionData: JSON!
+  revisionMetadata: RevisionMetadata!
+}
+
+type ProjectRevisionConnection implements RevisionConnection {
+  totalCount: Int!
+  nodes: [ProjectRevision!]!
+  pageInfo: PageInfo!
+}
+
 input ProjectsInput {
   page: PageInput
+
+  """
+  When not null, will filter for projects that are active (true) or paused (false).
+  """
+  active: Boolean
 }
 
 type ProjectTemplate {
@@ -2838,14 +3878,28 @@ type ProjectTemplate {
 }
 
 type ProjectV3 {
+  """- v0.ProjectV3ID"""
   id: UUID!
   name: String!
   blueprintID: UUID!
+  blueprint: Blueprint
   requirePlanApproval: Boolean!
   variables: [BlueprintVariable!]!
   project: Project
   projectEnvironment: ProjectEnvironment
   configuration: ProjectV3Configuration
+
+  """The 'blueprint configuration overrides' applied to this project."""
+  blueprintConfiguration: BlueprintConfiguration
+
+  """
+  The 'effective blueprint configuration' is a view of the BlueprintConfiguration that will be used by the Blueprint Driver.
+  
+  It is the result of merging two BlueprintConfiguration objects:
+  1. This project's blueprint.configuration
+  2. This project's blueprintConfiguration ("configuration overrides"), if defined.
+  """
+  effectiveBlueprintConfiguration: BlueprintConfiguration
 
   """
   Provides a view over driver action executions, grouping together Plan-type
@@ -2861,11 +3915,14 @@ type ProjectV3 {
 }
 
 type ProjectV3Adapter {
+  """- v0.ProjectAdapterID or v1.ProjectID"""
   id: UUID!
+  isDeployV2: Boolean!
   repo: Repo
   projectV3: ProjectV3
   name: String!
   status: ProjectV3AdapterStatus
+  billable: Boolean
   project: Project
   projectEnvironment: ProjectEnvironment
   createdAt: Time!
@@ -2883,6 +3940,7 @@ enum ProjectV3AdapterStatus {
   DRAFT
   PAUSED
   INACTIVE
+  PENDING_HEALTHY_CLUSTER
   JOB_RUN_STARTING
   JOB_RUN_RUNNING
   JOB_RUN_FAILED
@@ -2915,6 +3973,7 @@ type ProjectV3Connection {
 }
 
 input ProjectV3GitopsInput {
+  """- v0.ProjectV3ID"""
   projectID: UUID!
   githubConnectionID: Int!
   githubRepoOwner: String!
@@ -2933,12 +3992,14 @@ type ProjectV3Workflow {
 }
 
 enum ProjectV3WorkflowStatus {
+  QUEUED
   STARTING
   RUNNING
   FAILED
   SUCCEEDED
   PENDING_APPROVAL
   PENDING_MANUAL_ACTION
+  ABORTED
 }
 
 type Prometheus {
@@ -2962,11 +4023,14 @@ type Query {
   currentUser: User!
   user(id: ID!): User!
   team(id: UUID, path: String): Team
+
+  """- v0.ProjectID or v1.GroupID"""
   project(id: UUID, path: String): Project
   repo(id: UUID, path: String): Repo
   dockerRepository(image: String!): DockerRepository
   checkPrice(input: CheckPriceInput!): CheckPriceOutput!
   prices: Prices!
+  productCatalog: ProductCatalog!
   awsCostByService(awsAccountId: UUID!, where: CostByServiceWhere!): [Cost!]!
   awsCostUsage2(awsAccountId: UUID!, where: CostUsageWhere!): [Cost!]!
   blueprint(id: UUID!): Blueprint
@@ -2987,6 +4051,7 @@ type Release {
 }
 
 input RemoveProbeInput {
+  """- v0.RepoID"""
   id: ID!
   readinessProbe: Boolean
   livenessProbe: Boolean
@@ -3021,12 +4086,14 @@ input ReplicationInput {
 }
 
 type Repo {
+  """- v0.RepoID"""
   id: ID!
   name: String!
   source: RepoSource!
   appID: String
   enabled: Boolean!
   namespace: String
+  useHumanReadableKubernetesName: Boolean
   kappID: String
   clusterDomains: [ClusterDomains!]
   cdns: [CDN!]
@@ -3038,9 +4105,11 @@ type Repo {
   manualDeploy: Boolean
   autoRetry: Boolean
   autoRollback: Boolean
+  deployTimeoutSeconds: Int
   buildMethod: BuildMethod
   buildMethodSuggestions: [BuildMethod!]
   noBuildCache: Boolean
+  gitSubmodules: GitSubmodulesType
   kanikoFlags: KanikoFlags
   resources: ContainerResourcesSpec
   buildResources: ContainerResourcesSpec
@@ -3123,6 +4192,9 @@ type Repo {
   clusterIssuerName: String
   path: String!
   fullPath: String!
+  deploymentConfiguration(revisionId: UUID, sequenceId: Int): RepoDeploymentConfiguration!
+  deploymentConfigurationRevisions(page: PageInput): RepoDeploymentConfigurationConnection!
+  bitbucketIntegration: BitbucketRepoIntegration
   manifest: Manifest
   pipelineLinks: [RepoPipelineLink!]
   machines: [Machine!]
@@ -3169,17 +4241,36 @@ type RepoBranchV2 {
   kappID: String
   patchedPodSpec: String
   renderPodSpec(patch: String): String
+  renderIngress(patch: String): String
   awsLinks: AWSLinks
   gcpLinks: GCPLinks
   repo: Repo
   createdAt: Time!
   updatedAt: Time!
   resources: [CloudResource!]
+
+  """
+  This will indicate possible issues with the current configuration, i.e. if the git branch no longer exists.
+  This will NOT be used to communicate issues about the status of deployed
+  resources, i.e. if builds are failing or the deployment is crashing.
+  """
+  troubleshooting: Troubleshooting
 }
 
 type RepoConnection {
   totalCount: Int!
   nodes: [Repo!]!
+  pageInfo: PageInfo!
+}
+
+type RepoDeploymentConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+}
+
+type RepoDeploymentConfigurationConnection implements RevisionConnection {
+  totalCount: Int!
+  nodes: [RepoDeploymentConfiguration!]!
   pageInfo: PageInfo!
 }
 
@@ -3205,6 +4296,7 @@ type RepoGroup {
 }
 
 type RepoPipelineLink {
+  """- v0.RepoID"""
   id: UUID!
   source: Repo!
   sourceEvent: RepoEvent!
@@ -3229,6 +4321,7 @@ enum RepoSourceType {
   GITHUB
   GITHUB_PUBLIC
   GITLAB
+  BITBUCKET
   GIT
   DOCKER
   DOCKER_HUB
@@ -3250,6 +4343,9 @@ input ResourceAdapterFilter {
   status: AdapterStatusCriterion
   projectName: StringCriterion
   environmentName: StringCriterion
+
+  """Active=true or Paused=false"""
+  active: BooleanCriterion
 }
 
 input ResourceBranchInput {
@@ -3264,6 +4360,7 @@ input ResourceBuildInput {
   build: ProjectBuildInput
   buildTarget: BuildTargetInput
   buildResources: ContainerResourcesSpecInput
+  gitSubmodules: GitSubmodulesType
   kanikoFlags: KanikoFlagsInput
   noBuildCache: Boolean
   containerRegistryID: UUID
@@ -3285,6 +4382,7 @@ input ResourceFilter {
 }
 
 input ResourceKubernetesAppInput {
+  useHumanReadableName: Boolean
   deployJob: Boolean
   deployService: Boolean
   releaseCommand: String
@@ -3346,11 +4444,41 @@ input ResourceTerraformInput {
   variables: JSON
 }
 
+enum ResourceType {
+  CONTAINER
+  POD
+  JOB
+  DEPLOYMENT
+  REPLICASET
+  STATEFULSET
+  DAEMONSET
+  SERVICE
+}
+
 input ResourceWorkflowInput {
   autoRetry: Boolean
   autoRollback: Boolean
   manualDeploy: Boolean
   pipelineClusterID: UUID
+  deployTimeoutSeconds: Int
+}
+
+interface RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+}
+
+interface RevisionConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type RevisionMetadata {
+  id: UUID!
+  description: String!
+  sequenceId: Int!
+  createdBy: User!
+  createdAt: Time!
 }
 
 type RightSizingInstance {
@@ -3510,7 +4638,7 @@ type SlackIntegration implements Integration {
   updatedAt: Time!
 }
 
-type SlackWebhookIntegration implements Integration {
+type SlackWebhookIntegration implements Integration & NotificationIntegration {
   id: UUID!
   type: IntegrationType!
   name: String!
@@ -3519,6 +4647,7 @@ type SlackWebhookIntegration implements Integration {
   createdAt: Time!
   updatedAt: Time!
   url: String
+  notificationSettings: NotificationIntegrationSettings
 }
 
 enum SortDirection {
@@ -3596,6 +4725,54 @@ type Subscription {
   deploymentBuildLogsAdded(input: BuildLogsInput!): LogEntry!
 }
 
+input SubscriptionCart {
+  planTierSku: ID!
+  projectPackSku: ID!
+  supportTierSku: ID!
+  apiAccessSku: ID!
+}
+
+type SubscriptionFeature {
+  key: FeatureKey!
+  enabled: Boolean
+}
+
+type SubscriptionFeatures {
+  """Query a specific subscription feature"""
+  byKey(featureKey: FeatureKey!): SubscriptionFeature
+}
+
+"""
+A preview of the desired changes to a subscription.
+
+All fields should be checked for errors: if any errors are returned, a subsequent purchaseSubscription mutation would fail.
+"""
+type SubscriptionPurchasePreview {
+  """
+  A short name indicating the payment method on file that will be used for this subscription.
+  If no payment method is on file, this will be null.
+  If no payment method is on file, _and_ one is required to complete the purchase, an error will be returned."
+  """
+  paymentMethodName: String
+  products: [ProductPurchasePreview!]
+}
+
+type SubscriptionPurchaseResponse {
+  """The new billing overview with the updated subscription"""
+  overview: BillingOverview!
+}
+
+"""
+Indicates if the team is able to create new entities within their subscription limits.
+"""
+type SubscriptionUsageAllowed {
+  seats: Boolean!
+  clusters: Boolean!
+  cloudAccounts: Boolean!
+  projects: Boolean!
+  customBlueprints: Boolean!
+}
+
 input SuggestProjectNameInput {
   name: String
   type: String
@@ -3604,6 +4781,17 @@ input SuggestProjectNameInput {
 input SuggestTemplateNameInput {
   id: ID!
   name: String
+}
+
+type SupportTier implements Product {
+  name: String
+  description: String
+  sku: ID!
+  displayPrice: String
+  items: Object
+  usage: [Usage!]!
+  benefits: [String!]!
+  productTypeMetadata: ProductTypeMetadata
 }
 
 type SyslogIntegration {
@@ -3684,6 +4872,31 @@ input TerraformApproveActionParameters {
   planID: UUID!
 }
 
+type TerraformAutomaticOutputConfiguration {
+  """
+  Disable the 'automatic output' handler, which produces a single map named 'outputs' containing all module outputs.
+  """
+  disabled: Boolean
+
+  """
+  Mark the automatic output value as sensitive. This is required to be 'true'
+  when 'disabled' is false and any sensitive module output is not in 'excluded'.
+  """
+  sensitive: Boolean
+
+  """
+  The keys of any module outputs that should be excluded from the automatic output value. Ignored when 'disabled' is true.
+  """
+  excluded: [String!]
+}
+
+"""See TerraformAutomaticOutputConfiguration."""
+input TerraformAutomaticOutputConfigurationInput {
+  disabled: Boolean
+  sensitive: Boolean
+  excluded: [String!]
+}
+
 type TerraformModule {
   id: ID!
   owner: String
@@ -3754,6 +4967,41 @@ enum TerraformOperationState {
   SUCCEEDED
 }
 
+type TerraformOutputConfiguration {
+  """
+  Configuration for the automatic output handler. This configuration does not affect output defined via 'customization'.
+  """
+  automatic: TerraformAutomaticOutputConfiguration
+
+  """
+  A JSON object using Terraform configuration syntax
+  (https://developer.hashicorp.com/terraform/language/syntax/json), constituting
+  a valid "output" block.
+  
+  Example:
+  ```
+  {
+    "output": {
+      "example": {
+        "value": "${aws_instance.example}"
+      }
+    }
+  }
+  ```
+  
+  This must include the output block "envelope".
+  
+  To reference module values, use the expression mapping syntax: https://developer.hashicorp.com/terraform/language/syntax/json#expression-mapping
+  """
+  customization: JSON
+}
+
+"""See TerraformOutputConfiguration."""
+input TerraformOutputConfigurationInput {
+  automatic: TerraformAutomaticOutputConfigurationInput
+  customization: JSON
+}
+
 """
 [DEPRECATED] Input values for Terraform PLAN actions.
 Provider should be configured for the project, i.e. TerraformProjectV3ConfigurationInput,
@@ -3808,7 +5056,7 @@ input TerraformProjectV3ConfigurationInput {
 
   """
   Terraform Provider configuration: Maps a zeet-connected cloud account to a terraform provider.
-  This parameter is optional for backwards compatability. New Projects should specify their provider at creation,
+  This parameter is optional for backwards compatibility. New Projects should specify their provider at creation,
   instead of specifying the provider for each PLAN/PLAN_DESTROY action.
   
   This parameter will be required in the v1 API, and specifying provider "per-plan" will not be supported.
@@ -3905,6 +5153,34 @@ input TransferProjectInput {
   to: ID!
 }
 
+"""
+A minimal representation of some error state, and some possible triage, when available.
+"""
+type Troubleshooting {
+  """
+  The headline issue currently outstanding for this troubleshooting's parent object.
+  """
+  issue: TroubleshootingIssue
+}
+
+type TroubleshootingIssue {
+  """
+  Zero or more blocks representing either evidence of an issue or corresponding user instructions
+  """
+  blocks: [TroubleshootingIssueBlock!]
+  issueCode: String
+}
+
+type TroubleshootingIssueBlock {
+  blockType: TroubleshootingIssueBlockType
+  content: String
+}
+
+enum TroubleshootingIssueBlockType {
+  INSTRUCTION
+  EVIDENCE
+}
+
 input UpdateAWSAccountInput {
   id: UUID!
   name: String
@@ -3919,6 +5195,13 @@ input UpdateAzureAccountInput {
   clientSecret: String
 }
 
+input UpdateBitbucketIntegrationInput {
+  userID: UUID!
+  id: UUID!
+  name: String
+  accessToken: String
+}
+
 input UpdateBlueprintInput {
   displayName: String
   published: Boolean
@@ -3927,15 +5210,17 @@ input UpdateBlueprintInput {
 
   """
   Update the variables. Supports partial updates: only specify the variables that you wish to update.
-    To modify or remove an existing variable, you must specify the variable's ID.
+  To modify or remove an existing variable, you must specify the variable's ID.
   
-    If ID is not present, the variable will be created (and the "remove" field will be ignored).
+  If ID is not present, the variable will be created (and the "remove" field will be ignored).
   """
   variables: [BlueprintVariableSpecUpdate!]
   richInputSchema: JSON
   description: String
   tags: [String!]
   logoUrl: String
+  outputSchema: BlueprintOutputSchema
+  connectorSchema: ProjectConnectorSchema
 }
 
 input UpdateBranchInput {
@@ -3994,6 +5279,7 @@ input updateDatabaseLinkInput {
 input UpdateDOAccountInput {
   id: UUID!
   name: String
+  accessToken: String
 }
 
 input UpdateGCPAccountInput {
@@ -4017,6 +5303,7 @@ input UpdateIPFSServiceInput {
 input UpdateLinodeAccountInput {
   id: UUID!
   name: String
+  accessToken: String
 }
 
 input UpdateMarketplaceBlueprintInput {
@@ -4026,10 +5313,12 @@ input UpdateMarketplaceBlueprintInput {
 }
 
 input UpdateProjectDangerInput {
+  """- v0.RepoID"""
   id: UUID!
   namespace: String
   appID: String
   defaultIngressDomain: String
+  useHumanReadableKubernetesName: Boolean
   deployTarget: ProjectDeployInput
 }
 
@@ -4041,6 +5330,7 @@ input UpdateProjectEnvironmentInput {
 }
 
 input UpdateProjectInput {
+  """- v0.RepoID"""
   id: ID!
   path: String
   name: String
@@ -4059,6 +5349,7 @@ input UpdateProjectInput {
   pythonVersion: String
   golangVersion: String
   noBuildCache: Boolean
+  gitSubmodules: GitSubmodulesType
   kanikoFlags: KanikoFlagsInput
   alternativeImageTagTemplates: [String!]
   volumes: JSON
@@ -4082,8 +5373,10 @@ input UpdateProjectInput {
   autoRetry: Boolean
   autoRollback: Boolean
   deployStrategy: DeployStrategy
+  deployTimeoutSeconds: Int
   helmVersion: String
   helmValues: String
+  terraformSource: String
   terraformVersion: String
   terraformVariables: String
   manifests: [String!]
@@ -4130,8 +5423,18 @@ input UpdateProjectV3Input {
   name: String
   requirePlanApproval: Boolean
   variables: [BlueprintVariableInput!]
+
+  """- v0.ProjectID or v1.GroupID"""
   projectID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   environmentID: UUID
+
+  """
+  Blueprint configuration overrides to apply to the project, or the configuration if this project is based on
+  a sourceless blueprint. If set to null, the configuration will be cleared. If omitted, no changes occur.
+  Otherwise, a partial PATCH update will be performed.
+  """
   blueprintConfiguration: BlueprintConfigurationInput
   terraformConfiguration: TerraformProjectV3ConfigurationInput
   manifestConfiguration: ManifestProjectV3ConfigurationInput
@@ -4146,11 +5449,18 @@ input UpdateRepoCustomDomainInput {
 }
 
 input UpdateRepoPipelineLinkInput {
+  """- v0.RepoID"""
   id: UUID!
   sourceEvent: RepoEvent
   targetRepoID: UUID
+
+  """- v0.EnvironmentID or v1.SubGroupID"""
   targetEnvironmentID: UUID
   targetAction: RepoAction
+}
+
+input UpdateResourceAlphaInput {
+  source: SourceInput
 }
 
 input UpdateTeamInput {
@@ -4192,6 +5502,44 @@ scalar Upload
 
 scalar URL
 
+"""
+If a self-service link is available, url will be non-null. If url is null, notAllowed should be non-null.
+"""
+type UrlOrContactUs {
+  url: URL
+
+  """True if url is a self-service link, false if url is the contact url."""
+  hasUrl: Boolean!
+
+  """
+  If no self-service link is available, please get in touch with us via this URL.
+  """
+  contactUrl: URL!
+  notAllowed: BillingActionNotAllowed
+
+  """
+  When applicable, some help text explaining why a url is or is not available.
+  """
+  tooltip: String
+  contactUs: ContactUs @deprecated(reason: "Use notAllowed instead.")
+}
+
+"""A usage indicator"""
+type Usage {
+  unit: String!
+  unitPlural: String!
+
+  """A header display name"""
+  displayName: String!
+
+  """When the query is not for a specific user, currentUsage will be null"""
+  currentUsage: Int
+
+  """Null indicates unlimited usage allowed"""
+  maximumUsage: Int
+  description: String
+}
+
 type User implements ProfileOwner & ProjectOwner {
   id: ID!
   login: Login!
@@ -4206,13 +5554,13 @@ type User implements ProfileOwner & ProjectOwner {
   billingEmail: String
   createdAt: Time
   hasPaymentMethod: Boolean
-  needsPaymentMethod: Boolean
+  needsPaymentMethod: Boolean @deprecated(reason: "no longer supported: use User.billingOverview.externalLinks instead")
   billingURL: String
   stripe: StripeUser
   freeQuota: Int
   freeTrialEndsAt: Time
   freeLimitExceeded: Boolean
-  paymentError: String
+  paymentError: String @deprecated(reason: "no longer used")
   paymentAuthorizationError: String
   teams: [UserTeamEdge!]
   team(id: ID!): Team
@@ -4247,16 +5595,26 @@ type User implements ProfileOwner & ProjectOwner {
   apiKeys: [APIKey!]
   containerRegistries: [ContainerRegistry!]
   integrations: [Integration!]
+  crispAuth: CrispAuth
   ipfsServices: [IPFSService!]
   azureAccount(id: UUID!): AzureAccount
   azureAccounts: [AzureAccount!]
+
+  """Billing Overview only exists for users with subscriptions, i.e. a team"""
+  billingOverview: BillingOverview
   blueprints(page: PageInput): BlueprintConnection
   blueprint(id: UUID!): Blueprint
   projectV3(id: UUID!): ProjectV3
   projectV3s(filter: FilterInput!): ProjectV3Connection
   projectV3DriverActionExecutions(filter: FilterInput!): BlueprintDriverActionExecutionConnection
+  blueprintDriverWorkflow(id: UUID!): BlueprintDriverWorkflow
   projectV3Adapters(filter: FilterInput!): ProjectV3AdapterConnection
   eventIntegrations: [EventIntegration!]
+
+  """
+  Global settings for notification integrations. These settings may be overriden per-integration.
+  """
+  notificationIntegrationSettings: NotificationIntegrationSettings
   permissions: UserPermissionsConnection
 }
 
@@ -4299,6 +5657,13 @@ type UserTeamEdge {
 
 scalar UUID
 
+enum VariableType {
+  STRING
+  BOOLEAN
+  INTEGER
+  FLOAT
+}
+
 scalar VariableValueInput
 
 type Volume {
@@ -4324,6 +5689,7 @@ type VultrAccount {
   connected: Boolean
   clusters: [Cluster!]
   projects(input: ProjectsInput): ProjectConnection
+  projectV3Adapters: ProjectV3AdapterConnection
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]

@@ -1,9 +1,9 @@
 # Default genqlient config; for full documentation see:
 # https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
-schema: schema_0.graphql
+schema: schema_1.graphql
 operations:
-  - "pkg/**/*.go"
-generated: pkg/api/generated.go
+  - "../../zeet/captain/packages/web-api/graphql/v1/*/*.gql"
+generated: pkg/sdk/v1/generated.go
 allow_broken_features: true
 bindings:
   UUID:
@@ -23,3 +23,7 @@ bindings:
     type: string
   MapString:
     type: map[string]string
+  YAML:
+    type: string
+  VariableValueInput:
+    type: string

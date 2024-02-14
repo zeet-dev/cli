@@ -1,0 +1,3558 @@
+"""
+The @defer directive may be specified on a fragment spread to imply
+de-prioritization, that causes the fragment to be omitted in the initial
+response, and delivered as a subsequent response afterward. A query with @defer
+directive will cause the request to potentially return multiple responses, where
+non-deferred data is delivered in the initial response and data deferred
+delivered in a subsequent response. @include and @skip take precedence over @defer.
+"""
+directive @defer(if: Boolean = true, label: String) on FRAGMENT_SPREAD | INLINE_FRAGMENT
+
+directive @enforceUserAction(action: UserAction!) on FIELD_DEFINITION
+
+directive @goField(forceResolver: Boolean, name: String) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
+directive @goModel(model: String, models: [String!]) on OBJECT | INPUT_OBJECT | SCALAR | ENUM | INTERFACE | UNION
+
+"""
+The @specifiedBy built-in directive is used within the type system definition
+language to provide a scalar specification URL for specifying the behavior of
+custom scalar types.
+"""
+directive @specifiedBy(url: String!) on SCALAR
+
+type ActionTriggerConfiguration {
+  workflowId: UUID
+}
+
+input ActionTriggerConfigurationInput {
+  workflowId: UUID
+}
+
+input AdapterStatusCriterion {
+  value: [String]
+}
+
+input AddClusterInput {
+  userId: UUID!
+  kubeconfig: Upload
+  awsAccountId: UUID
+  gcpAccountId: UUID
+  name: String
+  region: String
+}
+
+input AddContainerRegistryInput {
+  userId: UUID!
+  name: String!
+  registry: String!
+  username: String!
+  password: String!
+}
+
+input AddTeamMemberInput {
+  """The team id"""
+  id: UUID!
+  username: String
+  userId: UUID
+  role: TeamMemberRole!
+}
+
+type APIKey {
+  id: UUID!
+  token: String!
+  name: String!
+  description: String!
+  createdAt: Time!
+}
+
+type AutoscalingData {
+  minReplicas: Int!
+  maxReplicas: Int!
+  coolDownPeriod: Int!
+  spec: String!
+  triggers: [AutoscalingTrigger]
+  kedaScaledObjectSpec: JSON
+}
+
+input AutoscalingDataInput {
+  minReplicas: Int!
+  maxReplicas: Int!
+  coolDownPeriod: Int!
+  spec: String!
+  triggers: [AutoscalingTriggerInput]
+  kedaScaledObjectSpec: JSON
+}
+
+type AutoscalingTrigger {
+  type: String!
+  spec: String!
+}
+
+input AutoscalingTriggerInput {
+  type: String!
+  spec: String!
+}
+
+type AWSAccount {
+  id: UUID!
+  configuration(revisionId: UUID, sequenceId: Int): AWSAccountConfiguration!
+  configurationRevisions(page: PageInput): AWSAccountConfigurationConnection!
+}
+
+type AWSAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+  accountId: String
+  roleArn: String
+  externalId: String
+  principal: String
+  roleName: String
+}
+
+type AWSAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [AWSAccountConfiguration!]!
+}
+
+type AwsSamGeneratorConfiguration {
+  envVars: [EnvVar!]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
+}
+
+input AwsSamGeneratorConfigurationInput {
+  envVars: [EnvVarInput]
+  runCommand: String
+  serverlessMemory: Int
+  serverlessArch: String
+  customDomainHost: String
+  customDomainCertificateArn: String
+  httpPort: String
+  buildImage: String
+}
+
+type AwsSamTargetConfiguration {
+  awsAccountId: UUID
+  awsRegion: String
+  stackName: String
+}
+
+input AwsSamTargetConfigurationInput {
+  awsAccountId: UUID
+  awsRegion: String
+  stackName: String
+}
+
+type AzureAccount {
+  id: UUID!
+  configuration(revisionId: UUID, sequenceId: Int): AzureAccountConfiguration!
+  configurationRevisions(page: PageInput): AzureAccountConfigurationConnection!
+}
+
+type AzureAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+}
+
+type AzureAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [AzureAccountConfiguration!]!
+}
+
+type Blueprint {
+  id: UUID!
+  type: BlueprintType!
+  owner: BlueprintOwner
+  displayName: String!
+  published: Boolean!
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  variables: [BlueprintVariableSpec!]!
+  allowedCloudProviders: [CloudProvider!]!
+  richInputSchema: JSON
+
+  """Whether this blueprint is officially supported."""
+  isOfficial: Boolean
+
+  """The number of projects using this blueprint."""
+  projectCount: Int!
+
+  """
+  Whether this blueprint is enabled for your team. Does not affect existing projects.
+  """
+  enabled: Boolean
+
+  """URL for Zeet Blueprint Documentation"""
+  docsUrl: String
+
+  """Query the revision history of this blueprint."""
+  configuration(revisionId: UUID, sequenceId: Int): BlueprintConfiguration!
+  configurationRevisions(page: PageInput): BlueprintConfigurationConnection!
+}
+
+type BlueprintAwsSamConfiguration {
+  placeholder: Boolean
+}
+
+input BlueprintAwsSamConfigurationInput {
+  placeholder: Boolean
+}
+
+input BlueprintAwsSamConfigurationUpdate {
+  placeholder: Boolean
+}
+
+type BlueprintConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+
+  """An identifier for this blueprint, unique within the owner's namespace."""
+  slug: String!
+
+  """A display name for this blueprint."""
+  displayName: String!
+
+  """
+  Whether this blueprint is currently available to be used by projects. Does not affect existing projects.
+  """
+  published: Boolean!
+
+  """A description of the purpose and behavior of this blueprint."""
+  description: String
+
+  """Relevant classifications for this blueprint."""
+  tags: [String!]!
+
+  """A url for a logo image."""
+  logoUrl: String
+
+  """
+  Optional 'pre-built' Driver configuration for this blueprint, which can be overridden or extended by projects.
+  """
+  driverConfiguration: BlueprintDriverConfiguration
+
+  """
+  A schema for rich input widgets. Used to generate forms which capture the
+  necessary configuration for instantiating a project from this blueprint.
+  """
+  richInputSchema: JSON
+
+  """
+  Variables are key-value inputs that are rendered into a blueprint project by a Driver.
+  """
+  variables: [BlueprintVariableSpec!]!
+}
+
+type BlueprintConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BlueprintConfiguration!]!
+}
+
+type BlueprintConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [Blueprint!]!
+}
+
+enum BlueprintDriver {
+  TERRAFORM
+  KUBERNETES_MANIFEST
+  HELM
+}
+
+enum BlueprintDriverAction {
+  PLAN_DESTROY
+  PLAN
+  APPROVE
+  APPLY
+}
+
+union BlueprintDriverConfiguration = BlueprintTerraformConfiguration | BlueprintManifestConfiguration | BlueprintHelmConfiguration
+
+input BlueprintDriverConfigurationInput {
+  terraform: BlueprintTerraformConfigurationInput
+  manifest: BlueprintManifestConfigurationInput
+  helm: BlueprintHelmConfigurationInput
+}
+
+enum BlueprintDriverWorkflowStepAction {
+  DRIVER_PLAN_DESTROY
+  DRIVER_PLAN
+  DRIVER_APPROVE
+  DRIVER_APPLY
+  PROJECT_DELETE
+}
+
+enum BlueprintDriverWorkflowStepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  ERROR
+  ABORTED
+}
+
+type BlueprintGcpCloudRunConfiguration {
+  placeholder: Boolean
+}
+
+input BlueprintGcpCloudRunConfigurationInput {
+  placeholder: Boolean
+}
+
+input BlueprintGcpCloudRunConfigurationUpdate {
+  placeholder: Boolean
+}
+
+type BlueprintHelmConfiguration {
+  source: Source
+}
+
+input BlueprintHelmConfigurationInput {
+  source: SourceInput
+}
+
+type BlueprintManifestConfiguration {
+  source: Source
+  useKustomize: Boolean
+}
+
+input BlueprintManifestConfigurationInput {
+  source: SourceInput
+  useKustomize: Boolean
+}
+
+type BlueprintMetadata {
+  id: UUID!
+  slug: String!
+  name: String!
+  displayName: String!
+  type: BlueprintType!
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  metatags: [BlueprintMetadataMetaTag]
+  version: String
+  versions: [String!]!
+  latestVersion: String
+  applicationVersion: String
+  organizationName: String
+  organizationDisplayName: String
+  createdAt: Time
+  updatedAt: Time
+}
+
+type BlueprintMetadataConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BlueprintMetadata!]!
+}
+
+input BlueprintMetadataFilter {
+  name: StringCriterion
+}
+
+type BlueprintMetadataMetaTag {
+  name: String!
+  value: String!
+}
+
+enum BlueprintOutputDataSource {
+  INPUT
+  OUTPUT
+  RESOURCE
+}
+
+type BlueprintOutputSchema {
+  entries: [BlueprintOutputSchemaEntry!]
+}
+
+type BlueprintOutputSchemaEntry {
+  id: UUID
+  name: String
+  displayName: String
+  type: VariableType
+  dataSource: BlueprintOutputDataSource
+  dataPath: String
+  transformations: [BlueprintOutputTransformationType!]
+  transformationContext: BlueprintOutputTransformationContext
+}
+
+type BlueprintOutputTransformationContext {
+  yaml: BlueprintOutputTransformationYamlContext
+}
+
+enum BlueprintOutputTransformationType {
+  CLUSTER_IP
+  YAML
+  DECODE_BASE64
+}
+
+type BlueprintOutputTransformationYamlContext {
+  path: String!
+}
+
+type BlueprintOwner implements ProfileOwner {
+  login: Login!
+  name: String!
+  avatar: URL
+}
+
+type BlueprintsMarketplace {
+  blueprints(input: BlueprintsMarketplaceInput): BlueprintConnection
+  blueprint(owner: Login!, slug: String!): Blueprint
+  blueprintMetadata(owner: Login, slug: String!, version: String): BlueprintMetadata
+  blueprintMetadataList(filter: FilterInput!): BlueprintMetadataConnection
+}
+
+input BlueprintsMarketplaceInput {
+  """Sorting is applied before pagination."""
+  sort: SortInput
+  page: PageInput
+}
+
+type BlueprintTerraformConfiguration {
+  source: Source
+  outputConfiguration: TerraformOutputConfiguration
+  terraformVersion: String
+}
+
+input BlueprintTerraformConfigurationInput {
+  source: SourceInput
+  outputConfiguration: TerraformOutputConfigurationInput
+  terraformVersion: String
+}
+
+enum BlueprintType {
+  TERRAFORM
+  KUBERNETES_MANIFEST
+  HELM
+  AWS_SAM
+  GCP_CLOUD_RUN
+  ZEET_KUBERNETES
+  ZEET_AWS_LAMBDA
+  ZEET_GCP_CLOUD_RUN
+}
+
+input BlueprintVariableInput {
+  """
+  ID of the corresponding variable spec. Must be present if name is not specified.
+  """
+  specId: UUID
+
+  """
+  Name of the corresponding variable spec, or name to use when declaring a variable without referencing a variable spec.
+  Must be present if specId is not specified.
+  """
+  name: String
+
+  """
+  The variable value. Always a string value, which will be parsed according to the variableType, determined either
+  by the referenced variableSpec, or the provided variableType
+  """
+  value: VariableValueInput!
+
+  """
+  Type specification is required when variable is being declared without referencing a variable spec.
+  """
+  type: BlueprintVariableType
+}
+
+type BlueprintVariableSpec {
+  name: String!
+  type: BlueprintVariableType!
+  required: Boolean!
+}
+
+input BlueprintVariableSpecInput {
+  name: String!
+  type: BlueprintVariableType!
+  required: Boolean!
+}
+
+enum BlueprintVariableType {
+  STRING
+  BOOLEAN
+  INTEGER
+  FLOAT
+  JSON
+}
+
+input BranchConfigInput {
+  containerImage: String
+  githubSha: String
+  serverlessStage: String
+  environmentSlug: String
+  kAppId: String
+}
+
+type Build {
+  id: UUID!
+  run(id: UUID!): BuildRun
+  runs(input: FilterInput): BuildRunConnection!
+  artifact(id: UUID!): BuildArtifact
+  artifacts(input: FilterInput): BuildArtifactConnection!
+  definition: BuildDefinition!
+  definitionRevision(revisionId: UUID, sequenceId: Int): BuildDefinition!
+  definitionRevisions(page: PageInput): BuildDefinitionConnection!
+  manifests: [BuildManifest]
+}
+
+type BuildArtifact {
+  id: UUID!
+  image: String!
+  createdAt: Time!
+}
+
+type BuildArtifactConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BuildArtifact!]!
+}
+
+type BuildConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [Build!]!
+}
+
+type BuildDefinition {
+  id: UUID!
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  buildClusterId: UUID
+  target: BuildTarget
+  type: BuildType
+  engine: BuildEngine
+  nodeJsVersion: String
+  pythonVersion: String
+  golangVersion: String
+  staticPath: String
+  dockerfilePath: String
+  dockerfileText: String
+  workingDirectory: String
+  buildCommand: String
+  testCommand: String
+  runCommand: String
+  noBuildCache: Boolean
+  autoRetry: Boolean
+  kanikoFlags: [String]
+}
+
+type BuildDefinitionConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BuildDefinition!]!
+}
+
+input BuildDefinitionInput {
+  buildAppId: String
+  buildAppName: String
+  gitSource: GitSourceInput
+  buildClusterId: UUID
+  target: BuildTargetInput
+  type: BuildType
+  engine: BuildEngine
+  nodeJsVersion: String
+  pythonVersion: String
+  golangVersion: String
+  staticPath: String
+  dockerfilePath: String
+  dockerfileText: String
+  workingDirectory: String
+  buildCommand: String
+  testCommand: String
+  runCommand: String
+  noBuildCache: Boolean
+  autoRetry: Boolean
+  kanikoFlags: [String]
+}
+
+enum BuildEngine {
+  CODE_BUILD
+  KANIKO
+  EXTERNAL
+}
+
+type BuildManifest {
+  kind: BuildManifestKind!
+  output: String
+}
+
+enum BuildManifestKind {
+  DOCKERFILE
+}
+
+enum BuildMethod {
+  DOCKER
+  BUILDPACKS
+  PYTHON
+  PYTHON_DJANGO
+  NODE
+  NODE_STATIC
+  NODE_NEXTJS
+  UBUNTU
+  ELIXIR_PHOENIX
+  GOLANG_MODULES
+  HEROKUISH
+}
+
+type BuildRun {
+  id: UUID!
+  definition: BuildDefinition
+  sequence: Int!
+  jobRun: JobRun
+  artifacts: [BuildArtifact!]
+  manifests: [BuildManifest]
+  triggeredBy: WorkflowRun
+}
+
+type BuildRunConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [BuildRun!]!
+}
+
+input BuildRunFilter {
+  ids: MultiEntityCriterion
+}
+
+type BuildRunStep implements WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+  outputs: [BuildArtifact]
+  logs: Logs
+}
+
+type BuildTarget {
+  type: BuildTargetType!
+  repository: String
+  alternativeImageTagTemplates: [String!]
+  integration: BuildTargetIntegration
+}
+
+input BuildTargetInput {
+  type: BuildTargetType!
+  repository: String
+  alternativeImageTagTemplates: [String!]
+  integration: BuildTargetIntegrationInput
+}
+
+type BuildTargetIntegration {
+  registryId: UUID
+  registryClusterId: UUID
+  awsAccountId: UUID
+  awsRegion: String
+  gcpAccountId: UUID
+  gcpRegion: String
+}
+
+input BuildTargetIntegrationInput {
+  registryId: UUID
+  registryClusterId: UUID
+  awsAccountId: UUID
+  awsRegion: String
+  gcpAccountId: UUID
+  gcpRegion: String
+}
+
+enum BuildTargetType {
+  NULL_REGISTRY
+  CLUSTER_REGISTRY
+  CONTAINER_REGISTRY
+  AWS_SAM_CONTAINER_REGISTRY
+  GCP_CONTAINER_REGISTRY
+}
+
+enum BuildType {
+  DOCKER
+  BUILDPACKS
+  PYTHON
+  PYTHON_DJANGO
+  NODE
+  NODE_STATIC
+  NODE_NEXTJS
+  UBUNTU
+  ELIXIR_PHOENIX
+  GOLANG_MODULES
+  HEROKUISH
+}
+
+type BuildVariable {
+  id: UUID!
+  name: String!
+  value: String!
+}
+
+type CertificateResource implements Resource {
+  id: ID!
+  externalId: String!
+  externalType: String
+  externalLink: URL
+  displayName: String!
+  status: String
+  domainName: String!
+  alternativeNames: [String!]
+  instructions: [DNSRecord!]
+}
+
+input CheckGroupNameInput {
+  name: String!
+}
+
+interface CISource {
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+}
+
+union CloudAccount = AWSAccount | AzureAccount | CoreWeaveAccount | DOAccount | GCPAccount | LinodeAccount | VultrAccount
+
+type CloudAccountFilter {
+  cloud: CloudProvider
+}
+
+enum CloudAccountState {
+  WAITING
+  SUCCESS
+  ERROR
+}
+
+type CloudInsights {
+  alerts(userId: UUID!, duration: Duration): Int
+  unhealthyClouds(userId: UUID!): Int
+  unreachableClusters(userId: UUID!): Int
+}
+
+enum CloudProvider {
+  AWS
+  AZURE
+  COREWEAVE
+  DIGITALOCEAN
+  GCP
+  LINODE
+  VULTR
+  UNKNOWN
+  ZEET
+  ALIBABA
+  IBM
+  OVH
+  OCI
+  SCALEWAY
+  TENCENT
+}
+
+type CloudResource {
+  name: String!
+  status: ResourceStatus!
+  type: ResourceType!
+  createdAt: Time
+  owners: [ResourceOwner!]
+  events: [ResourceEvent!]
+  resources: [CloudResource!]
+  metric(types: [MetricType!]!, clusterId: UUID!, projectId: UUID!): [ResourceMetric!]
+  log(clusterId: UUID!, projectId: UUID!): [Log!]
+}
+
+type Cluster {
+  id: UUID!
+  displayName: String!
+  state: ClusterState!
+  connected: Boolean
+  status: ClusterStatus
+  cloudProvider: CloudProvider
+  provider: ClusterProvider
+  createdAt: Time!
+  updatedAt: Time!
+  configuration(revisionId: UUID, sequenceId: Int): ClusterConfiguration!
+  configurationRevisions(page: PageInput): ClusterConfigurationConnection!
+  deployJob: JobRun
+  destroyJob: JobRun
+  components: [ClusterComponent]
+}
+
+type ClusterCertManager {
+  clusterIssuers: [String!]
+}
+
+type ClusterComponent {
+  name: String!
+  type: ClusterComponentType!
+  status: ClusterComponentEjectedStatus!
+  helmMetadata: HelmClusterComponentMetadata
+  project: Project
+  isInstalledByZeet: Boolean!
+  exists: Boolean!
+}
+
+enum ClusterComponentEjectedStatus {
+  NOT_FOUND
+  DETECTED
+}
+
+enum ClusterComponentType {
+  HELM
+}
+
+type ClusterConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+  displayName: String
+  region: String
+  containerRepository: String
+  containerCacheRepository: String
+  containerRegistry: ContainerRegistry
+  namespace: String
+
+  """
+  True if the cluster is managed by Zeet, false if the cluster is external.
+  """
+  isZeetManaged: Boolean
+  useExternalRegistry: Boolean
+  domain: String
+  serviceDomain: String
+  enableNatGateway: Boolean
+  disableHttpIngress: Boolean
+  ingressServiceName: String
+  ingressServiceNamespace: String
+  enableIngressClassAnnotation: Boolean
+  enforceSharedDedication: Boolean
+  enableGpu: Boolean
+  cloudWatchRegion: String
+  stateBackend: TerraformStateBackend
+}
+
+type ClusterConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [ClusterConfiguration!]!
+}
+
+type ClusterPrecheckStep implements WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+  cluster: Cluster
+}
+
+enum ClusterProvider {
+  GENERIC
+  EKS
+  GKE
+  DOKS
+  COREWEAVE
+  LKE
+}
+
+enum ClusterState {
+  PENDING
+  CREATING
+  HEALTHY
+  DELETING
+  ERROR
+  ERROR_DELETING
+}
+
+enum ClusterStatus {
+  PENDING
+  CREATING
+  HEALTHY
+  DELETING
+  ERROR
+  ERROR_DELETING
+  UNREACHABLE
+}
+
+input ConfigureMarketplaceBlueprintInput {
+  blueprintId: UUID!
+  enabled: Boolean
+}
+
+type ContainerRegistry {
+  id: UUID!
+  name: String!
+  registry: String!
+  username: String
+  credentialProvider: ContainerRegistryCredentialProvider
+}
+
+enum ContainerRegistryCredentialProvider {
+  DOCKER
+  ECR
+  GCR
+  DOCR
+}
+
+type ContainerRegistrySource {
+  registryId: UUID
+  registryUrl: URL
+  repository: String!
+  tag: String
+  digest: String
+}
+
+input ContainerRegistrySourceInput {
+  registryId: UUID
+  registryUrl: URL
+  repository: String!
+  tag: String
+}
+
+type ContainerResource implements Resource {
+  providerType: ContainerResourceProviderType!
+  externalId: String!
+  externalType: String
+  externalLink: URL
+  displayName: String!
+  status: String
+  endpoints: [String!]
+  logs: Logs
+  metrics(name: String!): [Metric!]
+}
+
+enum ContainerResourceProviderType {
+  AWS_SAM
+  GCP_CLOUD_RUN
+}
+
+type CoreWeaveAccount {
+  id: UUID!
+  configuration(revisionId: UUID, sequenceId: Int): CoreWeaveAccountConfiguration!
+  configurationRevisions(page: PageInput): CoreWeaveAccountConfigurationConnection!
+}
+
+type CoreWeaveAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+  namespace: String
+}
+
+type CoreWeaveAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [CoreWeaveAccountConfiguration!]!
+}
+
+input CreateAPIKeyInput {
+  userId: UUID!
+  name: String!
+}
+
+input CreateBlueprintInput {
+  """The owner for this blueprint."""
+  teamId: UUID!
+  type: BlueprintType!
+  slug: String!
+  displayName: String!
+  published: Boolean!
+  enabled: Boolean
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  driverConfiguration: BlueprintDriverConfigurationInput
+  richInputSchema: JSON
+  variables: [BlueprintVariableSpecInput!]!
+}
+
+input CreateBuildInput {
+  projectId: UUID!
+  definition: BuildDefinitionInput
+}
+
+input CreateBuildRunInput {
+  buildId: UUID!
+}
+
+input CreateClusterInput {
+  userId: UUID!
+  awsAccountId: UUID
+  gcpAccountId: UUID
+  doAccountId: UUID
+  linodeAccountId: UUID
+  vultrAccountId: UUID
+  name: String!
+  region: String!
+}
+
+input CreateDatadogIntegrationInput {
+  userId: UUID!
+  apiKey: String!
+}
+
+input CreateDeployInput {
+  projectId: UUID!
+  branchName: String
+  configuration: DeploymentConfigurationInput
+}
+
+input CreateDeploymentConfigurationInput {
+  branch: BranchConfigInput!
+  replications: [ReplicationInput]
+  source: SourceInput!
+  driver: BlueprintDriver!
+  autoRetry: Boolean!
+  autoRollback: Boolean!
+  instanceId: UUID!
+  blueprintDriverWorkflowStepActions: [BlueprintDriverWorkflowStepAction!]!
+  clusterId: UUID!
+  clusterNamespace: String
+}
+
+input CreateDeployRunInput {
+  deployId: UUID!
+  intentId: UUID
+}
+
+input CreateGitlabIntegrationInput {
+  userId: UUID!
+  name: String
+  apiUrl: URL
+  accessToken: String!
+}
+
+input CreateGroupInput {
+  teamId: UUID!
+  name: String!
+  envs: [EnvVarInput!]
+}
+
+input CreateJobInput {
+  projectId: UUID!
+  definition: JobDefinitionInput
+  createJobRun: Boolean
+}
+
+input CreateJobRunInput {
+  jobId: UUID!
+  revisionId: UUID
+}
+
+input CreatePersonalAccessTokenInput {
+  name: String!
+  description: String
+}
+
+input CreateProjectInput {
+  teamId: UUID!
+  groupId: UUID
+  groupName: String
+  subGroupId: UUID
+  subGroupName: String
+  name: String!
+  enabled: Boolean
+  workflow: WorkflowDefinitionInput
+  build: BuildDefinitionInput
+  jobs: [JobDefinitionInput!]
+  deploys: [DeploymentConfigurationInput!]
+  envs: [EnvVarInput!]
+  blueprintId: UUID
+}
+
+input CreateSubGroupInput {
+  groupId: UUID!
+  name: String!
+  envs: [EnvVarInput!]
+}
+
+input CreateTeamInput {
+  name: String!
+  login: String
+  billingEmail: String!
+  avatar: String
+}
+
+input CreateTriggerInput {
+  definition: TriggerDefinitionInput!
+  parentId: UUID!
+}
+
+input CreateWeb3ChallengeInput {
+  address: String!
+}
+
+input CreateWebhookIntegrationInput {
+  userId: UUID!
+  url: String!
+}
+
+input CreateWorkflowInput {
+  name: String!
+  type: WorkflowType!
+  parentId: UUID!
+  definition: WorkflowDefinitionInput
+}
+
+type CronJobEventTriggerConfiguration {
+  expression: String
+}
+
+input CronJobEventTriggerConfigurationInput {
+  expression: String
+}
+
+type DatadogIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  apiKey: String
+}
+
+"""Queries useful for testing server behaviors."""
+type Debug {
+  serverError(userMessage: String, errorCode: Boolean): Boolean!
+  clientError(userMessage: String, errorCode: Boolean): Boolean!
+  fatalError: Boolean!
+}
+
+type Deploy {
+  id: UUID!
+  name: String!
+  branchName: String
+
+  """
+  When querying history by revisionId or sequenceId, only the revisionMetadata and revisionData will be available,
+  when querying the current configuration (neither revisionId nor sequenceId is
+  specified), all fields _except_ revisionMetadata and revisionData will be available.
+  """
+  configuration(revisionId: UUID, sequenceId: Int): DeploymentConfiguration
+
+  """Only the revisionMetadata and revisionData will be available."""
+  configurationRevisions(page: PageInput): DeploymentConfigurationConnection
+  runs(input: PageInput): DeployRunConnection
+}
+
+input DeployableDriverActionExecutionFilter {
+  ids: MultiEntityCriterion
+  actionTypes: DriverActionTypeCriterion
+  resourceIds: MultiEntityCriterion
+}
+
+type DeployConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [Deploy!]!
+}
+
+type DeploymentConfiguration implements RevisableEntity {
+  id: UUID!
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  defaultWorkflowSteps: [BlueprintDriverWorkflowStepAction!]!
+  requirePlanApproval: Boolean
+  variables: [DeployVariable!]!
+  kubernetes: DeploymentConfigurationKubernetes
+  helm: DeploymentConfigurationKubernetesHelm
+  terraform: DeploymentConfigurationTerraform
+  awsSam: DeploymentConfigurationAwsSam
+  gcpCloudRun: DeploymentConfigurationGcpCloudRun
+}
+
+type DeploymentConfigurationAwsSam {
+  target: AwsSamTargetConfiguration
+  generator: AwsSamGeneratorConfiguration
+}
+
+input DeploymentConfigurationAwsSamInput {
+  target: AwsSamTargetConfigurationInput
+  generator: AwsSamGeneratorConfigurationInput
+}
+
+type DeploymentConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [DeploymentConfiguration!]!
+}
+
+type DeploymentConfigurationGcpCloudRun {
+  target: GcpCloudRunTargetConfiguration
+  generator: GcpCloudRunGeneratorConfiguration
+}
+
+input DeploymentConfigurationGcpCloudRunInput {
+  target: GcpCloudRunTargetConfigurationInput
+  generator: GcpCloudRunGeneratorConfigurationInput
+}
+
+input DeploymentConfigurationInput {
+  defaultWorkflowSteps: [BlueprintDriverWorkflowStepAction!]
+  requirePlanApproval: Boolean
+  variables: [BlueprintVariableInput!]
+  kubernetes: DeploymentConfigurationKubernetesInput
+  helm: DeploymentConfigurationKubernetesHelmInput
+  terraform: DeploymentConfigurationTerraformInput
+  awsSam: DeploymentConfigurationAwsSamInput
+  gcpCloudRun: DeploymentConfigurationGcpCloudRunInput
+}
+
+type DeploymentConfigurationKubernetes {
+  blueprint: BlueprintManifestConfiguration
+  target: ManifestTargetConfiguration
+  generator: KubernetesGeneratorConfiguration
+}
+
+type DeploymentConfigurationKubernetesHelm {
+  blueprint: BlueprintHelmConfiguration
+  target: HelmTargetConfiguration
+  values: YAML
+}
+
+input DeploymentConfigurationKubernetesHelmInput {
+  blueprint: BlueprintHelmConfigurationInput
+  target: HelmTargetConfigurationInput
+  values: YAML
+}
+
+input DeploymentConfigurationKubernetesInput {
+  blueprint: BlueprintManifestConfigurationInput
+  target: ManifestTargetConfigurationInput
+  generator: KubernetesGeneratorConfigurationInput
+}
+
+type DeploymentConfigurationTerraform {
+  blueprint: BlueprintTerraformConfiguration
+  target: TerraformTargetConfiguration
+}
+
+input DeploymentConfigurationTerraformInput {
+  blueprint: BlueprintTerraformConfigurationInput
+  target: TerraformTargetConfigurationInput
+}
+
+type DeploymentIntent {
+  id: UUID!
+  configuration: DeploymentConfiguration!
+}
+
+type DeploymentResult {
+  resources(input: PageInput): ResourceConnection!
+}
+
+enum DeploymentStatus {
+  HEALTHY
+  UNHEALTHY
+  PROVISIONING
+  DEPROVISIONING
+  INACTIVE
+  UNKNOWN
+}
+
+type DeploymentTimestamps {
+  lastDeployedAt: Time
+  lastUpdatedAt: Time
+}
+
+type DeployRun {
+  id: UUID!
+  sequence: Int!
+  intent: DeploymentIntent!
+  result: DeploymentResult
+}
+
+type DeployRunConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [DeployRun!]!
+}
+
+type DeployRunStep implements WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+  inputs: [BuildArtifact]
+  workflowRun: WorkflowRun
+}
+
+enum DeployStrategy {
+  RESTART
+  ROLLING
+}
+
+type DeployVariable {
+  id: UUID!
+  specId: UUID
+  name: String!
+  value: String!
+  type: BlueprintVariableType!
+  valueString: String
+  valueBoolean: Boolean
+  valueInt: Int
+  valueFloat: Float
+  valueJson: JSON
+}
+
+type DestroyRunStep implements WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+  inputs: [BuildArtifact]
+  workflowRun: WorkflowRun
+}
+
+type DiscordIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type DiscordWebhookIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  url: String
+}
+
+type DNSRecord {
+  name: String
+  domain: String!
+  type: DNSRecordType!
+  value: String
+}
+
+enum DNSRecordType {
+  A
+  CNAME
+  TXT
+}
+
+type DOAccount {
+  id: UUID!
+  configuration(revisionId: UUID, sequenceId: Int): DOAccountConfiguration!
+  configurationRevisions(page: PageInput): DOAccountConfigurationConnection!
+}
+
+type DOAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+}
+
+type DOAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [DOAccountConfiguration!]!
+}
+
+type DockerImage {
+  id: ID!
+  tag: String!
+  digest: String!
+  repository: DockerRepository!
+}
+
+type DockerRepository implements CISource {
+  id: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  isPrivate: Boolean!
+  description: String
+  images: [DockerImage!]
+  image(tag: String!): DockerImage
+  ports: [Port!]
+  volumes: [VolumeSpec!]
+}
+
+input DriverActionTypeCriterion {
+  value: [BlueprintDriverAction]
+  operator: FilterCriterionOperatorType
+}
+
+enum DriverWorkflowStepActionType {
+  DRIVER_PLAN_DESTROY
+  DRIVER_PLAN
+  DRIVER_APPROVE
+  DRIVER_APPLY
+  PROJECT_DELETE
+}
+
+input DuplicateProjectInput {
+  groupId: UUID
+  groupName: String
+  subGroupId: UUID
+  subGroupName: String
+  name: String!
+}
+
+scalar Duration
+
+type EndpointResource implements Resource {
+  id: ID!
+  externalId: String!
+  externalType: String
+  externalLink: URL
+  displayName: String!
+  status: String
+  endpoints: [String!]
+}
+
+type EnvVar {
+  id: ID!
+  name: String!
+  value: String!
+  visible: Boolean!
+  sealed: Boolean!
+  source: EnvVarSource
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+input EnvVarInput {
+  name: String!
+  value: String!
+  sealed: Boolean
+}
+
+type EnvVarSource {
+  type: EnvVarSourceType!
+}
+
+enum EnvVarSourceType {
+  ZEET
+  CLUSTER
+  GROUP
+  SUBGROUP
+  PROJECT
+  PROJECT_LINK
+}
+
+type EventTriggerConfiguration {
+  git: GitEventTriggerConfiguration
+  cronJob: CronJobEventTriggerConfiguration
+}
+
+input EventTriggerConfigurationInput {
+  git: GitEventTriggerConfigurationInput
+  cronJob: CronJobEventTriggerConfigurationInput
+}
+
+input FilterCriterion {
+  repoFilter: RepoFilter
+  userFilter: UserFilter
+  resourceFilter: ResourceFilter
+  resourceAdapterFilter: ResourceAdapterFilter
+  deployableDriverActionExecutionFilter: DeployableDriverActionExecutionFilter
+  projectFilter: ProjectFilterCriterion
+  buildRunFilter: BuildRunFilter
+  workflowRunFilter: WorkflowRunFilter
+  blueprintMetadataFilter: BlueprintMetadataFilter
+}
+
+enum FilterCriterionOperatorType {
+  EQUALS
+  NOT_EQUALS
+  INCLUDES
+  EXCLUDES
+  STARTS
+  ENDS
+  CONTAINS
+}
+
+input FilterExpression {
+  operator: FilterExpressionOperator
+  filters: [FilterNode!]
+}
+
+enum FilterExpressionOperator {
+  AND
+  OR
+  NOT
+}
+
+input FilterInput {
+  sort: SortInput
+  page: PageInput
+  filter: FilterNode!
+}
+
+input FilterNode {
+  expression: FilterExpression
+  criterion: FilterCriterion
+}
+
+type GCPAccount {
+  id: UUID!
+  createdAt: Time!
+  updatedAt: Time!
+  configuration(revisionId: UUID, sequenceId: Int): GCPAccountConfiguration!
+  configurationRevisions(page: PageInput): GCPAccountConfigurationConnection!
+}
+
+type GCPAccountConfiguration implements RevisableEntity {
+  revisionData: JSON!
+  revisionMetadata: RevisionMetadata!
+  name: String!
+  projectId: String
+}
+
+type GCPAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [GCPAccountConfiguration!]!
+}
+
+type GcpCloudRunGeneratorConfiguration {
+  envVars: [EnvVar!]
+  name: String!
+  httpPort: String
+  containerMemory: Float
+  containerCpu: Float
+  runCommand: String
+}
+
+input GcpCloudRunGeneratorConfigurationInput {
+  envVars: [EnvVarInput]
+  name: String!
+  httpPort: String
+  containerMemory: Float
+  containerCpu: Float
+  runCommand: String
+}
+
+type GcpCloudRunTargetConfiguration {
+  gcpAccountId: UUID
+  gcpRegion: String
+}
+
+input GcpCloudRunTargetConfigurationInput {
+  gcpAccountId: UUID
+  gcpRegion: String
+}
+
+input GCSBucketBackendInput {
+  gcpAccountId: UUID!
+  bucketName: String!
+  location: String
+  prefix: String
+}
+
+type GCSBucketConfiguration {
+  gcpAccountId: UUID!
+  location: String!
+  bucketName: String!
+  prefix: String
+}
+
+enum GenericWorkflowStepActionType {
+  DRIVER_PLAN_DESTROY
+  DRIVER_PLAN
+  DRIVER_APPROVE
+  DRIVER_APPLY
+  PROJECT_DELETE
+  ORCHESTRATION_BUILD
+  ORCHESTRATION_CLUSTER_PRECHECK
+  ORCHESTRATION_DEPLOY
+  ORCHESTRATION_RELEASE
+  ORCHESTRATION_DESTROY
+}
+
+type GitBranch {
+  id: ID!
+  name: String!
+  commit: GitCommit!
+}
+
+type GitCommit {
+  id: ID!
+  oid: String!
+  abbreviatedOid: String!
+  message: String!
+  createdAt: Time!
+}
+
+type GitEventTriggerConfiguration {
+  repoId: String
+  repoBranchName: String
+  repoOwner: String
+  repoName: String
+  githubConnectionId: Int
+}
+
+input GitEventTriggerConfigurationInput {
+  repoId: String
+  repoBranchName: String
+  repoOwner: String
+  repoName: String
+  githubConnectionId: Int
+}
+
+input GithubConnectionInput {
+  apiUrl: URL
+  installation: String!
+  owner: String!
+  repo: String!
+}
+
+type GitHubInstallation {
+  id: ID!
+  appId: Int!
+  account: GitHubUser!
+  repositorySelection: String!
+  repositories: [GitHubRepository!]
+}
+
+type GitHubRepository implements GitRepository & CISource {
+  id: ID!
+  provider: GitProvider!
+  providerId: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+  defaultBranch: GitBranch
+  branches: [GitBranch!]
+  isFork: Boolean!
+  isPrivate: Boolean!
+  updatedAt: Time!
+  primaryLanguage: String
+  ports: [Port!]
+  volumes: [VolumeSpec!]
+}
+
+type GitHubUser {
+  id: ID!
+  login: String!
+  avatar: URL
+  type: GithubUserType!
+}
+
+enum GithubUserType {
+  USER
+  ORGANIZATION
+}
+
+type GitlabIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  apiUrl: URL!
+  accessTokenPrefix: String
+  webhookUrl: URL!
+  webhookToken: String!
+}
+
+type GitlabRepository implements GitRepository & CISource {
+  id: ID!
+  provider: GitProvider!
+  providerId: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+  defaultBranch: GitBranch
+  branches: [GitBranch!]
+  isFork: Boolean!
+  isPrivate: Boolean!
+  updatedAt: Time!
+  primaryLanguage: String
+}
+
+enum GitProvider {
+  GITHUB
+  GITLAB
+  BITBUCKET
+}
+
+interface GitRepository {
+  id: ID!
+  provider: GitProvider!
+  providerId: ID!
+  name: String!
+  owner: String!
+  url: URL!
+  description: String
+  defaultBranch: GitBranch
+  branches: [GitBranch!]
+  isFork: Boolean!
+  isPrivate: Boolean!
+  updatedAt: Time!
+  primaryLanguage: String
+}
+
+type GitSource {
+  repository: String!
+  ref: String
+  path: String
+  integration: GitSourceIntegration
+}
+
+input GitSourceInput {
+  repository: String!
+  ref: String
+  path: String
+  integration: GitSourceIntegrationInput
+}
+
+type GitSourceIntegration {
+  githubInstallationId: Int
+  githubIntegrationId: UUID
+  gitlabIntegrationId: UUID
+  bitbucketIntegrationId: UUID
+}
+
+input GitSourceIntegrationInput {
+  githubInstallationId: Int
+  githubIntegrationId: UUID
+  gitlabIntegrationId: UUID
+  bitbucketIntegrationId: UUID
+}
+
+type Grafana {
+  url: String!
+  user: String
+  password: String
+}
+
+type Group {
+  id: UUID!
+  name: String!
+  envs: [EnvVar!]
+  subGroup(id: UUID!): SubGroup!
+  subGroups: [SubGroup!]!
+  owner: Team!
+  createdAt: Time!
+  updatedAt: Time!
+  deploymentTimestamps: DeploymentTimestamps
+}
+
+type GroupConnection {
+  pageInfo: PageInfo!
+  edges: [GroupEdge!]!
+  nodes: [Group!]!
+}
+
+type GroupEdge {
+  cursor: String!
+  node: Group!
+}
+
+input GroupFilter {
+  page: PageInput
+}
+
+interface GroupOwner {
+  groups(input: GroupFilter): GroupConnection!
+}
+
+type HelmChart {
+  id: String!
+  repository: HelmRepository!
+  name: String
+  normalizedName: String
+  description: String
+  logoImage: String
+  stars: Int
+  version: String
+  appVersion: String
+  deprecated: Boolean
+}
+
+type HelmChartConnection {
+  totalCount: Int!
+  nodes: [HelmChart!]!
+  pageInfo: PageInfo!
+}
+
+type HelmClusterComponentMetadata {
+  values: String!
+  namespace: String!
+  releaseName: String!
+  chartName: String!
+  chartRepoGuess: String
+  chartVersion: String!
+}
+
+type HelmRelease {
+  id: String!
+  chart: HelmChart!
+  version: String!
+}
+
+type HelmRepository {
+  id: String!
+  url: String
+  name: String
+  organizationName: String
+  chart(name: String!): HelmChart!
+}
+
+type HelmRepositorySource {
+  repositoryUrl: URL!
+  chart: String!
+  version: String
+}
+
+input HelmRepositorySourceInput {
+  repositoryUrl: URL!
+  chart: String!
+  version: String
+}
+
+type HelmTargetConfiguration {
+  clusterId: UUID!
+  namespace: String
+  releaseName: String
+}
+
+input HelmTargetConfigurationInput {
+  clusterId: UUID!
+  namespace: String
+  releaseName: String
+}
+
+type HTTPProbe {
+  host: String!
+  port: String!
+  path: String!
+}
+
+input HTTPProbeInput {
+  host: String!
+  port: String!
+  path: String!
+}
+
+type Insights {
+  cloud: CloudInsights
+}
+
+interface Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+enum IntegrationType {
+  SLACK
+  SLACK_WEBHOOK
+  DISCORD
+  DISCORD_WEBHOOK
+  DATADOG
+  GITLAB
+  EMAIL
+  BITBUCKET
+}
+
+input InviteTeamMemberInput {
+  id: UUID!
+  role: TeamMemberRole!
+  email: String
+  expiresAt: Time
+}
+
+type Job {
+  id: UUID!
+  run(id: UUID!): JobRun
+  runs(input: FilterInput): JobRunConnection!
+  definition: JobDefinition!
+}
+
+type JobConnection {
+  totalCount: Int!
+  nodes: [Job!]!
+  pageInfo: PageInfo!
+}
+
+type JobDefinition {
+  containerRegistry: ContainerRegistrySource
+  clusterId: String
+  jobName: String
+  jobNamespace: String
+  dockerEntrypoint: [String]
+  dockerCommand: [String]
+  envVars: [EnvVar]
+  parallelism: Int
+  timeoutSeconds: Int
+  appGeneratorVersion: String
+  branchName: String
+  productionBranchName: String
+  cpuRequest: String
+  memoryRequest: String
+  ephemeralStorage: String
+  dedicated: Boolean
+  gpuRequest: String
+  gpuType: String
+  tpuType: String
+  tpuTfVersion: String
+  tpuCores: Int
+  staticIp: Boolean
+  hostNetwork: Boolean
+  volumes: [VolumeSpec]
+  secretMounts: [SecretMountData]
+  logShipperType: LogShipperType
+  betterstackToken: String
+  datadogApmEnabled: Boolean
+  datadogHost: String
+  datadogKey: String
+  logDnaKey: String
+  logzToken: String
+  logzUrl: String
+  syslogConfig: String
+  awsIamRole: String
+  gcpServiceAccount: String
+  serviceAccountName: String
+  annotations: MapString
+  nodeSelector: MapString
+  podSpecPatch: String
+  legacyRepo: LegacyRepo
+}
+
+input JobDefinitionInput {
+  containerRegistry: ContainerRegistrySourceInput
+  clusterId: String
+  jobName: String
+  jobNamespace: String
+  dockerEntrypoint: [String]
+  dockerCommand: [String]
+  envVars: [EnvVarInput]
+  parallelism: Int
+  timeoutSeconds: Int
+  appGeneratorVersion: String
+  branchName: String
+  productionBranchName: String
+  cpuRequest: String
+  memoryRequest: String
+  ephemeralStorage: String
+  dedicated: Boolean
+  gpuRequest: String
+  gpuType: String
+  tpuType: String
+  tpuTfVersion: String
+  tpuCores: Int
+  staticIp: Boolean
+  hostNetwork: Boolean
+  volumes: [VolumeSpecInput]
+  secretMounts: [SecretMountDataInput]
+  logShipperType: LogShipperType
+  betterstackToken: String
+  datadogApmEnabled: Boolean
+  datadogHost: String
+  datadogKey: String
+  logDnaKey: String
+  logzToken: String
+  logzUrl: String
+  syslogConfig: String
+  awsIamRole: String
+  gcpServiceAccount: String
+  serviceAccountName: String
+  annotations: MapString
+  nodeSelector: MapString
+  podSpecPatch: String
+}
+
+type JobRun {
+  id: UUID!
+  definition: JobDefinition!
+  sequence: Int
+  state: JobRunState!
+  command: String!
+  exitCode: Int
+  logs: Logs
+  metrics(name: String!): [Metric!]
+  errorMessage: String
+  job: Job
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type JobRunConnection {
+  totalCount: Int!
+  nodes: [JobRun!]!
+  pageInfo: PageInfo!
+}
+
+enum JobRunState {
+  JOB_RUN_STARTING
+  JOB_RUN_RUNNING
+  JOB_RUN_FAILED
+  JOB_RUN_SUCCEEDED
+  JOB_RUN_PENDING_APPROVAL
+}
+
+type JobRunStep implements WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+  logs: Logs
+}
+
+scalar JSON
+
+type KubernetesGeneratorConfiguration {
+  containerRegistrySource: ContainerRegistrySource
+  appId: String!
+  branchName: String!
+  productionBranchName: String!
+  envs: [EnvVar]
+  appGeneratorVersion: String!
+  cpuRequest: String
+  memoryRequest: String
+  ephemeralStorage: String
+  dedicated: Boolean
+  gpuRequest: String
+  gpuType: String
+  tpuType: String
+  tpuTfVersion: String
+  tpuCores: Int
+  replicas: Int
+  autoscaling: AutoscalingData
+  ports: [PortData]
+  staticIp: Boolean
+  hostNetwork: Boolean
+  endpoint: String
+  defaultIngressDomain: String
+  volumes: [VolumeSpec]
+  secretMounts: [SecretMountData]
+  deployStrategy: DeployStrategy
+  preStopSleep: Int
+  terminationGracePeriodSeconds: Int
+  startupProbe: ProbeData
+  livenessProbe: ProbeData
+  readinessProbe: ProbeData
+  logShipperType: LogShipperType
+  betterstackToken: String
+  datadogApmEnabled: Boolean
+  datadogHost: String
+  datadogKey: String
+  logDnaKey: String
+  logzToken: String
+  logzUrl: String
+  syslogConfig: String
+  dockerEntrypoint: [String]
+  dockerCommand: [String]
+  awsIamRole: String
+  gcpServiceAccount: String
+  serviceAccountName: String
+  annotations: MapString
+  serviceAnnotations: MapString
+  nodeSelector: MapString
+  podSpecPatch: String
+  legacyRepo: LegacyRepo
+}
+
+input KubernetesGeneratorConfigurationInput {
+  containerRegistrySource: ContainerRegistrySourceInput
+  appId: String!
+  branchName: String!
+  productionBranchName: String!
+  envs: [EnvVarInput]
+  appGeneratorVersion: String!
+  cpuRequest: String
+  memoryRequest: String
+  ephemeralStorage: String
+  dedicated: Boolean
+  gpuRequest: String
+  gpuType: String
+  tpuType: String
+  tpuTfVersion: String
+  tpuCores: Int
+  replicas: Int
+  autoscaling: AutoscalingDataInput
+  ports: [PortDataInput]
+  staticIp: Boolean
+  hostNetwork: Boolean
+  endpoint: String
+  defaultIngressDomain: String
+  volumes: [VolumeSpecInput]
+  secretMounts: [SecretMountDataInput]
+  deployStrategy: DeployStrategy
+  preStopSleep: Int
+  terminationGracePeriodSeconds: Int
+  startupProbe: ProbeDataInput
+  livenessProbe: ProbeDataInput
+  readinessProbe: ProbeDataInput
+  logShipperType: LogShipperType
+  betterstackToken: String
+  datadogApmEnabled: Boolean
+  datadogHost: String
+  datadogKey: String
+  logDnaKey: String
+  logzToken: String
+  logzUrl: String
+  syslogConfig: String
+  dockerEntrypoint: [String]
+  dockerCommand: [String]
+  awsIamRole: String
+  gcpServiceAccount: String
+  serviceAccountName: String
+  annotations: MapString
+  serviceAnnotations: MapString
+  nodeSelector: MapString
+  podSpecPatch: String
+}
+
+enum LabelSelectorOperator {
+  In
+  NotIn
+  Exists
+  DoesNotExist
+}
+
+type LabelSelectorRequirement {
+  key: String!
+  operator: LabelSelectorOperator!
+  values: [String!]
+}
+
+input LabelSelectorRequirementInput {
+  key: String!
+  operator: LabelSelectorOperator!
+  values: [String!]
+}
+
+type LabelSelectors {
+  matchLabels: MapString
+  matchExpressions: [LabelSelectorRequirement!]
+}
+
+input LabelSelectorsInput {
+  matchLabels: MapString
+  matchExpressions: [LabelSelectorRequirementInput!]
+}
+
+type LegacyRepo {
+  id: String!
+  name: String!
+  appId: String!
+}
+
+input LinkCloudToClusterInput {
+  cloudType: CloudProvider!
+  cloudId: UUID!
+  clusterId: UUID!
+  cloudAz: String
+  cloudRegion: String
+}
+
+type LinodeAccount {
+  id: UUID!
+  createdAt: Time!
+  updatedAt: Time!
+  configuration(revisionId: UUID, sequenceId: Int): LinodeAccountConfiguration!
+  configurationRevisions(page: PageInput): LinodeAccountConfigurationConnection!
+}
+
+type LinodeAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+}
+
+type LinodeAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [LinodeAccountConfiguration!]!
+}
+
+type Log {
+  name: String!
+  entries: [LogEntry!]
+}
+
+type LogEntry {
+  text: String!
+  timestamp: Time
+}
+
+scalar Login
+
+type Logs {
+  id: ID!
+  cursor: String
+  completed: Boolean!
+  expired: Boolean
+  entries: [LogEntry!]
+}
+
+enum LogShipperType {
+  LOGZIO
+  SYSLOG
+  LOGDNA
+  DATADOG
+  BETTERSTACK
+}
+
+enum LogSourceType {
+  POD_LIVE
+}
+
+type ManifestTargetConfiguration {
+  clusterId: UUID!
+  namespace: String
+}
+
+input ManifestTargetConfigurationInput {
+  clusterId: UUID!
+  namespace: String
+}
+
+scalar Map
+
+scalar MapString
+
+"""
+String value, a floating point number and a quantity suffix.
+This is a modified version of the kubernetes memory resource: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory
+The numeric part is parsed as a 64-bit floating point number, with unbounded precision.
+NOTE: Please be aware of the possible imprecision when converting from string
+representations of decimals to their floating point representation.
+"""
+scalar Memory
+
+type Metric {
+  timestamp: Time!
+  value: Float
+}
+
+type MetricEntry {
+  timestamp: Time!
+  value: Float
+}
+
+enum MetricSourceType {
+  PROMETHEUS
+}
+
+enum MetricType {
+  QUERY
+  CPU
+  MEMORY
+  NETWORK
+  STORAGE
+}
+
+input MultiEntityCriterion {
+  value: [UUID!]
+}
+
+"""
+Zeet API v1 is currently experimental. Breaking changes WILL occur. Many resolvers are not implemented.
+
+Please refer to the legacy API schema while we stabilize the v1 API.
+"""
+type Mutation {
+  updateUser(id: UUID!, input: UpdateUserInput!): User!
+  deleteUser: Boolean!
+  createPersonalAccessTokenForUser(userId: UUID!, input: CreatePersonalAccessTokenInput!): PersonalAccessToken!
+  deletePersonalAccessToken(id: UUID!): Boolean!
+  createApiKey(input: CreateAPIKeyInput): APIKey!
+  deleteApiKey(id: UUID!): Boolean!
+  createBlueprint(input: CreateBlueprintInput!): Blueprint!
+  updateBlueprint(id: UUID!, input: UpdateBlueprintInput!): Blueprint!
+  deleteBlueprint(id: UUID!): Boolean!
+
+  """
+  Configure the team-specific settings for a blueprint available on the marketplace.
+  """
+  configureMarketplaceBlueprintForTeam(teamId: UUID!, input: ConfigureMarketplaceBlueprintInput!): Blueprint!
+  getOrCreateBlueprintFromMetadata(slug: String!, version: String!): Blueprint!
+  createCluster(input: CreateClusterInput!): Cluster!
+  deleteCluster(id: UUID!): Boolean!
+  updateCluster(id: UUID!, input: UpdateClusterInput!): Cluster!
+
+  """Add an existing cluster to your Zeet Account"""
+  addCluster(input: AddClusterInput!): Cluster!
+  linkCloudToCluster(input: LinkCloudToClusterInput!): Cluster!
+  addContainerRegistry(input: AddContainerRegistryInput!): ContainerRegistry!
+  removeContainerRegistry(id: UUID!): Boolean!
+  createGroup(input: CreateGroupInput!): Group!
+  updateGroup(id: UUID!, input: UpdateGroupInput!): Group!
+  deleteGroup(id: UUID!): Boolean!
+  createSubGroup(input: CreateSubGroupInput!): SubGroup!
+  updateSubGroup(id: UUID!, input: UpdateSubGroupInput!): SubGroup!
+  deleteSubGroup(id: UUID!): Boolean!
+  createSlackWebhookIntegration(input: CreateWebhookIntegrationInput!): SlackWebhookIntegration!
+  updateSlackWebhookIntegration(id: UUID!, input: UpdateWebhookIntegrationInput!): SlackWebhookIntegration!
+  createDiscordWebhookIntegration(input: CreateWebhookIntegrationInput!): DiscordWebhookIntegration!
+  updateDiscordWebhookIntegration(id: UUID!, input: UpdateWebhookIntegrationInput!): DiscordWebhookIntegration!
+  createDatadogIntegration(input: CreateDatadogIntegrationInput!): DatadogIntegration!
+  removeUserIntegration(id: UUID!): Boolean!
+  createGitlabIntegration(input: CreateGitlabIntegrationInput!): GitlabIntegration!
+  updateGitlabIntegration(id: UUID!, input: UpdateGitlabIntegrationInput!): GitlabIntegration!
+  linkProject(input: ProjectLinkInput!): ProjectLink!
+  unlinkProject(id: UUID!): Boolean!
+  updateProjectLink(id: UUID!, input: UpdateProjectLinkInput!): ProjectLink!
+  createProject(input: CreateProjectInput!): Project!
+  updateProject(id: UUID!, input: UpdateProjectInput!): Project!
+  duplicateProject(id: UUID!, input: DuplicateProjectInput!): Project!
+  deleteProject(id: UUID!, force: Boolean): Boolean!
+  deleteProjectResources(id: UUID!): UUID
+  deleteProjectAndResources(id: UUID!, deleteOnFailure: Boolean): UUID
+  createBuild(input: CreateBuildInput!): Build!
+  updateBuild(id: UUID!, input: UpdateBuildInput!): Build!
+  deleteBuild(id: UUID!): Boolean!
+  createBuildRun(input: CreateBuildRunInput!): BuildRun!
+  abortBuildRun(id: UUID!): BuildRun!
+  createDeploy(input: CreateDeployInput!): Deploy!
+  updateDeploy(id: UUID!, input: UpdateDeployInput!): Deploy!
+  deleteDeploy(id: UUID!): Boolean!
+  createDeployRun(input: CreateDeployRunInput!): DeployRun!
+  abortDeployRun(id: UUID!): DeployRun!
+  deleteDeployRun(id: UUID!): Boolean!
+  createJob(input: CreateJobInput!): Job!
+  updateJob(id: UUID!, input: UpdateJobInput!): Job!
+  deleteJob(id: UUID!): Boolean!
+  createJobRun(input: CreateJobRunInput!): JobRun!
+  abortJobRun(id: UUID!): JobRun!
+  deleteJobRun(id: UUID!): Boolean!
+
+  """
+  upgrade a projectv3 project to deployv2 project, the input must be a project adapter id
+  """
+  migrateProjectToDeployV2(projectId: UUID!): Project!
+
+  """duplicate a repo to deployv2 project, the input must be a repo id"""
+  duplicateRepoToDeployV2(repoId: UUID!): Project!
+  generateDownloadableLogLinkForWorkflowRunStep(actionStepId: UUID!): String!
+  submitWorkflow(input: SubmitWorkflowInput!): WorkflowRun!
+  createWorkflow(input: CreateWorkflowInput!): Workflow!
+  updateWorkflow(id: UUID!, input: UpdateWorkflowInput!): Workflow!
+  deleteWorkflow(id: UUID!): Boolean!
+  abortWorkflowRun(id: UUID!): Boolean!
+  deleteWorkflowRun(id: UUID!): Boolean!
+  approveWorkflowRunStep(projectId: UUID!, stepId: UUID!): Boolean!
+  createTrigger(input: CreateTriggerInput!): Trigger!
+  updateTrigger(id: UUID!, input: UpdateTriggerInput!): Trigger!
+  deleteTrigger(id: UUID!): Boolean!
+  createWeb3Challenge(input: CreateWeb3ChallengeInput!): Web3Challenge!
+  signInWithWeb3(input: SignInWithWeb3Input!): UserAuth!
+}
+
+scalar Object
+
+type ObservabilityConfig {
+  selector: ObservabilityResourceSelector
+}
+
+type ObservabilityResourceSelector {
+  type: ResourceType!
+  namespace: String
+  resourceName: String
+  containerName: String
+  labels: [ObservabilityResourceSelectorLabel!]
+}
+
+input ObservabilityResourceSelectorInput {
+  type: ResourceType!
+  namespace: String
+  resourceName: String
+  containerName: String
+  labels: [ObservabilityResourceSelectorLabelInput!]
+}
+
+type ObservabilityResourceSelectorLabel {
+  name: String!
+  value: String!
+}
+
+input ObservabilityResourceSelectorLabelInput {
+  name: String!
+  value: String!
+}
+
+type PageInfo {
+  startCursor: String!
+  endCursor: String!
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+}
+
+input PageInput {
+  first: Int = 10
+  last: Int
+  after: String
+  before: String
+}
+
+scalar PermissibleMutation
+
+type PersonalAccessToken {
+  id: UUID!
+  token: String!
+  name: String!
+  description: String!
+  createdAt: Time!
+}
+
+type Port {
+  port: String!
+  protocol: String!
+  public: Boolean!
+  https: Boolean!
+  grpc: Boolean!
+  loadBalancer: Boolean!
+}
+
+type PortData {
+  port: String!
+  https: Boolean
+  grpc: Boolean
+  public: Boolean
+  protocol: String
+  loadBalancer: Boolean
+}
+
+input PortDataInput {
+  port: String!
+  https: Boolean
+  grpc: Boolean
+  public: Boolean
+  protocol: String
+  loadBalancer: Boolean
+}
+
+type ProbeData {
+  command: String
+  http: HTTPProbe
+  tcp: TCPProbe
+  initialDelaySeconds: Int
+  periodSeconds: Int
+  successThreshold: Int
+  failureThreshold: Int
+  timeoutSeconds: Int
+}
+
+input ProbeDataInput {
+  command: String
+  http: HTTPProbeInput
+  tcp: TCPProbeInput
+  initialDelaySeconds: Int
+  periodSeconds: Int
+  successThreshold: Int
+  failureThreshold: Int
+  timeoutSeconds: Int
+}
+
+interface ProfileOwner {
+  login: Login!
+  name: String!
+  avatar: URL
+}
+
+type Project {
+  id: UUID!
+  name: String!
+  status: ProjectStatus!
+  billable: Boolean
+  workflow: Workflow
+  build: Build
+  jobs: [Job!]
+  deploys(input: FilterInput): DeployConnection!
+  envs: [EnvVar!]
+  owner: Team
+  group: Group
+  subGroup: SubGroup
+  isDeployV1: Boolean
+  blueprint: Blueprint
+  createdAt: Time!
+  updatedAt: Time!
+  clusters: [Cluster!]!
+  output: ProjectOutput
+  resources(clusterId: UUID!, selector: ObservabilityResourceSelectorInput): [CloudResource!]
+  observabilityConfig: ObservabilityConfig
+  connector(type: ProjectConnectorType!): ProjectConnector
+  link(id: UUID!): ProjectLink
+  availableProviders(type: ProjectLinkType!): [Project!]!
+  linkedProviders(type: ProjectLinkType!): ProjectLinkConnection!
+  linkedProjects(type: ProjectLinkType!): ProjectLinkConnection!
+  deploymentTimestamps: DeploymentTimestamps
+}
+
+type ProjectConnection {
+  nodes: [Project!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+type ProjectConnector {
+  type: ProjectConnectorType
+  fields: [ProjectConnectorField!]
+}
+
+type ProjectConnectorField {
+  name: String
+  displayName: String
+  type: VariableType
+  value: String
+}
+
+type ProjectConnectorSchema {
+  entries: [ProjectConnectorSchemaEntry!]
+}
+
+type ProjectConnectorSchemaEntry {
+  type: ProjectConnectorType
+  fields: [ProjectConnectorSchemaField!]
+}
+
+type ProjectConnectorSchemaField {
+  name: String
+  displayName: String
+  type: ProjectConnectorSchemaFieldType
+}
+
+enum ProjectConnectorSchemaFieldType {
+  OUTPUT
+}
+
+enum ProjectConnectorType {
+  DATABASE_CONNECTION
+}
+
+"""
+Available filters for querying Projects. The result set is the intersection of all specified filters.
+"""
+input ProjectFilter {
+  """Selects only the Projects having one of these ids."""
+  ids: [UUID!]
+
+  """Filter Projects by name, status, groupName and subGroupName"""
+  status: ProjectStatusCriterion
+  name: StringCriterion
+  groupName: StringCriterion
+  subGroupName: StringCriterion
+}
+
+input ProjectFilterCriterion {
+  ids: MultiEntityCriterion
+  status: ProjectStatusCriterion
+  name: StringCriterion
+  groupName: StringCriterion
+  subGroupName: StringCriterion
+}
+
+type ProjectLink {
+  id: UUID!
+  project: Project!
+  provider: Project!
+  linkType: ProjectLinkType!
+  envPrefix: String
+  envs: [ProjectLinkEnvVar!]
+}
+
+type ProjectLinkConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [ProjectLink!]!
+}
+
+type ProjectLinkEnvVar {
+  name: String
+  value: String
+}
+
+input ProjectLinkInput {
+  projectId: UUID!
+  providerId: UUID!
+  linkType: ProjectLinkType!
+  envPrefix: String
+}
+
+enum ProjectLinkType {
+  UNKNOWN
+  DATABASE
+}
+
+type ProjectOutput {
+  entries: [ProjectOutputEntry!]
+}
+
+type ProjectOutputEntry {
+  name: String
+  displayName: String
+  value: String
+  type: VariableType
+}
+
+"""Filter a ProjectConnection result set."""
+input ProjectsInput {
+  """Sorting is applied before pagination."""
+  sort: SortInput
+  page: PageInput
+  filter: ProjectFilter
+}
+
+enum ProjectStatus {
+  UNKNOWN
+  DRAFT
+  PAUSED
+  INACTIVE
+  DESTROYING
+  JOB_RUN_STARTING
+  JOB_RUN_RUNNING
+  JOB_RUN_FAILED
+  JOB_RUN_SUCCEEDED
+  JOB_RUN_CANCELLED
+  JOB_RUN_PENDING_APPROVAL
+  DEPLOY_PENDING
+  DEPLOY_IN_PROGRESS
+  DEPLOY_FAILED
+  DEPLOY_SUCCEEDED
+  DEPLOY_STOPPED
+  DEPLOY_HEALTHY
+  DEPLOY_CRASHING
+  BUILD_PENDING
+  BUILD_IN_PROGRESS
+  BUILD_FAILED
+  BUILD_SUCCEEDED
+  BUILD_ABORTED
+  CONTAINER_PULLING
+  HEALTH_CHECKING
+  NODE_PROVISIONING
+  PENDING_HEALTHY_CLUSTER
+}
+
+input ProjectStatusCriterion {
+  value: [String!]
+}
+
+type Prometheus {
+  url: String!
+  user: String
+  password: String
+  token: String
+}
+
+"""
+Zeet API v1 is currently experimental. Breaking changes WILL occur. Many resolvers are not implemented.
+
+Please refer to the legacy API schema while we stabilize the v1 API.
+"""
+type Query {
+  currentUser: User!
+  user(id: UUID!): User!
+  blueprint(id: UUID!): Blueprint
+  blueprintsMarketplace: BlueprintsMarketplace
+  debug: Debug
+  dockerRepository(image: String!): DockerRepository
+  searchHelmCharts(input: SearchHelmChartsInput!): HelmChartConnection!
+  helmRepository(url: String!): HelmRepository!
+  insights: Insights
+  team(id: UUID!): Team
+}
+
+input RemoveTeamMemberInput {
+  id: UUID!
+  userId: UUID!
+}
+
+type Replication {
+  region: String!
+  replicas: Int
+  cluster: Cluster
+}
+
+input ReplicationInput {
+  region: String!
+  replicas: Int!
+  clusterId: UUID
+  hidden: Boolean
+}
+
+input RepoFilter {
+  status: RepoStatusCriterion
+}
+
+input RepoStatusCriterion {
+  value: String
+  operator: FilterCriterionOperatorType
+}
+
+interface Resource {
+  externalId: String!
+  externalType: String
+  externalLink: URL
+  displayName: String!
+  status: String
+}
+
+input ResourceAdapterFilter {
+  ids: MultiEntityCriterion
+  repoIds: MultiEntityCriterion
+  resourceIds: MultiEntityCriterion
+  deployableIds: MultiEntityCriterion
+  name: StringCriterion
+  status: AdapterStatusCriterion
+  groupName: StringCriterion
+  subGroupName: StringCriterion
+}
+
+type ResourceConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [Resource!]!
+}
+
+type ResourceEvent {
+  type: ResourceEventType!
+  reason: String!
+  message: String!
+  action: String!
+  occurredAt: Time
+  firstOccurrenceAt: Time
+  lastOccurrenceAt: Time
+  count: Int!
+}
+
+enum ResourceEventType {
+  NORMAL
+  WARNING
+}
+
+input ResourceFilter {
+  ids: MultiEntityCriterion
+  deployableIds: MultiEntityCriterion
+  userIds: MultiEntityCriterion
+}
+
+type ResourceMetric {
+  type: MetricType
+  entries: [MetricEntry!]
+}
+
+type ResourceOwner {
+  type: ResourceType!
+  name: String!
+}
+
+enum ResourceStatus {
+  UNKNOWN
+  WAITING
+  RUNNING
+  PENDING
+  SUCCEEDED
+  FAILED
+  TERMINATED
+}
+
+enum ResourceType {
+  CONTAINER
+  POD
+  JOB
+  DEPLOYMENT
+  REPLICASET
+  STATEFULSET
+  DAEMONSET
+  SERVICE
+}
+
+interface RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+}
+
+type RevisionAuthorInfo {
+  """A short description of how the revision was initiated."""
+  summary: String!
+
+  """
+  When true, this indicates the original author's user has since been deleted.
+  """
+  creatorDeleted: Boolean!
+}
+
+type RevisionMetadata {
+  id: UUID!
+  description: String!
+  sequenceId: Int!
+
+  """
+  The user that authored this revision.
+  
+  If the user has been deleted, this will contain a placeholder User, with the
+  Name field changed to the deleted user's username.
+  When this field represents a deleted user, it SHOULD NOT be used for any API
+  operations expecting a userId, and any attempts will likely fail.
+  
+  To confirm whether this field represents a deleted user, you may additionally
+  consult the `authorInfo.creatorDeleted` flag (see `RevisionAuthorInfo`).
+  """
+  createdBy: User!
+  createdAt: Time!
+
+  """A revision may have additional information about how it was initiated."""
+  authorInfo: RevisionAuthorInfo
+}
+
+input S3BucketBackendInput {
+  awsAccountId: UUID!
+  bucketName: String!
+  region: String!
+  key: String
+}
+
+type S3BucketConfiguration {
+  awsAccountId: UUID!
+  region: String!
+  bucketName: String!
+  key: String
+}
+
+input SearchHelmChartsInput {
+  first: Int
+  after: String
+  query: String
+}
+
+type SecretMountData {
+  secretName: String!
+  mountPath: String!
+  readOnly: Boolean
+}
+
+input SecretMountDataInput {
+  secretName: String!
+  mountPath: String!
+  readOnly: Boolean
+}
+
+input SignInWithWeb3Input {
+  challengeId: UUID!
+  signature: String!
+}
+
+type SlackIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+}
+
+type SlackWebhookIntegration implements Integration {
+  id: UUID!
+  type: IntegrationType!
+  name: String!
+  description: String!
+  image: String!
+  createdAt: Time!
+  updatedAt: Time!
+  url: String
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+input SortInput {
+  direction: SortDirection
+  field: String
+}
+
+type Source {
+  git: GitSource
+  terraformModule: TerraformModuleSource
+  helmRepository: HelmRepositorySource
+  containerRegistry: ContainerRegistrySource
+}
+
+input SourceInput {
+  git: GitSourceInput
+  terraformModule: TerraformModuleSourceInput
+  helmRepository: HelmRepositorySourceInput
+  containerRegistry: ContainerRegistrySourceInput
+}
+
+input StringCriterion {
+  value: String
+  operator: FilterCriterionOperatorType
+}
+
+type SubGroup {
+  id: UUID!
+  name: String!
+  envs: [EnvVar!]
+  group: Group
+  createdAt: Time!
+  updatedAt: Time!
+  deploymentTimestamps: DeploymentTimestamps
+}
+
+input SubmitWorkflowInput {
+  workflowId: UUID!
+  definition: WorkflowRunDefinitionInput
+}
+
+input SuggestGroupNameInput {
+  name: String
+  type: String
+}
+
+type TCPProbe {
+  host: String!
+  port: String!
+}
+
+input TCPProbeInput {
+  host: String!
+  port: String!
+}
+
+"""
+A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+Groups can grant access to multiple teams.
+
+Teams can also have sub-teams or a parent team.
+A member of parent team will have equal access to all sub-teams.
+Being a member of sub-team does not confer access to the parent team.
+"""
+type Team implements GroupOwner {
+  id: UUID!
+  name: String!
+  avatar: URL
+  members: [UserTeamEdge!]!
+  memberInvitations: [TeamMemberInvitation!]!
+  groups(input: GroupFilter): GroupConnection!
+  cloudAccount(id: UUID!): CloudAccount
+  cluster(id: UUID!): Cluster
+  blueprints(page: PageInput): BlueprintConnection
+  blueprint(id: UUID!): Blueprint
+  project(id: UUID!): Project
+  projects(input: ProjectsInput): ProjectConnection
+  deploymentTimestamps: DeploymentTimestamps
+  build(id: UUID!): Build
+  builds(input: FilterInput): BuildConnection!
+  deploy(id: UUID!): Deploy
+  deploys(input: FilterInput): DeployConnection!
+  deployRun(id: UUID!): DeployRun!
+  resource(id: UUID!): Resource!
+  job(id: UUID!): Job
+  jobs(input: FilterInput): JobConnection!
+  jobRun(id: UUID!): JobRun
+  workflow(id: UUID!): Workflow
+  workflows(input: FilterInput): WorkflowConnection!
+  trigger(id: UUID!): Trigger
+}
+
+type TeamMemberInvitation {
+  id: UUID!
+  team: Team!
+  role: TeamMemberRole!
+  link: String!
+  email: String
+  expiresAt: Time
+  createdAt: Time!
+}
+
+enum TeamMemberRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+type TerraformAutomaticOutputConfiguration {
+  """
+  Disable the 'automatic output' handler, which produces a single map named 'outputs' containing all module outputs.
+  """
+  disabled: Boolean
+
+  """
+  The keys of any module outputs that should be excluded from the automatic output value. Ignored when 'disabled' is true.
+  """
+  excluded: [String!]
+
+  """
+  Mark the automatic output as sensitive. This MUST be 'true' when any sensitive
+  module output is not specified 'excluded' *and* 'disabled' is false.
+  """
+  sensitive: Boolean
+}
+
+"""See TerraformAutomaticOutputConfiguration."""
+input TerraformAutomaticOutputConfigurationInput {
+  disabled: Boolean
+  sensitive: Boolean
+  excluded: [String!]
+}
+
+type TerraformModuleSource {
+  """
+  Any valid Terraform Module source: https://developer.hashicorp.com/terraform/language/modules/sources
+  """
+  source: String!
+
+  """The version field is only applicable to Terraform Registry sources"""
+  version: String
+
+  """
+  Configuring an integration provides authentication to retrieve the module from private sources
+  """
+  integration: TerraformModuleSourceIntegration
+}
+
+input TerraformModuleSourceInput {
+  source: String!
+  version: String
+  integration: TerraformModuleSourceIntegrationInput
+}
+
+type TerraformModuleSourceIntegration {
+  git: GitSourceIntegration
+}
+
+input TerraformModuleSourceIntegrationInput {
+  git: GitSourceIntegrationInput
+}
+
+type TerraformOutputConfiguration {
+  """
+  Configuration for the automatic output handler. This configuration does not affect output defined via 'customization'.
+  """
+  automatic: TerraformAutomaticOutputConfiguration
+
+  """
+  A JSON object using Terraform configuration syntax
+  (https://developer.hashicorp.com/terraform/language/syntax/json), constituting
+  a valid "output" block.
+  
+  Example:
+  ```
+  {
+    "output": {
+      "example": {
+        "value": "${aws_instance.example}"
+      }
+    }
+  }
+  ```
+  
+  This must include the "output" key at the top level.
+  
+  To reference module values, use the expression mapping syntax: https://developer.hashicorp.com/terraform/language/syntax/json#expression-mapping
+  """
+  customization: JSON
+}
+
+"""See TerraformOutputConfiguration."""
+input TerraformOutputConfigurationInput {
+  automatic: TerraformAutomaticOutputConfigurationInput
+  customization: JSON
+}
+
+"""
+The Zeet-connected cloud account which will be mapped to a terraform provider
+"""
+type TerraformProvider {
+  awsAccount: AWSAccount
+  gcpAccount: GCPAccount
+  doAccount: DOAccount
+
+  """Region name, when applicable"""
+  region: String
+}
+
+input TerraformProviderInput {
+  """Zeet ID for a connected AWS Account"""
+  awsAccountId: UUID
+
+  """Zeet ID for a connected GCP Account"""
+  gcpAccountId: UUID
+
+  """Zeet ID for a connected DigitalOcean Account"""
+  doAccountId: UUID
+
+  """Region name, when applicable"""
+  region: String
+}
+
+type TerraformStateBackend {
+  s3Bucket: S3BucketConfiguration
+  gcsBucket: GCSBucketConfiguration
+}
+
+input TerraformStateBackendInput {
+  s3Bucket: S3BucketBackendInput
+  gcsBucket: GCSBucketBackendInput
+}
+
+type TerraformTargetConfiguration {
+  moduleName: String
+  stateBackend: TerraformStateBackend
+  provider: TerraformProvider
+}
+
+input TerraformTargetConfigurationInput {
+  stateBackend: TerraformStateBackendInput!
+  moduleName: String
+  provider: TerraformProviderInput!
+}
+
+scalar Time
+
+type Trigger {
+  id: UUID!
+  action: TriggerActionType!
+  events: [TriggerEventType!]
+  configuration: TriggerConfiguration
+}
+
+enum TriggerActionType {
+  ORCHESTRATION_WORKFLOW
+}
+
+type TriggerConfiguration {
+  event: EventTriggerConfiguration
+  action: ActionTriggerConfiguration
+}
+
+input TriggerConfigurationInput {
+  event: EventTriggerConfigurationInput
+  action: ActionTriggerConfigurationInput
+}
+
+type TriggerConnection {
+  nodes: [Trigger!]
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input TriggerDefinitionInput {
+  action: TriggerActionType!
+  events: [TriggerEventType!]
+  configuration: TriggerConfigurationInput!
+}
+
+enum TriggerEventType {
+  MANUAL
+  GIT_PUSH
+  GIT_PR_OPENED
+  GIT_PR_REVIEW_COMMENT
+  GIT_RELEASE_CREATED
+  GIT_RELEASE_RELEASED
+  GIT_ISSUE_OPENED
+  CRONJOB
+}
+
+input UpdateBlueprintInput {
+  slug: String!
+  displayName: String!
+  published: Boolean!
+  enabled: Boolean
+  description: String
+  tags: [String!]!
+  logoUrl: String
+  driverConfiguration: BlueprintDriverConfigurationInput
+  richInputSchema: JSON
+  variables: [BlueprintVariableSpecInput!]!
+}
+
+input UpdateBuildInput {
+  definition: BuildDefinitionInput
+}
+
+input UpdateClusterInput {
+  kubeconfig: Upload
+  name: String
+  domain: String
+  containerRepository: String
+  containerCacheRepository: String
+  containerRegistryId: UUID
+}
+
+input UpdateDeployInput {
+  configuration: DeploymentConfigurationInput
+}
+
+input UpdateDeploymentConfigurationInput {
+  branch: BranchConfigInput
+  replications: [ReplicationInput]
+  source: SourceInput
+  driver: BlueprintDriver
+  autoRetry: Boolean
+  autoRollback: Boolean
+  instanceId: UUID
+  blueprintDriverWorkflowStepActions: [BlueprintDriverWorkflowStepAction!]
+}
+
+input UpdateGitlabIntegrationInput {
+  name: String
+  apiUrl: URL
+  accessToken: String
+}
+
+input UpdateGroupInput {
+  id: UUID!
+  name: String
+  envs: [EnvVarInput!]
+}
+
+input UpdateJobInput {
+  definition: JobDefinitionInput
+}
+
+input UpdateProjectInput {
+  groupId: UUID
+  groupName: String
+  subGroupId: UUID
+  subGroupName: String
+  name: String
+  envs: [EnvVarInput!]
+}
+
+input UpdateProjectLinkInput {
+  providerId: UUID
+  envPrefix: String
+}
+
+input UpdateSubGroupInput {
+  id: UUID!
+  name: String
+  envs: [EnvVarInput!]
+}
+
+input UpdateTeamMemberRoleInput {
+  id: UUID!
+  role: TeamMemberRole!
+}
+
+input UpdateTriggerInput {
+  triggerId: UUID!
+  definition: TriggerDefinitionInput
+}
+
+input UpdateUserInput {
+  avatar: URL
+  login: String
+  name: String
+}
+
+input UpdateWebhookIntegrationInput {
+  userId: UUID!
+  url: String!
+}
+
+input UpdateWorkflowInput {
+  name: String
+  definition: WorkflowDefinitionInput
+}
+
+scalar Upload
+
+scalar URL
+
+type User implements ProfileOwner {
+  id: UUID!
+  login: Login!
+  name: String!
+  avatar: URL
+  isTeam: Boolean
+  personalAccessTokens: [PersonalAccessToken!]!
+  permissions: UserPermissionsConnection
+}
+
+enum UserAction {
+  READ_PRIVATE
+  EDIT_BILLING
+}
+
+type UserAuth {
+  authToken: String!
+}
+
+input UserFilter {
+  ids: MultiEntityCriterion
+}
+
+type UserPermissionsConnection {
+  principal: User
+  forTeam(teamId: UUID!): UserPermissionsTeamConnection
+}
+
+type UserPermissionsTeamConnection {
+  team: Team
+  mutations: [PermissibleMutation!]!
+}
+
+type UserTeamEdge {
+  id: UUID!
+  user: User!
+  team: Team!
+  role: TeamMemberRole!
+}
+
+scalar UUID
+
+enum VariableType {
+  STRING
+  BOOLEAN
+  INTEGER
+  FLOAT
+}
+
+scalar VariableValueInput
+
+type VolumeSpec {
+  size: Int!
+  mountPath: String!
+}
+
+input VolumeSpecInput {
+  size: Int!
+  mountPath: String!
+}
+
+type VultrAccount {
+  id: UUID!
+  createdAt: Time!
+  updatedAt: Time!
+  configuration(revisionId: UUID, sequenceId: Int): VultrAccountConfiguration!
+  configurationRevisions(page: PageInput): VultrAccountConfigurationConnection!
+}
+
+type VultrAccountConfiguration implements RevisableEntity {
+  revisionMetadata: RevisionMetadata!
+  revisionData: JSON!
+  name: String!
+}
+
+type VultrAccountConfigurationConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  nodes: [VultrAccountConfiguration!]!
+}
+
+type Web3Challenge {
+  id: UUID!
+  address: String!
+  nonce: String!
+}
+
+type Workflow {
+  type: WorkflowType
+  id: UUID!
+  parentId: UUID!
+  name: String
+  steps: [WorkflowStepDefinition!]
+  source: Source
+  run(id: UUID!): WorkflowRun!
+  runs(input: FilterInput): WorkflowRunConnection!
+  triggers(input: FilterInput): TriggerConnection!
+}
+
+input WorkflowBranchDefinitionInput {
+  name: String!
+  commitSha: String!
+}
+
+type WorkflowConnection {
+  nodes: [Workflow!]
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input WorkflowDefinitionInput {
+  steps: [WorkflowStepDefinitionInput!]
+  source: SourceInput
+  branch: WorkflowBranchDefinitionInput
+  workflowClusterId: UUID
+}
+
+enum WorkflowExecutionType {
+  BUILD_RUN
+  DEPLOY_RUN
+  DRIVER_ACTION
+}
+
+type WorkflowRun {
+  id: UUID!
+  sequence: Int!
+  workflowId: UUID!
+  step(id: UUID!): WorkflowRunStep!
+  steps: [WorkflowRunStep]
+  status: WorkflowRunStatus!
+  current: Boolean!
+  createdAt: Time!
+  updatedAt: Time!
+  finishedAt: Time
+}
+
+type WorkflowRunConnection {
+  nodes: [WorkflowRun!]!
+  totalCount: Int!
+  pageInfo: PageInfo!
+}
+
+input WorkflowRunDefinitionInput {
+  steps: [WorkflowRunStepDefinitionInput!]
+  source: SourceInput
+  branch: WorkflowBranchDefinitionInput
+}
+
+input WorkflowRunFilter {
+  ids: MultiEntityCriterion
+  type: WorkflowRunTypeCriterion
+}
+
+enum WorkflowRunStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  ABORTED
+}
+
+interface WorkflowRunStep {
+  id: UUID!
+  action: GenericWorkflowStepActionType!
+  dependsOn: [WorkflowRunStep!]
+  status: WorkflowRunStepStatus!
+  sequenceNumber: Int!
+  createdAt: Time!
+  updatedAt: Time!
+  executionId: UUID
+  executionType: WorkflowExecutionType
+  executionError: String
+}
+
+input WorkflowRunStepDefinitionInput {
+  action: WorkflowStepActionType!
+  dependsOn: [Int!]
+  disabled: Boolean
+  matchingRule: WorkflowStepDefinitionMatchingRuleInput
+  sequenceNumber: Int
+  metadata: WorkflowRunStepDefinitionMetadataInput
+}
+
+input WorkflowRunStepDefinitionMetadataInput {
+  deploySteps: [DriverWorkflowStepActionType!]
+}
+
+enum WorkflowRunStepStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  ERROR
+  ABORTED
+}
+
+enum WorkflowRunType {
+  CREATE_RESOURCE
+  DELETE_RESOURCE
+}
+
+input WorkflowRunTypeCriterion {
+  value: [WorkflowRunType]
+  operator: FilterCriterionOperatorType
+}
+
+enum WorkflowStepActionType {
+  ORCHESTRATION_BUILD
+  ORCHESTRATION_CLUSTER_PRECHECK
+  ORCHESTRATION_DEPLOY
+  ORCHESTRATION_RELEASE
+  ORCHESTRATION_DESTROY
+}
+
+type WorkflowStepDefinition {
+  action: WorkflowStepActionType!
+  dependsOn: [Int!]
+  disabled: Boolean
+  matchingRule: WorkflowStepDefinitionMatchingRule
+  sequenceNumber: Int
+}
+
+input WorkflowStepDefinitionInput {
+  action: WorkflowStepActionType!
+  dependsOn: [Int!]
+  disabled: Boolean
+  matchingRule: WorkflowStepDefinitionMatchingRuleInput
+  sequenceNumber: Int
+}
+
+type WorkflowStepDefinitionMatchingRule {
+  label: String
+  entityId: UUID
+  branchName: String
+}
+
+input WorkflowStepDefinitionMatchingRuleInput {
+  label: String
+  entityId: UUID
+  branchName: String
+}
+
+enum WorkflowType {
+  DRIVER
+  ORCHESTRATION
+}
+
+scalar YAML
+
+enum AnchorGraphQLApiVersion { v0, v1 }
+directive @api(name: AnchorGraphQLApiVersion = v0) on QUERY | MUTATION | SUBSCRIPTION
+
