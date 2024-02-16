@@ -8889,20 +8889,14 @@ type WorkflowRunDetailStepsWorkflowRunStep interface {
 
 func (v *WorkflowRunDetailStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunDetailStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunDetailStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
 func (v *WorkflowRunDetailStepsClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunDetailStepsWorkflowRunStep() {
-}
-func (v *WorkflowRunDetailStepsClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {
 }
 func (v *WorkflowRunDetailStepsDeployRunStep) implementsGraphQLInterfaceWorkflowRunDetailStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunDetailStepsDeployRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
 func (v *WorkflowRunDetailStepsDestroyRunStep) implementsGraphQLInterfaceWorkflowRunDetailStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunDetailStepsDestroyRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
 func (v *WorkflowRunDetailStepsJobRunStep) implementsGraphQLInterfaceWorkflowRunDetailStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunDetailStepsJobRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
 
 func __unmarshalWorkflowRunDetailStepsWorkflowRunStep(b []byte, v *WorkflowRunDetailStepsWorkflowRunStep) error {
 	if string(b) == "null" {
@@ -10607,23 +10601,13 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep interf
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceDependsOn() {
 }
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceDependsOn() {
 }
 
 func __unmarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep(b []byte, v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStep) error {
@@ -11271,19 +11255,14 @@ type WorkflowRunListItemStepsWorkflowRunStep interface {
 
 func (v *WorkflowRunListItemStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsBuildRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunListItemStepsClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunListItemStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsClusterPrecheckStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunListItemStepsDeployRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsDeployRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunListItemStepsDestroyRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsDestroyRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunListItemStepsJobRunStep) implementsGraphQLInterfaceWorkflowRunListItemStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunListItemStepsJobRunStep) implementsGraphQLInterfaceDependsOn() {}
 
 func __unmarshalWorkflowRunListItemStepsWorkflowRunStep(b []byte, v *WorkflowRunListItemStepsWorkflowRunStep) error {
 	if string(b) == "null" {
@@ -11671,16 +11650,11 @@ type WorkflowRunStepDetail interface {
 }
 
 func (v *WorkflowRunStepDetailBuildRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
-func (v *WorkflowRunStepDetailBuildRunStep) implementsGraphQLInterfaceDependsOn()             {}
 func (v *WorkflowRunStepDetailClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {
 }
-func (v *WorkflowRunStepDetailClusterPrecheckStep) implementsGraphQLInterfaceDependsOn()        {}
 func (v *WorkflowRunStepDetailDeployRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail()  {}
-func (v *WorkflowRunStepDetailDeployRunStep) implementsGraphQLInterfaceDependsOn()              {}
 func (v *WorkflowRunStepDetailDestroyRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail() {}
-func (v *WorkflowRunStepDetailDestroyRunStep) implementsGraphQLInterfaceDependsOn()             {}
 func (v *WorkflowRunStepDetailJobRunStep) implementsGraphQLInterfaceWorkflowRunStepDetail()     {}
-func (v *WorkflowRunStepDetailJobRunStep) implementsGraphQLInterfaceDependsOn()                 {}
 
 func __unmarshalWorkflowRunStepDetail(b []byte, v *WorkflowRunStepDetail) error {
 	if string(b) == "null" {
@@ -13871,20 +13845,14 @@ type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep interface {
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceDependsOn() {
 }
 func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceDependsOn() {}
 func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceDependsOn() {}
 
 func __unmarshalWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep(b []byte, v *WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep) error {
 	if string(b) == "null" {
@@ -19524,13 +19492,10 @@ type resourceLogsTeamResource interface {
 
 func (v *resourceLogsTeamResourceCertificateResource) implementsGraphQLInterfaceresourceLogsTeamResource() {
 }
-func (v *resourceLogsTeamResourceCertificateResource) implementsGraphQLInterfaceResourceLogs() {}
 func (v *resourceLogsTeamResourceContainerResource) implementsGraphQLInterfaceresourceLogsTeamResource() {
 }
-func (v *resourceLogsTeamResourceContainerResource) implementsGraphQLInterfaceResourceLogs() {}
 func (v *resourceLogsTeamResourceEndpointResource) implementsGraphQLInterfaceresourceLogsTeamResource() {
 }
-func (v *resourceLogsTeamResourceEndpointResource) implementsGraphQLInterfaceResourceLogs() {}
 
 func __unmarshalresourceLogsTeamResource(b []byte, v *resourceLogsTeamResource) error {
 	if string(b) == "null" {
@@ -23924,23 +23889,13 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceDependsOn() {
 }
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceDependsOn() {
 }
 
 func __unmarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep(b []byte, v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStep) error {
@@ -25313,23 +25268,13 @@ type workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) implementsGraphQLInterfaceDependsOn() {
 }
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
 }
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) implementsGraphQLInterfaceDependsOn() {
-}
 func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep() {
-}
-func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) implementsGraphQLInterfaceDependsOn() {
 }
 
 func __unmarshalworkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep(b []byte, v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStep) error {
