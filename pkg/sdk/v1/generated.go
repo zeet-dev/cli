@@ -12,12 +12,30 @@ import (
 	"github.com/google/uuid"
 )
 
+// abortWorkflowRunResponse is returned by abortWorkflowRun on success.
+type AbortWorkflowRunResponse struct {
+	AbortWorkflowRun bool `json:"abortWorkflowRun"`
+}
+
+// GetAbortWorkflowRun returns AbortWorkflowRunResponse.AbortWorkflowRun, and is useful for accessing the field via an interface.
+func (v *AbortWorkflowRunResponse) GetAbortWorkflowRun() bool { return v.AbortWorkflowRun }
+
 type ActionTriggerConfigurationInput struct {
 	WorkflowId uuid.UUID `json:"workflowId"`
 }
 
 // GetWorkflowId returns ActionTriggerConfigurationInput.WorkflowId, and is useful for accessing the field via an interface.
 func (v *ActionTriggerConfigurationInput) GetWorkflowId() uuid.UUID { return v.WorkflowId }
+
+// approveWorkflowRunStepResponse is returned by approveWorkflowRunStep on success.
+type ApproveWorkflowRunStepResponse struct {
+	ApproveWorkflowRunStep bool `json:"approveWorkflowRunStep"`
+}
+
+// GetApproveWorkflowRunStep returns ApproveWorkflowRunStepResponse.ApproveWorkflowRunStep, and is useful for accessing the field via an interface.
+func (v *ApproveWorkflowRunStepResponse) GetApproveWorkflowRunStep() bool {
+	return v.ApproveWorkflowRunStep
+}
 
 type AutoscalingDataInput struct {
 	MinReplicas          int                       `json:"minReplicas"`
@@ -370,6 +388,22 @@ func (v *BlueprintManifestConfigurationInput) GetSource() SourceInput { return v
 // GetUseKustomize returns BlueprintManifestConfigurationInput.UseKustomize, and is useful for accessing the field via an interface.
 func (v *BlueprintManifestConfigurationInput) GetUseKustomize() bool { return v.UseKustomize }
 
+// blueprintResponse is returned by blueprint on success.
+type BlueprintResponse struct {
+	Team blueprintTeam `json:"team"`
+}
+
+// GetTeam returns BlueprintResponse.Team, and is useful for accessing the field via an interface.
+func (v *BlueprintResponse) GetTeam() blueprintTeam { return v.Team }
+
+// blueprintRevisionsResponse is returned by blueprintRevisions on success.
+type BlueprintRevisionsResponse struct {
+	Team blueprintRevisionsTeam `json:"team"`
+}
+
+// GetTeam returns BlueprintRevisionsResponse.Team, and is useful for accessing the field via an interface.
+func (v *BlueprintRevisionsResponse) GetTeam() blueprintRevisionsTeam { return v.Team }
+
 type BlueprintTerraformConfigurationInput struct {
 	Source              SourceInput                       `json:"source"`
 	OutputConfiguration TerraformOutputConfigurationInput `json:"outputConfiguration"`
@@ -436,6 +470,14 @@ const (
 	BlueprintVariableTypeFloat   BlueprintVariableType = "FLOAT"
 	BlueprintVariableTypeJson    BlueprintVariableType = "JSON"
 )
+
+// buildArtifactsResponse is returned by buildArtifacts on success.
+type BuildArtifactsResponse struct {
+	Team buildArtifactsTeam `json:"team"`
+}
+
+// GetTeam returns BuildArtifactsResponse.Team, and is useful for accessing the field via an interface.
+func (v *BuildArtifactsResponse) GetTeam() buildArtifactsTeam { return v.Team }
 
 type BuildDefinitionInput struct {
 	BuildAppId       string           `json:"buildAppId"`
@@ -588,6 +630,14 @@ type BuildRunDetailJobRun struct {
 // GetId returns BuildRunDetailJobRun.Id, and is useful for accessing the field via an interface.
 func (v *BuildRunDetailJobRun) GetId() uuid.UUID { return v.Id }
 
+// buildRunDetailResponse is returned by buildRunDetail on success.
+type BuildRunDetailResponse struct {
+	Team buildRunDetailTeam `json:"team"`
+}
+
+// GetTeam returns BuildRunDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *BuildRunDetailResponse) GetTeam() buildRunDetailTeam { return v.Team }
+
 // BuildRunDetailTriggeredByWorkflowRun includes the requested fields of the GraphQL type WorkflowRun.
 type BuildRunDetailTriggeredByWorkflowRun struct {
 	Id       uuid.UUID `json:"id"`
@@ -645,6 +695,14 @@ func (v *BuildRunListItemTriggeredByWorkflowRun) GetId() uuid.UUID { return v.Id
 
 // GetSequence returns BuildRunListItemTriggeredByWorkflowRun.Sequence, and is useful for accessing the field via an interface.
 func (v *BuildRunListItemTriggeredByWorkflowRun) GetSequence() int { return v.Sequence }
+
+// buildRunsResponse is returned by buildRuns on success.
+type BuildRunsResponse struct {
+	Team buildRunsTeam `json:"team"`
+}
+
+// GetTeam returns BuildRunsResponse.Team, and is useful for accessing the field via an interface.
+func (v *BuildRunsResponse) GetTeam() buildRunsTeam { return v.Team }
 
 type BuildTargetInput struct {
 	Type                         BuildTargetType             `json:"type"`
@@ -818,6 +876,14 @@ func (v *CloudResourceOwnersResourceOwner) GetName() string { return v.Name }
 // GetType returns CloudResourceOwnersResourceOwner.Type, and is useful for accessing the field via an interface.
 func (v *CloudResourceOwnersResourceOwner) GetType() ResourceType { return v.Type }
 
+// cloudRevisionsResponse is returned by cloudRevisions on success.
+type CloudRevisionsResponse struct {
+	Team cloudRevisionsTeam `json:"team"`
+}
+
+// GetTeam returns CloudRevisionsResponse.Team, and is useful for accessing the field via an interface.
+func (v *CloudRevisionsResponse) GetTeam() cloudRevisionsTeam { return v.Team }
+
 type ClusterComponentEjectedStatus string
 
 const (
@@ -864,6 +930,22 @@ func (v *ClusterDetailV1) GetCreatedAt() time.Time { return v.CreatedAt }
 // GetUpdatedAt returns ClusterDetailV1.UpdatedAt, and is useful for accessing the field via an interface.
 func (v *ClusterDetailV1) GetUpdatedAt() time.Time { return v.UpdatedAt }
 
+// clusterDetailsResponse is returned by clusterDetails on success.
+type ClusterDetailsResponse struct {
+	Team clusterDetailsTeam `json:"team"`
+}
+
+// GetTeam returns ClusterDetailsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ClusterDetailsResponse) GetTeam() clusterDetailsTeam { return v.Team }
+
+// clusterRevisionsResponse is returned by clusterRevisions on success.
+type ClusterRevisionsResponse struct {
+	Team clusterRevisionsTeam `json:"team"`
+}
+
+// GetTeam returns ClusterRevisionsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ClusterRevisionsResponse) GetTeam() clusterRevisionsTeam { return v.Team }
+
 type ClusterState string
 
 const (
@@ -887,6 +969,14 @@ const (
 	ClusterStatusUnreachable   ClusterStatus = "UNREACHABLE"
 )
 
+// clusterStatusResponse is returned by clusterStatus on success.
+type ClusterStatusResponse struct {
+	Team clusterStatusTeam `json:"team"`
+}
+
+// GetTeam returns ClusterStatusResponse.Team, and is useful for accessing the field via an interface.
+func (v *ClusterStatusResponse) GetTeam() clusterStatusTeam { return v.Team }
+
 type ContainerRegistrySourceInput struct {
 	RegistryId  uuid.UUID `json:"registryId"`
 	RegistryUrl string    `json:"registryUrl"`
@@ -906,6 +996,16 @@ func (v *ContainerRegistrySourceInput) GetRepository() string { return v.Reposit
 // GetTag returns ContainerRegistrySourceInput.Tag, and is useful for accessing the field via an interface.
 func (v *ContainerRegistrySourceInput) GetTag() string { return v.Tag }
 
+// createBuildRunResponse is returned by createBuildRun on success.
+type CreateBuildRunResponse struct {
+	CreateBuildRun createBuildRunCreateBuildRun `json:"createBuildRun"`
+}
+
+// GetCreateBuildRun returns CreateBuildRunResponse.CreateBuildRun, and is useful for accessing the field via an interface.
+func (v *CreateBuildRunResponse) GetCreateBuildRun() createBuildRunCreateBuildRun {
+	return v.CreateBuildRun
+}
+
 type CreateDeployRunInput struct {
 	DeployId uuid.UUID `json:"deployId"`
 	IntentId uuid.UUID `json:"intentId"`
@@ -916,6 +1016,16 @@ func (v *CreateDeployRunInput) GetDeployId() uuid.UUID { return v.DeployId }
 
 // GetIntentId returns CreateDeployRunInput.IntentId, and is useful for accessing the field via an interface.
 func (v *CreateDeployRunInput) GetIntentId() uuid.UUID { return v.IntentId }
+
+// createDeployRunResponse is returned by createDeployRun on success.
+type CreateDeployRunResponse struct {
+	CreateDeployRun createDeployRunCreateDeployRun `json:"createDeployRun"`
+}
+
+// GetCreateDeployRun returns CreateDeployRunResponse.CreateDeployRun, and is useful for accessing the field via an interface.
+func (v *CreateDeployRunResponse) GetCreateDeployRun() createDeployRunCreateDeployRun {
+	return v.CreateDeployRun
+}
 
 type CreateProjectInput struct {
 	TeamId       uuid.UUID                      `json:"teamId"`
@@ -972,6 +1082,14 @@ func (v *CreateProjectInput) GetEnvs() []EnvVarInput { return v.Envs }
 // GetBlueprintId returns CreateProjectInput.BlueprintId, and is useful for accessing the field via an interface.
 func (v *CreateProjectInput) GetBlueprintId() uuid.UUID { return v.BlueprintId }
 
+// createProjectResponse is returned by createProject on success.
+type CreateProjectResponse struct {
+	CreateProject createProjectCreateProject `json:"createProject"`
+}
+
+// GetCreateProject returns CreateProjectResponse.CreateProject, and is useful for accessing the field via an interface.
+func (v *CreateProjectResponse) GetCreateProject() createProjectCreateProject { return v.CreateProject }
+
 type CreateTriggerInput struct {
 	Definition TriggerDefinitionInput `json:"definition"`
 	ParentId   uuid.UUID              `json:"parentId"`
@@ -983,12 +1101,102 @@ func (v *CreateTriggerInput) GetDefinition() TriggerDefinitionInput { return v.D
 // GetParentId returns CreateTriggerInput.ParentId, and is useful for accessing the field via an interface.
 func (v *CreateTriggerInput) GetParentId() uuid.UUID { return v.ParentId }
 
+// createUserPersonalAccessTokenResponse is returned by createUserPersonalAccessToken on success.
+type CreateUserPersonalAccessTokenResponse struct {
+	CreatePersonalAccessTokenForUser createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken `json:"createPersonalAccessTokenForUser"`
+}
+
+// GetCreatePersonalAccessTokenForUser returns CreateUserPersonalAccessTokenResponse.CreatePersonalAccessTokenForUser, and is useful for accessing the field via an interface.
+func (v *CreateUserPersonalAccessTokenResponse) GetCreatePersonalAccessTokenForUser() createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken {
+	return v.CreatePersonalAccessTokenForUser
+}
+
+// createWorkflowTriggerResponse is returned by createWorkflowTrigger on success.
+type CreateWorkflowTriggerResponse struct {
+	CreateTrigger createWorkflowTriggerCreateTrigger `json:"createTrigger"`
+}
+
+// GetCreateTrigger returns CreateWorkflowTriggerResponse.CreateTrigger, and is useful for accessing the field via an interface.
+func (v *CreateWorkflowTriggerResponse) GetCreateTrigger() createWorkflowTriggerCreateTrigger {
+	return v.CreateTrigger
+}
+
 type CronJobEventTriggerConfigurationInput struct {
 	Expression string `json:"expression"`
 }
 
 // GetExpression returns CronJobEventTriggerConfigurationInput.Expression, and is useful for accessing the field via an interface.
 func (v *CronJobEventTriggerConfigurationInput) GetExpression() string { return v.Expression }
+
+// currentUserResponse is returned by currentUser on success.
+type CurrentUserResponse struct {
+	CurrentUser currentUserCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns CurrentUserResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *CurrentUserResponse) GetCurrentUser() currentUserCurrentUser { return v.CurrentUser }
+
+// deleteGroupResponse is returned by deleteGroup on success.
+type DeleteGroupResponse struct {
+	DeleteGroup bool `json:"deleteGroup"`
+}
+
+// GetDeleteGroup returns DeleteGroupResponse.DeleteGroup, and is useful for accessing the field via an interface.
+func (v *DeleteGroupResponse) GetDeleteGroup() bool { return v.DeleteGroup }
+
+// deleteProjectAndResourcesResponse is returned by deleteProjectAndResources on success.
+type DeleteProjectAndResourcesResponse struct {
+	DeleteProjectAndResources uuid.UUID `json:"deleteProjectAndResources"`
+}
+
+// GetDeleteProjectAndResources returns DeleteProjectAndResourcesResponse.DeleteProjectAndResources, and is useful for accessing the field via an interface.
+func (v *DeleteProjectAndResourcesResponse) GetDeleteProjectAndResources() uuid.UUID {
+	return v.DeleteProjectAndResources
+}
+
+// deleteProjectResourcesResponse is returned by deleteProjectResources on success.
+type DeleteProjectResourcesResponse struct {
+	DeleteProjectResources uuid.UUID `json:"deleteProjectResources"`
+}
+
+// GetDeleteProjectResources returns DeleteProjectResourcesResponse.DeleteProjectResources, and is useful for accessing the field via an interface.
+func (v *DeleteProjectResourcesResponse) GetDeleteProjectResources() uuid.UUID {
+	return v.DeleteProjectResources
+}
+
+// deleteProjectResponse is returned by deleteProject on success.
+type DeleteProjectResponse struct {
+	DeleteProject bool `json:"deleteProject"`
+}
+
+// GetDeleteProject returns DeleteProjectResponse.DeleteProject, and is useful for accessing the field via an interface.
+func (v *DeleteProjectResponse) GetDeleteProject() bool { return v.DeleteProject }
+
+// deleteSubGroupResponse is returned by deleteSubGroup on success.
+type DeleteSubGroupResponse struct {
+	DeleteSubGroup bool `json:"deleteSubGroup"`
+}
+
+// GetDeleteSubGroup returns DeleteSubGroupResponse.DeleteSubGroup, and is useful for accessing the field via an interface.
+func (v *DeleteSubGroupResponse) GetDeleteSubGroup() bool { return v.DeleteSubGroup }
+
+// deleteUserPersonalAccessTokenResponse is returned by deleteUserPersonalAccessToken on success.
+type DeleteUserPersonalAccessTokenResponse struct {
+	DeletePersonalAccessToken bool `json:"deletePersonalAccessToken"`
+}
+
+// GetDeletePersonalAccessToken returns DeleteUserPersonalAccessTokenResponse.DeletePersonalAccessToken, and is useful for accessing the field via an interface.
+func (v *DeleteUserPersonalAccessTokenResponse) GetDeletePersonalAccessToken() bool {
+	return v.DeletePersonalAccessToken
+}
+
+// deleteWorkflowTriggerResponse is returned by deleteWorkflowTrigger on success.
+type DeleteWorkflowTriggerResponse struct {
+	DeleteTrigger bool `json:"deleteTrigger"`
+}
+
+// GetDeleteTrigger returns DeleteWorkflowTriggerResponse.DeleteTrigger, and is useful for accessing the field via an interface.
+func (v *DeleteWorkflowTriggerResponse) GetDeleteTrigger() bool { return v.DeleteTrigger }
 
 // DeployConfigurationDetail includes the GraphQL fields of Deploy requested by the fragment DeployConfigurationDetail.
 type DeployConfigurationDetail struct {
@@ -3106,6 +3314,16 @@ func (v *DuplicateProjectInput) GetSubGroupName() string { return v.SubGroupName
 // GetName returns DuplicateProjectInput.Name, and is useful for accessing the field via an interface.
 func (v *DuplicateProjectInput) GetName() string { return v.Name }
 
+// duplicateProjectResponse is returned by duplicateProject on success.
+type DuplicateProjectResponse struct {
+	DuplicateProject duplicateProjectDuplicateProject `json:"duplicateProject"`
+}
+
+// GetDuplicateProject returns DuplicateProjectResponse.DuplicateProject, and is useful for accessing the field via an interface.
+func (v *DuplicateProjectResponse) GetDuplicateProject() duplicateProjectDuplicateProject {
+	return v.DuplicateProject
+}
+
 type EjectClusterComponentInput struct {
 	Name         string               `json:"name"`
 	Type         ClusterComponentType `json:"type"`
@@ -3128,6 +3346,16 @@ func (v *EjectClusterComponentInput) GetSubGroupName() string { return v.SubGrou
 
 // GetProjectName returns EjectClusterComponentInput.ProjectName, and is useful for accessing the field via an interface.
 func (v *EjectClusterComponentInput) GetProjectName() string { return v.ProjectName }
+
+// ejectClusterComponentResponse is returned by ejectClusterComponent on success.
+type EjectClusterComponentResponse struct {
+	EjectClusterComponent ejectClusterComponentEjectClusterComponent `json:"ejectClusterComponent"`
+}
+
+// GetEjectClusterComponent returns EjectClusterComponentResponse.EjectClusterComponent, and is useful for accessing the field via an interface.
+func (v *EjectClusterComponentResponse) GetEjectClusterComponent() ejectClusterComponentEjectClusterComponent {
+	return v.EjectClusterComponent
+}
 
 type EnvVarInput struct {
 	Name   string `json:"name"`
@@ -3239,6 +3467,16 @@ func (v *GcpCloudRunTargetConfigurationInput) GetGcpAccountId() uuid.UUID { retu
 // GetGcpRegion returns GcpCloudRunTargetConfigurationInput.GcpRegion, and is useful for accessing the field via an interface.
 func (v *GcpCloudRunTargetConfigurationInput) GetGcpRegion() string { return v.GcpRegion }
 
+// generateDownloadableLogLinkForWorkflowRunStepResponse is returned by generateDownloadableLogLinkForWorkflowRunStep on success.
+type GenerateDownloadableLogLinkForWorkflowRunStepResponse struct {
+	GenerateDownloadableLogLinkForWorkflowRunStep string `json:"generateDownloadableLogLinkForWorkflowRunStep"`
+}
+
+// GetGenerateDownloadableLogLinkForWorkflowRunStep returns GenerateDownloadableLogLinkForWorkflowRunStepResponse.GenerateDownloadableLogLinkForWorkflowRunStep, and is useful for accessing the field via an interface.
+func (v *GenerateDownloadableLogLinkForWorkflowRunStepResponse) GetGenerateDownloadableLogLinkForWorkflowRunStep() string {
+	return v.GenerateDownloadableLogLinkForWorkflowRunStep
+}
+
 type GenericWorkflowStepActionType string
 
 const (
@@ -3316,6 +3554,14 @@ func (v *GitSourceIntegrationInput) GetGitlabIntegrationId() uuid.UUID { return 
 func (v *GitSourceIntegrationInput) GetBitbucketIntegrationId() uuid.UUID {
 	return v.BitbucketIntegrationId
 }
+
+// groupsWithSubgroupsResponse is returned by groupsWithSubgroups on success.
+type GroupsWithSubgroupsResponse struct {
+	Team groupsWithSubgroupsTeam `json:"team"`
+}
+
+// GetTeam returns GroupsWithSubgroupsResponse.Team, and is useful for accessing the field via an interface.
+func (v *GroupsWithSubgroupsResponse) GetTeam() groupsWithSubgroupsTeam { return v.Team }
 
 type HTTPProbeInput struct {
 	Host string `json:"host"`
@@ -3687,6 +3933,14 @@ type JobListItemRunsJobRunConnection struct {
 // GetTotalCount returns JobListItemRunsJobRunConnection.TotalCount, and is useful for accessing the field via an interface.
 func (v *JobListItemRunsJobRunConnection) GetTotalCount() int { return v.TotalCount }
 
+// jobListResponse is returned by jobList on success.
+type JobListResponse struct {
+	Team jobListTeam `json:"team"`
+}
+
+// GetTeam returns JobListResponse.Team, and is useful for accessing the field via an interface.
+func (v *JobListResponse) GetTeam() jobListTeam { return v.Team }
+
 // JobRunDetail includes the GraphQL fields of JobRun requested by the fragment JobRunDetail.
 type JobRunDetail struct {
 	JobRunListItem `json:"-"`
@@ -3800,6 +4054,14 @@ type JobRunDetailDefinitionJobDefinition struct {
 // GetJobName returns JobRunDetailDefinitionJobDefinition.JobName, and is useful for accessing the field via an interface.
 func (v *JobRunDetailDefinitionJobDefinition) GetJobName() string { return v.JobName }
 
+// jobRunDetailResponse is returned by jobRunDetail on success.
+type JobRunDetailResponse struct {
+	Team jobRunDetailTeam `json:"team"`
+}
+
+// GetTeam returns JobRunDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *JobRunDetailResponse) GetTeam() jobRunDetailTeam { return v.Team }
+
 // JobRunListItem includes the GraphQL fields of JobRun requested by the fragment JobRunListItem.
 type JobRunListItem struct {
 	Id        uuid.UUID   `json:"id"`
@@ -3819,6 +4081,14 @@ func (v *JobRunListItem) GetCreatedAt() time.Time { return v.CreatedAt }
 
 // GetState returns JobRunListItem.State, and is useful for accessing the field via an interface.
 func (v *JobRunListItem) GetState() JobRunState { return v.State }
+
+// jobRunListResponse is returned by jobRunList on success.
+type JobRunListResponse struct {
+	Team jobRunListTeam `json:"team"`
+}
+
+// GetTeam returns JobRunListResponse.Team, and is useful for accessing the field via an interface.
+func (v *JobRunListResponse) GetTeam() jobRunListTeam { return v.Team }
 
 // JobRunLogs includes the GraphQL fields of JobRun requested by the fragment JobRunLogs.
 type JobRunLogs struct {
@@ -3863,6 +4133,14 @@ func (v *JobRunLogsLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Time
 
 // GetText returns JobRunLogsLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
 func (v *JobRunLogsLogsEntriesLogEntry) GetText() string { return v.Text }
+
+// jobRunLogsResponse is returned by jobRunLogs on success.
+type JobRunLogsResponse struct {
+	Team jobRunLogsTeam `json:"team"`
+}
+
+// GetTeam returns JobRunLogsResponse.Team, and is useful for accessing the field via an interface.
+func (v *JobRunLogsResponse) GetTeam() jobRunLogsTeam { return v.Team }
 
 type JobRunState string
 
@@ -4111,6 +4389,16 @@ func (v *KubernetesGeneratorConfigurationInput) GetNodeSelector() map[string]str
 // GetPodSpecPatch returns KubernetesGeneratorConfigurationInput.PodSpecPatch, and is useful for accessing the field via an interface.
 func (v *KubernetesGeneratorConfigurationInput) GetPodSpecPatch() string { return v.PodSpecPatch }
 
+// linkProjectResponse is returned by linkProject on success.
+type LinkProjectResponse struct {
+	LinkProject linkProjectLinkProjectProjectLink `json:"linkProject"`
+}
+
+// GetLinkProject returns LinkProjectResponse.LinkProject, and is useful for accessing the field via an interface.
+func (v *LinkProjectResponse) GetLinkProject() linkProjectLinkProjectProjectLink {
+	return v.LinkProject
+}
+
 type LogShipperType string
 
 const (
@@ -4149,6 +4437,14 @@ const (
 	MetricTypeCpuUtilization     MetricType = "CPU_UTILIZATION"
 	MetricTypeMemoryUtilization  MetricType = "MEMORY_UTILIZATION"
 )
+
+// observabilityConfigResponse is returned by observabilityConfig on success.
+type ObservabilityConfigResponse struct {
+	Team observabilityConfigTeam `json:"team"`
+}
+
+// GetTeam returns ObservabilityConfigResponse.Team, and is useful for accessing the field via an interface.
+func (v *ObservabilityConfigResponse) GetTeam() observabilityConfigTeam { return v.Team }
 
 type ObservabilityResourceSelectorInput struct {
 	Type          ResourceType                              `json:"type"`
@@ -4266,6 +4562,14 @@ func (v *ProbeDataInput) GetFailureThreshold() int { return v.FailureThreshold }
 
 // GetTimeoutSeconds returns ProbeDataInput.TimeoutSeconds, and is useful for accessing the field via an interface.
 func (v *ProbeDataInput) GetTimeoutSeconds() int { return v.TimeoutSeconds }
+
+// projectAvailableProvidersResponse is returned by projectAvailableProviders on success.
+type ProjectAvailableProvidersResponse struct {
+	Team projectAvailableProvidersTeam `json:"team"`
+}
+
+// GetTeam returns ProjectAvailableProvidersResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectAvailableProvidersResponse) GetTeam() projectAvailableProvidersTeam { return v.Team }
 
 // ProjectBlueprintConfigurationDetailV1 includes the GraphQL fields of BlueprintConfiguration requested by the fragment ProjectBlueprintConfigurationDetailV1.
 type ProjectBlueprintConfigurationDetailV1 struct {
@@ -4773,6 +5077,14 @@ func (v *ProjectBlueprintConfigurationDetailV1DriverConfigurationBlueprintTerraf
 	return &retval, nil
 }
 
+// projectClustersResponse is returned by projectClusters on success.
+type ProjectClustersResponse struct {
+	Team projectClustersTeam `json:"team"`
+}
+
+// GetTeam returns ProjectClustersResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectClustersResponse) GetTeam() projectClustersTeam { return v.Team }
+
 type ProjectConnectorType string
 
 const (
@@ -4794,6 +5106,14 @@ func (v *ProjectDeployDetail) GetName() string { return v.Name }
 
 // GetRuns returns ProjectDeployDetail.Runs, and is useful for accessing the field via an interface.
 func (v *ProjectDeployDetail) GetRuns() ProjectDeployDetailRunsDeployRunConnection { return v.Runs }
+
+// projectDeployDetailResponse is returned by projectDeployDetail on success.
+type ProjectDeployDetailResponse struct {
+	Team projectDeployDetailTeam `json:"team"`
+}
+
+// GetTeam returns ProjectDeployDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectDeployDetailResponse) GetTeam() projectDeployDetailTeam { return v.Team }
 
 // ProjectDeployDetailRunsDeployRunConnection includes the requested fields of the GraphQL type DeployRunConnection.
 type ProjectDeployDetailRunsDeployRunConnection struct {
@@ -4921,6 +5241,14 @@ func (v *ProjectDeployListRunsDeployRunConnectionNodesDeployRun) GetId() uuid.UU
 // GetSequence returns ProjectDeployListRunsDeployRunConnectionNodesDeployRun.Sequence, and is useful for accessing the field via an interface.
 func (v *ProjectDeployListRunsDeployRunConnectionNodesDeployRun) GetSequence() int { return v.Sequence }
 
+// projectDeployRevisionsResponse is returned by projectDeployRevisions on success.
+type ProjectDeployRevisionsResponse struct {
+	Team projectDeployRevisionsTeam `json:"team"`
+}
+
+// GetTeam returns ProjectDeployRevisionsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectDeployRevisionsResponse) GetTeam() projectDeployRevisionsTeam { return v.Team }
+
 // ProjectDeployRunDetail includes the GraphQL fields of DeployRun requested by the fragment ProjectDeployRunDetail.
 type ProjectDeployRunDetail struct {
 	Id       uuid.UUID                                    `json:"id"`
@@ -4938,6 +5266,14 @@ func (v *ProjectDeployRunDetail) GetSequence() int { return v.Sequence }
 func (v *ProjectDeployRunDetail) GetResult() ProjectDeployRunDetailResultDeploymentResult {
 	return v.Result
 }
+
+// projectDeployRunDetailResponse is returned by projectDeployRunDetail on success.
+type ProjectDeployRunDetailResponse struct {
+	Team projectDeployRunDetailTeam `json:"team"`
+}
+
+// GetTeam returns ProjectDeployRunDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectDeployRunDetailResponse) GetTeam() projectDeployRunDetailTeam { return v.Team }
 
 // ProjectDeployRunDetailResultDeploymentResult includes the requested fields of the GraphQL type DeploymentResult.
 type ProjectDeployRunDetailResultDeploymentResult struct {
@@ -5569,6 +5905,14 @@ func __marshalProjectDeployRunListResultDeploymentResultResourcesResourceConnect
 	}
 }
 
+// projectDeploysResponse is returned by projectDeploys on success.
+type ProjectDeploysResponse struct {
+	Team projectDeploysTeam `json:"team"`
+}
+
+// GetTeam returns ProjectDeploysResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectDeploysResponse) GetTeam() projectDeploysTeam { return v.Team }
+
 // ProjectDetail includes the GraphQL fields of Project requested by the fragment ProjectDetail.
 type ProjectDetail struct {
 	ProjectInfo `json:"-"`
@@ -5948,6 +6292,14 @@ func (v *ProjectDetailGroup) GetId() uuid.UUID { return v.Id }
 // GetName returns ProjectDetailGroup.Name, and is useful for accessing the field via an interface.
 func (v *ProjectDetailGroup) GetName() string { return v.Name }
 
+// projectDetailResponse is returned by projectDetail on success.
+type ProjectDetailResponse struct {
+	Team projectDetailTeam `json:"team"`
+}
+
+// GetTeam returns ProjectDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectDetailResponse) GetTeam() projectDetailTeam { return v.Team }
+
 // ProjectDetailSubGroup includes the requested fields of the GraphQL type SubGroup.
 type ProjectDetailSubGroup struct {
 	Id   uuid.UUID `json:"id"`
@@ -6065,6 +6417,14 @@ type ProjectInfoJobsJob struct {
 
 // GetId returns ProjectInfoJobsJob.Id, and is useful for accessing the field via an interface.
 func (v *ProjectInfoJobsJob) GetId() uuid.UUID { return v.Id }
+
+// projectInfoResponse is returned by projectInfo on success.
+type ProjectInfoResponse struct {
+	Team projectInfoTeam `json:"team"`
+}
+
+// GetTeam returns ProjectInfoResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectInfoResponse) GetTeam() projectInfoTeam { return v.Team }
 
 // ProjectInfoWorkflow includes the requested fields of the GraphQL type Workflow.
 type ProjectInfoWorkflow struct {
@@ -6381,6 +6741,22 @@ const (
 	ProjectLinkTypeDatabase ProjectLinkType = "DATABASE"
 )
 
+// projectLinkedProjectsResponse is returned by projectLinkedProjects on success.
+type ProjectLinkedProjectsResponse struct {
+	Team projectLinkedProjectsTeam `json:"team"`
+}
+
+// GetTeam returns ProjectLinkedProjectsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectLinkedProjectsResponse) GetTeam() projectLinkedProjectsTeam { return v.Team }
+
+// projectOutputsResponse is returned by projectOutputs on success.
+type ProjectOutputsResponse struct {
+	Team projectOutputsTeam `json:"team"`
+}
+
+// GetTeam returns ProjectOutputsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectOutputsResponse) GetTeam() projectOutputsTeam { return v.Team }
+
 // ProjectSourceDetail includes the GraphQL fields of Source requested by the fragment ProjectSourceDetail.
 type ProjectSourceDetail struct {
 	Git               ProjectSourceDetailGitGitSource                             `json:"git"`
@@ -6582,6 +6958,14 @@ type ProjectStatusCriterion struct {
 
 // GetValue returns ProjectStatusCriterion.Value, and is useful for accessing the field via an interface.
 func (v *ProjectStatusCriterion) GetValue() []string { return v.Value }
+
+// projectStatusOnlyResponse is returned by projectStatusOnly on success.
+type ProjectStatusOnlyResponse struct {
+	Team projectStatusOnlyTeam `json:"team"`
+}
+
+// GetTeam returns ProjectStatusOnlyResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectStatusOnlyResponse) GetTeam() projectStatusOnlyTeam { return v.Team }
 
 // ProjectWithBlueprint includes the GraphQL fields of Project requested by the fragment ProjectWithBlueprint.
 type ProjectWithBlueprint struct {
@@ -6788,6 +7172,14 @@ func (v *ProjectWithStatus) GetId() uuid.UUID { return v.Id }
 // GetStatus returns ProjectWithStatus.Status, and is useful for accessing the field via an interface.
 func (v *ProjectWithStatus) GetStatus() ProjectStatus { return v.Status }
 
+// projectsCountResponse is returned by projectsCount on success.
+type ProjectsCountResponse struct {
+	Team projectsCountTeam `json:"team"`
+}
+
+// GetTeam returns ProjectsCountResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectsCountResponse) GetTeam() projectsCountTeam { return v.Team }
+
 // Filter a ProjectConnection result set.
 type ProjectsInput struct {
 	// Sorting is applied before pagination.
@@ -6804,6 +7196,32 @@ func (v *ProjectsInput) GetPage() PageInput { return v.Page }
 
 // GetFilter returns ProjectsInput.Filter, and is useful for accessing the field via an interface.
 func (v *ProjectsInput) GetFilter() ProjectFilter { return v.Filter }
+
+// projectsWithBlueprintResponse is returned by projectsWithBlueprint on success.
+type ProjectsWithBlueprintResponse struct {
+	Team projectsWithBlueprintTeam `json:"team"`
+}
+
+// GetTeam returns ProjectsWithBlueprintResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectsWithBlueprintResponse) GetTeam() projectsWithBlueprintTeam { return v.Team }
+
+// projectsWithDeploymentTimesResponse is returned by projectsWithDeploymentTimes on success.
+type ProjectsWithDeploymentTimesResponse struct {
+	Team projectsWithDeploymentTimesTeam `json:"team"`
+}
+
+// GetTeam returns ProjectsWithDeploymentTimesResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectsWithDeploymentTimesResponse) GetTeam() projectsWithDeploymentTimesTeam {
+	return v.Team
+}
+
+// projectsWithStatusResponse is returned by projectsWithStatus on success.
+type ProjectsWithStatusResponse struct {
+	Team projectsWithStatusTeam `json:"team"`
+}
+
+// GetTeam returns ProjectsWithStatusResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectsWithStatusResponse) GetTeam() projectsWithStatusTeam { return v.Team }
 
 type ResourceEventType string
 
@@ -7012,6 +7430,14 @@ func (v *ResourceLogsLogsEntriesLogEntry) GetText() string { return v.Text }
 // GetTimestamp returns ResourceLogsLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
 func (v *ResourceLogsLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
 
+// resourceLogsResponse is returned by resourceLogs on success.
+type ResourceLogsResponse struct {
+	Team resourceLogsTeam `json:"team"`
+}
+
+// GetTeam returns ResourceLogsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ResourceLogsResponse) GetTeam() resourceLogsTeam { return v.Team }
+
 // ResourceMetric includes the GraphQL fields of ResourceMetric requested by the fragment ResourceMetric.
 type ResourceMetric struct {
 	Type    MetricType                         `json:"type"`
@@ -7060,6 +7486,22 @@ const (
 	ResourceTypeDaemonset   ResourceType = "DAEMONSET"
 	ResourceTypeService     ResourceType = "SERVICE"
 )
+
+// resourcesWithLogsResponse is returned by resourcesWithLogs on success.
+type ResourcesWithLogsResponse struct {
+	Team resourcesWithLogsTeam `json:"team"`
+}
+
+// GetTeam returns ResourcesWithLogsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ResourcesWithLogsResponse) GetTeam() resourcesWithLogsTeam { return v.Team }
+
+// resourcesWithMetricsResponse is returned by resourcesWithMetrics on success.
+type ResourcesWithMetricsResponse struct {
+	Team resourcesWithMetricsTeam `json:"team"`
+}
+
+// GetTeam returns ResourcesWithMetricsResponse.Team, and is useful for accessing the field via an interface.
+func (v *ResourcesWithMetricsResponse) GetTeam() resourcesWithMetricsTeam { return v.Team }
 
 // RevisionDetailV1 includes the GraphQL fields of RevisableEntity requested by the fragment RevisionDetailV1.
 //
@@ -7543,6 +7985,16 @@ func (v *StringCriterion) GetValue() string { return v.Value }
 // GetOperator returns StringCriterion.Operator, and is useful for accessing the field via an interface.
 func (v *StringCriterion) GetOperator() FilterCriterionOperatorType { return v.Operator }
 
+// submitWorkflowRunResponse is returned by submitWorkflowRun on success.
+type SubmitWorkflowRunResponse struct {
+	SubmitWorkflow submitWorkflowRunSubmitWorkflowWorkflowRun `json:"submitWorkflow"`
+}
+
+// GetSubmitWorkflow returns SubmitWorkflowRunResponse.SubmitWorkflow, and is useful for accessing the field via an interface.
+func (v *SubmitWorkflowRunResponse) GetSubmitWorkflow() submitWorkflowRunSubmitWorkflowWorkflowRun {
+	return v.SubmitWorkflow
+}
+
 type TCPProbeInput struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
@@ -7704,12 +8156,28 @@ const (
 	TriggerEventTypeCronjob            TriggerEventType = "CRONJOB"
 )
 
+// unlinkProjectResponse is returned by unlinkProject on success.
+type UnlinkProjectResponse struct {
+	UnlinkProject bool `json:"unlinkProject"`
+}
+
+// GetUnlinkProject returns UnlinkProjectResponse.UnlinkProject, and is useful for accessing the field via an interface.
+func (v *UnlinkProjectResponse) GetUnlinkProject() bool { return v.UnlinkProject }
+
 type UpdateDeployInput struct {
 	Configuration DeploymentConfigurationInput `json:"configuration"`
 }
 
 // GetConfiguration returns UpdateDeployInput.Configuration, and is useful for accessing the field via an interface.
 func (v *UpdateDeployInput) GetConfiguration() DeploymentConfigurationInput { return v.Configuration }
+
+// updateDeployResponse is returned by updateDeploy on success.
+type UpdateDeployResponse struct {
+	UpdateDeploy updateDeployUpdateDeploy `json:"updateDeploy"`
+}
+
+// GetUpdateDeploy returns UpdateDeployResponse.UpdateDeploy, and is useful for accessing the field via an interface.
+func (v *UpdateDeployResponse) GetUpdateDeploy() updateDeployUpdateDeploy { return v.UpdateDeploy }
 
 type UpdateProjectInput struct {
 	GroupId      uuid.UUID     `json:"groupId"`
@@ -7738,6 +8206,14 @@ func (v *UpdateProjectInput) GetName() string { return v.Name }
 // GetEnvs returns UpdateProjectInput.Envs, and is useful for accessing the field via an interface.
 func (v *UpdateProjectInput) GetEnvs() []EnvVarInput { return v.Envs }
 
+// updateProjectResponse is returned by updateProject on success.
+type UpdateProjectResponse struct {
+	UpdateProject updateProjectUpdateProject `json:"updateProject"`
+}
+
+// GetUpdateProject returns UpdateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
+func (v *UpdateProjectResponse) GetUpdateProject() updateProjectUpdateProject { return v.UpdateProject }
+
 type UpdateTriggerInput struct {
 	TriggerId  uuid.UUID              `json:"triggerId"`
 	Definition TriggerDefinitionInput `json:"definition"`
@@ -7759,6 +8235,34 @@ func (v *UpdateWorkflowInput) GetName() string { return v.Name }
 
 // GetDefinition returns UpdateWorkflowInput.Definition, and is useful for accessing the field via an interface.
 func (v *UpdateWorkflowInput) GetDefinition() WorkflowDefinitionInput { return v.Definition }
+
+// updateWorkflowResponse is returned by updateWorkflow on success.
+type UpdateWorkflowResponse struct {
+	UpdateWorkflow updateWorkflowUpdateWorkflow `json:"updateWorkflow"`
+}
+
+// GetUpdateWorkflow returns UpdateWorkflowResponse.UpdateWorkflow, and is useful for accessing the field via an interface.
+func (v *UpdateWorkflowResponse) GetUpdateWorkflow() updateWorkflowUpdateWorkflow {
+	return v.UpdateWorkflow
+}
+
+// updateWorkflowTriggerResponse is returned by updateWorkflowTrigger on success.
+type UpdateWorkflowTriggerResponse struct {
+	UpdateTrigger updateWorkflowTriggerUpdateTrigger `json:"updateTrigger"`
+}
+
+// GetUpdateTrigger returns UpdateWorkflowTriggerResponse.UpdateTrigger, and is useful for accessing the field via an interface.
+func (v *UpdateWorkflowTriggerResponse) GetUpdateTrigger() updateWorkflowTriggerUpdateTrigger {
+	return v.UpdateTrigger
+}
+
+// userPersonalAccessTokensResponse is returned by userPersonalAccessTokens on success.
+type UserPersonalAccessTokensResponse struct {
+	User userPersonalAccessTokensUser `json:"user"`
+}
+
+// GetUser returns UserPersonalAccessTokensResponse.User, and is useful for accessing the field via an interface.
+func (v *UserPersonalAccessTokensResponse) GetUser() userPersonalAccessTokensUser { return v.User }
 
 type VariableType string
 
@@ -7825,6 +8329,14 @@ func (v *WorkflowDetail) GetSteps() []WorkflowDetailStepsWorkflowStepDefinition 
 
 // GetTriggers returns WorkflowDetail.Triggers, and is useful for accessing the field via an interface.
 func (v *WorkflowDetail) GetTriggers() WorkflowDetailTriggersTriggerConnection { return v.Triggers }
+
+// workflowDetailResponse is returned by workflowDetail on success.
+type WorkflowDetailResponse struct {
+	Team workflowDetailTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowDetailResponse) GetTeam() workflowDetailTeam { return v.Team }
 
 // WorkflowDetailStepsWorkflowStepDefinition includes the requested fields of the GraphQL type WorkflowStepDefinition.
 type WorkflowDetailStepsWorkflowStepDefinition struct {
@@ -8097,6 +8609,22 @@ func (v *WorkflowRunDetail) __premarshalJSON() (*__premarshalWorkflowRunDetail, 
 	retval.CreatedAt = v.WorkflowRunListItem.CreatedAt
 	return &retval, nil
 }
+
+// workflowRunDetailLogsResponse is returned by workflowRunDetailLogs on success.
+type WorkflowRunDetailLogsResponse struct {
+	Team workflowRunDetailLogsTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowRunDetailLogsResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowRunDetailLogsResponse) GetTeam() workflowRunDetailLogsTeam { return v.Team }
+
+// workflowRunDetailResponse is returned by workflowRunDetail on success.
+type WorkflowRunDetailResponse struct {
+	Team workflowRunDetailTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowRunDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowRunDetailResponse) GetTeam() workflowRunDetailTeam { return v.Team }
 
 // WorkflowRunDetailStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunDetailStepsBuildRunStep struct {
@@ -14161,6 +14689,26 @@ func __marshalWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkf
 	}
 }
 
+// workflowRunStepNestedDetailLogsResponse is returned by workflowRunStepNestedDetailLogs on success.
+type WorkflowRunStepNestedDetailLogsResponse struct {
+	Team workflowRunStepNestedDetailLogsTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowRunStepNestedDetailLogsResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepNestedDetailLogsResponse) GetTeam() workflowRunStepNestedDetailLogsTeam {
+	return v.Team
+}
+
+// workflowRunStepNestedDetailResponse is returned by workflowRunStepNestedDetail on success.
+type WorkflowRunStepNestedDetailResponse struct {
+	Team workflowRunStepNestedDetailTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowRunStepNestedDetailResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowRunStepNestedDetailResponse) GetTeam() workflowRunStepNestedDetailTeam {
+	return v.Team
+}
+
 type WorkflowRunStepStatus string
 
 const (
@@ -14171,6 +14719,14 @@ const (
 	WorkflowRunStepStatusError     WorkflowRunStepStatus = "ERROR"
 	WorkflowRunStepStatusAborted   WorkflowRunStepStatus = "ABORTED"
 )
+
+// workflowRunsResponse is returned by workflowRuns on success.
+type WorkflowRunsResponse struct {
+	Team workflowRunsTeam `json:"team"`
+}
+
+// GetTeam returns WorkflowRunsResponse.Team, and is useful for accessing the field via an interface.
+func (v *WorkflowRunsResponse) GetTeam() workflowRunsTeam { return v.Team }
 
 type WorkflowStepActionType string
 
@@ -15012,40 +15568,6 @@ func (v *__workflowRunsInput) GetProjectId() uuid.UUID { return v.ProjectId }
 // GetPage returns __workflowRunsInput.Page, and is useful for accessing the field via an interface.
 func (v *__workflowRunsInput) GetPage() PageInput { return v.Page }
 
-// abortWorkflowRunResponse is returned by abortWorkflowRun on success.
-type abortWorkflowRunResponse struct {
-	AbortWorkflowRun bool `json:"abortWorkflowRun"`
-}
-
-// GetAbortWorkflowRun returns abortWorkflowRunResponse.AbortWorkflowRun, and is useful for accessing the field via an interface.
-func (v *abortWorkflowRunResponse) GetAbortWorkflowRun() bool { return v.AbortWorkflowRun }
-
-// approveWorkflowRunStepResponse is returned by approveWorkflowRunStep on success.
-type approveWorkflowRunStepResponse struct {
-	ApproveWorkflowRunStep bool `json:"approveWorkflowRunStep"`
-}
-
-// GetApproveWorkflowRunStep returns approveWorkflowRunStepResponse.ApproveWorkflowRunStep, and is useful for accessing the field via an interface.
-func (v *approveWorkflowRunStepResponse) GetApproveWorkflowRunStep() bool {
-	return v.ApproveWorkflowRunStep
-}
-
-// blueprintResponse is returned by blueprint on success.
-type blueprintResponse struct {
-	Team blueprintTeam `json:"team"`
-}
-
-// GetTeam returns blueprintResponse.Team, and is useful for accessing the field via an interface.
-func (v *blueprintResponse) GetTeam() blueprintTeam { return v.Team }
-
-// blueprintRevisionsResponse is returned by blueprintRevisions on success.
-type blueprintRevisionsResponse struct {
-	Team blueprintRevisionsTeam `json:"team"`
-}
-
-// GetTeam returns blueprintRevisionsResponse.Team, and is useful for accessing the field via an interface.
-func (v *blueprintRevisionsResponse) GetTeam() blueprintRevisionsTeam { return v.Team }
-
 // blueprintRevisionsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -15312,14 +15834,6 @@ func (v *blueprintTeamBlueprint) __premarshalJSON() (*__premarshalblueprintTeamB
 	return &retval, nil
 }
 
-// buildArtifactsResponse is returned by buildArtifacts on success.
-type buildArtifactsResponse struct {
-	Team buildArtifactsTeam `json:"team"`
-}
-
-// GetTeam returns buildArtifactsResponse.Team, and is useful for accessing the field via an interface.
-func (v *buildArtifactsResponse) GetTeam() buildArtifactsTeam { return v.Team }
-
 // buildArtifactsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -15429,14 +15943,6 @@ type buildArtifactsTeamProjectBuildRunsBuildRunConnectionPageInfo struct {
 func (v *buildArtifactsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNextPage() bool {
 	return v.HasNextPage
 }
-
-// buildRunDetailResponse is returned by buildRunDetail on success.
-type buildRunDetailResponse struct {
-	Team buildRunDetailTeam `json:"team"`
-}
-
-// GetTeam returns buildRunDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *buildRunDetailResponse) GetTeam() buildRunDetailTeam { return v.Team }
 
 // buildRunDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -15563,14 +16069,6 @@ func (v *buildRunDetailTeamProjectBuildRun) __premarshalJSON() (*__premarshalbui
 	retval.Artifacts = v.BuildRunDetail.Artifacts
 	return &retval, nil
 }
-
-// buildRunsResponse is returned by buildRuns on success.
-type buildRunsResponse struct {
-	Team buildRunsTeam `json:"team"`
-}
-
-// GetTeam returns buildRunsResponse.Team, and is useful for accessing the field via an interface.
-func (v *buildRunsResponse) GetTeam() buildRunsTeam { return v.Team }
 
 // buildRunsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -15717,14 +16215,6 @@ type buildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo struct {
 func (v *buildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNextPage() bool {
 	return v.HasNextPage
 }
-
-// cloudRevisionsResponse is returned by cloudRevisions on success.
-type cloudRevisionsResponse struct {
-	Team cloudRevisionsTeam `json:"team"`
-}
-
-// GetTeam returns cloudRevisionsResponse.Team, and is useful for accessing the field via an interface.
-func (v *cloudRevisionsResponse) GetTeam() cloudRevisionsTeam { return v.Team }
 
 // cloudRevisionsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -16585,14 +17075,6 @@ func (v *cloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAc
 	return &retval, nil
 }
 
-// clusterDetailsResponse is returned by clusterDetails on success.
-type clusterDetailsResponse struct {
-	Team clusterDetailsTeam `json:"team"`
-}
-
-// GetTeam returns clusterDetailsResponse.Team, and is useful for accessing the field via an interface.
-func (v *clusterDetailsResponse) GetTeam() clusterDetailsTeam { return v.Team }
-
 // clusterDetailsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -16704,14 +17186,6 @@ func (v *clusterDetailsTeamCluster) __premarshalJSON() (*__premarshalclusterDeta
 	return &retval, nil
 }
 
-// clusterRevisionsResponse is returned by clusterRevisions on success.
-type clusterRevisionsResponse struct {
-	Team clusterRevisionsTeam `json:"team"`
-}
-
-// GetTeam returns clusterRevisionsResponse.Team, and is useful for accessing the field via an interface.
-func (v *clusterRevisionsResponse) GetTeam() clusterRevisionsTeam { return v.Team }
-
 // clusterRevisionsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -16818,14 +17292,6 @@ func (v *clusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationCo
 	return &retval, nil
 }
 
-// clusterStatusResponse is returned by clusterStatus on success.
-type clusterStatusResponse struct {
-	Team clusterStatusTeam `json:"team"`
-}
-
-// GetTeam returns clusterStatusResponse.Team, and is useful for accessing the field via an interface.
-func (v *clusterStatusResponse) GetTeam() clusterStatusTeam { return v.Team }
-
 // clusterStatusTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -16866,16 +17332,6 @@ type createBuildRunCreateBuildRun struct {
 // GetId returns createBuildRunCreateBuildRun.Id, and is useful for accessing the field via an interface.
 func (v *createBuildRunCreateBuildRun) GetId() uuid.UUID { return v.Id }
 
-// createBuildRunResponse is returned by createBuildRun on success.
-type createBuildRunResponse struct {
-	CreateBuildRun createBuildRunCreateBuildRun `json:"createBuildRun"`
-}
-
-// GetCreateBuildRun returns createBuildRunResponse.CreateBuildRun, and is useful for accessing the field via an interface.
-func (v *createBuildRunResponse) GetCreateBuildRun() createBuildRunCreateBuildRun {
-	return v.CreateBuildRun
-}
-
 // createDeployRunCreateDeployRun includes the requested fields of the GraphQL type DeployRun.
 type createDeployRunCreateDeployRun struct {
 	Id uuid.UUID `json:"id"`
@@ -16883,16 +17339,6 @@ type createDeployRunCreateDeployRun struct {
 
 // GetId returns createDeployRunCreateDeployRun.Id, and is useful for accessing the field via an interface.
 func (v *createDeployRunCreateDeployRun) GetId() uuid.UUID { return v.Id }
-
-// createDeployRunResponse is returned by createDeployRun on success.
-type createDeployRunResponse struct {
-	CreateDeployRun createDeployRunCreateDeployRun `json:"createDeployRun"`
-}
-
-// GetCreateDeployRun returns createDeployRunResponse.CreateDeployRun, and is useful for accessing the field via an interface.
-func (v *createDeployRunResponse) GetCreateDeployRun() createDeployRunCreateDeployRun {
-	return v.CreateDeployRun
-}
 
 // createProjectCreateProject includes the requested fields of the GraphQL type Project.
 type createProjectCreateProject struct {
@@ -16919,14 +17365,6 @@ type createProjectCreateProjectWorkflow struct {
 
 // GetId returns createProjectCreateProjectWorkflow.Id, and is useful for accessing the field via an interface.
 func (v *createProjectCreateProjectWorkflow) GetId() uuid.UUID { return v.Id }
-
-// createProjectResponse is returned by createProject on success.
-type createProjectResponse struct {
-	CreateProject createProjectCreateProject `json:"createProject"`
-}
-
-// GetCreateProject returns createProjectResponse.CreateProject, and is useful for accessing the field via an interface.
-func (v *createProjectResponse) GetCreateProject() createProjectCreateProject { return v.CreateProject }
 
 // createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken includes the requested fields of the GraphQL type PersonalAccessToken.
 type createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken struct {
@@ -16956,16 +17394,6 @@ func (v *createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAc
 	return v.CreatedAt
 }
 
-// createUserPersonalAccessTokenResponse is returned by createUserPersonalAccessToken on success.
-type createUserPersonalAccessTokenResponse struct {
-	CreatePersonalAccessTokenForUser createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken `json:"createPersonalAccessTokenForUser"`
-}
-
-// GetCreatePersonalAccessTokenForUser returns createUserPersonalAccessTokenResponse.CreatePersonalAccessTokenForUser, and is useful for accessing the field via an interface.
-func (v *createUserPersonalAccessTokenResponse) GetCreatePersonalAccessTokenForUser() createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken {
-	return v.CreatePersonalAccessTokenForUser
-}
-
 // createWorkflowTriggerCreateTrigger includes the requested fields of the GraphQL type Trigger.
 type createWorkflowTriggerCreateTrigger struct {
 	Id uuid.UUID `json:"id"`
@@ -16973,16 +17401,6 @@ type createWorkflowTriggerCreateTrigger struct {
 
 // GetId returns createWorkflowTriggerCreateTrigger.Id, and is useful for accessing the field via an interface.
 func (v *createWorkflowTriggerCreateTrigger) GetId() uuid.UUID { return v.Id }
-
-// createWorkflowTriggerResponse is returned by createWorkflowTrigger on success.
-type createWorkflowTriggerResponse struct {
-	CreateTrigger createWorkflowTriggerCreateTrigger `json:"createTrigger"`
-}
-
-// GetCreateTrigger returns createWorkflowTriggerResponse.CreateTrigger, and is useful for accessing the field via an interface.
-func (v *createWorkflowTriggerResponse) GetCreateTrigger() createWorkflowTriggerCreateTrigger {
-	return v.CreateTrigger
-}
 
 // currentUserCurrentUser includes the requested fields of the GraphQL type User.
 type currentUserCurrentUser struct {
@@ -16999,76 +17417,6 @@ func (v *currentUserCurrentUser) GetName() string { return v.Name }
 
 // GetLogin returns currentUserCurrentUser.Login, and is useful for accessing the field via an interface.
 func (v *currentUserCurrentUser) GetLogin() string { return v.Login }
-
-// currentUserResponse is returned by currentUser on success.
-type currentUserResponse struct {
-	CurrentUser currentUserCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns currentUserResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *currentUserResponse) GetCurrentUser() currentUserCurrentUser { return v.CurrentUser }
-
-// deleteGroupResponse is returned by deleteGroup on success.
-type deleteGroupResponse struct {
-	DeleteGroup bool `json:"deleteGroup"`
-}
-
-// GetDeleteGroup returns deleteGroupResponse.DeleteGroup, and is useful for accessing the field via an interface.
-func (v *deleteGroupResponse) GetDeleteGroup() bool { return v.DeleteGroup }
-
-// deleteProjectAndResourcesResponse is returned by deleteProjectAndResources on success.
-type deleteProjectAndResourcesResponse struct {
-	DeleteProjectAndResources uuid.UUID `json:"deleteProjectAndResources"`
-}
-
-// GetDeleteProjectAndResources returns deleteProjectAndResourcesResponse.DeleteProjectAndResources, and is useful for accessing the field via an interface.
-func (v *deleteProjectAndResourcesResponse) GetDeleteProjectAndResources() uuid.UUID {
-	return v.DeleteProjectAndResources
-}
-
-// deleteProjectResourcesResponse is returned by deleteProjectResources on success.
-type deleteProjectResourcesResponse struct {
-	DeleteProjectResources uuid.UUID `json:"deleteProjectResources"`
-}
-
-// GetDeleteProjectResources returns deleteProjectResourcesResponse.DeleteProjectResources, and is useful for accessing the field via an interface.
-func (v *deleteProjectResourcesResponse) GetDeleteProjectResources() uuid.UUID {
-	return v.DeleteProjectResources
-}
-
-// deleteProjectResponse is returned by deleteProject on success.
-type deleteProjectResponse struct {
-	DeleteProject bool `json:"deleteProject"`
-}
-
-// GetDeleteProject returns deleteProjectResponse.DeleteProject, and is useful for accessing the field via an interface.
-func (v *deleteProjectResponse) GetDeleteProject() bool { return v.DeleteProject }
-
-// deleteSubGroupResponse is returned by deleteSubGroup on success.
-type deleteSubGroupResponse struct {
-	DeleteSubGroup bool `json:"deleteSubGroup"`
-}
-
-// GetDeleteSubGroup returns deleteSubGroupResponse.DeleteSubGroup, and is useful for accessing the field via an interface.
-func (v *deleteSubGroupResponse) GetDeleteSubGroup() bool { return v.DeleteSubGroup }
-
-// deleteUserPersonalAccessTokenResponse is returned by deleteUserPersonalAccessToken on success.
-type deleteUserPersonalAccessTokenResponse struct {
-	DeletePersonalAccessToken bool `json:"deletePersonalAccessToken"`
-}
-
-// GetDeletePersonalAccessToken returns deleteUserPersonalAccessTokenResponse.DeletePersonalAccessToken, and is useful for accessing the field via an interface.
-func (v *deleteUserPersonalAccessTokenResponse) GetDeletePersonalAccessToken() bool {
-	return v.DeletePersonalAccessToken
-}
-
-// deleteWorkflowTriggerResponse is returned by deleteWorkflowTrigger on success.
-type deleteWorkflowTriggerResponse struct {
-	DeleteTrigger bool `json:"deleteTrigger"`
-}
-
-// GetDeleteTrigger returns deleteWorkflowTriggerResponse.DeleteTrigger, and is useful for accessing the field via an interface.
-func (v *deleteWorkflowTriggerResponse) GetDeleteTrigger() bool { return v.DeleteTrigger }
 
 // duplicateProjectDuplicateProject includes the requested fields of the GraphQL type Project.
 type duplicateProjectDuplicateProject struct {
@@ -17118,16 +17466,6 @@ func (v *duplicateProjectDuplicateProjectSubGroup) GetId() uuid.UUID { return v.
 // GetName returns duplicateProjectDuplicateProjectSubGroup.Name, and is useful for accessing the field via an interface.
 func (v *duplicateProjectDuplicateProjectSubGroup) GetName() string { return v.Name }
 
-// duplicateProjectResponse is returned by duplicateProject on success.
-type duplicateProjectResponse struct {
-	DuplicateProject duplicateProjectDuplicateProject `json:"duplicateProject"`
-}
-
-// GetDuplicateProject returns duplicateProjectResponse.DuplicateProject, and is useful for accessing the field via an interface.
-func (v *duplicateProjectResponse) GetDuplicateProject() duplicateProjectDuplicateProject {
-	return v.DuplicateProject
-}
-
 // ejectClusterComponentEjectClusterComponent includes the requested fields of the GraphQL type ClusterComponent.
 type ejectClusterComponentEjectClusterComponent struct {
 	Name   string                        `json:"name"`
@@ -17141,34 +17479,6 @@ func (v *ejectClusterComponentEjectClusterComponent) GetName() string { return v
 func (v *ejectClusterComponentEjectClusterComponent) GetStatus() ClusterComponentEjectedStatus {
 	return v.Status
 }
-
-// ejectClusterComponentResponse is returned by ejectClusterComponent on success.
-type ejectClusterComponentResponse struct {
-	EjectClusterComponent ejectClusterComponentEjectClusterComponent `json:"ejectClusterComponent"`
-}
-
-// GetEjectClusterComponent returns ejectClusterComponentResponse.EjectClusterComponent, and is useful for accessing the field via an interface.
-func (v *ejectClusterComponentResponse) GetEjectClusterComponent() ejectClusterComponentEjectClusterComponent {
-	return v.EjectClusterComponent
-}
-
-// generateDownloadableLogLinkForWorkflowRunStepResponse is returned by generateDownloadableLogLinkForWorkflowRunStep on success.
-type generateDownloadableLogLinkForWorkflowRunStepResponse struct {
-	GenerateDownloadableLogLinkForWorkflowRunStep string `json:"generateDownloadableLogLinkForWorkflowRunStep"`
-}
-
-// GetGenerateDownloadableLogLinkForWorkflowRunStep returns generateDownloadableLogLinkForWorkflowRunStepResponse.GenerateDownloadableLogLinkForWorkflowRunStep, and is useful for accessing the field via an interface.
-func (v *generateDownloadableLogLinkForWorkflowRunStepResponse) GetGenerateDownloadableLogLinkForWorkflowRunStep() string {
-	return v.GenerateDownloadableLogLinkForWorkflowRunStep
-}
-
-// groupsWithSubgroupsResponse is returned by groupsWithSubgroups on success.
-type groupsWithSubgroupsResponse struct {
-	Team groupsWithSubgroupsTeam `json:"team"`
-}
-
-// GetTeam returns groupsWithSubgroupsResponse.Team, and is useful for accessing the field via an interface.
-func (v *groupsWithSubgroupsResponse) GetTeam() groupsWithSubgroupsTeam { return v.Team }
 
 // groupsWithSubgroupsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -17235,14 +17545,6 @@ func (v *groupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup
 func (v *groupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup) GetName() string {
 	return v.Name
 }
-
-// jobListResponse is returned by jobList on success.
-type jobListResponse struct {
-	Team jobListTeam `json:"team"`
-}
-
-// GetTeam returns jobListResponse.Team, and is useful for accessing the field via an interface.
-func (v *jobListResponse) GetTeam() jobListTeam { return v.Team }
 
 // jobListTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -17339,14 +17641,6 @@ func (v *jobListTeamProjectJobsJob) __premarshalJSON() (*__premarshaljobListTeam
 	retval.Runs = v.JobListItem.Runs
 	return &retval, nil
 }
-
-// jobRunDetailResponse is returned by jobRunDetail on success.
-type jobRunDetailResponse struct {
-	Team jobRunDetailTeam `json:"team"`
-}
-
-// GetTeam returns jobRunDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *jobRunDetailResponse) GetTeam() jobRunDetailTeam { return v.Team }
 
 // jobRunDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -17472,14 +17766,6 @@ func (v *jobRunDetailTeamJobRun) __premarshalJSON() (*__premarshaljobRunDetailTe
 	return &retval, nil
 }
 
-// jobRunListResponse is returned by jobRunList on success.
-type jobRunListResponse struct {
-	Team jobRunListTeam `json:"team"`
-}
-
-// GetTeam returns jobRunListResponse.Team, and is useful for accessing the field via an interface.
-func (v *jobRunListResponse) GetTeam() jobRunListTeam { return v.Team }
-
 // jobRunListTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -17566,14 +17852,6 @@ func (v *jobRunListTeamJob) __premarshalJSON() (*__premarshaljobRunListTeamJob, 
 	return &retval, nil
 }
 
-// jobRunLogsResponse is returned by jobRunLogs on success.
-type jobRunLogsResponse struct {
-	Team jobRunLogsTeam `json:"team"`
-}
-
-// GetTeam returns jobRunLogsResponse.Team, and is useful for accessing the field via an interface.
-func (v *jobRunLogsResponse) GetTeam() jobRunLogsTeam { return v.Team }
-
 // jobRunLogsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -17659,24 +17937,6 @@ type linkProjectLinkProjectProjectLink struct {
 
 // GetId returns linkProjectLinkProjectProjectLink.Id, and is useful for accessing the field via an interface.
 func (v *linkProjectLinkProjectProjectLink) GetId() uuid.UUID { return v.Id }
-
-// linkProjectResponse is returned by linkProject on success.
-type linkProjectResponse struct {
-	LinkProject linkProjectLinkProjectProjectLink `json:"linkProject"`
-}
-
-// GetLinkProject returns linkProjectResponse.LinkProject, and is useful for accessing the field via an interface.
-func (v *linkProjectResponse) GetLinkProject() linkProjectLinkProjectProjectLink {
-	return v.LinkProject
-}
-
-// observabilityConfigResponse is returned by observabilityConfig on success.
-type observabilityConfigResponse struct {
-	Team observabilityConfigTeam `json:"team"`
-}
-
-// GetTeam returns observabilityConfigResponse.Team, and is useful for accessing the field via an interface.
-func (v *observabilityConfigResponse) GetTeam() observabilityConfigTeam { return v.Team }
 
 // observabilityConfigTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -17765,14 +18025,6 @@ func (v *observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityR
 func (v *observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelectorLabelsObservabilityResourceSelectorLabel) GetValue() string {
 	return v.Value
 }
-
-// projectAvailableProvidersResponse is returned by projectAvailableProviders on success.
-type projectAvailableProvidersResponse struct {
-	Team projectAvailableProvidersTeam `json:"team"`
-}
-
-// GetTeam returns projectAvailableProvidersResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectAvailableProvidersResponse) GetTeam() projectAvailableProvidersTeam { return v.Team }
 
 // projectAvailableProvidersTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -17872,14 +18124,6 @@ func (v *projectAvailableProvidersTeamProjectAvailableProvidersProject) __premar
 	return &retval, nil
 }
 
-// projectClustersResponse is returned by projectClusters on success.
-type projectClustersResponse struct {
-	Team projectClustersTeam `json:"team"`
-}
-
-// GetTeam returns projectClustersResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectClustersResponse) GetTeam() projectClustersTeam { return v.Team }
-
 // projectClustersTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -17959,14 +18203,6 @@ func (v *projectClustersTeamProject) __premarshalJSON() (*__premarshalprojectClu
 	retval.Clusters = v.ProjectWithClusters.Clusters
 	return &retval, nil
 }
-
-// projectDeployDetailResponse is returned by projectDeployDetail on success.
-type projectDeployDetailResponse struct {
-	Team projectDeployDetailTeam `json:"team"`
-}
-
-// GetTeam returns projectDeployDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectDeployDetailResponse) GetTeam() projectDeployDetailTeam { return v.Team }
 
 // projectDeployDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -18053,14 +18289,6 @@ func (v *projectDeployDetailTeamDeploy) __premarshalJSON() (*__premarshalproject
 	retval.Runs = v.ProjectDeployDetail.Runs
 	return &retval, nil
 }
-
-// projectDeployRevisionsResponse is returned by projectDeployRevisions on success.
-type projectDeployRevisionsResponse struct {
-	Team projectDeployRevisionsTeam `json:"team"`
-}
-
-// GetTeam returns projectDeployRevisionsResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectDeployRevisionsResponse) GetTeam() projectDeployRevisionsTeam { return v.Team }
 
 // projectDeployRevisionsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -18223,14 +18451,6 @@ func (v *projectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConf
 	return v.HasNextPage
 }
 
-// projectDeployRunDetailResponse is returned by projectDeployRunDetail on success.
-type projectDeployRunDetailResponse struct {
-	Team projectDeployRunDetailTeam `json:"team"`
-}
-
-// GetTeam returns projectDeployRunDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectDeployRunDetailResponse) GetTeam() projectDeployRunDetailTeam { return v.Team }
-
 // projectDeployRunDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -18320,14 +18540,6 @@ func (v *projectDeployRunDetailTeamDeployRun) __premarshalJSON() (*__premarshalp
 	retval.Result = v.ProjectDeployRunDetail.Result
 	return &retval, nil
 }
-
-// projectDeploysResponse is returned by projectDeploys on success.
-type projectDeploysResponse struct {
-	Team projectDeploysTeam `json:"team"`
-}
-
-// GetTeam returns projectDeploysResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectDeploysResponse) GetTeam() projectDeploysTeam { return v.Team }
 
 // projectDeploysTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -18442,14 +18654,6 @@ func (v *projectDeploysTeamProjectDeploysDeployConnectionNodesDeploy) __premarsh
 	retval.Runs = v.ProjectDeployList.Runs
 	return &retval, nil
 }
-
-// projectDetailResponse is returned by projectDetail on success.
-type projectDetailResponse struct {
-	Team projectDetailTeam `json:"team"`
-}
-
-// GetTeam returns projectDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectDetailResponse) GetTeam() projectDetailTeam { return v.Team }
 
 // projectDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -18605,14 +18809,6 @@ func (v *projectDetailTeamProject) __premarshalJSON() (*__premarshalprojectDetai
 	return &retval, nil
 }
 
-// projectInfoResponse is returned by projectInfo on success.
-type projectInfoResponse struct {
-	Team projectInfoTeam `json:"team"`
-}
-
-// GetTeam returns projectInfoResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectInfoResponse) GetTeam() projectInfoTeam { return v.Team }
-
 // projectInfoTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -18740,14 +18936,6 @@ func (v *projectInfoTeamProject) __premarshalJSON() (*__premarshalprojectInfoTea
 	retval.Blueprint = v.ProjectInfo.Blueprint
 	return &retval, nil
 }
-
-// projectLinkedProjectsResponse is returned by projectLinkedProjects on success.
-type projectLinkedProjectsResponse struct {
-	Team projectLinkedProjectsTeam `json:"team"`
-}
-
-// GetTeam returns projectLinkedProjectsResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectLinkedProjectsResponse) GetTeam() projectLinkedProjectsTeam { return v.Team }
 
 // projectLinkedProjectsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -18887,14 +19075,6 @@ func (v *projectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNode
 	return &retval, nil
 }
 
-// projectOutputsResponse is returned by projectOutputs on success.
-type projectOutputsResponse struct {
-	Team projectOutputsTeam `json:"team"`
-}
-
-// GetTeam returns projectOutputsResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectOutputsResponse) GetTeam() projectOutputsTeam { return v.Team }
-
 // projectOutputsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -18989,14 +19169,6 @@ type projectOutputsTeamProjectWorkflow struct {
 // GetId returns projectOutputsTeamProjectWorkflow.Id, and is useful for accessing the field via an interface.
 func (v *projectOutputsTeamProjectWorkflow) GetId() uuid.UUID { return v.Id }
 
-// projectStatusOnlyResponse is returned by projectStatusOnly on success.
-type projectStatusOnlyResponse struct {
-	Team projectStatusOnlyTeam `json:"team"`
-}
-
-// GetTeam returns projectStatusOnlyResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectStatusOnlyResponse) GetTeam() projectStatusOnlyTeam { return v.Team }
-
 // projectStatusOnlyTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -19029,14 +19201,6 @@ func (v *projectStatusOnlyTeamProject) GetId() uuid.UUID { return v.Id }
 // GetStatus returns projectStatusOnlyTeamProject.Status, and is useful for accessing the field via an interface.
 func (v *projectStatusOnlyTeamProject) GetStatus() ProjectStatus { return v.Status }
 
-// projectsCountResponse is returned by projectsCount on success.
-type projectsCountResponse struct {
-	Team projectsCountTeam `json:"team"`
-}
-
-// GetTeam returns projectsCountResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectsCountResponse) GetTeam() projectsCountTeam { return v.Team }
-
 // projectsCountTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -19066,14 +19230,6 @@ type projectsCountTeamProjectsProjectConnection struct {
 
 // GetTotalCount returns projectsCountTeamProjectsProjectConnection.TotalCount, and is useful for accessing the field via an interface.
 func (v *projectsCountTeamProjectsProjectConnection) GetTotalCount() int { return v.TotalCount }
-
-// projectsWithBlueprintResponse is returned by projectsWithBlueprint on success.
-type projectsWithBlueprintResponse struct {
-	Team projectsWithBlueprintTeam `json:"team"`
-}
-
-// GetTeam returns projectsWithBlueprintResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectsWithBlueprintResponse) GetTeam() projectsWithBlueprintTeam { return v.Team }
 
 // projectsWithBlueprintTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -19167,16 +19323,6 @@ func (v *projectsWithBlueprintTeamProjectsProjectConnectionNodesProject) __prema
 	retval.Id = v.ProjectWithBlueprint.Id
 	retval.Blueprint = v.ProjectWithBlueprint.Blueprint
 	return &retval, nil
-}
-
-// projectsWithDeploymentTimesResponse is returned by projectsWithDeploymentTimes on success.
-type projectsWithDeploymentTimesResponse struct {
-	Team projectsWithDeploymentTimesTeam `json:"team"`
-}
-
-// GetTeam returns projectsWithDeploymentTimesResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectsWithDeploymentTimesResponse) GetTeam() projectsWithDeploymentTimesTeam {
-	return v.Team
 }
 
 // projectsWithDeploymentTimesTeam includes the requested fields of the GraphQL type Team.
@@ -19281,14 +19427,6 @@ func (v *projectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject) _
 	return &retval, nil
 }
 
-// projectsWithStatusResponse is returned by projectsWithStatus on success.
-type projectsWithStatusResponse struct {
-	Team projectsWithStatusTeam `json:"team"`
-}
-
-// GetTeam returns projectsWithStatusResponse.Team, and is useful for accessing the field via an interface.
-func (v *projectsWithStatusResponse) GetTeam() projectsWithStatusTeam { return v.Team }
-
 // projectsWithStatusTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -19382,14 +19520,6 @@ func (v *projectsWithStatusTeamProjectsProjectConnectionNodesProject) __premarsh
 	retval.Status = v.ProjectWithStatus.Status
 	return &retval, nil
 }
-
-// resourceLogsResponse is returned by resourceLogs on success.
-type resourceLogsResponse struct {
-	Team resourceLogsTeam `json:"team"`
-}
-
-// GetTeam returns resourceLogsResponse.Team, and is useful for accessing the field via an interface.
-func (v *resourceLogsResponse) GetTeam() resourceLogsTeam { return v.Team }
 
 // resourceLogsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -19864,14 +19994,6 @@ func (v *resourceLogsTeamResourceEndpointResource) __premarshalJSON() (*__premar
 	return &retval, nil
 }
 
-// resourcesWithLogsResponse is returned by resourcesWithLogs on success.
-type resourcesWithLogsResponse struct {
-	Team resourcesWithLogsTeam `json:"team"`
-}
-
-// GetTeam returns resourcesWithLogsResponse.Team, and is useful for accessing the field via an interface.
-func (v *resourcesWithLogsResponse) GetTeam() resourcesWithLogsTeam { return v.Team }
-
 // resourcesWithLogsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -20244,14 +20366,6 @@ func (v *resourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourc
 	retval.Events = v.CloudResource.Events
 	return &retval, nil
 }
-
-// resourcesWithMetricsResponse is returned by resourcesWithMetrics on success.
-type resourcesWithMetricsResponse struct {
-	Team resourcesWithMetricsTeam `json:"team"`
-}
-
-// GetTeam returns resourcesWithMetricsResponse.Team, and is useful for accessing the field via an interface.
-func (v *resourcesWithMetricsResponse) GetTeam() resourcesWithMetricsTeam { return v.Team }
 
 // resourcesWithMetricsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -20658,16 +20772,6 @@ func (v *resourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudReso
 	return &retval, nil
 }
 
-// submitWorkflowRunResponse is returned by submitWorkflowRun on success.
-type submitWorkflowRunResponse struct {
-	SubmitWorkflow submitWorkflowRunSubmitWorkflowWorkflowRun `json:"submitWorkflow"`
-}
-
-// GetSubmitWorkflow returns submitWorkflowRunResponse.SubmitWorkflow, and is useful for accessing the field via an interface.
-func (v *submitWorkflowRunResponse) GetSubmitWorkflow() submitWorkflowRunSubmitWorkflowWorkflowRun {
-	return v.SubmitWorkflow
-}
-
 // submitWorkflowRunSubmitWorkflowWorkflowRun includes the requested fields of the GraphQL type WorkflowRun.
 type submitWorkflowRunSubmitWorkflowWorkflowRun struct {
 	Id uuid.UUID `json:"id"`
@@ -20676,22 +20780,6 @@ type submitWorkflowRunSubmitWorkflowWorkflowRun struct {
 // GetId returns submitWorkflowRunSubmitWorkflowWorkflowRun.Id, and is useful for accessing the field via an interface.
 func (v *submitWorkflowRunSubmitWorkflowWorkflowRun) GetId() uuid.UUID { return v.Id }
 
-// unlinkProjectResponse is returned by unlinkProject on success.
-type unlinkProjectResponse struct {
-	UnlinkProject bool `json:"unlinkProject"`
-}
-
-// GetUnlinkProject returns unlinkProjectResponse.UnlinkProject, and is useful for accessing the field via an interface.
-func (v *unlinkProjectResponse) GetUnlinkProject() bool { return v.UnlinkProject }
-
-// updateDeployResponse is returned by updateDeploy on success.
-type updateDeployResponse struct {
-	UpdateDeploy updateDeployUpdateDeploy `json:"updateDeploy"`
-}
-
-// GetUpdateDeploy returns updateDeployResponse.UpdateDeploy, and is useful for accessing the field via an interface.
-func (v *updateDeployResponse) GetUpdateDeploy() updateDeployUpdateDeploy { return v.UpdateDeploy }
-
 // updateDeployUpdateDeploy includes the requested fields of the GraphQL type Deploy.
 type updateDeployUpdateDeploy struct {
 	Id uuid.UUID `json:"id"`
@@ -20699,14 +20787,6 @@ type updateDeployUpdateDeploy struct {
 
 // GetId returns updateDeployUpdateDeploy.Id, and is useful for accessing the field via an interface.
 func (v *updateDeployUpdateDeploy) GetId() uuid.UUID { return v.Id }
-
-// updateProjectResponse is returned by updateProject on success.
-type updateProjectResponse struct {
-	UpdateProject updateProjectUpdateProject `json:"updateProject"`
-}
-
-// GetUpdateProject returns updateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
-func (v *updateProjectResponse) GetUpdateProject() updateProjectUpdateProject { return v.UpdateProject }
 
 // updateProjectUpdateProject includes the requested fields of the GraphQL type Project.
 type updateProjectUpdateProject struct {
@@ -20719,26 +20799,6 @@ func (v *updateProjectUpdateProject) GetId() uuid.UUID { return v.Id }
 
 // GetName returns updateProjectUpdateProject.Name, and is useful for accessing the field via an interface.
 func (v *updateProjectUpdateProject) GetName() string { return v.Name }
-
-// updateWorkflowResponse is returned by updateWorkflow on success.
-type updateWorkflowResponse struct {
-	UpdateWorkflow updateWorkflowUpdateWorkflow `json:"updateWorkflow"`
-}
-
-// GetUpdateWorkflow returns updateWorkflowResponse.UpdateWorkflow, and is useful for accessing the field via an interface.
-func (v *updateWorkflowResponse) GetUpdateWorkflow() updateWorkflowUpdateWorkflow {
-	return v.UpdateWorkflow
-}
-
-// updateWorkflowTriggerResponse is returned by updateWorkflowTrigger on success.
-type updateWorkflowTriggerResponse struct {
-	UpdateTrigger updateWorkflowTriggerUpdateTrigger `json:"updateTrigger"`
-}
-
-// GetUpdateTrigger returns updateWorkflowTriggerResponse.UpdateTrigger, and is useful for accessing the field via an interface.
-func (v *updateWorkflowTriggerResponse) GetUpdateTrigger() updateWorkflowTriggerUpdateTrigger {
-	return v.UpdateTrigger
-}
 
 // updateWorkflowTriggerUpdateTrigger includes the requested fields of the GraphQL type Trigger.
 type updateWorkflowTriggerUpdateTrigger struct {
@@ -20755,14 +20815,6 @@ type updateWorkflowUpdateWorkflow struct {
 
 // GetId returns updateWorkflowUpdateWorkflow.Id, and is useful for accessing the field via an interface.
 func (v *updateWorkflowUpdateWorkflow) GetId() uuid.UUID { return v.Id }
-
-// userPersonalAccessTokensResponse is returned by userPersonalAccessTokens on success.
-type userPersonalAccessTokensResponse struct {
-	User userPersonalAccessTokensUser `json:"user"`
-}
-
-// GetUser returns userPersonalAccessTokensResponse.User, and is useful for accessing the field via an interface.
-func (v *userPersonalAccessTokensResponse) GetUser() userPersonalAccessTokensUser { return v.User }
 
 // userPersonalAccessTokensUser includes the requested fields of the GraphQL type User.
 type userPersonalAccessTokensUser struct {
@@ -20805,14 +20857,6 @@ func (v *userPersonalAccessTokensUserPersonalAccessTokensPersonalAccessToken) Ge
 func (v *userPersonalAccessTokensUserPersonalAccessTokensPersonalAccessToken) GetCreatedAt() time.Time {
 	return v.CreatedAt
 }
-
-// workflowDetailResponse is returned by workflowDetail on success.
-type workflowDetailResponse struct {
-	Team workflowDetailTeam `json:"team"`
-}
-
-// GetTeam returns workflowDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowDetailResponse) GetTeam() workflowDetailTeam { return v.Team }
 
 // workflowDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -20907,14 +20951,6 @@ func (v *workflowDetailTeamProjectWorkflow) __premarshalJSON() (*__premarshalwor
 	retval.Triggers = v.WorkflowDetail.Triggers
 	return &retval, nil
 }
-
-// workflowRunDetailLogsResponse is returned by workflowRunDetailLogs on success.
-type workflowRunDetailLogsResponse struct {
-	Team workflowRunDetailLogsTeam `json:"team"`
-}
-
-// GetTeam returns workflowRunDetailLogsResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowRunDetailLogsResponse) GetTeam() workflowRunDetailLogsTeam { return v.Team }
 
 // workflowRunDetailLogsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -21309,14 +21345,6 @@ func (v *workflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLog
 	return v.Text
 }
 
-// workflowRunDetailResponse is returned by workflowRunDetail on success.
-type workflowRunDetailResponse struct {
-	Team workflowRunDetailTeam `json:"team"`
-}
-
-// GetTeam returns workflowRunDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowRunDetailResponse) GetTeam() workflowRunDetailTeam { return v.Team }
-
 // workflowRunDetailTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -21474,16 +21502,6 @@ func (v *workflowRunDetailTeamProjectWorkflowRun) __premarshalJSON() (*__premars
 	retval.Status = v.WorkflowRunDetail.WorkflowRunListItem.Status
 	retval.CreatedAt = v.WorkflowRunDetail.WorkflowRunListItem.CreatedAt
 	return &retval, nil
-}
-
-// workflowRunStepNestedDetailLogsResponse is returned by workflowRunStepNestedDetailLogs on success.
-type workflowRunStepNestedDetailLogsResponse struct {
-	Team workflowRunStepNestedDetailLogsTeam `json:"team"`
-}
-
-// GetTeam returns workflowRunStepNestedDetailLogsResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowRunStepNestedDetailLogsResponse) GetTeam() workflowRunStepNestedDetailLogsTeam {
-	return v.Team
 }
 
 // workflowRunStepNestedDetailLogsTeam includes the requested fields of the GraphQL type Team.
@@ -22535,16 +22553,6 @@ func (v *workflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep) Ge
 // GetId returns workflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep.Id, and is useful for accessing the field via an interface.
 func (v *workflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep) GetId() uuid.UUID {
 	return v.Id
-}
-
-// workflowRunStepNestedDetailResponse is returned by workflowRunStepNestedDetail on success.
-type workflowRunStepNestedDetailResponse struct {
-	Team workflowRunStepNestedDetailTeam `json:"team"`
-}
-
-// GetTeam returns workflowRunStepNestedDetailResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowRunStepNestedDetailResponse) GetTeam() workflowRunStepNestedDetailTeam {
-	return v.Team
 }
 
 // workflowRunStepNestedDetailTeam includes the requested fields of the GraphQL type Team.
@@ -25600,14 +25608,6 @@ func (v *workflowRunStepNestedDetailTeamProjectWorkflowRunStepJobRunStep) GetId(
 	return v.Id
 }
 
-// workflowRunsResponse is returned by workflowRuns on success.
-type workflowRunsResponse struct {
-	Team workflowRunsTeam `json:"team"`
-}
-
-// GetTeam returns workflowRunsResponse.Team, and is useful for accessing the field via an interface.
-func (v *workflowRunsResponse) GetTeam() workflowRunsTeam { return v.Team }
-
 // workflowRunsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
 //
@@ -25800,7 +25800,7 @@ func AbortWorkflowRunMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*abortWorkflowRunResponse, error) {
+) (*AbortWorkflowRunResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "abortWorkflowRun",
 		Query:  abortWorkflowRun_Operation,
@@ -25810,7 +25810,7 @@ func AbortWorkflowRunMutation(
 	}
 	var err_ error
 
-	var data_ abortWorkflowRunResponse
+	var data_ AbortWorkflowRunResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -25834,7 +25834,7 @@ func ApproveWorkflowRunStepMutation(
 	client_ graphql.Client,
 	stepId uuid.UUID,
 	projectId uuid.UUID,
-) (*approveWorkflowRunStepResponse, error) {
+) (*ApproveWorkflowRunStepResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "approveWorkflowRunStep",
 		Query:  approveWorkflowRunStep_Operation,
@@ -25845,7 +25845,7 @@ func ApproveWorkflowRunStepMutation(
 	}
 	var err_ error
 
-	var data_ approveWorkflowRunStepResponse
+	var data_ ApproveWorkflowRunStepResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -25892,7 +25892,7 @@ func BlueprintQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	blueprintId uuid.UUID,
-) (*blueprintResponse, error) {
+) (*BlueprintResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "blueprint",
 		Query:  blueprint_Operation,
@@ -25903,7 +25903,7 @@ func BlueprintQuery(
 	}
 	var err_ error
 
-	var data_ blueprintResponse
+	var data_ BlueprintResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -25969,7 +25969,7 @@ func BlueprintRevisionsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	blueprintId uuid.UUID,
-) (*blueprintRevisionsResponse, error) {
+) (*BlueprintRevisionsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "blueprintRevisions",
 		Query:  blueprintRevisions_Operation,
@@ -25980,7 +25980,7 @@ func BlueprintRevisionsQuery(
 	}
 	var err_ error
 
-	var data_ blueprintRevisionsResponse
+	var data_ BlueprintRevisionsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26025,7 +26025,7 @@ func BuildArtifactsQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	page PageInput,
-) (*buildArtifactsResponse, error) {
+) (*BuildArtifactsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "buildArtifacts",
 		Query:  buildArtifacts_Operation,
@@ -26037,7 +26037,7 @@ func BuildArtifactsQuery(
 	}
 	var err_ error
 
-	var data_ buildArtifactsResponse
+	var data_ BuildArtifactsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26090,7 +26090,7 @@ func BuildRunDetailQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	runId uuid.UUID,
-) (*buildRunDetailResponse, error) {
+) (*BuildRunDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "buildRunDetail",
 		Query:  buildRunDetail_Operation,
@@ -26102,7 +26102,7 @@ func BuildRunDetailQuery(
 	}
 	var err_ error
 
-	var data_ buildRunDetailResponse
+	var data_ BuildRunDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26154,7 +26154,7 @@ func BuildRunsQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	page PageInput,
-) (*buildRunsResponse, error) {
+) (*BuildRunsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "buildRuns",
 		Query:  buildRuns_Operation,
@@ -26166,7 +26166,7 @@ func BuildRunsQuery(
 	}
 	var err_ error
 
-	var data_ buildRunsResponse
+	var data_ BuildRunsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26270,7 +26270,7 @@ func CloudRevisionsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	cloudId uuid.UUID,
-) (*cloudRevisionsResponse, error) {
+) (*CloudRevisionsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "cloudRevisions",
 		Query:  cloudRevisions_Operation,
@@ -26281,7 +26281,7 @@ func CloudRevisionsQuery(
 	}
 	var err_ error
 
-	var data_ cloudRevisionsResponse
+	var data_ CloudRevisionsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26322,7 +26322,7 @@ func ClusterDetailsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	clusterId uuid.UUID,
-) (*clusterDetailsResponse, error) {
+) (*ClusterDetailsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "clusterDetails",
 		Query:  clusterDetails_Operation,
@@ -26333,7 +26333,7 @@ func ClusterDetailsQuery(
 	}
 	var err_ error
 
-	var data_ clusterDetailsResponse
+	var data_ ClusterDetailsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26386,7 +26386,7 @@ func ClusterRevisionsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	clusterId uuid.UUID,
-) (*clusterRevisionsResponse, error) {
+) (*ClusterRevisionsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "clusterRevisions",
 		Query:  clusterRevisions_Operation,
@@ -26397,7 +26397,7 @@ func ClusterRevisionsQuery(
 	}
 	var err_ error
 
-	var data_ clusterRevisionsResponse
+	var data_ ClusterRevisionsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26427,7 +26427,7 @@ func ClusterStatusQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	clusterId uuid.UUID,
-) (*clusterStatusResponse, error) {
+) (*ClusterStatusResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "clusterStatus",
 		Query:  clusterStatus_Operation,
@@ -26438,7 +26438,7 @@ func ClusterStatusQuery(
 	}
 	var err_ error
 
-	var data_ clusterStatusResponse
+	var data_ ClusterStatusResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26463,7 +26463,7 @@ func CreateBuildRunMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	buildId uuid.UUID,
-) (*createBuildRunResponse, error) {
+) (*CreateBuildRunResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "createBuildRun",
 		Query:  createBuildRun_Operation,
@@ -26473,7 +26473,7 @@ func CreateBuildRunMutation(
 	}
 	var err_ error
 
-	var data_ createBuildRunResponse
+	var data_ CreateBuildRunResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26498,7 +26498,7 @@ func CreateDeployRunMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	input CreateDeployRunInput,
-) (*createDeployRunResponse, error) {
+) (*CreateDeployRunResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "createDeployRun",
 		Query:  createDeployRun_Operation,
@@ -26508,7 +26508,7 @@ func CreateDeployRunMutation(
 	}
 	var err_ error
 
-	var data_ createDeployRunResponse
+	var data_ CreateDeployRunResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26537,7 +26537,7 @@ func CreateProjectMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	input CreateProjectInput,
-) (*createProjectResponse, error) {
+) (*CreateProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "createProject",
 		Query:  createProject_Operation,
@@ -26547,7 +26547,7 @@ func CreateProjectMutation(
 	}
 	var err_ error
 
-	var data_ createProjectResponse
+	var data_ CreateProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26576,7 +26576,7 @@ func CreateUserPersonalAccessTokenMutation(
 	client_ graphql.Client,
 	userId uuid.UUID,
 	name string,
-) (*createUserPersonalAccessTokenResponse, error) {
+) (*CreateUserPersonalAccessTokenResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "createUserPersonalAccessToken",
 		Query:  createUserPersonalAccessToken_Operation,
@@ -26587,7 +26587,7 @@ func CreateUserPersonalAccessTokenMutation(
 	}
 	var err_ error
 
-	var data_ createUserPersonalAccessTokenResponse
+	var data_ CreateUserPersonalAccessTokenResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26612,7 +26612,7 @@ func CreateWorkflowTriggerMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	input CreateTriggerInput,
-) (*createWorkflowTriggerResponse, error) {
+) (*CreateWorkflowTriggerResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "createWorkflowTrigger",
 		Query:  createWorkflowTrigger_Operation,
@@ -26622,7 +26622,7 @@ func CreateWorkflowTriggerMutation(
 	}
 	var err_ error
 
-	var data_ createWorkflowTriggerResponse
+	var data_ CreateWorkflowTriggerResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26648,14 +26648,14 @@ query currentUser {
 func CurrentUserQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*currentUserResponse, error) {
+) (*CurrentUserResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "currentUser",
 		Query:  currentUser_Operation,
 	}
 	var err_ error
 
-	var data_ currentUserResponse
+	var data_ CurrentUserResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26678,7 +26678,7 @@ func DeleteGroupMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteGroupResponse, error) {
+) (*DeleteGroupResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteGroup",
 		Query:  deleteGroup_Operation,
@@ -26688,7 +26688,7 @@ func DeleteGroupMutation(
 	}
 	var err_ error
 
-	var data_ deleteGroupResponse
+	var data_ DeleteGroupResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26712,7 +26712,7 @@ func DeleteProjectMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	force bool,
-) (*deleteProjectResponse, error) {
+) (*DeleteProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteProject",
 		Query:  deleteProject_Operation,
@@ -26723,7 +26723,7 @@ func DeleteProjectMutation(
 	}
 	var err_ error
 
-	var data_ deleteProjectResponse
+	var data_ DeleteProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26747,7 +26747,7 @@ func DeleteProjectAndResourcesMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	deleteOnFailure bool,
-) (*deleteProjectAndResourcesResponse, error) {
+) (*DeleteProjectAndResourcesResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteProjectAndResources",
 		Query:  deleteProjectAndResources_Operation,
@@ -26758,7 +26758,7 @@ func DeleteProjectAndResourcesMutation(
 	}
 	var err_ error
 
-	var data_ deleteProjectAndResourcesResponse
+	var data_ DeleteProjectAndResourcesResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26781,7 +26781,7 @@ func DeleteProjectResourcesMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteProjectResourcesResponse, error) {
+) (*DeleteProjectResourcesResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteProjectResources",
 		Query:  deleteProjectResources_Operation,
@@ -26791,7 +26791,7 @@ func DeleteProjectResourcesMutation(
 	}
 	var err_ error
 
-	var data_ deleteProjectResourcesResponse
+	var data_ DeleteProjectResourcesResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26814,7 +26814,7 @@ func DeleteSubGroupMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteSubGroupResponse, error) {
+) (*DeleteSubGroupResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteSubGroup",
 		Query:  deleteSubGroup_Operation,
@@ -26824,7 +26824,7 @@ func DeleteSubGroupMutation(
 	}
 	var err_ error
 
-	var data_ deleteSubGroupResponse
+	var data_ DeleteSubGroupResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26847,7 +26847,7 @@ func DeleteUserPersonalAccessTokenMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteUserPersonalAccessTokenResponse, error) {
+) (*DeleteUserPersonalAccessTokenResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteUserPersonalAccessToken",
 		Query:  deleteUserPersonalAccessToken_Operation,
@@ -26857,7 +26857,7 @@ func DeleteUserPersonalAccessTokenMutation(
 	}
 	var err_ error
 
-	var data_ deleteUserPersonalAccessTokenResponse
+	var data_ DeleteUserPersonalAccessTokenResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26880,7 +26880,7 @@ func DeleteWorkflowTriggerMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteWorkflowTriggerResponse, error) {
+) (*DeleteWorkflowTriggerResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteWorkflowTrigger",
 		Query:  deleteWorkflowTrigger_Operation,
@@ -26890,7 +26890,7 @@ func DeleteWorkflowTriggerMutation(
 	}
 	var err_ error
 
-	var data_ deleteWorkflowTriggerResponse
+	var data_ DeleteWorkflowTriggerResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26925,7 +26925,7 @@ func DuplicateProjectMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	input DuplicateProjectInput,
-) (*duplicateProjectResponse, error) {
+) (*DuplicateProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "duplicateProject",
 		Query:  duplicateProject_Operation,
@@ -26936,7 +26936,7 @@ func DuplicateProjectMutation(
 	}
 	var err_ error
 
-	var data_ duplicateProjectResponse
+	var data_ DuplicateProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26963,7 +26963,7 @@ func EjectClusterComponentMutation(
 	client_ graphql.Client,
 	clusterId uuid.UUID,
 	input EjectClusterComponentInput,
-) (*ejectClusterComponentResponse, error) {
+) (*EjectClusterComponentResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "ejectClusterComponent",
 		Query:  ejectClusterComponent_Operation,
@@ -26974,7 +26974,7 @@ func EjectClusterComponentMutation(
 	}
 	var err_ error
 
-	var data_ ejectClusterComponentResponse
+	var data_ EjectClusterComponentResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -26997,7 +26997,7 @@ func GenerateDownloadableLogLinkForWorkflowRunStepMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	actionStepId uuid.UUID,
-) (*generateDownloadableLogLinkForWorkflowRunStepResponse, error) {
+) (*GenerateDownloadableLogLinkForWorkflowRunStepResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "generateDownloadableLogLinkForWorkflowRunStep",
 		Query:  generateDownloadableLogLinkForWorkflowRunStep_Operation,
@@ -27007,7 +27007,7 @@ func GenerateDownloadableLogLinkForWorkflowRunStepMutation(
 	}
 	var err_ error
 
-	var data_ generateDownloadableLogLinkForWorkflowRunStepResponse
+	var data_ GenerateDownloadableLogLinkForWorkflowRunStepResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27042,7 +27042,7 @@ func GroupsWithSubgroupsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	teamId uuid.UUID,
-) (*groupsWithSubgroupsResponse, error) {
+) (*GroupsWithSubgroupsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "groupsWithSubgroups",
 		Query:  groupsWithSubgroups_Operation,
@@ -27052,7 +27052,7 @@ func GroupsWithSubgroupsQuery(
 	}
 	var err_ error
 
-	var data_ groupsWithSubgroupsResponse
+	var data_ GroupsWithSubgroupsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27092,7 +27092,7 @@ func JobListQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*jobListResponse, error) {
+) (*JobListResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "jobList",
 		Query:  jobList_Operation,
@@ -27103,7 +27103,7 @@ func JobListQuery(
 	}
 	var err_ error
 
-	var data_ jobListResponse
+	var data_ JobListResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27148,7 +27148,7 @@ func JobRunDetailQuery(
 	client_ graphql.Client,
 	id uuid.UUID,
 	teamId uuid.UUID,
-) (*jobRunDetailResponse, error) {
+) (*JobRunDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "jobRunDetail",
 		Query:  jobRunDetail_Operation,
@@ -27159,7 +27159,7 @@ func JobRunDetailQuery(
 	}
 	var err_ error
 
-	var data_ jobRunDetailResponse
+	var data_ JobRunDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27210,7 +27210,7 @@ func JobRunListQuery(
 	id uuid.UUID,
 	teamId uuid.UUID,
 	page PageInput,
-) (*jobRunListResponse, error) {
+) (*JobRunListResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "jobRunList",
 		Query:  jobRunList_Operation,
@@ -27222,7 +27222,7 @@ func JobRunListQuery(
 	}
 	var err_ error
 
-	var data_ jobRunListResponse
+	var data_ JobRunListResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27263,7 +27263,7 @@ func JobRunLogsQuery(
 	client_ graphql.Client,
 	id uuid.UUID,
 	teamId uuid.UUID,
-) (*jobRunLogsResponse, error) {
+) (*JobRunLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "jobRunLogs",
 		Query:  jobRunLogs_Operation,
@@ -27274,7 +27274,7 @@ func JobRunLogsQuery(
 	}
 	var err_ error
 
-	var data_ jobRunLogsResponse
+	var data_ JobRunLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27299,7 +27299,7 @@ func LinkProjectMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	input ProjectLinkInput,
-) (*linkProjectResponse, error) {
+) (*LinkProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "linkProject",
 		Query:  linkProject_Operation,
@@ -27309,7 +27309,7 @@ func LinkProjectMutation(
 	}
 	var err_ error
 
-	var data_ linkProjectResponse
+	var data_ LinkProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27349,7 +27349,7 @@ func ObservabilityConfigQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*observabilityConfigResponse, error) {
+) (*ObservabilityConfigResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "observabilityConfig",
 		Query:  observabilityConfig_Operation,
@@ -27360,7 +27360,7 @@ func ObservabilityConfigQuery(
 	}
 	var err_ error
 
-	var data_ observabilityConfigResponse
+	var data_ ObservabilityConfigResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27397,7 +27397,7 @@ func ProjectAvailableProvidersQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	linkType ProjectLinkType,
-) (*projectAvailableProvidersResponse, error) {
+) (*ProjectAvailableProvidersResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectAvailableProviders",
 		Query:  projectAvailableProviders_Operation,
@@ -27409,7 +27409,7 @@ func ProjectAvailableProvidersQuery(
 	}
 	var err_ error
 
-	var data_ projectAvailableProvidersResponse
+	var data_ ProjectAvailableProvidersResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27455,7 +27455,7 @@ func ProjectClustersQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectClustersResponse, error) {
+) (*ProjectClustersResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectClusters",
 		Query:  projectClusters_Operation,
@@ -27466,7 +27466,7 @@ func ProjectClustersQuery(
 	}
 	var err_ error
 
-	var data_ projectClustersResponse
+	var data_ ProjectClustersResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27532,7 +27532,7 @@ func ProjectDeployDetailQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	deployId uuid.UUID,
-) (*projectDeployDetailResponse, error) {
+) (*ProjectDeployDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectDeployDetail",
 		Query:  projectDeployDetail_Operation,
@@ -27543,7 +27543,7 @@ func ProjectDeployDetailQuery(
 	}
 	var err_ error
 
-	var data_ projectDeployDetailResponse
+	var data_ ProjectDeployDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27607,7 +27607,7 @@ func ProjectDeployRevisionsQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	page PageInput,
-) (*projectDeployRevisionsResponse, error) {
+) (*ProjectDeployRevisionsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectDeployRevisions",
 		Query:  projectDeployRevisions_Operation,
@@ -27619,7 +27619,7 @@ func ProjectDeployRevisionsQuery(
 	}
 	var err_ error
 
-	var data_ projectDeployRevisionsResponse
+	var data_ ProjectDeployRevisionsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27662,7 +27662,7 @@ func ProjectDeployRunDetailQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	deployRunId uuid.UUID,
-) (*projectDeployRunDetailResponse, error) {
+) (*ProjectDeployRunDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectDeployRunDetail",
 		Query:  projectDeployRunDetail_Operation,
@@ -27673,7 +27673,7 @@ func ProjectDeployRunDetailQuery(
 	}
 	var err_ error
 
-	var data_ projectDeployRunDetailResponse
+	var data_ ProjectDeployRunDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27718,7 +27718,7 @@ func ProjectDeploysQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectDeploysResponse, error) {
+) (*ProjectDeploysResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectDeploys",
 		Query:  projectDeploys_Operation,
@@ -27729,7 +27729,7 @@ func ProjectDeploysQuery(
 	}
 	var err_ error
 
-	var data_ projectDeploysResponse
+	var data_ ProjectDeploysResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28289,7 +28289,7 @@ func ProjectDetailQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectDetailResponse, error) {
+) (*ProjectDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectDetail",
 		Query:  projectDetail_Operation,
@@ -28300,7 +28300,7 @@ func ProjectDetailQuery(
 	}
 	var err_ error
 
-	var data_ projectDetailResponse
+	var data_ ProjectDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28478,7 +28478,7 @@ func ProjectInfoQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectInfoResponse, error) {
+) (*ProjectInfoResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectInfo",
 		Query:  projectInfo_Operation,
@@ -28489,7 +28489,7 @@ func ProjectInfoQuery(
 	}
 	var err_ error
 
-	var data_ projectInfoResponse
+	var data_ ProjectInfoResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28543,7 +28543,7 @@ func ProjectLinkedProjectsQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	linkType ProjectLinkType,
-) (*projectLinkedProjectsResponse, error) {
+) (*ProjectLinkedProjectsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectLinkedProjects",
 		Query:  projectLinkedProjects_Operation,
@@ -28555,7 +28555,7 @@ func ProjectLinkedProjectsQuery(
 	}
 	var err_ error
 
-	var data_ projectLinkedProjectsResponse
+	var data_ ProjectLinkedProjectsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28597,7 +28597,7 @@ func ProjectOutputsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectOutputsResponse, error) {
+) (*ProjectOutputsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectOutputs",
 		Query:  projectOutputs_Operation,
@@ -28608,7 +28608,7 @@ func ProjectOutputsQuery(
 	}
 	var err_ error
 
-	var data_ projectOutputsResponse
+	var data_ ProjectOutputsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28638,7 +28638,7 @@ func ProjectStatusOnlyQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*projectStatusOnlyResponse, error) {
+) (*ProjectStatusOnlyResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectStatusOnly",
 		Query:  projectStatusOnly_Operation,
@@ -28649,7 +28649,7 @@ func ProjectStatusOnlyQuery(
 	}
 	var err_ error
 
-	var data_ projectStatusOnlyResponse
+	var data_ ProjectStatusOnlyResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28677,7 +28677,7 @@ func ProjectsCountQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	teamId uuid.UUID,
-) (*projectsCountResponse, error) {
+) (*ProjectsCountResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectsCount",
 		Query:  projectsCount_Operation,
@@ -28687,7 +28687,7 @@ func ProjectsCountQuery(
 	}
 	var err_ error
 
-	var data_ projectsCountResponse
+	var data_ ProjectsCountResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28728,7 +28728,7 @@ func ProjectsWithBlueprintQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	teamId uuid.UUID,
-) (*projectsWithBlueprintResponse, error) {
+) (*ProjectsWithBlueprintResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectsWithBlueprint",
 		Query:  projectsWithBlueprint_Operation,
@@ -28738,7 +28738,7 @@ func ProjectsWithBlueprintQuery(
 	}
 	var err_ error
 
-	var data_ projectsWithBlueprintResponse
+	var data_ ProjectsWithBlueprintResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28776,7 +28776,7 @@ func ProjectsWithDeploymentTimesQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	input ProjectsInput,
-) (*projectsWithDeploymentTimesResponse, error) {
+) (*ProjectsWithDeploymentTimesResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectsWithDeploymentTimes",
 		Query:  projectsWithDeploymentTimes_Operation,
@@ -28787,7 +28787,7 @@ func ProjectsWithDeploymentTimesQuery(
 	}
 	var err_ error
 
-	var data_ projectsWithDeploymentTimesResponse
+	var data_ ProjectsWithDeploymentTimesResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28822,7 +28822,7 @@ func ProjectsWithStatusQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	input ProjectsInput,
-) (*projectsWithStatusResponse, error) {
+) (*ProjectsWithStatusResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "projectsWithStatus",
 		Query:  projectsWithStatus_Operation,
@@ -28833,7 +28833,7 @@ func ProjectsWithStatusQuery(
 	}
 	var err_ error
 
-	var data_ projectsWithStatusResponse
+	var data_ ProjectsWithStatusResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28881,7 +28881,7 @@ func ResourceLogsQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	resourceId uuid.UUID,
-) (*resourceLogsResponse, error) {
+) (*ResourceLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "resourceLogs",
 		Query:  resourceLogs_Operation,
@@ -28892,7 +28892,7 @@ func ResourceLogsQuery(
 	}
 	var err_ error
 
-	var data_ resourceLogsResponse
+	var data_ ResourceLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -28959,7 +28959,7 @@ func ResourcesWithLogsQuery(
 	projectId uuid.UUID,
 	clusterId uuid.UUID,
 	selector ObservabilityResourceSelectorInput,
-) (*resourcesWithLogsResponse, error) {
+) (*ResourcesWithLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "resourcesWithLogs",
 		Query:  resourcesWithLogs_Operation,
@@ -28972,7 +28972,7 @@ func ResourcesWithLogsQuery(
 	}
 	var err_ error
 
-	var data_ resourcesWithLogsResponse
+	var data_ ResourcesWithLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29043,7 +29043,7 @@ func ResourcesWithMetricsQuery(
 	clusterId uuid.UUID,
 	metricTypes []MetricType,
 	selector ObservabilityResourceSelectorInput,
-) (*resourcesWithMetricsResponse, error) {
+) (*ResourcesWithMetricsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "resourcesWithMetrics",
 		Query:  resourcesWithMetrics_Operation,
@@ -29057,7 +29057,7 @@ func ResourcesWithMetricsQuery(
 	}
 	var err_ error
 
-	var data_ resourcesWithMetricsResponse
+	var data_ ResourcesWithMetricsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29083,7 +29083,7 @@ func SubmitWorkflowRunMutation(
 	client_ graphql.Client,
 	workflowId uuid.UUID,
 	definition WorkflowRunDefinitionInput,
-) (*submitWorkflowRunResponse, error) {
+) (*SubmitWorkflowRunResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "submitWorkflowRun",
 		Query:  submitWorkflowRun_Operation,
@@ -29094,7 +29094,7 @@ func SubmitWorkflowRunMutation(
 	}
 	var err_ error
 
-	var data_ submitWorkflowRunResponse
+	var data_ SubmitWorkflowRunResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29117,7 +29117,7 @@ func UnlinkProjectMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*unlinkProjectResponse, error) {
+) (*UnlinkProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "unlinkProject",
 		Query:  unlinkProject_Operation,
@@ -29127,7 +29127,7 @@ func UnlinkProjectMutation(
 	}
 	var err_ error
 
-	var data_ unlinkProjectResponse
+	var data_ UnlinkProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29153,7 +29153,7 @@ func UpdateDeployMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	input UpdateDeployInput,
-) (*updateDeployResponse, error) {
+) (*UpdateDeployResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateDeploy",
 		Query:  updateDeploy_Operation,
@@ -29164,7 +29164,7 @@ func UpdateDeployMutation(
 	}
 	var err_ error
 
-	var data_ updateDeployResponse
+	var data_ UpdateDeployResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29191,7 +29191,7 @@ func UpdateProjectMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	input UpdateProjectInput,
-) (*updateProjectResponse, error) {
+) (*UpdateProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateProject",
 		Query:  updateProject_Operation,
@@ -29202,7 +29202,7 @@ func UpdateProjectMutation(
 	}
 	var err_ error
 
-	var data_ updateProjectResponse
+	var data_ UpdateProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29228,7 +29228,7 @@ func UpdateWorkflowMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	input UpdateWorkflowInput,
-) (*updateWorkflowResponse, error) {
+) (*UpdateWorkflowResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateWorkflow",
 		Query:  updateWorkflow_Operation,
@@ -29239,7 +29239,7 @@ func UpdateWorkflowMutation(
 	}
 	var err_ error
 
-	var data_ updateWorkflowResponse
+	var data_ UpdateWorkflowResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29265,7 +29265,7 @@ func UpdateWorkflowTriggerMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	input UpdateTriggerInput,
-) (*updateWorkflowTriggerResponse, error) {
+) (*UpdateWorkflowTriggerResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateWorkflowTrigger",
 		Query:  updateWorkflowTrigger_Operation,
@@ -29276,7 +29276,7 @@ func UpdateWorkflowTriggerMutation(
 	}
 	var err_ error
 
-	var data_ updateWorkflowTriggerResponse
+	var data_ UpdateWorkflowTriggerResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29307,7 +29307,7 @@ func UserPersonalAccessTokensQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*userPersonalAccessTokensResponse, error) {
+) (*UserPersonalAccessTokensResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "userPersonalAccessTokens",
 		Query:  userPersonalAccessTokens_Operation,
@@ -29317,7 +29317,7 @@ func UserPersonalAccessTokensQuery(
 	}
 	var err_ error
 
-	var data_ userPersonalAccessTokensResponse
+	var data_ UserPersonalAccessTokensResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29377,7 +29377,7 @@ func WorkflowDetailQuery(
 	client_ graphql.Client,
 	teamId uuid.UUID,
 	projectId uuid.UUID,
-) (*workflowDetailResponse, error) {
+) (*WorkflowDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowDetail",
 		Query:  workflowDetail_Operation,
@@ -29388,7 +29388,7 @@ func WorkflowDetailQuery(
 	}
 	var err_ error
 
-	var data_ workflowDetailResponse
+	var data_ WorkflowDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29545,7 +29545,7 @@ func WorkflowRunDetailQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	runId uuid.UUID,
-) (*workflowRunDetailResponse, error) {
+) (*WorkflowRunDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowRunDetail",
 		Query:  workflowRunDetail_Operation,
@@ -29557,7 +29557,7 @@ func WorkflowRunDetailQuery(
 	}
 	var err_ error
 
-	var data_ workflowRunDetailResponse
+	var data_ WorkflowRunDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29619,7 +29619,7 @@ func WorkflowRunDetailLogsQuery(
 	projectId uuid.UUID,
 	runId uuid.UUID,
 	stepId uuid.UUID,
-) (*workflowRunDetailLogsResponse, error) {
+) (*WorkflowRunDetailLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowRunDetailLogs",
 		Query:  workflowRunDetailLogs_Operation,
@@ -29632,7 +29632,7 @@ func WorkflowRunDetailLogsQuery(
 	}
 	var err_ error
 
-	var data_ workflowRunDetailLogsResponse
+	var data_ WorkflowRunDetailLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29723,7 +29723,7 @@ func WorkflowRunStepNestedDetailQuery(
 	projectId uuid.UUID,
 	runId uuid.UUID,
 	stepId uuid.UUID,
-) (*workflowRunStepNestedDetailResponse, error) {
+) (*WorkflowRunStepNestedDetailResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowRunStepNestedDetail",
 		Query:  workflowRunStepNestedDetail_Operation,
@@ -29736,7 +29736,7 @@ func WorkflowRunStepNestedDetailQuery(
 	}
 	var err_ error
 
-	var data_ workflowRunStepNestedDetailResponse
+	var data_ WorkflowRunStepNestedDetailResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29824,7 +29824,7 @@ func WorkflowRunStepNestedDetailLogsQuery(
 	runId uuid.UUID,
 	stepId uuid.UUID,
 	actionStepId uuid.UUID,
-) (*workflowRunStepNestedDetailLogsResponse, error) {
+) (*WorkflowRunStepNestedDetailLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowRunStepNestedDetailLogs",
 		Query:  workflowRunStepNestedDetailLogs_Operation,
@@ -29838,7 +29838,7 @@ func WorkflowRunStepNestedDetailLogsQuery(
 	}
 	var err_ error
 
-	var data_ workflowRunStepNestedDetailLogsResponse
+	var data_ WorkflowRunStepNestedDetailLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29931,7 +29931,7 @@ func WorkflowRunsQuery(
 	teamId uuid.UUID,
 	projectId uuid.UUID,
 	page PageInput,
-) (*workflowRunsResponse, error) {
+) (*WorkflowRunsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "workflowRuns",
 		Query:  workflowRuns_Operation,
@@ -29943,7 +29943,7 @@ func WorkflowRunsQuery(
 	}
 	var err_ error
 
-	var data_ workflowRunsResponse
+	var data_ WorkflowRunsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
