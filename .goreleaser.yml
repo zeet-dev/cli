@@ -49,7 +49,7 @@ snapshot:
   name_template: "{{ incpatch .Version }}-next"
 brews:
   - name: zeet
-    tap:
+    repository:
       owner: zeet-dev
       name: homebrew-tap
       token: "{{ .Env.GORELEASER_GITHUB_TOKEN }}"
