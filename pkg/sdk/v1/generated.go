@@ -4438,6 +4438,15 @@ const (
 	MetricTypeMemoryUtilization  MetricType = "MEMORY_UTILIZATION"
 )
 
+type ObservabilityConfigInput struct {
+	Selector ObservabilityResourceSelectorInput `json:"selector"`
+}
+
+// GetSelector returns ObservabilityConfigInput.Selector, and is useful for accessing the field via an interface.
+func (v *ObservabilityConfigInput) GetSelector() ObservabilityResourceSelectorInput {
+	return v.Selector
+}
+
 // observabilityConfigResponse is returned by observabilityConfig on success.
 type ObservabilityConfigResponse struct {
 	Team observabilityConfigTeam `json:"team"`
@@ -4481,6 +4490,26 @@ func (v *ObservabilityResourceSelectorLabelInput) GetName() string { return v.Na
 
 // GetValue returns ObservabilityResourceSelectorLabelInput.Value, and is useful for accessing the field via an interface.
 func (v *ObservabilityResourceSelectorLabelInput) GetValue() string { return v.Value }
+
+// OutputEntryDetail includes the GraphQL fields of ProjectOutputEntry requested by the fragment OutputEntryDetail.
+type OutputEntryDetail struct {
+	DisplayName string       `json:"displayName"`
+	Name        string       `json:"name"`
+	Type        VariableType `json:"type"`
+	Value       string       `json:"value"`
+}
+
+// GetDisplayName returns OutputEntryDetail.DisplayName, and is useful for accessing the field via an interface.
+func (v *OutputEntryDetail) GetDisplayName() string { return v.DisplayName }
+
+// GetName returns OutputEntryDetail.Name, and is useful for accessing the field via an interface.
+func (v *OutputEntryDetail) GetName() string { return v.Name }
+
+// GetType returns OutputEntryDetail.Type, and is useful for accessing the field via an interface.
+func (v *OutputEntryDetail) GetType() VariableType { return v.Type }
+
+// GetValue returns OutputEntryDetail.Value, and is useful for accessing the field via an interface.
+func (v *OutputEntryDetail) GetValue() string { return v.Value }
 
 type PageInput struct {
 	First  int    `json:"first"`
@@ -6749,6 +6778,110 @@ type ProjectLinkedProjectsResponse struct {
 // GetTeam returns ProjectLinkedProjectsResponse.Team, and is useful for accessing the field via an interface.
 func (v *ProjectLinkedProjectsResponse) GetTeam() projectLinkedProjectsTeam { return v.Team }
 
+// ProjectOutput includes the GraphQL fields of Project requested by the fragment ProjectOutput.
+type ProjectOutput struct {
+	Output ProjectOutputOutputProjectOutput `json:"output"`
+}
+
+// GetOutput returns ProjectOutput.Output, and is useful for accessing the field via an interface.
+func (v *ProjectOutput) GetOutput() ProjectOutputOutputProjectOutput { return v.Output }
+
+// ProjectOutputOutputProjectOutput includes the requested fields of the GraphQL type ProjectOutput.
+type ProjectOutputOutputProjectOutput struct {
+	Entries []ProjectOutputOutputProjectOutputEntriesProjectOutputEntry `json:"entries"`
+}
+
+// GetEntries returns ProjectOutputOutputProjectOutput.Entries, and is useful for accessing the field via an interface.
+func (v *ProjectOutputOutputProjectOutput) GetEntries() []ProjectOutputOutputProjectOutputEntriesProjectOutputEntry {
+	return v.Entries
+}
+
+// ProjectOutputOutputProjectOutputEntriesProjectOutputEntry includes the requested fields of the GraphQL type ProjectOutputEntry.
+type ProjectOutputOutputProjectOutputEntriesProjectOutputEntry struct {
+	OutputEntryDetail `json:"-"`
+}
+
+// GetDisplayName returns ProjectOutputOutputProjectOutputEntriesProjectOutputEntry.DisplayName, and is useful for accessing the field via an interface.
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) GetDisplayName() string {
+	return v.OutputEntryDetail.DisplayName
+}
+
+// GetName returns ProjectOutputOutputProjectOutputEntriesProjectOutputEntry.Name, and is useful for accessing the field via an interface.
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) GetName() string {
+	return v.OutputEntryDetail.Name
+}
+
+// GetType returns ProjectOutputOutputProjectOutputEntriesProjectOutputEntry.Type, and is useful for accessing the field via an interface.
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) GetType() VariableType {
+	return v.OutputEntryDetail.Type
+}
+
+// GetValue returns ProjectOutputOutputProjectOutputEntriesProjectOutputEntry.Value, and is useful for accessing the field via an interface.
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) GetValue() string {
+	return v.OutputEntryDetail.Value
+}
+
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*ProjectOutputOutputProjectOutputEntriesProjectOutputEntry
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.ProjectOutputOutputProjectOutputEntriesProjectOutputEntry = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.OutputEntryDetail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalProjectOutputOutputProjectOutputEntriesProjectOutputEntry struct {
+	DisplayName string `json:"displayName"`
+
+	Name string `json:"name"`
+
+	Type VariableType `json:"type"`
+
+	Value string `json:"value"`
+}
+
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) __premarshalJSON() (*__premarshalProjectOutputOutputProjectOutputEntriesProjectOutputEntry, error) {
+	var retval __premarshalProjectOutputOutputProjectOutputEntriesProjectOutputEntry
+
+	retval.DisplayName = v.OutputEntryDetail.DisplayName
+	retval.Name = v.OutputEntryDetail.Name
+	retval.Type = v.OutputEntryDetail.Type
+	retval.Value = v.OutputEntryDetail.Value
+	return &retval, nil
+}
+
+// projectOutputResponse is returned by projectOutput on success.
+type ProjectOutputResponse struct {
+	Team projectOutputTeam `json:"team"`
+}
+
+// GetTeam returns ProjectOutputResponse.Team, and is useful for accessing the field via an interface.
+func (v *ProjectOutputResponse) GetTeam() projectOutputTeam { return v.Team }
+
 // projectOutputsResponse is returned by projectOutputs on success.
 type ProjectOutputsResponse struct {
 	Team projectOutputsTeam `json:"team"`
@@ -8180,12 +8313,13 @@ type UpdateDeployResponse struct {
 func (v *UpdateDeployResponse) GetUpdateDeploy() updateDeployUpdateDeploy { return v.UpdateDeploy }
 
 type UpdateProjectInput struct {
-	GroupId      uuid.UUID     `json:"groupId"`
-	GroupName    string        `json:"groupName"`
-	SubGroupId   uuid.UUID     `json:"subGroupId"`
-	SubGroupName string        `json:"subGroupName"`
-	Name         string        `json:"name"`
-	Envs         []EnvVarInput `json:"envs"`
+	GroupId             uuid.UUID                `json:"groupId"`
+	GroupName           string                   `json:"groupName"`
+	SubGroupId          uuid.UUID                `json:"subGroupId"`
+	SubGroupName        string                   `json:"subGroupName"`
+	Name                string                   `json:"name"`
+	Envs                []EnvVarInput            `json:"envs"`
+	ObservabilityConfig ObservabilityConfigInput `json:"observabilityConfig"`
 }
 
 // GetGroupId returns UpdateProjectInput.GroupId, and is useful for accessing the field via an interface.
@@ -8205,6 +8339,11 @@ func (v *UpdateProjectInput) GetName() string { return v.Name }
 
 // GetEnvs returns UpdateProjectInput.Envs, and is useful for accessing the field via an interface.
 func (v *UpdateProjectInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// GetObservabilityConfig returns UpdateProjectInput.ObservabilityConfig, and is useful for accessing the field via an interface.
+func (v *UpdateProjectInput) GetObservabilityConfig() ObservabilityConfigInput {
+	return v.ObservabilityConfig
+}
 
 // updateProjectResponse is returned by updateProject on success.
 type UpdateProjectResponse struct {
@@ -15260,6 +15399,18 @@ func (v *__projectLinkedProjectsInput) GetProjectId() uuid.UUID { return v.Proje
 // GetLinkType returns __projectLinkedProjectsInput.LinkType, and is useful for accessing the field via an interface.
 func (v *__projectLinkedProjectsInput) GetLinkType() ProjectLinkType { return v.LinkType }
 
+// __projectOutputInput is used internally by genqlient
+type __projectOutputInput struct {
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+}
+
+// GetTeamId returns __projectOutputInput.TeamId, and is useful for accessing the field via an interface.
+func (v *__projectOutputInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetProjectId returns __projectOutputInput.ProjectId, and is useful for accessing the field via an interface.
+func (v *__projectOutputInput) GetProjectId() uuid.UUID { return v.ProjectId }
+
 // __projectOutputsInput is used internally by genqlient
 type __projectOutputsInput struct {
 	TeamId    uuid.UUID `json:"teamId"`
@@ -17984,10 +18135,16 @@ func (v *observabilityConfigTeamProjectObservabilityConfig) GetSelector() observ
 
 // observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector includes the requested fields of the GraphQL type ObservabilityResourceSelector.
 type observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector struct {
+	Type          ResourceType                                                                                                                     `json:"type"`
 	Namespace     string                                                                                                                           `json:"namespace"`
 	ResourceName  string                                                                                                                           `json:"resourceName"`
 	ContainerName string                                                                                                                           `json:"containerName"`
 	Labels        []observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelectorLabelsObservabilityResourceSelectorLabel `json:"labels"`
+}
+
+// GetType returns observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector.Type, and is useful for accessing the field via an interface.
+func (v *observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector) GetType() ResourceType {
+	return v.Type
 }
 
 // GetNamespace returns observabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector.Namespace, and is useful for accessing the field via an interface.
@@ -19072,6 +19229,80 @@ func (v *projectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNode
 	retval.LinkType = v.ProjectLinkDetail.LinkType
 	retval.EnvPrefix = v.ProjectLinkDetail.EnvPrefix
 	retval.Envs = v.ProjectLinkDetail.Envs
+	return &retval, nil
+}
+
+// projectOutputTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type projectOutputTeam struct {
+	Id      uuid.UUID                `json:"id"`
+	Project projectOutputTeamProject `json:"project"`
+}
+
+// GetId returns projectOutputTeam.Id, and is useful for accessing the field via an interface.
+func (v *projectOutputTeam) GetId() uuid.UUID { return v.Id }
+
+// GetProject returns projectOutputTeam.Project, and is useful for accessing the field via an interface.
+func (v *projectOutputTeam) GetProject() projectOutputTeamProject { return v.Project }
+
+// projectOutputTeamProject includes the requested fields of the GraphQL type Project.
+type projectOutputTeamProject struct {
+	ProjectOutput `json:"-"`
+}
+
+// GetOutput returns projectOutputTeamProject.Output, and is useful for accessing the field via an interface.
+func (v *projectOutputTeamProject) GetOutput() ProjectOutputOutputProjectOutput {
+	return v.ProjectOutput.Output
+}
+
+func (v *projectOutputTeamProject) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*projectOutputTeamProject
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.projectOutputTeamProject = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.ProjectOutput)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalprojectOutputTeamProject struct {
+	Output ProjectOutputOutputProjectOutput `json:"output"`
+}
+
+func (v *projectOutputTeamProject) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *projectOutputTeamProject) __premarshalJSON() (*__premarshalprojectOutputTeamProject, error) {
+	var retval __premarshalprojectOutputTeamProject
+
+	retval.Output = v.ProjectOutput.Output
 	return &retval, nil
 }
 
@@ -25791,7 +26022,7 @@ func (v *workflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionPageInfo) GetHa
 
 // The query or mutation executed by abortWorkflowRun.
 const abortWorkflowRun_Operation = `
-mutation abortWorkflowRun ($id: UUID!) @api(name: v1) {
+mutation abortWorkflowRun ($id: UUID!) {
 	abortWorkflowRun(id: $id)
 }
 `
@@ -25824,7 +26055,7 @@ func AbortWorkflowRunMutation(
 
 // The query or mutation executed by approveWorkflowRunStep.
 const approveWorkflowRunStep_Operation = `
-mutation approveWorkflowRunStep ($stepId: UUID!, $projectId: UUID!) @api(name: v1) {
+mutation approveWorkflowRunStep ($stepId: UUID!, $projectId: UUID!) {
 	approveWorkflowRunStep(stepId: $stepId, projectId: $projectId)
 }
 `
@@ -25859,7 +26090,7 @@ func ApproveWorkflowRunStepMutation(
 
 // The query or mutation executed by blueprint.
 const blueprint_Operation = `
-query blueprint ($teamId: UUID!, $blueprintId: UUID!) @api(name: v1) {
+query blueprint ($teamId: UUID!, $blueprintId: UUID!) {
 	team(id: $teamId) {
 		id
 		blueprint(id: $blueprintId) {
@@ -25917,7 +26148,7 @@ func BlueprintQuery(
 
 // The query or mutation executed by blueprintRevisions.
 const blueprintRevisions_Operation = `
-query blueprintRevisions ($teamId: UUID!, $blueprintId: UUID!) @api(name: v1) {
+query blueprintRevisions ($teamId: UUID!, $blueprintId: UUID!) {
 	team(id: $teamId) {
 		id
 		blueprint(id: $blueprintId) {
@@ -25994,7 +26225,7 @@ func BlueprintRevisionsQuery(
 
 // The query or mutation executed by buildArtifacts.
 const buildArtifacts_Operation = `
-query buildArtifacts ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) @api(name: v1) {
+query buildArtifacts ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) {
 	team(id: $teamId) {
 		project(id: $projectId) {
 			build {
@@ -26051,7 +26282,7 @@ func BuildArtifactsQuery(
 
 // The query or mutation executed by buildRunDetail.
 const buildRunDetail_Operation = `
-query buildRunDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!) @api(name: v1) {
+query buildRunDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!) {
 	team(id: $teamId) {
 		project(id: $projectId) {
 			build {
@@ -26116,7 +26347,7 @@ func BuildRunDetailQuery(
 
 // The query or mutation executed by buildRuns.
 const buildRuns_Operation = `
-query buildRuns ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) @api(name: v1) {
+query buildRuns ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) {
 	team(id: $teamId) {
 		project(id: $projectId) {
 			build {
@@ -26180,7 +26411,7 @@ func BuildRunsQuery(
 
 // The query or mutation executed by cloudRevisions.
 const cloudRevisions_Operation = `
-query cloudRevisions ($teamId: UUID!, $cloudId: UUID!) @api(name: v1) {
+query cloudRevisions ($teamId: UUID!, $cloudId: UUID!) {
 	team(id: $teamId) {
 		id
 		cloudAccount(id: $cloudId) {
@@ -26295,7 +26526,7 @@ func CloudRevisionsQuery(
 
 // The query or mutation executed by clusterDetails.
 const clusterDetails_Operation = `
-query clusterDetails ($teamId: UUID!, $clusterId: UUID!) @api(name: v1) {
+query clusterDetails ($teamId: UUID!, $clusterId: UUID!) {
 	team(id: $teamId) {
 		id
 		cluster(id: $clusterId) {
@@ -26347,7 +26578,7 @@ func ClusterDetailsQuery(
 
 // The query or mutation executed by clusterRevisions.
 const clusterRevisions_Operation = `
-query clusterRevisions ($teamId: UUID!, $clusterId: UUID!) @api(name: v1) {
+query clusterRevisions ($teamId: UUID!, $clusterId: UUID!) {
 	team(id: $teamId) {
 		id
 		cluster(id: $clusterId) {
@@ -26411,7 +26642,7 @@ func ClusterRevisionsQuery(
 
 // The query or mutation executed by clusterStatus.
 const clusterStatus_Operation = `
-query clusterStatus ($teamId: UUID!, $clusterId: UUID!) @api(name: v1) {
+query clusterStatus ($teamId: UUID!, $clusterId: UUID!) {
 	team(id: $teamId) {
 		id
 		cluster(id: $clusterId) {
@@ -26452,7 +26683,7 @@ func ClusterStatusQuery(
 
 // The query or mutation executed by createBuildRun.
 const createBuildRun_Operation = `
-mutation createBuildRun ($buildId: UUID!) @api(name: v1) {
+mutation createBuildRun ($buildId: UUID!) {
 	createBuildRun(input: {buildId:$buildId}) {
 		id
 	}
@@ -26487,7 +26718,7 @@ func CreateBuildRunMutation(
 
 // The query or mutation executed by createDeployRun.
 const createDeployRun_Operation = `
-mutation createDeployRun ($input: CreateDeployRunInput!) @api(name: v1) {
+mutation createDeployRun ($input: CreateDeployRunInput!) {
 	createDeployRun(input: $input) {
 		id
 	}
@@ -26522,7 +26753,7 @@ func CreateDeployRunMutation(
 
 // The query or mutation executed by createProject.
 const createProject_Operation = `
-mutation createProject ($input: CreateProjectInput!) @api(name: v1) {
+mutation createProject ($input: CreateProjectInput!) {
 	createProject(input: $input) {
 		id
 		name
@@ -26561,7 +26792,7 @@ func CreateProjectMutation(
 
 // The query or mutation executed by createUserPersonalAccessToken.
 const createUserPersonalAccessToken_Operation = `
-mutation createUserPersonalAccessToken ($userId: UUID!, $name: String!) @api(name: v1) {
+mutation createUserPersonalAccessToken ($userId: UUID!, $name: String!) {
 	createPersonalAccessTokenForUser(userId: $userId, input: {name:$name}) {
 		id
 		name
@@ -26601,7 +26832,7 @@ func CreateUserPersonalAccessTokenMutation(
 
 // The query or mutation executed by createWorkflowTrigger.
 const createWorkflowTrigger_Operation = `
-mutation createWorkflowTrigger ($input: CreateTriggerInput!) @api(name: v1) {
+mutation createWorkflowTrigger ($input: CreateTriggerInput!) {
 	createTrigger(input: $input) {
 		id
 	}
@@ -26669,7 +26900,7 @@ func CurrentUserQuery(
 
 // The query or mutation executed by deleteGroup.
 const deleteGroup_Operation = `
-mutation deleteGroup ($id: UUID!) @api(name: v1) {
+mutation deleteGroup ($id: UUID!) {
 	deleteGroup(id: $id)
 }
 `
@@ -26702,7 +26933,7 @@ func DeleteGroupMutation(
 
 // The query or mutation executed by deleteProject.
 const deleteProject_Operation = `
-mutation deleteProject ($id: UUID!, $force: Boolean) @api(name: v1) {
+mutation deleteProject ($id: UUID!, $force: Boolean) {
 	deleteProject(id: $id, force: $force)
 }
 `
@@ -26737,7 +26968,7 @@ func DeleteProjectMutation(
 
 // The query or mutation executed by deleteProjectAndResources.
 const deleteProjectAndResources_Operation = `
-mutation deleteProjectAndResources ($id: UUID!, $deleteOnFailure: Boolean) @api(name: v1) {
+mutation deleteProjectAndResources ($id: UUID!, $deleteOnFailure: Boolean) {
 	deleteProjectAndResources(id: $id, deleteOnFailure: $deleteOnFailure)
 }
 `
@@ -26772,7 +27003,7 @@ func DeleteProjectAndResourcesMutation(
 
 // The query or mutation executed by deleteProjectResources.
 const deleteProjectResources_Operation = `
-mutation deleteProjectResources ($id: UUID!) @api(name: v1) {
+mutation deleteProjectResources ($id: UUID!) {
 	deleteProjectResources(id: $id)
 }
 `
@@ -26805,7 +27036,7 @@ func DeleteProjectResourcesMutation(
 
 // The query or mutation executed by deleteSubGroup.
 const deleteSubGroup_Operation = `
-mutation deleteSubGroup ($id: UUID!) @api(name: v1) {
+mutation deleteSubGroup ($id: UUID!) {
 	deleteSubGroup(id: $id)
 }
 `
@@ -26838,7 +27069,7 @@ func DeleteSubGroupMutation(
 
 // The query or mutation executed by deleteUserPersonalAccessToken.
 const deleteUserPersonalAccessToken_Operation = `
-mutation deleteUserPersonalAccessToken ($id: UUID!) @api(name: v1) {
+mutation deleteUserPersonalAccessToken ($id: UUID!) {
 	deletePersonalAccessToken(id: $id)
 }
 `
@@ -26871,7 +27102,7 @@ func DeleteUserPersonalAccessTokenMutation(
 
 // The query or mutation executed by deleteWorkflowTrigger.
 const deleteWorkflowTrigger_Operation = `
-mutation deleteWorkflowTrigger ($id: UUID!) @api(name: v1) {
+mutation deleteWorkflowTrigger ($id: UUID!) {
 	deleteTrigger(id: $id)
 }
 `
@@ -26904,7 +27135,7 @@ func DeleteWorkflowTriggerMutation(
 
 // The query or mutation executed by duplicateProject.
 const duplicateProject_Operation = `
-mutation duplicateProject ($id: UUID!, $input: DuplicateProjectInput!) @api(name: v1) {
+mutation duplicateProject ($id: UUID!, $input: DuplicateProjectInput!) {
 	duplicateProject(id: $id, input: $input) {
 		id
 		name
@@ -26950,7 +27181,7 @@ func DuplicateProjectMutation(
 
 // The query or mutation executed by ejectClusterComponent.
 const ejectClusterComponent_Operation = `
-mutation ejectClusterComponent ($clusterId: UUID!, $input: EjectClusterComponentInput!) @api(name: v1) {
+mutation ejectClusterComponent ($clusterId: UUID!, $input: EjectClusterComponentInput!) {
 	ejectClusterComponent(clusterId: $clusterId, input: $input) {
 		name
 		status
@@ -26988,7 +27219,7 @@ func EjectClusterComponentMutation(
 
 // The query or mutation executed by generateDownloadableLogLinkForWorkflowRunStep.
 const generateDownloadableLogLinkForWorkflowRunStep_Operation = `
-mutation generateDownloadableLogLinkForWorkflowRunStep ($actionStepId: UUID!) @api(name: v1) {
+mutation generateDownloadableLogLinkForWorkflowRunStep ($actionStepId: UUID!) {
 	generateDownloadableLogLinkForWorkflowRunStep(actionStepId: $actionStepId)
 }
 `
@@ -27021,7 +27252,7 @@ func GenerateDownloadableLogLinkForWorkflowRunStepMutation(
 
 // The query or mutation executed by groupsWithSubgroups.
 const groupsWithSubgroups_Operation = `
-query groupsWithSubgroups ($teamId: UUID!) @api(name: v1) {
+query groupsWithSubgroups ($teamId: UUID!) {
 	team(id: $teamId) {
 		id
 		groups {
@@ -27066,7 +27297,7 @@ func GroupsWithSubgroupsQuery(
 
 // The query or mutation executed by jobList.
 const jobList_Operation = `
-query jobList ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query jobList ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -27117,7 +27348,7 @@ func JobListQuery(
 
 // The query or mutation executed by jobRunDetail.
 const jobRunDetail_Operation = `
-query jobRunDetail ($id: UUID!, $teamId: UUID!) @api(name: v1) {
+query jobRunDetail ($id: UUID!, $teamId: UUID!) {
 	team(id: $teamId) {
 		id
 		jobRun(id: $id) {
@@ -27173,7 +27404,7 @@ func JobRunDetailQuery(
 
 // The query or mutation executed by jobRunList.
 const jobRunList_Operation = `
-query jobRunList ($id: UUID!, $teamId: UUID!, $page: PageInput!) @api(name: v1) {
+query jobRunList ($id: UUID!, $teamId: UUID!, $page: PageInput!) {
 	team(id: $teamId) {
 		id
 		job(id: $id) {
@@ -27236,7 +27467,7 @@ func JobRunListQuery(
 
 // The query or mutation executed by jobRunLogs.
 const jobRunLogs_Operation = `
-query jobRunLogs ($id: UUID!, $teamId: UUID!) @api(name: v1) {
+query jobRunLogs ($id: UUID!, $teamId: UUID!) {
 	team(id: $teamId) {
 		id
 		jobRun(id: $id) {
@@ -27288,7 +27519,7 @@ func JobRunLogsQuery(
 
 // The query or mutation executed by linkProject.
 const linkProject_Operation = `
-mutation linkProject ($input: ProjectLinkInput!) @api(name: v1) {
+mutation linkProject ($input: ProjectLinkInput!) {
 	linkProject(input: $input) {
 		id
 	}
@@ -27323,13 +27554,14 @@ func LinkProjectMutation(
 
 // The query or mutation executed by observabilityConfig.
 const observabilityConfig_Operation = `
-query observabilityConfig ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query observabilityConfig ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
 			id
 			observabilityConfig {
 				selector {
+					type
 					namespace
 					resourceName
 					containerName
@@ -27374,7 +27606,7 @@ func ObservabilityConfigQuery(
 
 // The query or mutation executed by projectAvailableProviders.
 const projectAvailableProviders_Operation = `
-query projectAvailableProviders ($teamId: UUID!, $projectId: UUID!, $linkType: ProjectLinkType!) @api(name: v1) {
+query projectAvailableProviders ($teamId: UUID!, $projectId: UUID!, $linkType: ProjectLinkType!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -27423,7 +27655,7 @@ func ProjectAvailableProvidersQuery(
 
 // The query or mutation executed by projectClusters.
 const projectClusters_Operation = `
-query projectClusters ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectClusters ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -27480,7 +27712,7 @@ func ProjectClustersQuery(
 
 // The query or mutation executed by projectDeployDetail.
 const projectDeployDetail_Operation = `
-query projectDeployDetail ($teamId: UUID!, $deployId: UUID!) @api(name: v1) {
+query projectDeployDetail ($teamId: UUID!, $deployId: UUID!) {
 	team(id: $teamId) {
 		id
 		deploy(id: $deployId) {
@@ -27557,7 +27789,7 @@ func ProjectDeployDetailQuery(
 
 // The query or mutation executed by projectDeployRevisions.
 const projectDeployRevisions_Operation = `
-query projectDeployRevisions ($teamId: UUID!, $projectId: UUID!, $page: PageInput) @api(name: v1) {
+query projectDeployRevisions ($teamId: UUID!, $projectId: UUID!, $page: PageInput) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -27633,7 +27865,7 @@ func ProjectDeployRevisionsQuery(
 
 // The query or mutation executed by projectDeployRunDetail.
 const projectDeployRunDetail_Operation = `
-query projectDeployRunDetail ($teamId: UUID!, $deployRunId: UUID!) @api(name: v1) {
+query projectDeployRunDetail ($teamId: UUID!, $deployRunId: UUID!) {
 	team(id: $teamId) {
 		id
 		deployRun(id: $deployRunId) {
@@ -27687,7 +27919,7 @@ func ProjectDeployRunDetailQuery(
 
 // The query or mutation executed by projectDeploys.
 const projectDeploys_Operation = `
-query projectDeploys ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectDeploys ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -27743,7 +27975,7 @@ func ProjectDeploysQuery(
 
 // The query or mutation executed by projectDetail.
 const projectDetail_Operation = `
-query projectDetail ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectDetail ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28314,7 +28546,7 @@ func ProjectDetailQuery(
 
 // The query or mutation executed by projectInfo.
 const projectInfo_Operation = `
-query projectInfo ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectInfo ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28503,7 +28735,7 @@ func ProjectInfoQuery(
 
 // The query or mutation executed by projectLinkedProjects.
 const projectLinkedProjects_Operation = `
-query projectLinkedProjects ($teamId: UUID!, $projectId: UUID!, $linkType: ProjectLinkType!) @api(name: v1) {
+query projectLinkedProjects ($teamId: UUID!, $projectId: UUID!, $linkType: ProjectLinkType!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28567,9 +28799,62 @@ func ProjectLinkedProjectsQuery(
 	return &data_, err_
 }
 
+// The query or mutation executed by projectOutput.
+const projectOutput_Operation = `
+query projectOutput ($teamId: UUID!, $projectId: UUID!) {
+	team(id: $teamId) {
+		id
+		project(id: $projectId) {
+			... ProjectOutput
+		}
+	}
+}
+fragment ProjectOutput on Project {
+	output {
+		entries {
+			... OutputEntryDetail
+		}
+	}
+}
+fragment OutputEntryDetail on ProjectOutputEntry {
+	displayName
+	name
+	type
+	value
+}
+`
+
+func ProjectOutputQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	teamId uuid.UUID,
+	projectId uuid.UUID,
+) (*ProjectOutputResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "projectOutput",
+		Query:  projectOutput_Operation,
+		Variables: &__projectOutputInput{
+			TeamId:    teamId,
+			ProjectId: projectId,
+		},
+	}
+	var err_ error
+
+	var data_ ProjectOutputResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by projectOutputs.
 const projectOutputs_Operation = `
-query projectOutputs ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectOutputs ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28622,7 +28907,7 @@ func ProjectOutputsQuery(
 
 // The query or mutation executed by projectStatusOnly.
 const projectStatusOnly_Operation = `
-query projectStatusOnly ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query projectStatusOnly ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28663,7 +28948,7 @@ func ProjectStatusOnlyQuery(
 
 // The query or mutation executed by projectsCount.
 const projectsCount_Operation = `
-query projectsCount ($teamId: UUID!) @api(name: v1) {
+query projectsCount ($teamId: UUID!) {
 	team(id: $teamId) {
 		id
 		projects {
@@ -28701,7 +28986,7 @@ func ProjectsCountQuery(
 
 // The query or mutation executed by projectsWithBlueprint.
 const projectsWithBlueprint_Operation = `
-query projectsWithBlueprint ($teamId: UUID!) @api(name: v1) {
+query projectsWithBlueprint ($teamId: UUID!) {
 	team(id: $teamId) {
 		id
 		projects {
@@ -28752,7 +29037,7 @@ func ProjectsWithBlueprintQuery(
 
 // The query or mutation executed by projectsWithDeploymentTimes.
 const projectsWithDeploymentTimes_Operation = `
-query projectsWithDeploymentTimes ($teamId: UUID!, $input: ProjectsInput!) @api(name: v1) {
+query projectsWithDeploymentTimes ($teamId: UUID!, $input: ProjectsInput!) {
 	team(id: $teamId) {
 		id
 		projects(input: $input) {
@@ -28801,7 +29086,7 @@ func ProjectsWithDeploymentTimesQuery(
 
 // The query or mutation executed by projectsWithStatus.
 const projectsWithStatus_Operation = `
-query projectsWithStatus ($teamId: UUID!, $input: ProjectsInput!) @api(name: v1) {
+query projectsWithStatus ($teamId: UUID!, $input: ProjectsInput!) {
 	team(id: $teamId) {
 		id
 		projects(input: $input) {
@@ -28847,7 +29132,7 @@ func ProjectsWithStatusQuery(
 
 // The query or mutation executed by resourceLogs.
 const resourceLogs_Operation = `
-query resourceLogs ($teamId: UUID!, $resourceId: UUID!) @api(name: v1) {
+query resourceLogs ($teamId: UUID!, $resourceId: UUID!) {
 	team(id: $teamId) {
 		id
 		resource(id: $resourceId) {
@@ -28906,7 +29191,7 @@ func ResourceLogsQuery(
 
 // The query or mutation executed by resourcesWithLogs.
 const resourcesWithLogs_Operation = `
-query resourcesWithLogs ($teamId: UUID!, $projectId: UUID!, $clusterId: UUID!, $selector: ObservabilityResourceSelectorInput) @api(name: v1) {
+query resourcesWithLogs ($teamId: UUID!, $projectId: UUID!, $clusterId: UUID!, $selector: ObservabilityResourceSelectorInput) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -28986,7 +29271,7 @@ func ResourcesWithLogsQuery(
 
 // The query or mutation executed by resourcesWithMetrics.
 const resourcesWithMetrics_Operation = `
-query resourcesWithMetrics ($teamId: UUID!, $projectId: UUID!, $clusterId: UUID!, $metricTypes: [MetricType!]!, $selector: ObservabilityResourceSelectorInput) @api(name: v1) {
+query resourcesWithMetrics ($teamId: UUID!, $projectId: UUID!, $clusterId: UUID!, $metricTypes: [MetricType!]!, $selector: ObservabilityResourceSelectorInput) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -29071,7 +29356,7 @@ func ResourcesWithMetricsQuery(
 
 // The query or mutation executed by submitWorkflowRun.
 const submitWorkflowRun_Operation = `
-mutation submitWorkflowRun ($workflowId: UUID!, $definition: WorkflowRunDefinitionInput) @api(name: v1) {
+mutation submitWorkflowRun ($workflowId: UUID!, $definition: WorkflowRunDefinitionInput) {
 	submitWorkflow(input: {workflowId:$workflowId,definition:$definition}) {
 		id
 	}
@@ -29108,7 +29393,7 @@ func SubmitWorkflowRunMutation(
 
 // The query or mutation executed by unlinkProject.
 const unlinkProject_Operation = `
-mutation unlinkProject ($id: UUID!) @api(name: v1) {
+mutation unlinkProject ($id: UUID!) {
 	unlinkProject(id: $id)
 }
 `
@@ -29141,7 +29426,7 @@ func UnlinkProjectMutation(
 
 // The query or mutation executed by updateDeploy.
 const updateDeploy_Operation = `
-mutation updateDeploy ($id: UUID!, $input: UpdateDeployInput!) @api(name: v1) {
+mutation updateDeploy ($id: UUID!, $input: UpdateDeployInput!) {
 	updateDeploy(id: $id, input: $input) {
 		id
 	}
@@ -29178,7 +29463,7 @@ func UpdateDeployMutation(
 
 // The query or mutation executed by updateProject.
 const updateProject_Operation = `
-mutation updateProject ($id: UUID!, $input: UpdateProjectInput!) @api(name: v1) {
+mutation updateProject ($id: UUID!, $input: UpdateProjectInput!) {
 	updateProject(id: $id, input: $input) {
 		id
 		name
@@ -29216,7 +29501,7 @@ func UpdateProjectMutation(
 
 // The query or mutation executed by updateWorkflow.
 const updateWorkflow_Operation = `
-mutation updateWorkflow ($id: UUID!, $input: UpdateWorkflowInput!) @api(name: v1) {
+mutation updateWorkflow ($id: UUID!, $input: UpdateWorkflowInput!) {
 	updateWorkflow(id: $id, input: $input) {
 		id
 	}
@@ -29253,7 +29538,7 @@ func UpdateWorkflowMutation(
 
 // The query or mutation executed by updateWorkflowTrigger.
 const updateWorkflowTrigger_Operation = `
-mutation updateWorkflowTrigger ($id: UUID!, $input: UpdateTriggerInput!) @api(name: v1) {
+mutation updateWorkflowTrigger ($id: UUID!, $input: UpdateTriggerInput!) {
 	updateTrigger(id: $id, input: $input) {
 		id
 	}
@@ -29290,7 +29575,7 @@ func UpdateWorkflowTriggerMutation(
 
 // The query or mutation executed by userPersonalAccessTokens.
 const userPersonalAccessTokens_Operation = `
-query userPersonalAccessTokens ($id: UUID!) @api(name: v1) {
+query userPersonalAccessTokens ($id: UUID!) {
 	user(id: $id) {
 		id
 		personalAccessTokens {
@@ -29331,7 +29616,7 @@ func UserPersonalAccessTokensQuery(
 
 // The query or mutation executed by workflowDetail.
 const workflowDetail_Operation = `
-query workflowDetail ($teamId: UUID!, $projectId: UUID!) @api(name: v1) {
+query workflowDetail ($teamId: UUID!, $projectId: UUID!) {
 	team(id: $teamId) {
 		project(id: $projectId) {
 			workflow {
@@ -29402,7 +29687,7 @@ func WorkflowDetailQuery(
 
 // The query or mutation executed by workflowRunDetail.
 const workflowRunDetail_Operation = `
-query workflowRunDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!) @api(name: v1) {
+query workflowRunDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -29571,7 +29856,7 @@ func WorkflowRunDetailQuery(
 
 // The query or mutation executed by workflowRunDetailLogs.
 const workflowRunDetailLogs_Operation = `
-query workflowRunDetailLogs ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!) @api(name: v1) {
+query workflowRunDetailLogs ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -29646,7 +29931,7 @@ func WorkflowRunDetailLogsQuery(
 
 // The query or mutation executed by workflowRunStepNestedDetail.
 const workflowRunStepNestedDetail_Operation = `
-query workflowRunStepNestedDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!) @api(name: v1) {
+query workflowRunStepNestedDetail ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -29750,7 +30035,7 @@ func WorkflowRunStepNestedDetailQuery(
 
 // The query or mutation executed by workflowRunStepNestedDetailLogs.
 const workflowRunStepNestedDetailLogs_Operation = `
-query workflowRunStepNestedDetailLogs ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!, $actionStepId: UUID!) @api(name: v1) {
+query workflowRunStepNestedDetailLogs ($teamId: UUID!, $projectId: UUID!, $runId: UUID!, $stepId: UUID!, $actionStepId: UUID!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {
@@ -29852,7 +30137,7 @@ func WorkflowRunStepNestedDetailLogsQuery(
 
 // The query or mutation executed by workflowRuns.
 const workflowRuns_Operation = `
-query workflowRuns ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) @api(name: v1) {
+query workflowRuns ($teamId: UUID!, $projectId: UUID!, $page: PageInput!) {
 	team(id: $teamId) {
 		id
 		project(id: $projectId) {

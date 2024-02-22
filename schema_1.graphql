@@ -2413,6 +2413,10 @@ type ObservabilityConfig {
   selector: ObservabilityResourceSelector
 }
 
+input ObservabilityConfigInput {
+  selector: ObservabilityResourceSelectorInput
+}
+
 type ObservabilityResourceSelector {
   type: ResourceType!
   namespace: String
@@ -3284,6 +3288,7 @@ input UpdateProjectInput {
   subGroupName: String
   name: String
   envs: [EnvVarInput!]
+  observabilityConfig: ObservabilityConfigInput
 }
 
 input UpdateProjectLinkInput {
@@ -3575,7 +3580,4 @@ enum WorkflowType {
 }
 
 scalar YAML
-
-enum AnchorGraphQLApiVersion { v0, v1 }
-directive @api(name: AnchorGraphQLApiVersion = v0) on QUERY | MUTATION | SUBSCRIPTION
 
