@@ -4,7 +4,9 @@ schema: schema_0.graphql
 operations:
   - "../../zeet/captain/packages/web-api/graphql/v0/common.gql"
   - "../../zeet/captain/packages/web-api/graphql/v0/*/*.gql"
+  # - "./graphql/v0/*/*.gql"
 generated: pkg/sdk/v0/generated.go
+optional: pointer
 allow_broken_features: true
 bindings:
   YAML:
@@ -32,4 +34,4 @@ bindings:
     type: string
   PermissibleMutation:
     type: string
-optional: pointer
+

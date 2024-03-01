@@ -771,7 +771,7 @@ type CloudResource {
   owners: [ResourceOwner!]
   events: [ResourceEvent!]
   resources: [CloudResource!]
-  metric(types: [MetricType!]!, clusterId: UUID!, projectId: UUID!): [ResourceMetric!]
+  metric(types: [MetricType!]!, clusterId: UUID!, projectId: UUID!): [MetricStream!]
   log(clusterId: UUID!, projectId: UUID!): [Log!]
 }
 
@@ -877,6 +877,7 @@ enum ClusterProvider {
 
 enum ClusterState {
   PENDING
+  PENDING_SETUP
   CREATING
   HEALTHY
   DELETING
@@ -886,6 +887,7 @@ enum ClusterState {
 
 enum ClusterStatus {
   PENDING
+  PENDING_SETUP
   CREATING
   HEALTHY
   DELETING
@@ -2284,13 +2286,55 @@ type Metric {
   value: Float
 }
 
+type MetricAnnotation {
+  type: MetricAnnotationType!
+  direction: MetricAnnotationDirection!
+  function: MetricAnnotationFunction
+  label: String
+  value: Float
+}
+
+enum MetricAnnotationDirection {
+  VERTICAL
+  HORIZONTAL
+}
+
+enum MetricAnnotationFunction {
+  AVERAGE
+  MAX
+  MIN
+}
+
+enum MetricAnnotationType {
+  LINE
+  POINT
+}
+
 type MetricEntry {
   timestamp: Time!
   value: Float
 }
 
+enum MetricLabelType {
+  POD
+  CONTAINER
+}
+
 enum MetricSourceType {
   PROMETHEUS
+}
+
+type MetricStream {
+  type: MetricType
+  query: String!
+  entries: [MetricEntry!]
+  labels: [MetricStreamLabel!]
+  annotations: [MetricAnnotation!]
+}
+
+type MetricStreamLabel {
+  label: MetricLabelType!
+  value: String!
 }
 
 enum MetricType {
@@ -2798,11 +2842,6 @@ input ResourceFilter {
   userIds: MultiEntityCriterion
 }
 
-type ResourceMetric {
-  type: MetricType
-  entries: [MetricEntry!]
-}
-
 type ResourceOwner {
   type: ResourceType!
   name: String!
@@ -3063,7 +3102,7 @@ input TerraformAutomaticOutputConfigurationInput {
 }
 
 type TerraformClusterComponentMetadata {
-  jobRunState: JobRunState!
+  jobRunState: JobRunState
 }
 
 type TerraformModuleSource {

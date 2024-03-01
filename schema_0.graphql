@@ -1239,6 +1239,7 @@ enum ClusterProvider {
 
 enum ClusterState {
   PENDING
+  PENDING_SETUP
   CREATING
   HEALTHY
   DELETING
@@ -1248,6 +1249,7 @@ enum ClusterState {
 
 enum ClusterStatus {
   PENDING
+  PENDING_SETUP
   CREATING
   HEALTHY
   DELETING
@@ -2037,6 +2039,7 @@ type DiscordWebhookIntegration implements Integration & NotificationIntegration 
   updatedAt: Time!
   url: String
   notificationSettings: NotificationIntegrationSettings
+  deliveryError: NotificationDeliveryError
 }
 
 input dispatchRepoGroupActionInput {
@@ -2166,6 +2169,7 @@ type EmailIntegration implements Integration & NotificationIntegration {
   """
   activated: Boolean
   notificationSettings: NotificationIntegrationSettings
+  deliveryError: NotificationDeliveryError
 }
 
 type EnvironmentOverview {
@@ -3039,6 +3043,30 @@ type Metric {
   value: Float
 }
 
+type MetricAnnotation {
+  type: MetricAnnotationType!
+  direction: MetricAnnotationDirection!
+  function: MetricAnnotationFunction
+  label: String
+  value: Float
+}
+
+enum MetricAnnotationDirection {
+  VERTICAL
+  HORIZONTAL
+}
+
+enum MetricAnnotationFunction {
+  AVERAGE
+  MAX
+  MIN
+}
+
+enum MetricAnnotationType {
+  LINE
+  POINT
+}
+
 type MetricEntry {
   timestamp: Time!
   value: Float
@@ -3059,6 +3087,7 @@ type MetricStream {
   query: String!
   entries: [MetricEntry!]
   labels: [MetricStreamLabel!]
+  annotations: [MetricAnnotation!]
 }
 
 type MetricStreamLabel {
@@ -3235,6 +3264,7 @@ type Mutation {
   2. when integrationID IS specified: configures per-integration settings
   """
   updateNotificationIntegrationSettings(userID: UUID!, integrationID: UUID, input: NotificationIntegrationSettingsInput!): NotificationIntegrationSettings
+  acknowledgeNotificationDeliveryError(userID: UUID!, integrationID: UUID!): NotificationDeliveryError
   createIPFSService(input: CreateIPFSServiceInput!): IPFSService!
   runJob(input: RunJobInput!): JobRun!
   cancelJob(input: CancelJobInput!): JobRun!
@@ -3419,6 +3449,17 @@ input NotificationConditionProviderInput {
   noConditions: Boolean
 }
 
+type NotificationDeliveryError {
+  message: String!
+  errorID: String
+  errorCode: String
+
+  """
+  A user may "acknowledge" this delivery error, which will set this timestamp.
+  """
+  acknowledgedAt: Time
+}
+
 """A destination for Zeet notifications."""
 interface NotificationIntegration {
   """
@@ -3431,6 +3472,11 @@ interface NotificationIntegration {
   or the user's settings are used as a fallback.
   """
   notificationSettings: NotificationIntegrationSettings
+
+  """
+  The latest error that prevented delivery of a notification via this integration.
+  """
+  deliveryError: NotificationDeliveryError
 }
 
 type NotificationIntegrationSettings {
@@ -4658,6 +4704,7 @@ type SlackWebhookIntegration implements Integration & NotificationIntegration {
   updatedAt: Time!
   url: String
   notificationSettings: NotificationIntegrationSettings
+  deliveryError: NotificationDeliveryError
 }
 
 enum SortDirection {
@@ -4908,7 +4955,7 @@ input TerraformAutomaticOutputConfigurationInput {
 }
 
 type TerraformClusterComponentMetadata {
-  jobRunState: JobRunState!
+  jobRunState: JobRunState
 }
 
 type TerraformModule {
