@@ -86,4 +86,4 @@ require (
 	k8s.io/utils v0.0.0-20230209194617-a36077c30491
 )
 
-replace github.com/Khan/genqlient => github.com/zeet-dev/genqlient v0.0.0-20240216234901-9cd40bcefdb4
+replace github.com/Khan/genqlient => github.com/zeet-dev/genqlient v0.0.0-20240305201314-69992b6a9701

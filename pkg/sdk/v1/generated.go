@@ -7405,8 +7405,8 @@ func (v *ResourcesWithMetricsResponse) GetTeam() *resourcesWithMetricsTeam { ret
 // RevisionDetailV1BlueprintConfiguration
 // RevisionDetailV1ClusterConfiguration
 // RevisionDetailV1CoreWeaveAccountConfiguration
-// RevisionDetailV1DeploymentConfiguration
 // RevisionDetailV1DOAccountConfiguration
+// RevisionDetailV1DeploymentConfiguration
 // RevisionDetailV1GCPAccountConfiguration
 // RevisionDetailV1LinodeAccountConfiguration
 // RevisionDetailV1VultrAccountConfiguration
@@ -7424,8 +7424,8 @@ func (v *RevisionDetailV1BlueprintConfiguration) implementsGraphQLInterfaceRevis
 func (v *RevisionDetailV1ClusterConfiguration) implementsGraphQLInterfaceRevisionDetailV1()      {}
 func (v *RevisionDetailV1CoreWeaveAccountConfiguration) implementsGraphQLInterfaceRevisionDetailV1() {
 }
-func (v *RevisionDetailV1DeploymentConfiguration) implementsGraphQLInterfaceRevisionDetailV1()    {}
 func (v *RevisionDetailV1DOAccountConfiguration) implementsGraphQLInterfaceRevisionDetailV1()     {}
+func (v *RevisionDetailV1DeploymentConfiguration) implementsGraphQLInterfaceRevisionDetailV1()    {}
 func (v *RevisionDetailV1GCPAccountConfiguration) implementsGraphQLInterfaceRevisionDetailV1()    {}
 func (v *RevisionDetailV1LinodeAccountConfiguration) implementsGraphQLInterfaceRevisionDetailV1() {}
 func (v *RevisionDetailV1VultrAccountConfiguration) implementsGraphQLInterfaceRevisionDetailV1()  {}
@@ -7459,11 +7459,11 @@ func __unmarshalRevisionDetailV1(b []byte, v *RevisionDetailV1) error {
 	case "CoreWeaveAccountConfiguration":
 		*v = new(RevisionDetailV1CoreWeaveAccountConfiguration)
 		return json.Unmarshal(b, *v)
-	case "DeploymentConfiguration":
-		*v = new(RevisionDetailV1DeploymentConfiguration)
-		return json.Unmarshal(b, *v)
 	case "DOAccountConfiguration":
 		*v = new(RevisionDetailV1DOAccountConfiguration)
+		return json.Unmarshal(b, *v)
+	case "DeploymentConfiguration":
+		*v = new(RevisionDetailV1DeploymentConfiguration)
 		return json.Unmarshal(b, *v)
 	case "GCPAccountConfiguration":
 		*v = new(RevisionDetailV1GCPAccountConfiguration)
@@ -7527,20 +7527,20 @@ func __marshalRevisionDetailV1(v *RevisionDetailV1) ([]byte, error) {
 			*RevisionDetailV1CoreWeaveAccountConfiguration
 		}{typename, v}
 		return json.Marshal(result)
-	case *RevisionDetailV1DeploymentConfiguration:
-		typename = "DeploymentConfiguration"
-
-		result := struct {
-			TypeName string `json:"__typename"`
-			*RevisionDetailV1DeploymentConfiguration
-		}{typename, v}
-		return json.Marshal(result)
 	case *RevisionDetailV1DOAccountConfiguration:
 		typename = "DOAccountConfiguration"
 
 		result := struct {
 			TypeName string `json:"__typename"`
 			*RevisionDetailV1DOAccountConfiguration
+		}{typename, v}
+		return json.Marshal(result)
+	case *RevisionDetailV1DeploymentConfiguration:
+		typename = "DeploymentConfiguration"
+
+		result := struct {
+			TypeName string `json:"__typename"`
+			*RevisionDetailV1DeploymentConfiguration
 		}{typename, v}
 		return json.Marshal(result)
 	case *RevisionDetailV1GCPAccountConfiguration:

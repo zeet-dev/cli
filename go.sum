@@ -307,8 +307,8 @@ github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9de
 github.com/yuin/goldmark v1.1.32/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-github.com/zeet-dev/genqlient v0.0.0-20240216234901-9cd40bcefdb4 h1:/Kdg+bcjqzYAPCuU9KaDNRevqIb72su6/TQK27aG22I=
-github.com/zeet-dev/genqlient v0.0.0-20240216234901-9cd40bcefdb4/go.mod h1:CxlUi7/HTxw3SETFpvQTVBHHqWPvTHMQtrMVwbBklgw=
+github.com/zeet-dev/genqlient v0.0.0-20240305201314-69992b6a9701 h1:Tmqj2pgP6b9Jn+xdbM7I1V4FtvnlR3MQV9s1lb9YOFo=
+github.com/zeet-dev/genqlient v0.0.0-20240305201314-69992b6a9701/go.mod h1:HNyy3wZvuYwmW3Y7mkoQLZsa/R5n5yIRajS1kPBvSFM=
 github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9 h1:2f3aYcnXtEEIHwlPXmxgjWAPXKvAAMcQepf3EEL4y3Y=
 github.com/zeet-dev/pkg v0.0.0-20220428223645-b4c9393bd8a9/go.mod h1:FAYtQyFtIVN2rmHXRrvMuvC9NzhZ/Mq1lz4Ib84z2Uk=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
