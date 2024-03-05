@@ -1,0 +1,6 @@
+query team($id: UUID!) {
+  team(id: $id) {
+    id
+    name
+  }
+}

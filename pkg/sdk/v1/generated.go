@@ -7910,6 +7910,14 @@ func (v *TCPProbeInput) GetHost() string { return v.Host }
 // GetPort returns TCPProbeInput.Port, and is useful for accessing the field via an interface.
 func (v *TCPProbeInput) GetPort() string { return v.Port }
 
+// teamResponse is returned by team on success.
+type TeamResponse struct {
+	Team *teamTeam `json:"team"`
+}
+
+// GetTeam returns TeamResponse.Team, and is useful for accessing the field via an interface.
+func (v *TeamResponse) GetTeam() *teamTeam { return v.Team }
+
 // See TerraformAutomaticOutputConfiguration.
 type TerraformAutomaticOutputConfigurationInput struct {
 	Disabled  *bool    `json:"disabled"`
@@ -15464,6 +15472,14 @@ func (v *__submitWorkflowRunInput) GetWorkflowId() uuid.UUID { return v.Workflow
 // GetDefinition returns __submitWorkflowRunInput.Definition, and is useful for accessing the field via an interface.
 func (v *__submitWorkflowRunInput) GetDefinition() *WorkflowRunDefinitionInput { return v.Definition }
 
+// __teamInput is used internally by genqlient
+type __teamInput struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns __teamInput.Id, and is useful for accessing the field via an interface.
+func (v *__teamInput) GetId() uuid.UUID { return v.Id }
+
 // __unlinkProjectInput is used internally by genqlient
 type __unlinkProjectInput struct {
 	Id uuid.UUID `json:"id"`
@@ -21424,6 +21440,26 @@ type submitWorkflowRunSubmitWorkflowWorkflowRun struct {
 
 // GetId returns submitWorkflowRunSubmitWorkflowWorkflowRun.Id, and is useful for accessing the field via an interface.
 func (v *submitWorkflowRunSubmitWorkflowWorkflowRun) GetId() uuid.UUID { return v.Id }
+
+// teamTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type teamTeam struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns teamTeam.Id, and is useful for accessing the field via an interface.
+func (v *teamTeam) GetId() uuid.UUID { return v.Id }
+
+// GetName returns teamTeam.Name, and is useful for accessing the field via an interface.
+func (v *teamTeam) GetName() string { return v.Name }
 
 // updateDeployUpdateDeploy includes the requested fields of the GraphQL type Deploy.
 type updateDeployUpdateDeploy struct {
@@ -30239,6 +30275,42 @@ func SubmitWorkflowRunMutation(
 	var err_ error
 
 	var data_ SubmitWorkflowRunResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by team.
+const team_Operation = `
+query team ($id: UUID!) {
+	team(id: $id) {
+		id
+		name
+	}
+}
+`
+
+func TeamQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+) (*TeamResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "team",
+		Query:  team_Operation,
+		Variables: &__teamInput{
+			Id: id,
+		},
+	}
+	var err_ error
+
+	var data_ TeamResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
