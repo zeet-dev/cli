@@ -1515,17 +1515,6 @@ enum FilterCriterionOperatorType {
   CONTAINS
 }
 
-input FilterExpression {
-  operator: FilterExpressionOperator
-  filters: [FilterNode!]
-}
-
-enum FilterExpressionOperator {
-  AND
-  OR
-  NOT
-}
-
 input FilterInput {
   sort: SortInput
   page: PageInput
@@ -1533,7 +1522,6 @@ input FilterInput {
 }
 
 input FilterNode {
-  expression: FilterExpression
   criterion: FilterCriterion
 }
 
@@ -1798,11 +1786,18 @@ type GroupEdge {
 }
 
 input GroupFilter {
-  page: PageInput
+  id: MultiEntityCriterion
+  name: StringCriterion
 }
 
 interface GroupOwner {
-  groups(input: GroupFilter): GroupConnection!
+  groups(input: GroupsInput): GroupConnection!
+}
+
+input GroupsInput {
+  sort: SortInput
+  page: PageInput
+  filter: GroupFilter
 }
 
 type HelmChart {
@@ -3037,7 +3032,7 @@ type Team implements GroupOwner {
   avatar: URL
   members: [UserTeamEdge!]!
   memberInvitations: [TeamMemberInvitation!]!
-  groups(input: GroupFilter): GroupConnection!
+  groups(input: GroupsInput): GroupConnection!
   cloudAccount(id: UUID!): CloudAccount
   cluster(id: UUID!): Cluster
   blueprints(page: PageInput): BlueprintConnection

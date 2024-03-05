@@ -3,7 +3,7 @@
 schema: schema_1.graphql
 operations:
   - "../../zeet/captain/packages/web-api/graphql/v1/*/*.gql"
-  # - "./graphql/v1/*/*.gql"
+  - "./graphql/v1/*/*.gql"
 generated: pkg/sdk/v1/generated.go
 optional: pointer
 allow_broken_features: true

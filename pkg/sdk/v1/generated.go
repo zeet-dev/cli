@@ -1033,6 +1033,29 @@ func (v *CreateDeployRunResponse) GetCreateDeployRun() createDeployRunCreateDepl
 	return v.CreateDeployRun
 }
 
+type CreateGroupInput struct {
+	TeamId uuid.UUID     `json:"teamId"`
+	Name   string        `json:"name"`
+	Envs   []EnvVarInput `json:"envs"`
+}
+
+// GetTeamId returns CreateGroupInput.TeamId, and is useful for accessing the field via an interface.
+func (v *CreateGroupInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetName returns CreateGroupInput.Name, and is useful for accessing the field via an interface.
+func (v *CreateGroupInput) GetName() string { return v.Name }
+
+// GetEnvs returns CreateGroupInput.Envs, and is useful for accessing the field via an interface.
+func (v *CreateGroupInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// createGroupResponse is returned by createGroup on success.
+type CreateGroupResponse struct {
+	CreateGroup createGroupCreateGroup `json:"createGroup"`
+}
+
+// GetCreateGroup returns CreateGroupResponse.CreateGroup, and is useful for accessing the field via an interface.
+func (v *CreateGroupResponse) GetCreateGroup() createGroupCreateGroup { return v.CreateGroup }
+
 type CreateProjectInput struct {
 	TeamId       uuid.UUID                      `json:"teamId"`
 	GroupId      *uuid.UUID                     `json:"groupId"`
@@ -1095,6 +1118,31 @@ type CreateProjectResponse struct {
 
 // GetCreateProject returns CreateProjectResponse.CreateProject, and is useful for accessing the field via an interface.
 func (v *CreateProjectResponse) GetCreateProject() createProjectCreateProject { return v.CreateProject }
+
+type CreateSubGroupInput struct {
+	GroupId uuid.UUID     `json:"groupId"`
+	Name    string        `json:"name"`
+	Envs    []EnvVarInput `json:"envs"`
+}
+
+// GetGroupId returns CreateSubGroupInput.GroupId, and is useful for accessing the field via an interface.
+func (v *CreateSubGroupInput) GetGroupId() uuid.UUID { return v.GroupId }
+
+// GetName returns CreateSubGroupInput.Name, and is useful for accessing the field via an interface.
+func (v *CreateSubGroupInput) GetName() string { return v.Name }
+
+// GetEnvs returns CreateSubGroupInput.Envs, and is useful for accessing the field via an interface.
+func (v *CreateSubGroupInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// createSubGroupResponse is returned by createSubGroup on success.
+type CreateSubGroupResponse struct {
+	CreateSubGroup createSubGroupCreateSubGroup `json:"createSubGroup"`
+}
+
+// GetCreateSubGroup returns CreateSubGroupResponse.CreateSubGroup, and is useful for accessing the field via an interface.
+func (v *CreateSubGroupResponse) GetCreateSubGroup() createSubGroupCreateSubGroup {
+	return v.CreateSubGroup
+}
 
 type CreateTriggerInput struct {
 	Definition TriggerDefinitionInput `json:"definition"`
@@ -3561,6 +3609,56 @@ func (v *GitSourceIntegrationInput) GetBitbucketIntegrationId() *uuid.UUID {
 	return v.BitbucketIntegrationId
 }
 
+type GroupFilter struct {
+	Id   *MultiEntityCriterion `json:"id"`
+	Name *StringCriterion      `json:"name"`
+}
+
+// GetId returns GroupFilter.Id, and is useful for accessing the field via an interface.
+func (v *GroupFilter) GetId() *MultiEntityCriterion { return v.Id }
+
+// GetName returns GroupFilter.Name, and is useful for accessing the field via an interface.
+func (v *GroupFilter) GetName() *StringCriterion { return v.Name }
+
+// groupResponse is returned by group on success.
+type GroupResponse struct {
+	Team *groupTeam `json:"team"`
+}
+
+// GetTeam returns GroupResponse.Team, and is useful for accessing the field via an interface.
+func (v *GroupResponse) GetTeam() *groupTeam { return v.Team }
+
+// groupSubGroupsResponse is returned by groupSubGroups on success.
+type GroupSubGroupsResponse struct {
+	Team *groupSubGroupsTeam `json:"team"`
+}
+
+// GetTeam returns GroupSubGroupsResponse.Team, and is useful for accessing the field via an interface.
+func (v *GroupSubGroupsResponse) GetTeam() *groupSubGroupsTeam { return v.Team }
+
+type GroupsInput struct {
+	Sort   *SortInput   `json:"sort"`
+	Page   *PageInput   `json:"page"`
+	Filter *GroupFilter `json:"filter"`
+}
+
+// GetSort returns GroupsInput.Sort, and is useful for accessing the field via an interface.
+func (v *GroupsInput) GetSort() *SortInput { return v.Sort }
+
+// GetPage returns GroupsInput.Page, and is useful for accessing the field via an interface.
+func (v *GroupsInput) GetPage() *PageInput { return v.Page }
+
+// GetFilter returns GroupsInput.Filter, and is useful for accessing the field via an interface.
+func (v *GroupsInput) GetFilter() *GroupFilter { return v.Filter }
+
+// groupsResponse is returned by groups on success.
+type GroupsResponse struct {
+	Team *groupsTeam `json:"team"`
+}
+
+// GetTeam returns GroupsResponse.Team, and is useful for accessing the field via an interface.
+func (v *GroupsResponse) GetTeam() *groupsTeam { return v.Team }
+
 // groupsWithSubgroupsResponse is returned by groupsWithSubgroups on success.
 type GroupsWithSubgroupsResponse struct {
 	Team *groupsWithSubgroupsTeam `json:"team"`
@@ -4568,6 +4666,13 @@ const (
 	MetricTypeCpuUtilization     MetricType = "CPU_UTILIZATION"
 	MetricTypeMemoryUtilization  MetricType = "MEMORY_UTILIZATION"
 )
+
+type MultiEntityCriterion struct {
+	Value []uuid.UUID `json:"value"`
+}
+
+// GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
+func (v *MultiEntityCriterion) GetValue() []uuid.UUID { return v.Value }
 
 type ObservabilityConfigInput struct {
 	Selector *ObservabilityResourceSelectorInput `json:"selector"`
@@ -7776,6 +7881,14 @@ func (v *StringCriterion) GetValue() *string { return v.Value }
 // GetOperator returns StringCriterion.Operator, and is useful for accessing the field via an interface.
 func (v *StringCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
+// subGroupResponse is returned by subGroup on success.
+type SubGroupResponse struct {
+	Team *subGroupTeam `json:"team"`
+}
+
+// GetTeam returns SubGroupResponse.Team, and is useful for accessing the field via an interface.
+func (v *SubGroupResponse) GetTeam() *subGroupTeam { return v.Team }
+
 // submitWorkflowRunResponse is returned by submitWorkflowRun on success.
 type SubmitWorkflowRunResponse struct {
 	SubmitWorkflow submitWorkflowRunSubmitWorkflowWorkflowRun `json:"submitWorkflow"`
@@ -7970,6 +8083,29 @@ type UpdateDeployResponse struct {
 // GetUpdateDeploy returns UpdateDeployResponse.UpdateDeploy, and is useful for accessing the field via an interface.
 func (v *UpdateDeployResponse) GetUpdateDeploy() updateDeployUpdateDeploy { return v.UpdateDeploy }
 
+type UpdateGroupInput struct {
+	Id   uuid.UUID     `json:"id"`
+	Name *string       `json:"name"`
+	Envs []EnvVarInput `json:"envs"`
+}
+
+// GetId returns UpdateGroupInput.Id, and is useful for accessing the field via an interface.
+func (v *UpdateGroupInput) GetId() uuid.UUID { return v.Id }
+
+// GetName returns UpdateGroupInput.Name, and is useful for accessing the field via an interface.
+func (v *UpdateGroupInput) GetName() *string { return v.Name }
+
+// GetEnvs returns UpdateGroupInput.Envs, and is useful for accessing the field via an interface.
+func (v *UpdateGroupInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// updateGroupResponse is returned by updateGroup on success.
+type UpdateGroupResponse struct {
+	UpdateGroup updateGroupUpdateGroup `json:"updateGroup"`
+}
+
+// GetUpdateGroup returns UpdateGroupResponse.UpdateGroup, and is useful for accessing the field via an interface.
+func (v *UpdateGroupResponse) GetUpdateGroup() updateGroupUpdateGroup { return v.UpdateGroup }
+
 type UpdateProjectInput struct {
 	GroupId             *uuid.UUID                `json:"groupId"`
 	GroupName           *string                   `json:"groupName"`
@@ -8010,6 +8146,31 @@ type UpdateProjectResponse struct {
 
 // GetUpdateProject returns UpdateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
 func (v *UpdateProjectResponse) GetUpdateProject() updateProjectUpdateProject { return v.UpdateProject }
+
+type UpdateSubGroupInput struct {
+	Id   uuid.UUID     `json:"id"`
+	Name *string       `json:"name"`
+	Envs []EnvVarInput `json:"envs"`
+}
+
+// GetId returns UpdateSubGroupInput.Id, and is useful for accessing the field via an interface.
+func (v *UpdateSubGroupInput) GetId() uuid.UUID { return v.Id }
+
+// GetName returns UpdateSubGroupInput.Name, and is useful for accessing the field via an interface.
+func (v *UpdateSubGroupInput) GetName() *string { return v.Name }
+
+// GetEnvs returns UpdateSubGroupInput.Envs, and is useful for accessing the field via an interface.
+func (v *UpdateSubGroupInput) GetEnvs() []EnvVarInput { return v.Envs }
+
+// updateSubGroupResponse is returned by updateSubGroup on success.
+type UpdateSubGroupResponse struct {
+	UpdateSubGroup updateSubGroupUpdateSubGroup `json:"updateSubGroup"`
+}
+
+// GetUpdateSubGroup returns UpdateSubGroupResponse.UpdateSubGroup, and is useful for accessing the field via an interface.
+func (v *UpdateSubGroupResponse) GetUpdateSubGroup() updateSubGroupUpdateSubGroup {
+	return v.UpdateSubGroup
+}
 
 type UpdateTriggerInput struct {
 	TriggerId  uuid.UUID               `json:"triggerId"`
@@ -14745,6 +14906,14 @@ type __createDeployRunInput struct {
 // GetInput returns __createDeployRunInput.Input, and is useful for accessing the field via an interface.
 func (v *__createDeployRunInput) GetInput() CreateDeployRunInput { return v.Input }
 
+// __createGroupInput is used internally by genqlient
+type __createGroupInput struct {
+	Input CreateGroupInput `json:"input"`
+}
+
+// GetInput returns __createGroupInput.Input, and is useful for accessing the field via an interface.
+func (v *__createGroupInput) GetInput() CreateGroupInput { return v.Input }
+
 // __createProjectInput is used internally by genqlient
 type __createProjectInput struct {
 	Input CreateProjectInput `json:"input"`
@@ -14752,6 +14921,14 @@ type __createProjectInput struct {
 
 // GetInput returns __createProjectInput.Input, and is useful for accessing the field via an interface.
 func (v *__createProjectInput) GetInput() CreateProjectInput { return v.Input }
+
+// __createSubGroupInput is used internally by genqlient
+type __createSubGroupInput struct {
+	Input CreateSubGroupInput `json:"input"`
+}
+
+// GetInput returns __createSubGroupInput.Input, and is useful for accessing the field via an interface.
+func (v *__createSubGroupInput) GetInput() CreateSubGroupInput { return v.Input }
 
 // __createUserPersonalAccessTokenInput is used internally by genqlient
 type __createUserPersonalAccessTokenInput struct {
@@ -14870,6 +15047,42 @@ type __generateDownloadableLogLinkForWorkflowRunStepInput struct {
 func (v *__generateDownloadableLogLinkForWorkflowRunStepInput) GetActionStepId() uuid.UUID {
 	return v.ActionStepId
 }
+
+// __groupInput is used internally by genqlient
+type __groupInput struct {
+	TeamId uuid.UUID `json:"teamId"`
+	Id     uuid.UUID `json:"id"`
+}
+
+// GetTeamId returns __groupInput.TeamId, and is useful for accessing the field via an interface.
+func (v *__groupInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetId returns __groupInput.Id, and is useful for accessing the field via an interface.
+func (v *__groupInput) GetId() uuid.UUID { return v.Id }
+
+// __groupSubGroupsInput is used internally by genqlient
+type __groupSubGroupsInput struct {
+	TeamId  uuid.UUID `json:"teamId"`
+	GroupId uuid.UUID `json:"groupId"`
+}
+
+// GetTeamId returns __groupSubGroupsInput.TeamId, and is useful for accessing the field via an interface.
+func (v *__groupSubGroupsInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetGroupId returns __groupSubGroupsInput.GroupId, and is useful for accessing the field via an interface.
+func (v *__groupSubGroupsInput) GetGroupId() uuid.UUID { return v.GroupId }
+
+// __groupsInput is used internally by genqlient
+type __groupsInput struct {
+	TeamId uuid.UUID   `json:"teamId"`
+	Input  GroupsInput `json:"input"`
+}
+
+// GetTeamId returns __groupsInput.TeamId, and is useful for accessing the field via an interface.
+func (v *__groupsInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetInput returns __groupsInput.Input, and is useful for accessing the field via an interface.
+func (v *__groupsInput) GetInput() GroupsInput { return v.Input }
 
 // __groupsWithSubgroupsInput is used internally by genqlient
 type __groupsWithSubgroupsInput struct {
@@ -15223,6 +15436,22 @@ func (v *__resourcesWithMetricsInput) GetSelector() *ObservabilityResourceSelect
 	return v.Selector
 }
 
+// __subGroupInput is used internally by genqlient
+type __subGroupInput struct {
+	TeamId  uuid.UUID `json:"teamId"`
+	GroupId uuid.UUID `json:"groupId"`
+	Id      uuid.UUID `json:"id"`
+}
+
+// GetTeamId returns __subGroupInput.TeamId, and is useful for accessing the field via an interface.
+func (v *__subGroupInput) GetTeamId() uuid.UUID { return v.TeamId }
+
+// GetGroupId returns __subGroupInput.GroupId, and is useful for accessing the field via an interface.
+func (v *__subGroupInput) GetGroupId() uuid.UUID { return v.GroupId }
+
+// GetId returns __subGroupInput.Id, and is useful for accessing the field via an interface.
+func (v *__subGroupInput) GetId() uuid.UUID { return v.Id }
+
 // __submitWorkflowRunInput is used internally by genqlient
 type __submitWorkflowRunInput struct {
 	WorkflowId uuid.UUID                   `json:"workflowId"`
@@ -15255,6 +15484,18 @@ func (v *__updateDeployInput) GetId() uuid.UUID { return v.Id }
 // GetInput returns __updateDeployInput.Input, and is useful for accessing the field via an interface.
 func (v *__updateDeployInput) GetInput() UpdateDeployInput { return v.Input }
 
+// __updateGroupInput is used internally by genqlient
+type __updateGroupInput struct {
+	Id    uuid.UUID        `json:"id"`
+	Input UpdateGroupInput `json:"input"`
+}
+
+// GetId returns __updateGroupInput.Id, and is useful for accessing the field via an interface.
+func (v *__updateGroupInput) GetId() uuid.UUID { return v.Id }
+
+// GetInput returns __updateGroupInput.Input, and is useful for accessing the field via an interface.
+func (v *__updateGroupInput) GetInput() UpdateGroupInput { return v.Input }
+
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
 	Id    uuid.UUID          `json:"id"`
@@ -15266,6 +15507,18 @@ func (v *__updateProjectInput) GetId() uuid.UUID { return v.Id }
 
 // GetInput returns __updateProjectInput.Input, and is useful for accessing the field via an interface.
 func (v *__updateProjectInput) GetInput() UpdateProjectInput { return v.Input }
+
+// __updateSubGroupInput is used internally by genqlient
+type __updateSubGroupInput struct {
+	Id    uuid.UUID           `json:"id"`
+	Input UpdateSubGroupInput `json:"input"`
+}
+
+// GetId returns __updateSubGroupInput.Id, and is useful for accessing the field via an interface.
+func (v *__updateSubGroupInput) GetId() uuid.UUID { return v.Id }
+
+// GetInput returns __updateSubGroupInput.Input, and is useful for accessing the field via an interface.
+func (v *__updateSubGroupInput) GetInput() UpdateSubGroupInput { return v.Input }
 
 // __updateWorkflowInput is used internally by genqlient
 type __updateWorkflowInput struct {
@@ -17182,6 +17435,66 @@ type createDeployRunCreateDeployRun struct {
 // GetId returns createDeployRunCreateDeployRun.Id, and is useful for accessing the field via an interface.
 func (v *createDeployRunCreateDeployRun) GetId() uuid.UUID { return v.Id }
 
+// createGroupCreateGroup includes the requested fields of the GraphQL type Group.
+type createGroupCreateGroup struct {
+	Id        uuid.UUID                          `json:"id"`
+	Name      string                             `json:"name"`
+	Envs      []createGroupCreateGroupEnvsEnvVar `json:"envs"`
+	Owner     createGroupCreateGroupOwnerTeam    `json:"owner"`
+	CreatedAt time.Time                          `json:"createdAt"`
+	UpdatedAt time.Time                          `json:"updatedAt"`
+}
+
+// GetId returns createGroupCreateGroup.Id, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns createGroupCreateGroup.Name, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetName() string { return v.Name }
+
+// GetEnvs returns createGroupCreateGroup.Envs, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetEnvs() []createGroupCreateGroupEnvsEnvVar { return v.Envs }
+
+// GetOwner returns createGroupCreateGroup.Owner, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetOwner() createGroupCreateGroupOwnerTeam { return v.Owner }
+
+// GetCreatedAt returns createGroupCreateGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns createGroupCreateGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// createGroupCreateGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type createGroupCreateGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns createGroupCreateGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroupEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns createGroupCreateGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroupEnvsEnvVar) GetValue() string { return v.Value }
+
+// createGroupCreateGroupOwnerTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type createGroupCreateGroupOwnerTeam struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns createGroupCreateGroupOwnerTeam.Id, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroupOwnerTeam) GetId() uuid.UUID { return v.Id }
+
+// GetName returns createGroupCreateGroupOwnerTeam.Name, and is useful for accessing the field via an interface.
+func (v *createGroupCreateGroupOwnerTeam) GetName() string { return v.Name }
+
 // createProjectCreateProject includes the requested fields of the GraphQL type Project.
 type createProjectCreateProject struct {
 	Id       uuid.UUID                           `json:"id"`
@@ -17207,6 +17520,60 @@ type createProjectCreateProjectWorkflow struct {
 
 // GetId returns createProjectCreateProjectWorkflow.Id, and is useful for accessing the field via an interface.
 func (v *createProjectCreateProjectWorkflow) GetId() uuid.UUID { return v.Id }
+
+// createSubGroupCreateSubGroup includes the requested fields of the GraphQL type SubGroup.
+type createSubGroupCreateSubGroup struct {
+	Id        uuid.UUID                                `json:"id"`
+	Name      string                                   `json:"name"`
+	Envs      []createSubGroupCreateSubGroupEnvsEnvVar `json:"envs"`
+	Group     *createSubGroupCreateSubGroupGroup       `json:"group"`
+	CreatedAt time.Time                                `json:"createdAt"`
+	UpdatedAt time.Time                                `json:"updatedAt"`
+}
+
+// GetId returns createSubGroupCreateSubGroup.Id, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns createSubGroupCreateSubGroup.Name, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetName() string { return v.Name }
+
+// GetEnvs returns createSubGroupCreateSubGroup.Envs, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetEnvs() []createSubGroupCreateSubGroupEnvsEnvVar {
+	return v.Envs
+}
+
+// GetGroup returns createSubGroupCreateSubGroup.Group, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetGroup() *createSubGroupCreateSubGroupGroup { return v.Group }
+
+// GetCreatedAt returns createSubGroupCreateSubGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns createSubGroupCreateSubGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// createSubGroupCreateSubGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type createSubGroupCreateSubGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns createSubGroupCreateSubGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroupEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns createSubGroupCreateSubGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroupEnvsEnvVar) GetValue() string { return v.Value }
+
+// createSubGroupCreateSubGroupGroup includes the requested fields of the GraphQL type Group.
+type createSubGroupCreateSubGroupGroup struct {
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+}
+
+// GetId returns createSubGroupCreateSubGroupGroup.Id, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroupGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns createSubGroupCreateSubGroupGroup.Name, and is useful for accessing the field via an interface.
+func (v *createSubGroupCreateSubGroupGroup) GetName() string { return v.Name }
 
 // createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken includes the requested fields of the GraphQL type PersonalAccessToken.
 type createUserPersonalAccessTokenCreatePersonalAccessTokenForUserPersonalAccessToken struct {
@@ -17321,6 +17688,210 @@ func (v *ejectClusterComponentEjectClusterComponent) GetName() string { return v
 func (v *ejectClusterComponentEjectClusterComponent) GetStatus() ClusterComponentEjectedStatus {
 	return v.Status
 }
+
+// groupSubGroupsTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type groupSubGroupsTeam struct {
+	Groups groupSubGroupsTeamGroupsGroupConnection `json:"groups"`
+}
+
+// GetGroups returns groupSubGroupsTeam.Groups, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeam) GetGroups() groupSubGroupsTeamGroupsGroupConnection { return v.Groups }
+
+// groupSubGroupsTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
+type groupSubGroupsTeamGroupsGroupConnection struct {
+	Nodes []groupSubGroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+}
+
+// GetNodes returns groupSubGroupsTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnection) GetNodes() []groupSubGroupsTeamGroupsGroupConnectionNodesGroup {
+	return v.Nodes
+}
+
+// groupSubGroupsTeamGroupsGroupConnectionNodesGroup includes the requested fields of the GraphQL type Group.
+type groupSubGroupsTeamGroupsGroupConnectionNodesGroup struct {
+	Id        uuid.UUID                                                            `json:"id"`
+	SubGroups []groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup `json:"subGroups"`
+}
+
+// GetId returns groupSubGroupsTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroup) GetId() uuid.UUID { return v.Id }
+
+// GetSubGroups returns groupSubGroupsTeamGroupsGroupConnectionNodesGroup.SubGroups, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroup) GetSubGroups() []groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup {
+	return v.SubGroups
+}
+
+// groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup includes the requested fields of the GraphQL type SubGroup.
+type groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup struct {
+	Id        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+// GetId returns groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup.Id, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup) GetId() uuid.UUID {
+	return v.Id
+}
+
+// GetName returns groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup.Name, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup) GetName() string {
+	return v.Name
+}
+
+// GetCreatedAt returns groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup) GetCreatedAt() time.Time {
+	return v.CreatedAt
+}
+
+// GetUpdatedAt returns groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *groupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup) GetUpdatedAt() time.Time {
+	return v.UpdatedAt
+}
+
+// groupTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type groupTeam struct {
+	Groups groupTeamGroupsGroupConnection `json:"groups"`
+}
+
+// GetGroups returns groupTeam.Groups, and is useful for accessing the field via an interface.
+func (v *groupTeam) GetGroups() groupTeamGroupsGroupConnection { return v.Groups }
+
+// groupTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
+type groupTeamGroupsGroupConnection struct {
+	Nodes []groupTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+}
+
+// GetNodes returns groupTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnection) GetNodes() []groupTeamGroupsGroupConnectionNodesGroup {
+	return v.Nodes
+}
+
+// groupTeamGroupsGroupConnectionNodesGroup includes the requested fields of the GraphQL type Group.
+type groupTeamGroupsGroupConnectionNodesGroup struct {
+	Id        uuid.UUID                                            `json:"id"`
+	Name      string                                               `json:"name"`
+	Envs      []groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar `json:"envs"`
+	CreatedAt time.Time                                            `json:"createdAt"`
+	UpdatedAt time.Time                                            `json:"updatedAt"`
+}
+
+// GetId returns groupTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns groupTeamGroupsGroupConnectionNodesGroup.Name, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroup) GetName() string { return v.Name }
+
+// GetEnvs returns groupTeamGroupsGroupConnectionNodesGroup.Envs, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroup) GetEnvs() []groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar {
+	return v.Envs
+}
+
+// GetCreatedAt returns groupTeamGroupsGroupConnectionNodesGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns groupTeamGroupsGroupConnectionNodesGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *groupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar) GetValue() string { return v.Value }
+
+// groupsTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type groupsTeam struct {
+	Groups groupsTeamGroupsGroupConnection `json:"groups"`
+}
+
+// GetGroups returns groupsTeam.Groups, and is useful for accessing the field via an interface.
+func (v *groupsTeam) GetGroups() groupsTeamGroupsGroupConnection { return v.Groups }
+
+// groupsTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
+type groupsTeamGroupsGroupConnection struct {
+	PageInfo groupsTeamGroupsGroupConnectionPageInfo     `json:"pageInfo"`
+	Nodes    []groupsTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+}
+
+// GetPageInfo returns groupsTeamGroupsGroupConnection.PageInfo, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnection) GetPageInfo() groupsTeamGroupsGroupConnectionPageInfo {
+	return v.PageInfo
+}
+
+// GetNodes returns groupsTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnection) GetNodes() []groupsTeamGroupsGroupConnectionNodesGroup {
+	return v.Nodes
+}
+
+// groupsTeamGroupsGroupConnectionNodesGroup includes the requested fields of the GraphQL type Group.
+type groupsTeamGroupsGroupConnectionNodesGroup struct {
+	Id        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
+// GetId returns groupsTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionNodesGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns groupsTeamGroupsGroupConnectionNodesGroup.Name, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionNodesGroup) GetName() string { return v.Name }
+
+// GetCreatedAt returns groupsTeamGroupsGroupConnectionNodesGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionNodesGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns groupsTeamGroupsGroupConnectionNodesGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionNodesGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// groupsTeamGroupsGroupConnectionPageInfo includes the requested fields of the GraphQL type PageInfo.
+type groupsTeamGroupsGroupConnectionPageInfo struct {
+	HasNextPage     bool   `json:"hasNextPage"`
+	HasPreviousPage bool   `json:"hasPreviousPage"`
+	StartCursor     string `json:"startCursor"`
+	EndCursor       string `json:"endCursor"`
+}
+
+// GetHasNextPage returns groupsTeamGroupsGroupConnectionPageInfo.HasNextPage, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionPageInfo) GetHasNextPage() bool { return v.HasNextPage }
+
+// GetHasPreviousPage returns groupsTeamGroupsGroupConnectionPageInfo.HasPreviousPage, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionPageInfo) GetHasPreviousPage() bool { return v.HasPreviousPage }
+
+// GetStartCursor returns groupsTeamGroupsGroupConnectionPageInfo.StartCursor, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionPageInfo) GetStartCursor() string { return v.StartCursor }
+
+// GetEndCursor returns groupsTeamGroupsGroupConnectionPageInfo.EndCursor, and is useful for accessing the field via an interface.
+func (v *groupsTeamGroupsGroupConnectionPageInfo) GetEndCursor() string { return v.EndCursor }
 
 // groupsWithSubgroupsTeam includes the requested fields of the GraphQL type Team.
 // The GraphQL type's documentation follows.
@@ -20760,6 +21331,92 @@ func (v *resourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudReso
 	return &retval, nil
 }
 
+// subGroupTeam includes the requested fields of the GraphQL type Team.
+// The GraphQL type's documentation follows.
+//
+// A Zeet Team is used as a permission boundary, and as the owner of projects, clusters, and other resources.
+// Groups can grant access to multiple teams.
+//
+// Teams can also have sub-teams or a parent team.
+// A member of parent team will have equal access to all sub-teams.
+// Being a member of sub-team does not confer access to the parent team.
+type subGroupTeam struct {
+	Groups subGroupTeamGroupsGroupConnection `json:"groups"`
+}
+
+// GetGroups returns subGroupTeam.Groups, and is useful for accessing the field via an interface.
+func (v *subGroupTeam) GetGroups() subGroupTeamGroupsGroupConnection { return v.Groups }
+
+// subGroupTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
+type subGroupTeamGroupsGroupConnection struct {
+	Nodes []subGroupTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+}
+
+// GetNodes returns subGroupTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnection) GetNodes() []subGroupTeamGroupsGroupConnectionNodesGroup {
+	return v.Nodes
+}
+
+// subGroupTeamGroupsGroupConnectionNodesGroup includes the requested fields of the GraphQL type Group.
+type subGroupTeamGroupsGroupConnectionNodesGroup struct {
+	Id       uuid.UUID                                           `json:"id"`
+	SubGroup subGroupTeamGroupsGroupConnectionNodesGroupSubGroup `json:"subGroup"`
+}
+
+// GetId returns subGroupTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroup) GetId() uuid.UUID { return v.Id }
+
+// GetSubGroup returns subGroupTeamGroupsGroupConnectionNodesGroup.SubGroup, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroup) GetSubGroup() subGroupTeamGroupsGroupConnectionNodesGroupSubGroup {
+	return v.SubGroup
+}
+
+// subGroupTeamGroupsGroupConnectionNodesGroupSubGroup includes the requested fields of the GraphQL type SubGroup.
+type subGroupTeamGroupsGroupConnectionNodesGroupSubGroup struct {
+	Id        uuid.UUID                                                       `json:"id"`
+	Name      string                                                          `json:"name"`
+	Envs      []subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar `json:"envs"`
+	CreatedAt time.Time                                                       `json:"createdAt"`
+	UpdatedAt time.Time                                                       `json:"updatedAt"`
+}
+
+// GetId returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroup.Id, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroup.Name, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroup) GetName() string { return v.Name }
+
+// GetEnvs returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroup.Envs, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroup) GetEnvs() []subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar {
+	return v.Envs
+}
+
+// GetCreatedAt returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroup) GetCreatedAt() time.Time {
+	return v.CreatedAt
+}
+
+// GetUpdatedAt returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroup) GetUpdatedAt() time.Time {
+	return v.UpdatedAt
+}
+
+// subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar) GetName() string {
+	return v.Name
+}
+
+// GetValue returns subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *subGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar) GetValue() string {
+	return v.Value
+}
+
 // submitWorkflowRunSubmitWorkflowWorkflowRun includes the requested fields of the GraphQL type WorkflowRun.
 type submitWorkflowRunSubmitWorkflowWorkflowRun struct {
 	Id uuid.UUID `json:"id"`
@@ -20776,6 +21433,42 @@ type updateDeployUpdateDeploy struct {
 // GetId returns updateDeployUpdateDeploy.Id, and is useful for accessing the field via an interface.
 func (v *updateDeployUpdateDeploy) GetId() uuid.UUID { return v.Id }
 
+// updateGroupUpdateGroup includes the requested fields of the GraphQL type Group.
+type updateGroupUpdateGroup struct {
+	Id        uuid.UUID                          `json:"id"`
+	Name      string                             `json:"name"`
+	Envs      []updateGroupUpdateGroupEnvsEnvVar `json:"envs"`
+	CreatedAt time.Time                          `json:"createdAt"`
+	UpdatedAt time.Time                          `json:"updatedAt"`
+}
+
+// GetId returns updateGroupUpdateGroup.Id, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns updateGroupUpdateGroup.Name, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroup) GetName() string { return v.Name }
+
+// GetEnvs returns updateGroupUpdateGroup.Envs, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroup) GetEnvs() []updateGroupUpdateGroupEnvsEnvVar { return v.Envs }
+
+// GetCreatedAt returns updateGroupUpdateGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns updateGroupUpdateGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// updateGroupUpdateGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type updateGroupUpdateGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns updateGroupUpdateGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroupEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns updateGroupUpdateGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *updateGroupUpdateGroupEnvsEnvVar) GetValue() string { return v.Value }
+
 // updateProjectUpdateProject includes the requested fields of the GraphQL type Project.
 type updateProjectUpdateProject struct {
 	Id   uuid.UUID `json:"id"`
@@ -20787,6 +21480,44 @@ func (v *updateProjectUpdateProject) GetId() uuid.UUID { return v.Id }
 
 // GetName returns updateProjectUpdateProject.Name, and is useful for accessing the field via an interface.
 func (v *updateProjectUpdateProject) GetName() string { return v.Name }
+
+// updateSubGroupUpdateSubGroup includes the requested fields of the GraphQL type SubGroup.
+type updateSubGroupUpdateSubGroup struct {
+	Id        uuid.UUID                                `json:"id"`
+	Name      string                                   `json:"name"`
+	Envs      []updateSubGroupUpdateSubGroupEnvsEnvVar `json:"envs"`
+	CreatedAt time.Time                                `json:"createdAt"`
+	UpdatedAt time.Time                                `json:"updatedAt"`
+}
+
+// GetId returns updateSubGroupUpdateSubGroup.Id, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroup) GetId() uuid.UUID { return v.Id }
+
+// GetName returns updateSubGroupUpdateSubGroup.Name, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroup) GetName() string { return v.Name }
+
+// GetEnvs returns updateSubGroupUpdateSubGroup.Envs, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroup) GetEnvs() []updateSubGroupUpdateSubGroupEnvsEnvVar {
+	return v.Envs
+}
+
+// GetCreatedAt returns updateSubGroupUpdateSubGroup.CreatedAt, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroup) GetCreatedAt() time.Time { return v.CreatedAt }
+
+// GetUpdatedAt returns updateSubGroupUpdateSubGroup.UpdatedAt, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroup) GetUpdatedAt() time.Time { return v.UpdatedAt }
+
+// updateSubGroupUpdateSubGroupEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type updateSubGroupUpdateSubGroupEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns updateSubGroupUpdateSubGroupEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroupEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns updateSubGroupUpdateSubGroupEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *updateSubGroupUpdateSubGroupEnvsEnvVar) GetValue() string { return v.Value }
 
 // updateWorkflowTriggerUpdateTrigger includes the requested fields of the GraphQL type Trigger.
 type updateWorkflowTriggerUpdateTrigger struct {
@@ -26518,6 +27249,54 @@ func CreateDeployRunMutation(
 	return &data_, err_
 }
 
+// The query or mutation executed by createGroup.
+const createGroup_Operation = `
+mutation createGroup ($input: CreateGroupInput!) {
+	createGroup(input: $input) {
+		id
+		name
+		envs {
+			name
+			value
+		}
+		owner {
+			... on Team {
+				id
+				name
+			}
+		}
+		createdAt
+		updatedAt
+	}
+}
+`
+
+func CreateGroupMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	input CreateGroupInput,
+) (*CreateGroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "createGroup",
+		Query:  createGroup_Operation,
+		Variables: &__createGroupInput{
+			Input: input,
+		},
+	}
+	var err_ error
+
+	var data_ CreateGroupResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by createProject.
 const createProject_Operation = `
 mutation createProject ($input: CreateProjectInput!) {
@@ -26546,6 +27325,52 @@ func CreateProjectMutation(
 	var err_ error
 
 	var data_ CreateProjectResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by createSubGroup.
+const createSubGroup_Operation = `
+mutation createSubGroup ($input: CreateSubGroupInput!) {
+	createSubGroup(input: $input) {
+		id
+		name
+		envs {
+			name
+			value
+		}
+		group {
+			id
+			name
+		}
+		createdAt
+		updatedAt
+	}
+}
+`
+
+func CreateSubGroupMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	input CreateSubGroupInput,
+) (*CreateSubGroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "createSubGroup",
+		Query:  createSubGroup_Operation,
+		Variables: &__createSubGroupInput{
+			Input: input,
+		},
+	}
+	var err_ error
+
+	var data_ CreateSubGroupResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -27006,6 +27831,151 @@ func GenerateDownloadableLogLinkForWorkflowRunStepMutation(
 	var err_ error
 
 	var data_ GenerateDownloadableLogLinkForWorkflowRunStepResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by group.
+const group_Operation = `
+query group ($teamId: UUID!, $id: UUID!) {
+	team(id: $teamId) {
+		groups(input: {page:{first:1},filter:{id:{value:[$id]}}}) {
+			nodes {
+				id
+				name
+				envs {
+					name
+					value
+				}
+				createdAt
+				updatedAt
+			}
+		}
+	}
+}
+`
+
+func GroupQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	teamId uuid.UUID,
+	id uuid.UUID,
+) (*GroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "group",
+		Query:  group_Operation,
+		Variables: &__groupInput{
+			TeamId: teamId,
+			Id:     id,
+		},
+	}
+	var err_ error
+
+	var data_ GroupResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by groupSubGroups.
+const groupSubGroups_Operation = `
+query groupSubGroups ($teamId: UUID!, $groupId: UUID!) {
+	team(id: $teamId) {
+		groups(input: {page:{first:1},filter:{id:{value:[$groupId]}}}) {
+			nodes {
+				id
+				subGroups {
+					id
+					name
+					createdAt
+					updatedAt
+				}
+			}
+		}
+	}
+}
+`
+
+func GroupSubGroupsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	teamId uuid.UUID,
+	groupId uuid.UUID,
+) (*GroupSubGroupsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "groupSubGroups",
+		Query:  groupSubGroups_Operation,
+		Variables: &__groupSubGroupsInput{
+			TeamId:  teamId,
+			GroupId: groupId,
+		},
+	}
+	var err_ error
+
+	var data_ GroupSubGroupsResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by groups.
+const groups_Operation = `
+query groups ($teamId: UUID!, $input: GroupsInput!) {
+	team(id: $teamId) {
+		groups(input: $input) {
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			nodes {
+				id
+				name
+				createdAt
+				updatedAt
+			}
+		}
+	}
+}
+`
+
+func GroupsQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	teamId uuid.UUID,
+	input GroupsInput,
+) (*GroupsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "groups",
+		Query:  groups_Operation,
+		Variables: &__groupsInput{
+			TeamId: teamId,
+			Input:  input,
+		},
+	}
+	var err_ error
+
+	var data_ GroupsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -29190,6 +30160,59 @@ func ResourcesWithMetricsQuery(
 	return &data_, err_
 }
 
+// The query or mutation executed by subGroup.
+const subGroup_Operation = `
+query subGroup ($teamId: UUID!, $groupId: UUID!, $id: UUID!) {
+	team(id: $teamId) {
+		groups(input: {page:{first:1},filter:{id:{value:[$groupId]}}}) {
+			nodes {
+				id
+				subGroup(id: $id) {
+					id
+					name
+					envs {
+						name
+						value
+					}
+					createdAt
+					updatedAt
+				}
+			}
+		}
+	}
+}
+`
+
+func SubGroupQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	teamId uuid.UUID,
+	groupId uuid.UUID,
+	id uuid.UUID,
+) (*SubGroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "subGroup",
+		Query:  subGroup_Operation,
+		Variables: &__subGroupInput{
+			TeamId:  teamId,
+			GroupId: groupId,
+			Id:      id,
+		},
+	}
+	var err_ error
+
+	var data_ SubGroupResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by submitWorkflowRun.
 const submitWorkflowRun_Operation = `
 mutation submitWorkflowRun ($workflowId: UUID!, $definition: WorkflowRunDefinitionInput) {
@@ -29297,6 +30320,50 @@ func UpdateDeployMutation(
 	return &data_, err_
 }
 
+// The query or mutation executed by updateGroup.
+const updateGroup_Operation = `
+mutation updateGroup ($id: UUID!, $input: UpdateGroupInput!) {
+	updateGroup(id: $id, input: $input) {
+		id
+		name
+		envs {
+			name
+			value
+		}
+		createdAt
+		updatedAt
+	}
+}
+`
+
+func UpdateGroupMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	input UpdateGroupInput,
+) (*UpdateGroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "updateGroup",
+		Query:  updateGroup_Operation,
+		Variables: &__updateGroupInput{
+			Id:    id,
+			Input: input,
+		},
+	}
+	var err_ error
+
+	var data_ UpdateGroupResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by updateProject.
 const updateProject_Operation = `
 mutation updateProject ($id: UUID!, $input: UpdateProjectInput!) {
@@ -29324,6 +30391,50 @@ func UpdateProjectMutation(
 	var err_ error
 
 	var data_ UpdateProjectResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by updateSubGroup.
+const updateSubGroup_Operation = `
+mutation updateSubGroup ($id: UUID!, $input: UpdateSubGroupInput!) {
+	updateSubGroup(id: $id, input: $input) {
+		id
+		name
+		envs {
+			name
+			value
+		}
+		createdAt
+		updatedAt
+	}
+}
+`
+
+func UpdateSubGroupMutation(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	id uuid.UUID,
+	input UpdateSubGroupInput,
+) (*UpdateSubGroupResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "updateSubGroup",
+		Query:  updateSubGroup_Operation,
+		Variables: &__updateSubGroupInput{
+			Id:    id,
+			Input: input,
+		},
+	}
+	var err_ error
+
+	var data_ UpdateSubGroupResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(

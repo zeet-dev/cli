@@ -1,0 +1,75 @@
+query group($teamId: UUID!, $id: UUID!) {
+  team(id: $teamId) {
+    groups(input: { page: { first: 1 }, filter: { id: { value: [$id] } } }) {
+      nodes {
+        id
+        name
+        envs {
+          name
+          value
+        }
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+
+query groups($teamId: UUID!, $input: GroupsInput!) {
+  team(id: $teamId) {
+    groups(input: $input) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      nodes {
+        id
+        name
+        createdAt
+        updatedAt
+      }
+    }
+  }
+}
+
+query subGroup($teamId: UUID!, $groupId: UUID!, $id: UUID!) {
+  team(id: $teamId) {
+    groups(
+      input: { page: { first: 1 }, filter: { id: { value: [$groupId] } } }
+    ) {
+      nodes {
+        id
+        subGroup(id: $id) {
+          id
+          name
+          envs {
+            name
+            value
+          }
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+}
+
+query groupSubGroups($teamId: UUID!, $groupId: UUID!) {
+  team(id: $teamId) {
+    groups(
+      input: { page: { first: 1 }, filter: { id: { value: [$groupId] } } }
+    ) {
+      nodes {
+        id
+        subGroups {
+          id
+          name
+          createdAt
+          updatedAt
+        }
+      }
+    }
+  }
+}
