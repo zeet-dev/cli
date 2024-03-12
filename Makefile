@@ -12,6 +12,9 @@ link-dev:
 gen-go:
 	go generate ./...
 
+test:
+	go test ./...
+
 # GraphQL
 
 gen-gql: get-schema gen-gql-go gen-gql-sdk
