@@ -1,0 +1,103 @@
+fragment CDNDetail on CDN {
+  id
+  domains {
+    domain
+    certReady
+    routeReady
+    instruction {
+      domain
+      type
+      value
+    }
+  }
+  endpoint
+  state
+  certificate {
+    dnsNames
+    ready
+    issuing
+    instructions {
+      name
+      domain
+      type
+      value
+    }
+  }
+}
+
+fragment DomainDetail on CustomDomain {
+  id
+  domain
+  isApex
+  cnameTargets
+  ipTargets
+  disableCertManager
+  certManagerChallengeType
+  syncDomain {
+    id
+  }
+  instructions {
+    domain
+    type
+    value
+  }
+  certificate {
+    dnsNames
+    ready
+    issuing
+    challenges {
+      dnsName
+      solver
+      statusReason
+      statusState
+      type
+      wildcard
+    }
+    instructions {
+      domain
+      type
+      value
+    }
+  }
+}
+
+fragment ClusterDomainsDetail on ClusterDomains {
+  id
+  cluster {
+    id
+    name
+  }
+  domains {
+    id
+    ...DomainDetail
+  }
+}
+
+fragment RepoNetwork on Repo {
+  ...RepoCommon
+  clusterDomains {
+    id
+    ...ClusterDomainsDetail
+  }
+  cdns {
+    id
+    ...CDNDetail
+  }
+  ports {
+    port
+    protocol
+    public
+    https
+    grpc
+    loadBalancer
+  }
+  hostNetwork
+  staticIP
+}
+
+query repoNetwork($id: UUID!) {
+  repo(id: $id) {
+    id
+    ...RepoNetwork
+  }
+}

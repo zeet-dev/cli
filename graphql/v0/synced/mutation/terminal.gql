@@ -1,0 +1,9 @@
+mutation createEphemeralContainer(
+  $deploymentId: UUID!
+  $input: CreateEphemeralContainerInput!
+) {
+  createEphemeralContainer(deploymentId: $deploymentId, input: $input) {
+    name
+    image
+  }
+}

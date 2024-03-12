@@ -1,0 +1,54 @@
+mutation createProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    id
+    name
+    workflow {
+      id
+    }
+  }
+}
+
+mutation updateProject($id: UUID!, $input: UpdateProjectInput!) {
+  updateProject(id: $id, input: $input) {
+    id
+    name
+  }
+}
+
+mutation duplicateProject($id: UUID!, $input: DuplicateProjectInput!)
+{
+  duplicateProject(id: $id, input: $input) {
+    id
+    name
+    group {
+      id
+      name
+    }
+    subGroup {
+      id
+      name
+    }
+  }
+}
+
+mutation deleteProject($id: UUID!, $force: Boolean) {
+  deleteProject(id: $id, force: $force)
+}
+
+mutation deleteProjectResources($id: UUID!) {
+  deleteProjectResources(id: $id)
+}
+
+mutation deleteProjectAndResources($id: UUID!, $deleteOnFailure: Boolean) {
+  deleteProjectAndResources(id: $id, deleteOnFailure: $deleteOnFailure)
+}
+
+mutation linkProject($input: ProjectLinkInput!) {
+  linkProject(input: $input) {
+    id
+  }
+}
+
+mutation unlinkProject($id: UUID!) {
+  unlinkProject(id: $id)
+}

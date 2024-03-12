@@ -1,0 +1,6 @@
+mutation runJob($input: RunJobInput!) {
+  runJob(input: $input) {
+    id
+    ...JobCommon
+  }
+}

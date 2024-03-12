@@ -1,0 +1,13 @@
+query suggestProjectName($user: ID!, $input: SuggestProjectNameInput!) {
+  user(id: $user) {
+    id
+    suggestProjectName(input: $input)
+  }
+}
+
+query checkProjectName($user: ID!, $input: CheckProjectNameInput!) {
+  user(id: $user) {
+    id
+    checkProjectName(input: $input)
+  }
+}

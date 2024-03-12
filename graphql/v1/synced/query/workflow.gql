@@ -1,0 +1,370 @@
+fragment WorkflowRunListItem on WorkflowRun {
+  id
+  sequence
+  status
+  createdAt
+
+  steps {
+    id
+    action
+    dependsOn {
+      id
+    }
+    status
+    sequenceNumber
+    createdAt
+    updatedAt
+    executionId
+    executionType
+
+    ... on BuildRunStep {
+      outputs {
+        id
+        image
+      }
+    }
+
+    ... on DeployRunStep {
+      workflowRun {
+        id
+        workflowId
+        sequence
+        status
+        createdAt
+        steps {
+          id
+          action
+          dependsOn {
+            id
+          }
+          status
+          sequenceNumber
+          createdAt
+          updatedAt
+          executionId
+          executionType
+        }
+      }
+    }
+  }
+}
+
+fragment WorkflowRunDetail on WorkflowRun {
+  ...WorkflowRunListItem
+  finishedAt
+  steps {
+    ...WorkflowRunStepDetail
+  }
+}
+
+fragment WorkflowRunStepDetail on WorkflowRunStep {
+  id
+  action
+  dependsOn {
+    id
+  }
+  status
+  sequenceNumber
+  createdAt
+  updatedAt
+  executionId
+  executionType
+  executionError
+
+  ... on BuildRunStep {
+    outputs {
+      id
+      image
+    }
+  }
+
+  ... on DeployRunStep {
+    workflowRun {
+      id
+      workflowId
+      sequence
+      status
+      createdAt
+      steps {
+        id
+        action
+        dependsOn {
+          id
+        }
+        status
+        sequenceNumber
+        createdAt
+        updatedAt
+        executionId
+        executionType
+        executionError
+      }
+    }
+  }
+
+  ... on ClusterPrecheckStep {
+    cluster {
+      ...ClusterDetailV1
+    }
+  }
+}
+
+query workflowRuns($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
+{
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      workflow {
+        id
+        runs(input: { page: $page, filter: {} }) {
+          totalCount
+          pageInfo {
+            hasNextPage
+          }
+          nodes {
+            ...WorkflowRunListItem
+          }
+        }
+      }
+    }
+  }
+}
+
+query workflowRunDetail($teamId: UUID!, $projectId: UUID!, $runId: UUID!)
+{
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      workflow {
+        id
+        run(id: $runId) {
+          ...WorkflowRunDetail
+        }
+      }
+    }
+  }
+}
+
+fragment WorkflowDetail on Workflow {
+  id
+  steps {
+    action
+    sequenceNumber
+    disabled
+  }
+  triggers {
+    totalCount
+    nodes {
+      id
+      action
+      events
+      configuration {
+        event {
+          git {
+            repoId
+            repoBranchName
+            repoOwner
+            repoName
+            githubConnectionId
+          }
+        }
+        action {
+          workflowId
+        }
+      }
+    }
+  }
+}
+
+query workflowDetail($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    project(id: $projectId) {
+      workflow {
+        ...WorkflowDetail
+      }
+    }
+  }
+}
+
+query workflowRunDetailLogs(
+  $teamId: UUID!
+  $projectId: UUID!
+  $runId: UUID!
+  $stepId: UUID!
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      workflow {
+        id
+        run(id: $runId) {
+          id
+          step(id: $stepId) {
+            ... on JobRunStep {
+              logs {
+                id
+                completed
+                expired
+                entries {
+                  timestamp
+                  text
+                }
+              }
+            }
+            ... on BuildRunStep {
+              logs {
+                id
+                completed
+                expired
+                entries {
+                  timestamp
+                  text
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query workflowRunStepNestedDetail(
+  $teamId: UUID!
+  $projectId: UUID!
+  $runId: UUID!
+  $stepId: UUID!
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      workflow {
+        id
+        run(id: $runId) {
+          id
+          step(id: $stepId) {
+            id
+            ... on DeployRunStep {
+              workflowRun {
+                id
+                workflowId
+                sequence
+                status
+                createdAt
+                steps {
+                  id
+                  action
+                  dependsOn {
+                    id
+                  }
+                  status
+                  sequenceNumber
+                  createdAt
+                  updatedAt
+                  executionId
+                  executionType
+                  executionError
+                }
+              }
+            }
+            ... on DestroyRunStep {
+              workflowRun {
+                id
+                workflowId
+                sequence
+                status
+                createdAt
+                steps {
+                  id
+                  action
+                  dependsOn {
+                    id
+                  }
+                  status
+                  sequenceNumber
+                  createdAt
+                  updatedAt
+                  executionId
+                  executionType
+                  executionError
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query workflowRunStepNestedDetailLogs(
+  $teamId: UUID!
+  $projectId: UUID!
+  $runId: UUID!
+  $stepId: UUID!
+  $actionStepId: UUID!
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      workflow {
+        id
+        run(id: $runId) {
+          id
+          step(id: $stepId) {
+            id
+            ... on DeployRunStep {
+              workflowRun {
+                id
+                sequence
+                status
+                createdAt
+                step(id: $actionStepId) {
+                  id
+                  ... on JobRunStep {
+                    logs {
+                      id
+                      completed
+                      expired
+                      entries {
+                        timestamp
+                        text
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            ... on DestroyRunStep {
+              workflowRun {
+                id
+                sequence
+                status
+                createdAt
+                step(id: $actionStepId) {
+                  id
+                  ... on JobRunStep {
+                    logs {
+                      id
+                      completed
+                      expired
+                      entries {
+                        timestamp
+                        text
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

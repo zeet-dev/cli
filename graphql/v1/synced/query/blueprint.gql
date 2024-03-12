@@ -1,0 +1,47 @@
+fragment BlueprintConfigurationRevision on BlueprintConfiguration {
+  ...RevisionDetailV1
+}
+
+fragment BlueprintConfigurationDetail on BlueprintConfiguration {
+  slug
+  displayName
+  published
+  description
+  tags
+  logoUrl
+  richInputSchema
+}
+
+fragment BlueprintDetail on Blueprint {
+  id
+  type
+  isOfficial
+  enabled
+  configuration {
+    ...BlueprintConfigurationDetail
+  }
+}
+
+query blueprint($teamId: UUID!, $blueprintId: UUID!) {
+  team(id: $teamId) {
+    id
+    blueprint(id: $blueprintId) {
+      ...BlueprintDetail
+    }
+  }
+}
+
+query blueprintRevisions($teamId: UUID!, $blueprintId: UUID!) {
+  team(id: $teamId) {
+    id
+    blueprint(id: $blueprintId) {
+      id
+      configurationRevisions {
+        nodes {
+          ...BlueprintConfigurationDetail
+          ...BlueprintConfigurationRevision
+        }
+      }
+    }
+  }
+}

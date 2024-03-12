@@ -1,0 +1,29 @@
+query monthlyCostForServices($awsAccountId: UUID!, $services: [String!]!) {
+  withoutCredit: awsCostUsage2(
+    awsAccountId: $awsAccountId
+    where: {
+      granularity: "MONTHLY"
+      dimensionType1: "SERVICE"
+      dimensionType2: "RECORD_TYPE"
+      dimension2NotIn: ["Credit"]
+      dimension1In: $services
+    }
+  ) {
+    service
+    unblendedCostAmount
+    unblendedCostUnit
+    periodStart
+    periodEnd
+  }
+
+  withCredit: awsCostByService(
+    awsAccountId: $awsAccountId
+    where: { services: $services }
+  ) {
+    service
+    unblendedCostAmount
+    unblendedCostUnit
+    periodStart
+    periodEnd
+  }
+}

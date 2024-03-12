@@ -1,0 +1,9 @@
+mutation ejectClusterComponent(
+  $clusterId: UUID!
+  $input: EjectClusterComponentInput!
+) {
+  ejectClusterComponent(clusterId: $clusterId, input: $input) {
+    name
+    status
+  }
+}

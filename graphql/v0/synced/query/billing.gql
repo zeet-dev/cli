@@ -1,0 +1,124 @@
+fragment BillingOverviewDetail on BillingOverview {
+  currentProducts {
+    ...ProductDetail
+  }
+  externalLinks {
+    invoiceHistory {
+      ...UrlOrContactUsDetail
+    }
+    managePaymentMethod {
+      ...UrlOrContactUsDetail
+    }
+    downgrade {
+      ...UrlOrContactUsDetail
+    }
+    help {
+      ...UrlOrContactUsDetail
+    }
+  }
+  subscriptionUsageAllowed {
+    seats
+    clusters
+    cloudAccounts
+    projects
+    customBlueprints
+  }
+}
+
+fragment ProductDetail on Product {
+  productTypeMetadata {
+    productType
+    displayName
+    pricingPageAnchor
+  }
+  name
+  description
+  sku
+  displayPrice
+  usage {
+    unit
+    unitPlural
+    displayName
+    currentUsage
+    maximumUsage
+    description
+  }
+  benefits
+}
+
+fragment UrlOrContactUsDetail on UrlOrContactUs {
+  url
+  contactUs
+}
+
+fragment ProductCatalogSectionDetail on ProductCatalogSection {
+  sectionName
+  productTypeMetadata {
+    productType
+    displayName
+    pricingPageAnchor
+  }
+  allProducts {
+    product {
+      ...ProductDetail
+    }
+    description
+    status
+    available
+  }
+}
+
+query userProductCatalog($forUserID: UUID!) {
+  productCatalog {
+    products(forUserID: $forUserID) {
+      ...ProductCatalogSectionDetail
+    }
+  }
+}
+
+query userBillingOverview($id: ID!) {
+  user(id: $id) {
+    id
+    billingOverview {
+      ...BillingOverviewDetail
+    }
+  }
+}
+
+query subscriptionFeature($id: ID!, $featureKey: FeatureKey!) {
+  user(id: $id) {
+    id
+    billingOverview {
+      subscriptionFeatures {
+        byKey(featureKey: $featureKey) {
+          key
+          enabled
+        }
+      }
+    }
+  }
+}
+
+query previewSubscription(
+  $forUserID: UUID!
+  $subscriptionCart: SubscriptionCart!
+) {
+  productCatalog {
+    previewSubscription(
+      forUserID: $forUserID
+      subscriptionCart: $subscriptionCart
+    ) {
+      paymentMethodName
+      products {
+        currentProduct {
+          ...ProductDetail
+        }
+        newProduct {
+          ...ProductDetail
+        }
+        newProductStatus
+        sectionName
+      }
+    }
+  }
+}

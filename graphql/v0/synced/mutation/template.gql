@@ -1,0 +1,6 @@
+mutation createProjectsFromTemplate($input: CreateProjectsFromTemplateInput!) {
+  createProjectsFromTemplate(input: $input) {
+    id
+    ...RepoCommon
+  }
+}

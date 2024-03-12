@@ -1,0 +1,3 @@
+mutation generateDownloadableLogLink($deploymentID: UUID!) {
+  generateDownloadableLogLink(deploymentID: $deploymentID)
+}

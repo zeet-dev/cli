@@ -1,0 +1,160 @@
+mutation createDiscordWebhookIntegration(
+  $input: CreateWebhookIntegrationInput!
+) {
+  createDiscordWebhookIntegrationV2(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on DiscordWebhookIntegration {
+      url
+    }
+  }
+}
+
+mutation updateDiscordWebhookIntegration(
+  $input: UpdateWebhookIntegrationInput!
+) {
+  updateDiscordWebhookIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on DiscordWebhookIntegration {
+      url
+    }
+  }
+}
+
+mutation createSlackWebhookIntegration($input: CreateWebhookIntegrationInput!) {
+  createSlackWebhookIntegrationV2(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on SlackWebhookIntegration {
+      url
+    }
+  }
+}
+
+mutation updateSlackWebhookIntegration($input: UpdateWebhookIntegrationInput!) {
+  updateSlackWebhookIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on SlackWebhookIntegration {
+      url
+    }
+  }
+}
+
+mutation createDatadogIntegration($input: CreateDatadogIntegrationInput!) {
+  createDatadogIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on DatadogIntegration {
+      apiKey
+    }
+  }
+}
+
+mutation createGitlabIntegration($input: CreateGitlabIntegrationInput!) {
+  createGitlabIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on GitlabIntegration {
+      accessTokenPrefix
+      webhookUrl
+      webhookToken
+    }
+  }
+}
+
+mutation createEmailIntegration($input: CreateEmailIntegrationInput!) {
+  createEmailIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on EmailIntegration {
+      emailAddress
+      activated
+    }
+  }
+}
+
+mutation updateGitlabIntegration($input: UpdateGitlabIntegrationInput!) {
+  updateGitlabIntegration(input: $input) {
+    id
+    ...IntegrationCommon
+    ... on GitlabIntegration {
+      accessTokenPrefix
+      webhookUrl
+      webhookToken
+    }
+  }
+}
+
+mutation deleteIntegration($input: RemoveUserIntegrationInput!) {
+  removeUserIntegration(input: $input)
+}
+
+mutation updateNotificationIntegrationSettings(
+  $userID: UUID!
+  $input: NotificationIntegrationSettingsInput!
+) {
+  updateNotificationIntegrationSettings(userID: $userID, input: $input) {
+    build
+    deploy
+    podCrash
+  }
+}
+
+mutation updateNotificationIntegrationSpecificSettings(
+  $userID: UUID!
+  $integrationID: UUID!
+  $input: NotificationIntegrationSettingsInput!
+) {
+  updateNotificationIntegrationSettings(
+    userID: $userID
+    integrationID: $integrationID
+    input: $input
+  ) {
+    build
+    deploy
+    podCrash
+  }
+}
+
+mutation createBitbucketIntegration(
+  $userId: UUID!
+  $accessToken: String!
+  $name: String!
+) {
+  createBitbucketIntegration(
+    input: { userID: $userId, accessToken: $accessToken, name: $name }
+  ) {
+    id
+  }
+}
+mutation updateBitbucketIntegration(
+  $id: UUID!
+  $userId: UUID!
+  $name: String!
+) {
+  updateBitbucketIntegration(input: { userID: $userId, id: $id, name: $name }) {
+    id
+  }
+}
+
+mutation updateNotificationIntegrationConditions(
+  $userId: UUID!
+  $integrationId: UUID!
+  $input: NotificationConditionProviderInput!
+) {
+  updateNotificationIntegrationSettings(
+    userID: $userId
+    integrationID: $integrationId
+    input: { conditions: $input }
+  ) {
+    conditions {
+      ... on NotificationCondition {
+        key
+        operator
+        value
+      }
+    }
+  }
+}

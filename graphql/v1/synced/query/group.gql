@@ -1,0 +1,15 @@
+query groupsWithSubgroups($teamId: UUID!) {
+  team(id: $teamId) {
+    id
+    groups {
+      nodes {
+        id
+        name
+        subGroups {
+          id
+          name
+        }
+      }
+    }
+  }
+}

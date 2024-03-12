@@ -1,0 +1,11 @@
+mutation updateDeploy($id: UUID!, $input: UpdateDeployInput!) {
+  updateDeploy(id: $id, input: $input) {
+    id
+  }
+}
+
+mutation createDeployRun($input: CreateDeployRunInput!) {
+  createDeployRun(input: $input) {
+    id
+  }
+}

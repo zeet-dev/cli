@@ -1,0 +1,96 @@
+mutation createCluster($input: CreateClusterInput!) {
+  createCluster(input: $input) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation addCluster($input: AddClusterInput!) {
+  addCluster(input: $input) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation updateCluster($input: UpdateClusterInput!) {
+  updateCluster(input: $input) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation deleteCluster($id: UUID!) {
+  deleteCluster(id: $id)
+}
+
+mutation unlinkCluster($id: UUID!) {
+  unlinkCluster(id: $id)
+}
+
+mutation UpdateClusterDomain($input: UpdateClusterDomainInput!) {
+  updateClusterDomain(input: $input) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation LinkClusterToCloud($input: LinkCloudToClusterInput!) {
+  linkCloudToCluster(input: $input) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation UpdateClusterDetailsExternal(
+  $updateClusterInput: UpdateClusterInput!
+  $updateClusterDomainInput: UpdateClusterDomainInput!
+) {
+  updateCluster(input: $updateClusterInput) {
+    id
+    ...ClusterDetail
+  }
+  updateClusterDomain(input: $updateClusterDomainInput) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation UpdateClusterDetailsExternalLink(
+  $updateClusterInput: UpdateClusterInput!
+  $updateClusterDomainInput: UpdateClusterDomainInput!
+  $linkCloudToClusterInput: LinkCloudToClusterInput!
+) {
+  updateCluster(input: $updateClusterInput) {
+    id
+    ...ClusterDetail
+  }
+  updateClusterDomain(input: $updateClusterDomainInput) {
+    id
+    ...ClusterDetail
+  }
+  linkCloudToCluster(input: $linkCloudToClusterInput) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation UpdateClusterDetailsZeet($updateClusterInput: UpdateClusterInput!) {
+  updateCluster(input: $updateClusterInput) {
+    id
+    ...ClusterDetail
+  }
+}
+
+mutation UpdateClusterDetailsZeetLink(
+  $updateClusterInput: UpdateClusterInput!
+  $linkCloudToClusterInput: LinkCloudToClusterInput!
+) {
+  updateCluster(input: $updateClusterInput) {
+    id
+    ...ClusterDetail
+  }
+  linkCloudToCluster(input: $linkCloudToClusterInput) {
+    id
+    ...ClusterDetail
+  }
+}

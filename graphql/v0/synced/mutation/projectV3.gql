@@ -1,0 +1,61 @@
+mutation createResourceAlpha($input: CreateResourceAlphaInput!) {
+  createResourceAlpha(input: $input) {
+    name
+    project {
+      name
+    }
+    projectEnvironment {
+      name
+    }
+  }
+}
+
+mutation createProjectV3($input: CreateProjectV3Input!) {
+  createProjectV3(input: $input) {
+    ...ProjectV3Detail
+  }
+}
+
+mutation duplicateProjectV3($input: DuplicateProjectV3Input!) {
+  duplicateProjectV3(input: $input) {
+    id
+    name
+    project {
+      name
+    }
+    projectEnvironment {
+      name
+    }
+  }
+}
+
+mutation updateProjectV3($projectID: UUID!, $input: UpdateProjectV3Input!) {
+  updateProjectV3(projectID: $projectID, input: $input) {
+    id
+  }
+}
+
+mutation createBlueprintDriverWorkflow(
+  $projectID: UUID!
+  $driver: BlueprintDriver!
+  $steps: [BlueprintDriverWorkflowStepAction!]!
+) {
+  submitBlueprintDriverWorkflow(
+    projectID: $projectID
+    input: { driver: $driver, steps: $steps }
+  ) {
+    id
+    ...BlueprintDriverWorkflowDetail
+  }
+}
+
+mutation approveBlueprintDriverWorkflow($workflowID: UUID!) {
+  approveBlueprintDriverWorkflow(workflowID: $workflowID) {
+    id
+    ...BlueprintDriverWorkflowDetail
+  }
+}
+
+mutation abortBlueprintDriverWorkflow($workflowID: UUID!) {
+  abortBlueprintDriverWorkflow(workflowID: $workflowID)
+}

@@ -1,0 +1,105 @@
+query insightsAlertsMetric($teamId: ID!) {
+  user(id: $teamId) {
+    id
+    projectV3Adapters(filter: { filter: {} }) {
+      nodes {
+        id
+        name
+        project {
+          id
+          name
+        }
+        projectEnvironment {
+          id
+          name
+        }
+        repo {
+          id
+          name
+          source {
+            type
+          }
+          image
+          productionDeployment {
+            id
+            alerts(page: { first: 1 }) {
+              nodes {
+                ...DeploymentAlertDetail
+              }
+            }
+          }
+        }
+        updatedAt
+      }
+    }
+    integrations {
+      id
+      type
+    }
+  }
+}
+
+fragment InsightCluster on Cluster {
+  id
+  name
+  status
+  connected
+  cloudProvider
+}
+
+query insightsClusters($teamId: ID!) {
+  user(id: $teamId) {
+    id
+    clusters {
+      ...InsightCluster
+    }
+  }
+}
+
+query insightsClouds($teamId: ID!) {
+  user(id: $teamId) {
+    id
+    awsAccounts {
+      id
+      name
+      state
+      connected
+    }
+    doAccounts {
+      id
+      name
+      state
+      connected
+    }
+    gcpAccounts {
+      id
+      name
+      state
+      connected
+    }
+    linodeAccounts {
+      id
+      name
+      state
+      connected
+    }
+    coreweaveAccounts {
+      id
+      name
+      state
+      connected
+    }
+    vultrAccounts {
+      id
+      name
+      state
+      connected
+    }
+    azureAccounts {
+      id
+      name
+      state
+      connected
+    }
+  }
+}

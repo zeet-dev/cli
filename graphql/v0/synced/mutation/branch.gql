@@ -1,0 +1,10 @@
+mutation createBranch($id: UUID!, $name: String!) {
+  updateBranch(input: { repoID: $id, name: $name, deploy: true }) {
+    id
+    ...BranchCommon
+  }
+}
+
+mutation deleteProjectBranch($id: UUID!, $branch: String!) {
+  deleteProjectBranch(id: $id, branch: $branch)
+}

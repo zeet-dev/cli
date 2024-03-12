@@ -1,0 +1,264 @@
+fragment ProjectBlueprintConfigurationDetail on BlueprintConfiguration {
+  ... on BlueprintTerraformConfiguration {
+    registrySource
+    moduleVersionConstraint
+    githubSource
+    moduleSource {
+      source
+      version
+      integration {
+        git {
+          githubInstallationID
+          bitbucketIntegrationID
+          gitlabIntegrationID
+        }
+      }
+    }
+  }
+  ... on BlueprintHelmConfiguration {
+    source {
+      git {
+        repository
+        path
+        ref
+        integration {
+          githubInstallationID
+          bitbucketIntegrationID
+          gitlabIntegrationID
+        }
+      }
+      helmRepository {
+        chart
+        version
+        repositoryURL
+      }
+      containerRegistry {
+        registryID
+        registryURL
+        repository
+        tag
+      }
+    }
+  }
+  ... on BlueprintManifestConfiguration {
+    source {
+      git {
+        repository
+        path
+        ref
+        integration {
+          githubInstallationID
+          bitbucketIntegrationID
+          gitlabIntegrationID
+        }
+      }
+    }
+  }
+}
+
+fragment BlueprintList on Blueprint {
+  id
+  description
+  displayName
+  isOfficial
+  logoUrl
+  enabled
+  published
+  projectCount
+  richInputSchema
+  allowedCloudProviders
+  slug
+  tags
+  type
+  configuration {
+    ...ProjectBlueprintConfigurationDetail
+  }
+  owner {
+    name
+    login
+  }
+  variables {
+    id
+    name
+    type
+    required
+  }
+}
+
+fragment BlueprintMetadataList on BlueprintMetadata {
+  id
+  slug
+  name
+  displayName
+  type
+
+  description
+  tags
+  logoUrl
+  metatags {
+    name
+    value
+  }
+
+  version
+  versions {
+    version
+    prerelease
+    timestamp
+  }
+  latestVersion
+  availableVersions
+  applicationVersion
+
+  organizationName
+  organizationDisplayName
+
+  createdAt
+  updatedAt
+}
+
+query blueprints(
+  $userId: ID!
+  $permissionsUserId: UUID!
+  $pageInput: PageInput!
+) {
+  currentUser {
+    id
+    permissions {
+      user(userID: $permissionsUserId) {
+        mutations
+      }
+    }
+  }
+  user(id: $userId) {
+    id
+    blueprints(page: $pageInput) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      nodes {
+        ...BlueprintList
+      }
+    }
+  }
+}
+
+query lambdaCloudRunBlueprints(
+  $owner: Login!
+  $lambdaBlueprintSlug: String!
+  $cloudRunBlueprintSlug: String!
+) {
+  blueprintsMarketplace {
+    lambdaBlueprint: blueprint(owner: $owner, slug: $lambdaBlueprintSlug) {
+      ...BlueprintList
+    }
+    cloudRunBlueprint: blueprint(owner: $owner, slug: $cloudRunBlueprintSlug) {
+      ...BlueprintList
+    }
+  }
+}
+
+query marketplaceBlueprints($pageInput: PageInput!) {
+  blueprintsMarketplace {
+    blueprints(page: $pageInput) {
+      nodes {
+        ...BlueprintList
+      }
+    }
+  }
+}
+
+query marketplaceBlueprintMetadataList($filterInput: FilterInput!) {
+  blueprintsMarketplace {
+    blueprintMetadataList(filter: $filterInput) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      nodes {
+        ...BlueprintMetadataList
+      }
+    }
+  }
+}
+
+query marketplaceBlueprint($owner: Login!, $slug: String!) {
+  blueprintsMarketplace {
+    blueprint(owner: $owner, slug: $slug) {
+      ...BlueprintList
+    }
+  }
+}
+
+query marketplaceBlueprintMetadata(
+  $owner: Login
+  $slug: String!
+  $version: String
+) {
+  blueprintsMarketplace {
+    blueprintMetadata(owner: $owner, slug: $slug, version: $version) {
+      ...BlueprintMetadataList
+    }
+  }
+}
+
+query blueprint($userId: ID!, $permissionsUserId: UUID!, $blueprintId: UUID!) {
+  currentUser {
+    id
+    permissions {
+      user(userID: $permissionsUserId) {
+        mutations
+      }
+    }
+  }
+  user(id: $userId) {
+    id
+    login
+    blueprint(id: $blueprintId) {
+      ...BlueprintList
+    }
+  }
+}
+
+query blueprintWithProjects(
+  $userId: ID!
+  $permissionsUserId: UUID!
+  $blueprintId: UUID!
+) {
+  currentUser {
+    id
+    permissions {
+      user(userID: $permissionsUserId) {
+        mutations
+      }
+    }
+  }
+  user(id: $userId) {
+    id
+    login
+    blueprint(id: $blueprintId) {
+      ...BlueprintList
+    }
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: { deployableIds: { value: [$blueprintId] } }
+          }
+        }
+      }
+    ) {
+      totalCount
+      nodes {
+        ...BridgeProjectV3List
+      }
+    }
+  }
+}

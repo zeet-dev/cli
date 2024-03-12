@@ -1,0 +1,268 @@
+query userDeployment($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      ...DeploymentDetail
+    }
+  }
+}
+
+query userDeploymentMetric(
+  $deploymentID: ID!
+  $deploymentUUID: UUID!
+  $queryOptions: MetricQueryOptions
+) {
+  currentUser {
+    id
+    deployment(id: $deploymentID) {
+      id
+      cpuMetrics: metricsV2(
+        deploymentID: $deploymentUUID
+        metricType: CPU
+        queryOptions: $queryOptions
+      ) {
+        ...MetricStream
+      }
+      memoryMetrics: metricsV2(
+        deploymentID: $deploymentUUID
+        metricType: MEMORY
+        queryOptions: $queryOptions
+      ) {
+        ...MetricStream
+      }
+      networkMetrics: metricsV2(
+        deploymentID: $deploymentUUID
+        metricType: NETWORK
+        queryOptions: $queryOptions
+      ) {
+        ...MetricStream
+      }
+      diskMetrics: metricsV2(
+        deploymentID: $deploymentUUID
+        metricType: STORAGE
+        queryOptions: $queryOptions
+      ) {
+        ...MetricStream
+      }
+    }
+  }
+}
+
+query userEphemeralContainers($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      ephemeralContainers {
+        name
+        image
+        ready
+      }
+    }
+  }
+}
+
+fragment DeploymentBuildLogs on Deployment {
+  deploymentError {
+    errorID
+    errorCode
+    message
+  }
+  build {
+    id
+    errorMessage
+    logs {
+      id
+      completed
+      expired
+      entries {
+        timestamp
+        text
+      }
+    }
+  }
+}
+
+query deploymentBuildLogs($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      ...DeploymentBuildLogs
+    }
+  }
+}
+
+query deploymentReleaseLogs($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      releaseStage {
+        id
+        logs {
+          id
+          completed
+          expired
+          entries {
+            timestamp
+            text
+          }
+        }
+      }
+    }
+  }
+}
+
+query deploymentDeployLogs($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      deployStage {
+        id
+        logs {
+          id
+          completed
+          expired
+          entries {
+            timestamp
+            text
+          }
+        }
+      }
+    }
+  }
+}
+
+query deploymentLogs($repoID: ID!, $deploymentID: ID!) {
+  currentUser {
+    id
+    repo(id: $repoID) {
+      id
+      deployment(id: $deploymentID) {
+        id
+        logs {
+          timestamp
+          text
+        }
+        logsV2 {
+          previous {
+            timestamp
+            text
+          }
+          current {
+            timestamp
+            text
+          }
+        }
+        awsLinks {
+          cloudwatchLogs
+        }
+        gcpLinks {
+          cloudLogging
+        }
+      }
+    }
+  }
+}
+
+query buildTemplates($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      buildStage {
+        buildTemplates {
+          type
+          output
+        }
+      }
+    }
+  }
+}
+
+query deployTemplates($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      deployTemplates {
+        output
+        type
+      }
+    }
+  }
+}
+
+query buildTemplatesExist($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      buildStage {
+        buildTemplates {
+          type
+        }
+      }
+    }
+  }
+}
+
+query deployTemplatesExist($id: ID!) {
+  currentUser {
+    id
+    deployment(id: $id) {
+      id
+      deployTemplates {
+        type
+      }
+    }
+  }
+}
+
+query deploymentAlert($deploymentId: ID!, $alertId: UUID!) {
+  currentUser {
+    id
+    deployment(id: $deploymentId) {
+      alert(id: $alertId) {
+        ...DeploymentAlertDetail
+      }
+    }
+  }
+}
+
+fragment DeploymentAlertDetail on DeploymentAlert {
+  createdAt
+  resolvedAt
+  ... on DeploymentPodCrashAlert {
+    id
+    namespace
+    podName
+    previousPodLogs {
+      entries {
+        text
+      }
+    }
+  }
+}
+
+query deploymentAlerts($deploymentID: ID!, $page: PageInput) {
+  currentUser {
+    id
+    deployment(id: $deploymentID) {
+      alerts(page: $page) {
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        nodes {
+          ...DeploymentAlertDetail
+        }
+      }
+    }
+  }
+}

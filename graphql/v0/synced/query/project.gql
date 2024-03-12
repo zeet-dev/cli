@@ -1,0 +1,182 @@
+query project($path: String!) {
+  project(path: $path) {
+    ...ProjectContext
+  }
+}
+
+query projectById($id: UUID!) {
+  project(id: $id) {
+    ...ProjectBasic
+  }
+}
+
+query projects($userId: ID!, $filterInput: FilterInput!) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(filter: $filterInput) {
+      nodes {
+        ...ProjectListItem
+      }
+    }
+    projects {
+      nodes {
+        ...GroupListItem
+      }
+    }
+  }
+}
+
+query projectCount($userId: ID!, $filterInput: FilterInput!) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(filter: $filterInput) {
+      totalCount
+    }
+  }
+}
+
+fragment GroupListItem on Project {
+  id
+  name
+  updatedAt
+
+  environments {
+    ...SubgroupListItem
+  }
+}
+
+fragment SubgroupListItem on ProjectEnvironment {
+  id
+  name
+  updatedAt
+}
+
+query projectsWithRepo($userId: ID!, $filterInput: FilterInput!) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(filter: $filterInput) {
+      nodes {
+        ...ProjectWithRepo
+      }
+    }
+  }
+}
+
+fragment ProjectListItem on ProjectV3Adapter {
+  id
+  name
+  repo {
+    id
+    cluster {
+      state
+    }
+  }
+  project {
+    id
+    name
+  }
+  projectEnvironment {
+    id
+    name
+  }
+  createdAt
+  updatedAt
+}
+
+fragment ProjectWithRepo on ProjectV3Adapter {
+  repo {
+    id
+    image
+    deployTarget
+    deployJob
+    source {
+      id
+      type
+      name
+    }
+    productionDeployment {
+      endpoints
+      privateEndpoint
+    }
+  }
+}
+
+query userProjectsProductionDeployments($id: ID!) {
+  user(id: $id) {
+    id
+    projects(input: { page: { first: 0 } }) {
+      nodes {
+        id
+        repo {
+          id
+          productionDeployment {
+            id
+            ...DeploymentCommon
+          }
+        }
+      }
+    }
+  }
+}
+
+query userBasicProjects($id: ID!) {
+  user(id: $id) {
+    id
+    projects(input: { page: { first: 0 } }) {
+      nodes {
+        id
+        ...ProjectBasic
+      }
+    }
+  }
+}
+
+query projectRevisions($id: UUID!, $page: PageInput) {
+  project(id: $id) {
+    revisions(page: $page) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+      nodes {
+        ...RevisableEntityCommonFragment
+      }
+    }
+  }
+}
+
+fragment ProjectBasic on Project {
+  id
+  name
+  owner {
+    id
+    login
+  }
+}
+
+fragment ProjectContext on Project {
+  id
+  name
+
+  isMultiRepo
+
+  defaultEnvironment {
+    id
+    name
+    defaultRepo {
+      id
+      name
+    }
+  }
+
+  owner {
+    id
+    login
+  }
+
+  createdAt
+  updatedAt
+}

@@ -1,0 +1,5 @@
+mutation createBuildRun($buildId: UUID!) {
+  createBuildRun(input: { buildId: $buildId }) {
+    id
+  }
+}

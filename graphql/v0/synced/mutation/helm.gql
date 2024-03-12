@@ -1,0 +1,6 @@
+mutation createProjectHelm($input: CreateProjectHelmInput) {
+  createProjectHelm(input: $input) {
+    id
+    ...RepoCommon
+  }
+}

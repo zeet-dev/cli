@@ -1,0 +1,312 @@
+fragment AWSAccountDetail on AWSAccount {
+  id
+  name
+  state
+
+  accountID
+  roleARN
+  cloudFormationURL
+  connected
+}
+
+fragment GCPAccountDetail on GCPAccount {
+  id
+  name
+  state
+
+  projectID
+  clientEmail
+  connected
+
+  error
+}
+
+fragment DOAccountDetail on DOAccount {
+  id
+  name
+  state
+
+  accessTokenPrefix
+  defaultProject
+  connected
+}
+
+fragment LinodeAccountDetail on LinodeAccount {
+  id
+  name
+  state
+
+  accessTokenPrefix
+  connected
+}
+
+fragment VultrAccountDetail on VultrAccount {
+  id
+  name
+  state
+  connected
+}
+
+fragment CWAccountDetail on CoreWeaveAccount {
+  id
+  name
+  state
+
+  namespace
+  connected
+}
+
+fragment AzureAccountDetail on AzureAccount {
+  id
+  name
+  state
+  connected
+
+  subscriptionID
+  tenantID
+  clientID
+}
+
+query userAWSAccounts($id: ID!) {
+  user(id: $id) {
+    id
+    awsAccounts {
+      id
+      ...AWSAccountDetail
+    }
+  }
+}
+
+query userAWSAccountsWithCQ($id: ID!) {
+  user(id: $id) {
+    id
+    awsAccounts {
+      id
+      ...AWSAccountDetail
+
+      cloudQuery {
+        id
+        state
+      }
+    }
+  }
+}
+
+query userGCPAccounts($id: ID!) {
+  user(id: $id) {
+    id
+    gcpAccounts {
+      id
+      ...GCPAccountDetail
+    }
+  }
+}
+
+query userDOAccounts($id: ID!) {
+  user(id: $id) {
+    id
+    doAccounts {
+      id
+      ...DOAccountDetail
+    }
+  }
+}
+
+query userLinodeAccounts($id: ID!) {
+  user(id: $id) {
+    id
+    linodeAccounts {
+      id
+      ...LinodeAccountDetail
+    }
+  }
+}
+
+query userCoreWeaveAccounts($id: ID!) {
+  user(id: $id) {
+    id
+    coreweaveAccounts {
+      id
+      ...CWAccountDetail
+    }
+  }
+}
+
+query userAwsResources(
+  $userId: ID!
+  $awsResourceSearchInput: AwsResourceSearchInput!
+  $awsId: UUID!
+) {
+  user(id: $userId) {
+    id
+    awsAccount(id: $awsId) {
+      id
+      awsResources(input: $awsResourceSearchInput) {
+        nextToken
+        awsResources {
+          arn
+          type
+          region
+        }
+      }
+      accountID
+    }
+  }
+}
+
+fragment UserClouds on User {
+  awsAccounts {
+    id
+    clusters {
+      name
+    }
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    updatedAt
+    ...AWSAccountDetail
+  }
+  gcpAccounts {
+    id
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    clusters {
+      name
+    }
+    updatedAt
+    ...GCPAccountDetail
+  }
+  doAccounts {
+    id
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    updatedAt
+    clusters {
+      name
+    }
+    ...DOAccountDetail
+  }
+  coreweaveAccounts {
+    id
+    updatedAt
+    clusters {
+      name
+      projectV3Adapters {
+        ...ProjectV3AdapterConnectionCommon
+      }
+    }
+    ...CWAccountDetail
+  }
+  linodeAccounts {
+    id
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    updatedAt
+    clusters {
+      name
+    }
+    ...LinodeAccountDetail
+  }
+  vultrAccounts {
+    id
+    clusters {
+      name
+    }
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    updatedAt
+    ...VultrAccountDetail
+  }
+  azureAccounts {
+    id
+    clusters {
+      name
+    }
+    projectV3Adapters {
+      ...ProjectV3AdapterConnectionCommon
+    }
+    updatedAt
+    ...AzureAccountDetail
+  }
+}
+
+query userClouds($id: ID!) {
+  user(id: $id) {
+    id
+    ...UserClouds
+  }
+}
+
+query cloudDetailsAws($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    awsAccount(id: $accountId) {
+      id
+      ...AWSAccountDetail
+    }
+  }
+}
+
+query cloudDetailsGcp($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    gcpAccount(id: $accountId) {
+      id
+      ...GCPAccountDetail
+    }
+  }
+}
+
+query cloudDetailsDo($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    doAccount(id: $accountId) {
+      id
+      ...DOAccountDetail
+    }
+  }
+}
+
+query cloudDetailsCoreweave($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    coreweaveAccount(id: $accountId) {
+      id
+      ...CWAccountDetail
+    }
+  }
+}
+
+query cloudDetailsLinode($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    linodeAccount(id: $accountId) {
+      id
+      ...LinodeAccountDetail
+    }
+  }
+}
+
+query cloudDetailsVultr($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    vultrAccount(id: $accountId) {
+      id
+      ...VultrAccountDetail
+    }
+  }
+}
+
+query cloudDetailsAzure($id: ID!, $accountId: UUID!) {
+  user(id: $id) {
+    id
+    azureAccount(id: $accountId) {
+      id
+      ...AzureAccountDetail
+    }
+  }
+}

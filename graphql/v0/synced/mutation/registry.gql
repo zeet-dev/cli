@@ -1,0 +1,12 @@
+mutation addContainerRegistry($input: AddContainerRegistryInput!) {
+  addContainerRegistry(input: $input) {
+    id
+    name
+    registry
+    username
+  }
+}
+
+mutation removeContainerRegistry($id: UUID!) {
+  removeContainerRegistry(id: $id)
+}

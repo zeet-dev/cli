@@ -1,0 +1,38 @@
+mutation abortWorkflowRun($id: UUID!) {
+  abortWorkflowRun(id: $id)
+}
+
+mutation submitWorkflowRun(
+  $workflowId: UUID!
+  $definition: WorkflowRunDefinitionInput
+) {
+  submitWorkflow(input: { workflowId: $workflowId, definition: $definition }) {
+    id
+  }
+}
+
+mutation updateWorkflow($id: UUID!, $input: UpdateWorkflowInput!) {
+  updateWorkflow(id: $id, input: $input) {
+    id
+  }
+}
+
+mutation createWorkflowTrigger($input: CreateTriggerInput!) {
+  createTrigger(input: $input) {
+    id
+  }
+}
+
+mutation updateWorkflowTrigger($id: UUID!, $input: UpdateTriggerInput!) {
+  updateTrigger(id: $id, input: $input) {
+    id
+  }
+}
+
+mutation deleteWorkflowTrigger($id: UUID!) {
+  deleteTrigger(id: $id)
+}
+
+mutation approveWorkflowRunStep($stepId: UUID!, $projectId: UUID!) {
+  approveWorkflowRunStep(stepId: $stepId, projectId: $projectId)
+}

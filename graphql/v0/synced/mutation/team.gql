@@ -1,0 +1,97 @@
+mutation createTeam($input: CreateTeamInput!) {
+  createTeam(input: $input) {
+    ...TeamCommon
+  }
+}
+
+mutation updateTeam($input: UpdateTeamInput!) {
+  updateTeam(input: $input) {
+    ...TeamCommon
+  }
+}
+
+mutation addTeamMember($input: AddTeamMemberInput!) {
+  addTeamMember(input: $input) {
+    ...TeamCommon
+    members {
+      user {
+        id
+        name
+      }
+      role
+    }
+    user {
+      id
+      billingOverview {
+        ...BillingOverviewDetail
+      }
+    }
+  }
+}
+
+mutation removeTeamMember($input: RemoveTeamMemberInput!) {
+  removeTeamMember(input: $input) {
+    ...TeamCommon
+  }
+}
+
+mutation deleteTeam($id: UUID!) {
+  deleteTeam(id: $id)
+}
+
+mutation transferProject($input: TransferProjectInput!) {
+  transferProject(input: $input) {
+    id
+    name
+  }
+}
+
+fragment TeamInvite on TeamMemberInvitation {
+  id
+  role
+  link
+  email
+  expiresAt
+  createdAt
+}
+
+mutation inviteTeamMember($input: InviteTeamMemberInput!) {
+  inviteTeamMember(input: $input) {
+    id
+    ...TeamInvite
+  }
+}
+
+mutation deleteTeamMemberInvitation($id: UUID!) {
+  deleteTeamMemberInvitation(id: $id)
+}
+
+mutation resendTeamMemberInvitation($id: UUID!) {
+  resendTeamMemberInvitation(id: $id)
+}
+
+mutation acceptTeamMemberInvitation($token: String!) {
+  acceptTeamMemberInvitation(token: $token) {
+    id
+    ...TeamCommon
+  }
+}
+
+mutation UpdateTeamMemberRole($input: UpdateTeamMemberRoleInput!) {
+  updateTeamMemberRole(input: $input) {
+    role
+    id
+  }
+}
+
+mutation ConnectUserToIam($input: ConnectUserToIamInput!) {
+  connectUserToIam(input: $input)
+}
+
+mutation DisconnectUserFromIam($id: UUID!) {
+  disconnectUserFromIam(id: $id)
+}
+
+mutation AttachAwsPolicyToUser($input: AttachAwsPolicyToUser!) {
+  attachAwsPolicyToUser(input: $input)
+}

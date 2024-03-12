@@ -1,0 +1,398 @@
+fragment ClusterComponents on Cluster {
+  id
+  terraformProjectUrl
+  components {
+    name
+    type
+    status
+    isInstalledByZeet
+    exists
+    project {
+      id
+      project {
+        name
+      }
+      projectEnvironment {
+        name
+      }
+      name
+    }
+    helmMetadata {
+      values
+      namespace
+      releaseName
+      chartRepoGuess
+      chartVersion
+      chartName
+    }
+    terraformMetadata {
+      jobRunState
+    }
+  }
+}
+
+fragment ClusterDetail on Cluster {
+  id
+  ...ClusterListItem
+
+  ingressIP
+  ingressDNS
+
+  ...ClusterComponents
+
+  clusterProvider
+  cloudProvider
+  ...ClusterCloudNames
+  ...ClusterCloudAccountIds
+
+  prometheus {
+    url
+    user
+    password
+    token
+  }
+  grafana {
+    url
+    user
+    password
+  }
+
+  ...ClusterContainerRegistry
+
+  deployJob {
+    id
+    state
+  }
+}
+
+fragment ClusterListItem on Cluster {
+  id
+  ...ClusterCommon
+
+  ingressIP
+  ingressDNS
+
+  clusterProvider
+  cloudProvider
+  ...ClusterCloudNames
+
+  ...ClusterContainerRegistry
+
+  projects {
+    ...ProjectConnectionComon
+  }
+  projectV3Adapters {
+    ...ProjectV3AdapterConnectionCommon
+  }
+}
+
+fragment ClusterContainerRegistry on Cluster {
+  id
+  containerRegistry {
+    id
+    name
+    credentialProvider
+    username
+  }
+
+  containerRepository
+  containerCacheRepository
+}
+
+fragment ClusterDeployTarget on Cluster {
+  id
+  ...ClusterCommon
+
+  clusterProvider
+  cloudProvider
+  ...ClusterCloudNames
+  ...ClusterCloudAccountIds
+
+  ...ClusterContainerRegistry
+}
+
+fragment ClusterCloudAccountIds on Cluster {
+  cloudAccount {
+    ... on AWSAccount {
+      id
+    }
+    ... on AzureAccount {
+      id
+    }
+    ... on CoreWeaveAccount {
+      id
+    }
+    ... on DOAccount {
+      id
+    }
+    ... on GCPAccount {
+      id
+    }
+    ... on LinodeAccount {
+      id
+    }
+    ... on VultrAccount {
+      id
+    }
+  }
+}
+
+fragment UserCloudDeployTargets on User {
+  id
+  hasZeetCloud
+  awsAccounts {
+    id
+    ...AWSAccountDetail
+  }
+  gcpAccounts {
+    id
+    ...GCPAccountDetail
+  }
+  doAccounts {
+    id
+    ...DOAccountDetail
+  }
+  linodeAccounts {
+    id
+    ...LinodeAccountDetail
+  }
+  coreweaveAccounts {
+    id
+    ...CWAccountDetail
+  }
+  azureAccounts {
+    id
+    ...AzureAccountDetail
+  }
+  vultrAccounts {
+    id
+    ...VultrAccountDetail
+  }
+}
+
+fragment ClusterCloudNames on Cluster {
+  id
+  awsAccount {
+    id
+    name
+    accountID
+  }
+  gcpAccount {
+    id
+    name
+    projectID
+  }
+  doAccount {
+    id
+    name
+    defaultProject
+  }
+  cwAccount {
+    id
+    name
+    namespace
+  }
+  linodeAccount {
+    id
+    name
+    accessTokenPrefix
+  }
+  azureAccount {
+    id
+    name
+    subscriptionID
+  }
+  vultrAccount {
+    id
+    name
+  }
+}
+
+fragment ClusterNamesWithCloudNames on Cluster {
+  id
+  name
+  ...ClusterCloudNames
+}
+
+fragment ClusterCommon on Cluster {
+  id
+  name
+  region
+  state
+  status
+  connected
+  domain
+  isExternal
+  isEjected
+
+  clusterProvider
+  cloudProvider
+
+  updatedAt
+  createdAt
+}
+
+query userClusters($id: ID!) {
+  user(id: $id) {
+    id
+    clusters {
+      id
+      ...ClusterListItem
+    }
+  }
+}
+
+query userDeployTargets($id: ID!) {
+  user(id: $id) {
+    id
+    ...UserCloudDeployTargets
+    defaultCluster {
+      id
+      ...ClusterDeployTarget
+    }
+
+    clusters {
+      id
+      ...ClusterDeployTarget
+    }
+  }
+}
+
+query clusterProvisionTargets($id: ID!) {
+  user(id: $id) {
+    id
+    ...UserCloudDeployTargets
+  }
+}
+
+query clusterKubeconfig($userID: ID!, $clusterID: UUID!) {
+  user(id: $userID) {
+    id
+    cluster(id: $clusterID) {
+      id
+      name
+      kubeconfig
+    }
+  }
+}
+
+query clusterCertIssuers($userID: ID!, $repoID: ID!, $clusterID: UUID!) {
+  user(id: $userID) {
+    id
+    cluster(id: $clusterID) {
+      id
+      name
+      clusterIssuers
+    }
+    repo(id: $repoID) {
+      id
+      name
+      clusterIssuerName
+    }
+  }
+}
+
+query clusterDomain($userID: ID!, $clusterID: UUID!) {
+  user(id: $userID) {
+    id
+    cluster(id: $clusterID) {
+      id
+      domain
+    }
+  }
+}
+
+query clustersCustomDomains($id: ID!) {
+  user(id: $id) {
+    id
+    clusters {
+      id
+
+      customDomains {
+        id
+        customDomain {
+          id
+          domain
+          syncDomain {
+            id
+            domain
+          }
+        }
+        repo {
+          ...RepoCommon
+        }
+      }
+      ...ClusterNamesWithCloudNames
+    }
+  }
+}
+
+query clusterName($teamId: ID!, $clusterId: UUID!) {
+  user(id: $teamId) {
+    id
+    cluster(id: $clusterId) {
+      id
+      cloudProvider
+      name
+    }
+  }
+}
+
+query clusterDetails($id: ID!, $clusterId: UUID!) {
+  user(id: $id) {
+    id
+    cluster(id: $clusterId) {
+      id
+      ...ClusterDetail
+    }
+    ...UserClouds
+    ...UserContainerRegistries
+  }
+}
+
+query clusterCommon($id: ID!, $clusterId: UUID!) {
+  user(id: $id) {
+    id
+    cluster(id: $clusterId) {
+      id
+      ...ClusterCommon
+    }
+  }
+}
+
+query clusterDeployLogs($id: ID!, $clusterId: UUID!) {
+  user(id: $id) {
+    id
+    cluster(id: $clusterId) {
+      id
+      deployJob {
+        id
+        logs {
+          id
+          cursor
+          entries {
+            text
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+
+query terraformEjectionStatus($id: ID!, $clusterId: UUID!) {
+  user(id: $id) {
+    id
+    cluster(id: $clusterId) {
+      id
+      components {
+        type
+        name
+        status
+        terraformMetadata {
+          jobRunState
+        }
+      }
+    }
+  }
+}

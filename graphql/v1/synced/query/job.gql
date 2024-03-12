@@ -1,0 +1,94 @@
+query jobList($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      jobs {
+        ...JobListItem
+      }
+    }
+  }
+}
+
+query jobRunList($id: UUID!, $teamId: UUID!, $page: PageInput!) {
+  team(id: $teamId) {
+    id
+    job(id: $id) {
+      ...JobDetailItem
+    }
+  }
+}
+
+query jobRunDetail($id: UUID!, $teamId: UUID!) {
+  team(id: $teamId) {
+    id
+    jobRun(id: $id) {
+      ...JobRunDetail
+    }
+  }
+}
+
+query jobRunLogs($id: UUID!, $teamId: UUID!) {
+  team(id: $teamId) {
+    id
+    jobRun(id: $id) {
+      ...JobRunLogs
+    }
+  }
+}
+
+fragment JobListItem on Job {
+  id
+  definition {
+    jobName
+  }
+  runs(input: { filter: {}, page: { first: 0 } }) {
+    totalCount
+  }
+}
+
+fragment JobDetailItem on Job {
+  id
+  definition {
+    jobName
+  }
+  runs(input: { filter: {}, page: $page }) {
+    totalCount
+    pageInfo {
+      hasNextPage
+    }
+    nodes {
+      ...JobRunListItem
+    }
+  }
+}
+
+fragment JobRunListItem on JobRun {
+  id
+  sequence
+  createdAt
+  state
+}
+
+fragment JobRunDetail on JobRun {
+  ...JobRunListItem
+  updatedAt
+  command
+  exitCode
+  errorMessage
+  definition {
+    jobName
+  }
+}
+
+fragment JobRunLogs on JobRun {
+  id
+  logs {
+    id
+    completed
+    expired
+    entries {
+      timestamp
+      text
+    }
+  }
+}

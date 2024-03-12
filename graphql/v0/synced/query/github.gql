@@ -1,0 +1,165 @@
+query userGithubRepos {
+  currentUser {
+    id
+    login
+    avatar
+    githubInstallations {
+      id
+      targetType
+      account {
+        id
+        login
+        avatar
+        type
+      }
+      repositorySelection
+      repositories {
+        ...GitHubRepo
+      }
+    }
+  }
+}
+
+query teamGithubRepos($path: String!) {
+  team(path: $path) {
+    user {
+      githubInstallations {
+        id
+        targetType
+        account {
+          id
+          login
+          avatar
+          type
+        }
+        repositorySelection
+        repositories {
+          ...GitHubRepo
+        }
+      }
+    }
+  }
+}
+
+query userGithubOrgs {
+  currentUser {
+    id
+    githubInstallations {
+      id
+      account {
+        id
+        login
+        avatar
+        type
+      }
+    }
+  }
+}
+
+fragment GithubDetail on GitHubRepository {
+  defaultBranch {
+    name
+  }
+  ports {
+    port
+    protocol
+    https
+    public
+  }
+  volumes {
+    mountPath
+    size
+  }
+  buildMethodSuggestions {
+    name
+    type
+    dockerfilePath
+    buildCommand
+    staticPath
+    runCommand
+  }
+}
+
+query userGithubRepo($installationId: ID!, $owner: String!, $repo: String!) {
+  currentUser {
+    id
+    githubRepository(
+      installationID: $installationId
+      owner: $owner
+      repo: $repo
+    ) {
+      id
+      ...GitHubRepo
+      ...GithubDetail
+    }
+  }
+}
+
+query repoBuildSuggestion($id: ID!) {
+  currentUser {
+    id
+    repo(id: $id) {
+      id
+      buildMethodSuggestions {
+        name
+        type
+        dockerfilePath
+        buildCommand
+        staticPath
+        runCommand
+      }
+    }
+  }
+}
+
+query githubRepoPort($installationId: ID!, $owner: String!, $repo: String!) {
+  currentUser {
+    id
+    githubRepository(
+      installationID: $installationId
+      owner: $owner
+      repo: $repo
+    ) {
+      id
+      ports {
+        https
+        port
+        protocol
+        public
+      }
+    }
+  }
+}
+
+query userGithubRepoServerless(
+  $installationId: ID!
+  $owner: String!
+  $repo: String!
+) {
+  currentUser {
+    id
+    githubRepository(
+      installationID: $installationId
+      owner: $owner
+      repo: $repo
+    ) {
+      id
+      ...GitHubRepo
+      ...GithubDetail
+      serverless {
+        service
+        provider {
+          name
+          region
+          runtime
+          stackName
+          stage
+        }
+        functions {
+          name
+          handler
+        }
+      }
+    }
+  }
+}

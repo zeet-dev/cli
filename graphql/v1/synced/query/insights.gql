@@ -1,0 +1,15 @@
+query insightsCloudsMetric($teamId: UUID!) {
+  insights {
+    cloud {
+      unhealthyClouds(userId: $teamId)
+    }
+  }
+}
+
+query insightsClustersMetric($teamId: UUID!) {
+  insights {
+    cloud {
+      unreachableClusters(userId: $teamId)
+    }
+  }
+}

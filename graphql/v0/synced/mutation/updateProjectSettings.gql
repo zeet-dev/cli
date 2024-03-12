@@ -1,0 +1,19 @@
+mutation updateProjectSettings($input: UpdateProjectInput!) {
+  updateProject(input: $input) {
+    id
+    ...RepoDetail
+  }
+}
+
+mutation updateProjectDangerSettings($input: UpdateProjectDangerInput!) {
+  updateProjectDanger(input: $input) {
+    id
+    ...RepoDetail
+  }
+}
+
+mutation updateResourceAlpha($id: UUID!, $input: UpdateResourceAlphaInput!) {
+  updateResourceAlpha(repoID: $id, input: $input) {
+    id
+  }
+}

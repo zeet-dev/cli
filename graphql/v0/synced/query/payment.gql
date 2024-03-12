@@ -1,0 +1,9 @@
+query userPayment($id: ID!) {
+  user(id: $id) {
+    id
+    hasPaymentMethod
+    needsPaymentMethod
+    freeQuota
+    paymentError
+  }
+}

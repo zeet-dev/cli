@@ -1,0 +1,78 @@
+fragment IntegrationCommon on Integration {
+  id
+  type
+  name
+  description
+  image
+  createdAt
+  updatedAt
+}
+
+fragment NotificationIntegrationCommon on NotificationIntegration {
+  notificationSettings {
+    build
+    deploy
+    podCrash
+
+    conditions {
+      ... on NotificationCondition {
+        key
+        operator
+        value
+      }
+    }
+  }
+}
+
+fragment IntegrationDetail on Integration {
+  id
+  ...IntegrationCommon
+  ...NotificationIntegrationCommon
+  ... on DiscordWebhookIntegration {
+    url
+  }
+  ... on SlackWebhookIntegration {
+    url
+  }
+  ... on DatadogIntegration {
+    apiKey
+  }
+  ... on GitlabIntegration {
+    accessTokenPrefix
+    webhookUrl
+    webhookToken
+  }
+  ... on GithubIntegration {
+    login
+    appID
+    installationID
+    targetType
+  }
+  ... on BitbucketIntegration {
+    webhookUrl
+    webhookToken
+    account {
+      username
+    }
+    authType
+  }
+  ... on EmailIntegration {
+    emailAddress
+    activated
+  }
+}
+
+query userIntegrations($id: ID!) {
+  user(id: $id) {
+    id
+    integrations {
+      id
+      ...IntegrationDetail
+    }
+    notificationIntegrationSettings {
+      build
+      deploy
+      podCrash
+    }
+  }
+}

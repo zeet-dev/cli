@@ -1,0 +1,15 @@
+mutation purchaseSubscription(
+  $forUserID: UUID!
+  $subscriptionCart: SubscriptionCart!
+) {
+  purchaseSubscription(
+    forUserID: $forUserID
+    subscriptionCart: $subscriptionCart
+  ) {
+    overview {
+      currentProducts {
+        ...ProductDetail
+      }
+    }
+  }
+}

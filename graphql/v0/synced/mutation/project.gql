@@ -1,0 +1,95 @@
+mutation removeProjectLogShipper($id: UUID!) {
+  removeLogShipper(id: $id)
+}
+
+mutation addRepoCustomDomain($input: AddRepoCustomDomainInput!) {
+  addRepoCustomDomain(input: $input) {
+    id
+    clusterDomains {
+      id
+      ...ClusterDomainsDetail
+    }
+  }
+}
+
+mutation removeRepoCustomDomain($input: RemoveRepoCustomDomainInput!) {
+  removeRepoCustomDomain(input: $input) {
+    id
+    clusterDomains {
+      id
+      ...ClusterDomainsDetail
+    }
+  }
+}
+
+mutation removeProbe($input: RemoveProbeInput!) {
+  removeProbe(input: $input) {
+    id
+    ...RepoDetail
+  }
+}
+
+mutation enableProject($id: ID!) {
+  enableRepo(id: $id) {
+    ...RepoDetail
+  }
+}
+
+mutation disableProject($id: ID!) {
+  disableRepo(id: $id) {
+    ...RepoDetail
+  }
+}
+
+mutation deleteProject($id: ID!) {
+  deleteRepo(id: $id)
+}
+
+mutation unlinkProject($id: ID!) {
+  unlinkRepo(id: $id)
+}
+
+mutation DuplicateProject($input: DuplicateProjectInput!) {
+  duplicateProject(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation deleteProjectV2($id: UUID!) {
+  deleteProjectV2(id: $id)
+}
+
+mutation deleteProjectV3($id: UUID!) {
+  deleteProjectV3(id: $id)
+}
+
+mutation updateProjectV2($input: UpdateProjectV2Input!) {
+  updateProjectV2(input: $input) {
+    ...ProjectBasic
+  }
+}
+
+query moveRepoTargets($id: ID!) {
+  user(id: $id) {
+    id
+    projects {
+      nodes {
+        id
+        name
+        environments {
+          id
+          name
+        }
+      }
+    }
+  }
+}
+
+mutation moveRepo($input: MoveRepoInput!) {
+  moveRepoToProjectEnvironment(input: $input) {
+    ...RepoDetail
+    projectEnvironment {
+      name
+    }
+  }
+}

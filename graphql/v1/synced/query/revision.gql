@@ -1,0 +1,19 @@
+fragment RevisionDetailV1 on RevisableEntity {
+  revisionData
+  revisionMetadata {
+    id
+    sequenceId
+    description
+    createdAt
+    createdBy {
+      id
+      login
+      name
+      avatar
+    }
+    authorInfo {
+      summary
+      creatorDeleted
+    }
+  }
+}

@@ -1,0 +1,38 @@
+fragment BranchCommon on RepoBranchV2 {
+  id
+  name
+  createdAt
+  updatedAt
+  state
+  endpoints
+  latestDeployment {
+    id
+    ...DeploymentCommon
+  }
+}
+query projectActiveBranchesCount($id: ID!) {
+  currentUser {
+    repo(id: $id) {
+      id
+      branchesV2(input: { active: true }) {
+        totalCount
+      }
+    }
+  }
+}
+
+query projectBranches($id: ID!, $active: Boolean) {
+  currentUser {
+    repo(id: $id) {
+      id
+      productionBranchV2 {
+        ...BranchCommon
+      }
+      branchesV2(page: { first: 0 }, input: { active: $active }) {
+        nodes {
+          ...BranchCommon
+        }
+      }
+    }
+  }
+}

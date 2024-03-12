@@ -1,0 +1,35 @@
+fragment IpfSServicesFragment on IPFSService {
+  id
+  state
+  apiURL
+  nodeURL
+  accessToken
+  owner {
+    id
+    ...UserCommon
+  }
+  api {
+    id
+    repo {
+      id
+      clusterDomains {
+        id
+        domains {
+          id
+          domain
+          ...DomainDetail
+        }
+      }
+    }
+  }
+}
+
+query IpfsServices($id: ID!) {
+  user(id: $id) {
+    id
+    ipfsServices {
+      id
+      ...IpfSServicesFragment
+    }
+  }
+}

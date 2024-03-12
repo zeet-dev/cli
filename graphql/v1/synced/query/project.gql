@@ -1,0 +1,623 @@
+query projectsCount($teamId: UUID!) {
+  team(id: $teamId) {
+    id
+    projects {
+      totalCount
+    }
+  }
+}
+
+query projectsWithDeploymentTimes($teamId: UUID!, $input: ProjectsInput!) {
+  team(id: $teamId) {
+    id
+    projects(input: $input) {
+      nodes {
+        ...ProjectWithDeploymentTime
+      }
+    }
+  }
+}
+
+query projectsWithStatus($teamId: UUID!, $input: ProjectsInput!) {
+  team(id: $teamId) {
+    id
+    projects(input: $input) {
+      nodes {
+        ...ProjectWithStatus
+      }
+    }
+  }
+}
+
+fragment ProjectWithStatus on Project {
+  id
+  status
+}
+
+fragment ProjectWithDeploymentTime on Project {
+  id
+  deploymentTimestamps {
+    lastUpdatedAt
+  }
+  updatedAt
+}
+
+query projectsWithBlueprint($teamId: UUID!) {
+  team(id: $teamId) {
+    id
+    projects {
+      nodes {
+        ...ProjectWithBlueprint
+      }
+    }
+  }
+}
+
+fragment ProjectWithBlueprint on Project {
+  id
+  blueprint {
+    id
+    type
+    configuration {
+      slug
+      logoUrl
+    }
+  }
+}
+
+query projectInfo($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      ...ProjectInfo
+    }
+  }
+}
+
+query projectStatusOnly($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      status
+    }
+  }
+}
+
+query projectDetail($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      ...ProjectDetail
+    }
+  }
+}
+
+fragment ProjectInfo on Project {
+  id
+  name
+  createdAt
+  updatedAt
+  status
+  build {
+    id
+  }
+  deploys {
+    totalCount
+  }
+  workflow {
+    id
+    runs {
+      nodes {
+        ...WorkflowRunDetail
+      }
+    }
+  }
+  jobs {
+    id
+  }
+  blueprint {
+    id
+    type
+  }
+}
+
+fragment ProjectSourceDetail on Source {
+  git {
+    repository
+    ref
+    path
+    integration {
+      githubInstallationId
+      githubIntegrationId
+      gitlabIntegrationId
+    }
+  }
+  terraformModule {
+    source
+    version
+    integration {
+      git {
+        githubInstallationId
+      }
+    }
+  }
+  helmRepository {
+    repositoryUrl
+    chart
+    version
+  }
+  containerRegistry {
+    registryId
+    registryUrl
+    repository
+    tag
+    digest
+  }
+}
+
+fragment ProjectBlueprintConfigurationDetailV1 on BlueprintConfiguration {
+  ...BlueprintConfigurationDetail
+  driverConfiguration {
+    ... on BlueprintTerraformConfiguration {
+      source {
+        ...ProjectSourceDetail
+      }
+    }
+    ... on BlueprintHelmConfiguration {
+      source {
+        ...ProjectSourceDetail
+      }
+    }
+    ... on BlueprintManifestConfiguration {
+      source {
+        ...ProjectSourceDetail
+      }
+    }
+  }
+}
+
+fragment ProjectDetail on Project {
+  ...ProjectInfo
+  deploys {
+    nodes {
+      ...DeployConfigurationDetail
+    }
+  }
+  build {
+    id
+    definition {
+      id
+    }
+  }
+  blueprint {
+    ...ProjectBlueprintDetail
+  }
+  group {
+    id
+    name
+  }
+  subGroup {
+    id
+    name
+  }
+}
+
+fragment ProjectBlueprintDetail on Blueprint {
+  id
+  type
+  configuration {
+    ...BlueprintConfigurationDetail
+  }
+}
+
+fragment DeployConfigurationDetail on Deploy {
+  id
+  name
+  branchName
+  configuration {
+    id
+    defaultWorkflowSteps
+    requirePlanApproval
+    variables {
+      ...DeployVariableDetail
+    }
+    kubernetes {
+      blueprint {
+        source {
+          ...ProjectSourceDetail
+        }
+        useKustomize
+      }
+      target {
+        clusterId
+        namespace
+      }
+      generator {
+        containerRegistrySource {
+          registryId
+          registryUrl
+          repository
+          tag
+          digest
+        }
+        appId
+        branchName
+        productionBranchName
+        envs {
+          id
+          name
+          value
+          visible
+          sealed
+          source {
+            type
+          }
+          createdAt
+          updatedAt
+        }
+        appGeneratorVersion
+        cpuRequest
+        memoryRequest
+        ephemeralStorage
+        dedicated
+        gpuRequest
+        gpuType
+        tpuType
+        tpuTfVersion
+        tpuCores
+        replicas
+        autoscaling {
+          minReplicas
+          maxReplicas
+          coolDownPeriod
+          spec
+          triggers {
+            type
+            spec
+          }
+          kedaScaledObjectSpec
+        }
+        ports {
+          port
+          https
+          grpc
+          public
+          protocol
+          loadBalancer
+        }
+        staticIp
+        hostNetwork
+        endpoint
+        defaultIngressDomain
+        volumes {
+          size
+          mountPath
+        }
+        secretMounts {
+          secretName
+          mountPath
+          readOnly
+        }
+        deployStrategy
+        preStopSleep
+        terminationGracePeriodSeconds
+        startupProbe {
+          command
+          http {
+            host
+            port
+            path
+          }
+          tcp {
+            host
+            port
+          }
+          initialDelaySeconds
+          periodSeconds
+          successThreshold
+          failureThreshold
+          timeoutSeconds
+        }
+        livenessProbe {
+          command
+          http {
+            host
+            port
+            path
+          }
+          tcp {
+            host
+            port
+          }
+          initialDelaySeconds
+          periodSeconds
+          successThreshold
+          failureThreshold
+          timeoutSeconds
+        }
+        readinessProbe {
+          command
+          http {
+            host
+            port
+            path
+          }
+          tcp {
+            host
+            port
+          }
+          initialDelaySeconds
+          periodSeconds
+          successThreshold
+          failureThreshold
+          timeoutSeconds
+        }
+        logShipperType
+        betterstackToken
+        datadogApmEnabled
+        datadogHost
+        datadogKey
+        logDnaKey
+        logzToken
+        logzUrl
+        syslogConfig
+        dockerEntrypoint
+        dockerCommand
+        awsIamRole
+        gcpServiceAccount
+        serviceAccountName
+        annotations
+        serviceAnnotations
+        nodeSelector
+        podSpecPatch
+        legacyRepo {
+          id
+          name
+          appId
+        }
+      }
+    }
+    helm {
+      blueprint {
+        source {
+          ...ProjectSourceDetail
+        }
+      }
+      target {
+        clusterId
+        namespace
+        releaseName
+      }
+      values
+    }
+    terraform {
+      blueprint {
+        source {
+          ...ProjectSourceDetail
+        }
+        outputConfiguration {
+          automatic {
+            disabled
+            excluded
+            sensitive
+          }
+          customization
+        }
+        terraformVersion
+      }
+      target {
+        moduleName
+        stateBackend {
+          s3Bucket {
+            awsAccountId
+            region
+            bucketName
+            key
+          }
+          gcsBucket {
+            gcpAccountId
+            location
+            bucketName
+            prefix
+          }
+        }
+        provider {
+          awsAccount {
+            id
+          }
+          gcpAccount {
+            id
+          }
+          doAccount {
+            id
+          }
+          region
+        }
+      }
+    }
+    awsSam {
+      target {
+        awsAccountId
+        awsRegion
+        stackName
+      }
+      generator {
+        envVars {
+          id
+          name
+          value
+          visible
+          sealed
+          source {
+            type
+          }
+          createdAt
+          updatedAt
+        }
+        runCommand
+        serverlessMemory
+        serverlessArch
+        customDomainHost
+        customDomainCertificateArn
+        httpPort
+        buildImage
+      }
+    }
+    gcpCloudRun {
+      target {
+        gcpAccountId
+        gcpRegion
+      }
+      generator {
+        envVars {
+          id
+          name
+          value
+          visible
+          sealed
+          source {
+            type
+          }
+          createdAt
+          updatedAt
+        }
+        containerMemory
+        name
+        httpPort
+        runCommand
+        containerCpu
+      }
+    }
+  }
+}
+
+fragment DeployVariableDetail on DeployVariable {
+  id
+  specId
+  name
+  value
+  valueString
+  valueBoolean
+  valueInt
+  valueFloat
+  valueJson
+}
+
+query projectOutputs($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      status
+      connector(type: DATABASE_CONNECTION) {
+        type
+        fields {
+          type
+          name
+          displayName
+          value
+        }
+      }
+      workflow {
+        id
+      }
+    }
+  }
+}
+
+fragment ProjectLinkDetail on ProjectLink {
+  id
+  project {
+    ...ProjectWithName
+  }
+  provider {
+    ...ProjectWithName
+  }
+  linkType
+  envPrefix
+
+  envs {
+    name
+    value
+  }
+}
+
+fragment ProjectWithName on Project {
+  id
+  name
+}
+
+query projectAvailableProviders(
+  $teamId: UUID!
+  $projectId: UUID!
+  $linkType: ProjectLinkType!
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      availableProviders(type: $linkType) {
+        ...ProjectWithName
+      }
+    }
+  }
+}
+
+query projectLinkedProjects(
+  $teamId: UUID!
+  $projectId: UUID!
+  $linkType: ProjectLinkType!
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      linkedProjects(type: $linkType) {
+        nodes {
+          ...ProjectLinkDetail
+        }
+      }
+    }
+  }
+}
+
+fragment ProjectWithClusters on Project {
+  id
+  clusters {
+    ...ClusterDetailV1
+  }
+}
+
+query projectClusters($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      ...ProjectWithClusters
+    }
+  }
+}
+
+query projectOutput($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      ...ProjectOutput
+    }
+  }
+}
+
+fragment ProjectOutput on Project {
+  output {
+    entries {
+      ...OutputEntryDetail
+    }
+  }
+}
+
+fragment OutputEntryDetail on ProjectOutputEntry {
+  displayName
+  name
+  type
+  value
+}

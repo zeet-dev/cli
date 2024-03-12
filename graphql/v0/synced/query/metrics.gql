@@ -1,0 +1,43 @@
+query deploymentMetrics($repoID: ID!, $deploymentID: ID!, $name: String!) {
+  currentUser {
+    id
+    repo(id: $repoID) {
+      id
+      deployment(id: $deploymentID) {
+        id
+        metrics(name: $name) {
+          timestamp
+          value
+        }
+      }
+    }
+  }
+}
+
+query combinedDeploymentMetrics($repoID: ID!, $deploymentID: ID!) {
+  currentUser {
+    id
+    repo(id: $repoID) {
+      id
+      deployment(id: $deploymentID) {
+        id
+        cpuMetrics: metrics(name: "cpu") {
+          timestamp
+          value
+        }
+        memoryMetrics: metrics(name: "memory") {
+          timestamp
+          value
+        }
+        networkMetrics: metrics(name: "network_out") {
+          timestamp
+          value
+        }
+        diskMetrics: metrics(name: "disk_usage") {
+          timestamp
+          value
+        }
+      }
+    }
+  }
+}

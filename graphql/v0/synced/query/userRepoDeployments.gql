@@ -1,0 +1,18 @@
+query userRepoDeployments($id: ID!, $branch: String) {
+  currentUser {
+    id
+    repo(id: $id) {
+      id
+      deployments(input: { branch: $branch }) {
+        id
+        ...DeploymentCommon
+        awsLinks {
+          cloudwatchLogs
+        }
+        gcpLinks {
+          cloudLogging
+        }
+      }
+    }
+  }
+}

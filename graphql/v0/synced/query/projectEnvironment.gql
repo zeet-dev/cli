@@ -1,0 +1,133 @@
+query subgroupOverview($path: String!, $environment: String!) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      overviewV2 {
+        deploymentStatus
+        count
+      }
+      projectV3Adapters {
+        ...ProjectV3AdapterConnectionCommon
+      }
+    }
+  }
+}
+
+query projectEnvironments($path: String!) {
+  project(path: $path) {
+    id
+    environments {
+      ...ProjectEnvironmentListItem
+    }
+  }
+}
+
+query projectEnvironmentsAndRepoCount($path: String!) {
+  project(path: $path) {
+    id
+    environments {
+      repoConnection(page: {}) {
+        totalCount
+      }
+      ...ProjectEnvironmentBasic
+    }
+  }
+}
+
+query projectEnvironmentsBasic($path: String!) {
+  project(path: $path) {
+    id
+    environments {
+      ...ProjectEnvironmentBasic
+    }
+  }
+}
+
+query projectEnvironmentsById($id: UUID!) {
+  project(id: $id) {
+    id
+    environments {
+      ...ProjectEnvironmentBasic
+    }
+  }
+}
+
+query projectEnvironment($path: String!, $env: String!) {
+  project(path: $path) {
+    id
+    environment(name: $env) {
+      ...ProjectEnvironmentBasic
+    }
+  }
+}
+
+query projectEnvironmentById($projectId: UUID!, $envId: UUID!) {
+  project(id: $projectId) {
+    id
+    environment(id: $envId) {
+      ...ProjectEnvironmentBasic
+    }
+  }
+}
+
+query projectEnvironmentVariables($path: String!) {
+  project(path: $path) {
+    id
+    envs {
+      ...EnvVarDetail
+    }
+  }
+}
+
+query environmentEnvironmentVariables($path: String!, $env: String!) {
+  project(path: $path) {
+    id
+    envs {
+      ...EnvVarDetail
+    }
+    environment(name: $env) {
+      id
+      envs {
+        ...EnvVarDetail
+      }
+    }
+  }
+}
+
+query projectEnvironmentRevisions(
+  $projectId: UUID!
+  $id: UUID!
+  $page: PageInput
+) {
+  project(id: $projectId) {
+    environment(id: $id) {
+      revisions(page: $page) {
+        totalCount
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+        nodes {
+          ...RevisableEntityCommonFragment
+        }
+      }
+    }
+  }
+}
+
+fragment ProjectEnvironmentBasic on ProjectEnvironment {
+  id
+  name
+}
+
+fragment ProjectEnvironmentListItem on ProjectEnvironment {
+  ...ProjectEnvironmentBasic
+  updatedAt
+  projectV3Adapters {
+    totalCount
+  }
+}

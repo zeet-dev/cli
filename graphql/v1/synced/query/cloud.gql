@@ -1,0 +1,63 @@
+query cloudRevisions($teamId: UUID!, $cloudId: UUID!) {
+  team(id: $teamId) {
+    id
+    cloudAccount(id: $cloudId) {
+      ... on AWSAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on AzureAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on GCPAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on DOAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on LinodeAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on VultrAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+      ... on CoreWeaveAccount {
+        id
+        configurationRevisions {
+          nodes {
+            ...RevisionDetailV1
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,154 @@
+query projectDeploys($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      deploys {
+        nodes {
+          ...ProjectDeployList
+        }
+      }
+    }
+  }
+}
+
+query projectDeployDetail($teamId: UUID!, $deployId: UUID!) {
+  team(id: $teamId) {
+    id
+    deploy(id: $deployId) {
+      ...ProjectDeployDetail
+    }
+  }
+}
+
+query projectDeployRevisions(
+  $teamId: UUID!
+  $projectId: UUID!
+  $page: PageInput
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      deploys {
+        nodes {
+          id
+          name
+          configurationRevisions(page: $page) {
+            totalCount
+            pageInfo {
+              hasNextPage
+            }
+            nodes {
+              ...RevisionDetailV1
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query projectDeployRunDetail($teamId: UUID!, $deployRunId: UUID!)
+{
+  team(id: $teamId) {
+    id
+    deployRun(id: $deployRunId) {
+      ...ProjectDeployRunDetail
+    }
+  }
+}
+
+query resourceLogs($teamId: UUID!, $resourceId: UUID!) {
+  team(id: $teamId) {
+    id
+    resource(id: $resourceId) {
+      ...ResourceLogs
+    }
+  }
+}
+
+fragment ProjectDeployList on Deploy {
+  id
+  name
+  runs(input: { first: 1 }) {
+    totalCount
+    nodes {
+      id
+      sequence
+    }
+  }
+}
+
+fragment ProjectDeployDetail on Deploy {
+  id
+  name
+  runs {
+    totalCount
+    nodes {
+      ...ProjectDeployRunList
+    }
+  }
+}
+
+fragment ProjectDeployRunList on DeployRun {
+  id
+  sequence
+  result {
+    resources {
+      totalCount
+      nodes {
+        displayName
+        externalId
+        externalLink
+        externalType
+
+        ... on ContainerResource {
+          logs {
+            id
+            completed
+            expired
+            entries {
+              text
+              timestamp
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment ProjectDeployRunDetail on DeployRun {
+  id
+  sequence
+  result {
+    resources {
+      totalCount
+      nodes {
+        displayName
+        externalId
+      }
+    }
+  }
+}
+
+fragment ResourceLogs on Resource {
+  externalId
+  externalType
+  externalLink
+  displayName
+  status
+
+  ... on ContainerResource {
+    logs {
+      id
+      completed
+      expired
+      entries {
+        text
+        timestamp
+      }
+    }
+  }
+}

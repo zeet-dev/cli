@@ -1,0 +1,31 @@
+mutation reissueCert($input: ReissueCustomDomainCertificateInput!) {
+  reissueCustomDomainCertificate(input: $input) {
+    id
+    ...RepoDetail
+  }
+}
+
+mutation updateCert($input: UpdateRepoCustomDomainInput!) {
+  updateRepoCustomDomain(input: $input) {
+    id
+    ...RepoDetail
+  }
+}
+
+mutation addCDN($input: AddCDNInput!) {
+  addCDN(input: $input) {
+    id
+    ...CDNDetail
+  }
+}
+
+mutation updateCDN($input: UpdateCDNInput!) {
+  updateCDN(input: $input) {
+    id
+    ...CDNDetail
+  }
+}
+
+mutation removeCDN($id: UUID!) {
+  removeCDN(id: $id)
+}

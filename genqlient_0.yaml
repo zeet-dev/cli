@@ -2,9 +2,8 @@
 # https://github.com/Khan/genqlient/blob/main/docs/genqlient.yaml
 schema: schema_0.graphql
 operations:
-  - "../../zeet/captain/packages/web-api/graphql/v0/common.gql"
-  - "../../zeet/captain/packages/web-api/graphql/v0/*/*.gql"
-  # - "./graphql/v0/*/*.gql"
+  - "./graphql/v0/*/*.gql"
+  - "./graphql/v0/*/*/*.gql"
 generated: pkg/sdk/v0/generated.go
 optional: pointer
 allow_broken_features: true

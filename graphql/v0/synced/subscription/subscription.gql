@@ -1,0 +1,182 @@
+subscription deploymentUpdated($id: ID!) {
+  deploymentUpdated(id: $id) {
+    id
+    status
+    endpoints
+    build {
+      id
+    }
+  }
+}
+
+subscription deploymentBuildLogsAdded($input: BuildLogsInput!) {
+  deploymentBuildLogsAdded(input: $input) {
+    text
+    timestamp
+  }
+}
+
+subscription combinedDeploymentMetricsUpdated($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    cpuMetrics: metrics(name: "cpu") {
+      timestamp
+      value
+    }
+    memoryMetrics: metrics(name: "memory") {
+      timestamp
+      value
+    }
+    networkMetrics: metrics(name: "network_out") {
+      timestamp
+      value
+    }
+    diskMetrics: metrics(name: "disk_usage") {
+      timestamp
+      value
+    }
+  }
+}
+
+subscription combinedDeploymentMetricsUpdatedV2($deploymentID: ID!, $deploymentUUID: UUID!, $queryOptions: MetricQueryOptions) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    cpuMetrics: metricsV2(deploymentID: $deploymentUUID, metricType: CPU, queryOptions: $queryOptions) {
+      ...MetricStream
+    }
+    memoryMetrics: metricsV2(deploymentID: $deploymentUUID, metricType: MEMORY, queryOptions: $queryOptions) {
+      ...MetricStream
+    }
+    networkMetrics: metricsV2(deploymentID: $deploymentUUID, metricType: NETWORK, queryOptions: $queryOptions) {
+      ...MetricStream
+    }
+    diskMetrics: metricsV2(deploymentID: $deploymentUUID, metricType: STORAGE, queryOptions: $queryOptions) {
+      ...MetricStream
+    }
+  }
+}
+
+subscription combinedLambdaDeploymentMetricsUpdated($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    awsLinks {
+      cloudwatchMetrics
+    }
+    invocations: metrics(name: "Invocations") {
+      timestamp
+      value
+    }
+    errors: metrics(name: "Errors") {
+      timestamp
+      value
+    }
+    duration: metrics(name: "Duration") {
+      timestamp
+      value
+    }
+    concurrentExecutions: metrics(name: "ConcurrentExecutions") {
+      timestamp
+      value
+    }
+  }
+}
+
+subscription combinedCloudFunctionDeploymentMetricsUpdated($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    gcpLinks {
+      cloudMonitoring
+    }
+    executionCount: metrics(name: "execution_count") {
+      timestamp
+      value
+    }
+    duration: metrics(name: "execution_times") {
+      timestamp
+      value
+    }
+    memoryUsage: metrics(name: "user_memory_bytes") {
+      timestamp
+      value
+    }
+    activeInstances: metrics(name: "active_instances") {
+      timestamp
+      value
+    }
+  }
+}
+
+subscription combinedCloudRunMetricsUpdated($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    gcpLinks {
+      cloudMonitoring
+    }
+    request_count: metrics(name: "request_count") {
+      timestamp
+      value
+    }
+    instance_count: metrics(name: "container/instance_count") {
+      timestamp
+      value
+    }
+    cpu_utilizations: metrics(name: "container/cpu/utilizations") {
+      timestamp
+      value
+    }
+    memory_utilizations: metrics(name: "container/memory/utilizations") {
+      timestamp
+      value
+    }
+  }
+}
+
+subscription deploymentBuildMetrics($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    build {
+      id
+      cpuMetrics: metrics(name: "cpu") {
+        timestamp
+        value
+      }
+      memoryMetrics: metrics(name: "memory") {
+        timestamp
+        value
+      }
+    }
+  }
+}
+
+subscription combinedAwsRdsMetricsUpdated($deploymentID: ID!) {
+  deploymentUpdated(id: $deploymentID) {
+    id
+    awsLinks {
+      cloudwatchMetrics
+    }
+    CPUUtilization: metrics(name: "CPUUtilization") {
+      timestamp
+      value
+    }
+    DatabaseConnections: metrics(name: "DatabaseConnections") {
+      timestamp
+      value
+    }
+    FreeStorageSpace: metrics(name: "FreeStorageSpace") {
+      timestamp
+      value
+    }
+    FreeableMemory: metrics(name: "FreeableMemory") {
+      timestamp
+      value
+    }
+    ReadLatency: metrics(name: "ReadLatency") {
+      timestamp
+      value
+    }
+    WriteLatency: metrics(name: "WriteLatency") {
+      timestamp
+      value
+    }
+  }
+}

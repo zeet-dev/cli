@@ -1,0 +1,28 @@
+mutation rollbackToDeployment($projectID: UUID!, $deploymentID: UUID!) {
+  rollbackProjectToDeployment(
+    projectID: $projectID
+    deploymentID: $deploymentID
+  ) {
+    id
+    productionDeployment {
+      id
+      status
+      deployStatus {
+        state
+        active
+      }
+    }
+  }
+}
+
+mutation deployRepoBranch($input: DeployRepoBranchInput!) {
+  deployRepoBranch(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation abortBuild($id: UUID!) {
+  abortBuild(id: $id) {
+    ...RepoDetail
+  }
+}

@@ -1,0 +1,91 @@
+query buildArtifacts($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
+{
+  team(id: $teamId) {
+    project(id: $projectId) {
+      build {
+        runs(input: { filter: {}, page: $page }) {
+          totalCount
+          pageInfo {
+            hasNextPage
+          }
+          nodes {
+            id
+            sequence
+            artifacts {
+              id
+              image
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment BuildRunListItem on BuildRun {
+  id
+  sequence
+  jobRun {
+    createdAt
+    state
+  }
+  triggeredBy {
+    id
+    sequence
+  }
+}
+
+fragment BuildRunDetail on BuildRun {
+  id
+  sequence
+  jobRun {
+    id
+  }
+  triggeredBy {
+    id
+    sequence
+  }
+  definition {
+    id
+  }
+  artifacts {
+    id
+    image
+    createdAt
+  }
+}
+
+query buildRuns($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
+{
+  team(id: $teamId) {
+    project(id: $projectId) {
+      build {
+        id
+        runs(input: { page: $page, filter: {} }) {
+          totalCount
+          pageInfo {
+            hasNextPage
+          }
+          nodes {
+            ...BuildRunListItem
+          }
+        }
+      }
+    }
+  }
+}
+
+query buildRunDetail($teamId: UUID!, $projectId: UUID!, $runId: UUID!)
+{
+  team(id: $teamId) {
+    project(id: $projectId) {
+      build {
+        id
+        run(id: $runId) {
+          ...BuildRunDetail
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+mutation createAPIKey($input: CreateAPIKeyInput!) {
+  createAPIKey(input: $input) {
+    id
+    token
+    name
+    description
+    createdAt
+  }
+}
+
+mutation deleteAPIKey($id: UUID!) {
+  deleteAPIKey(id: $id)
+}

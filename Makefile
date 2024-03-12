@@ -27,6 +27,13 @@ get-schema:
 	get-graphql-schema https://anchor.zeet.co/graphql > schema_0.graphql
 	get-graphql-schema https://anchor.zeet.co/v1/graphql > schema_1.graphql
 
+
+CAPTAIN_PATH ?= "../../zeet/captain"
+sync-gql-query:
+	rm -r ./graphql/v0/synced ./graphql/v1/synced
+	cp -r $(CAPTAIN_PATH)/packages/web-api/graphql/v0 ./graphql/v0/synced
+	cp -r $(CAPTAIN_PATH)/packages/web-api/graphql/v1 ./graphql/v1/synced
+
 gen-gql-go:
 	go run github.com/Khan/genqlient genqlient.yaml
 

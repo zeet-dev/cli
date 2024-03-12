@@ -1,0 +1,35 @@
+mutation createProject($input: CreateProjectInput) {
+  createProject(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation createProjectDocker($input: CreateProjectDockerInput) {
+  createProjectDocker(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation createDatabase($input: CreateDatabaseInput) {
+  createDatabase(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation createProjectGit($input: CreateProjectGitInput) {
+  createProjectGit(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation createProjectTerraform($input: CreateProjectTerraformInput) {
+  createProjectTerraform(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation createProjectManifest($input: CreateManifestAppInput) {
+  createManifestApp(input: $input) {
+    ...RepoDetail
+  }
+}

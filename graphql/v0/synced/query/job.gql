@@ -1,0 +1,68 @@
+fragment JobCommon on JobRun {
+  id
+  state
+  build {
+    version
+  }
+  command
+  exitCode
+  createdAt
+}
+
+query projectJobs($id: ID!) {
+  currentUser {
+    repo(id: $id) {
+      id
+      jobRuns {
+        totalCount
+        nodes {
+          id
+          ...JobCommon
+        }
+      }
+    }
+  }
+}
+
+query projectJob($repoID: ID!, $jobID: UUID!) {
+  currentUser {
+    repo(id: $repoID) {
+      id
+      jobRun(id: $jobID) {
+        id
+        deployment {
+          id
+          branch
+        }
+        ...JobCommon
+        logs {
+          id
+          completed
+          expired
+          entries {
+            timestamp
+            text
+          }
+        }
+      }
+    }
+  }
+}
+
+query userJob($jobID: UUID!) {
+  currentUser {
+    jobRun(id: $jobID) {
+      id
+      ...JobCommon
+      logs {
+        id
+        completed
+        expired
+        entries {
+          timestamp
+          text
+        }
+      }
+    }
+  }
+}

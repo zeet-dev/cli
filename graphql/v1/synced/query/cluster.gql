@@ -1,0 +1,50 @@
+fragment ClusterDetailV1 on Cluster {
+  id
+
+  displayName
+
+  state
+  connected
+
+  cloudProvider
+
+  createdAt
+  updatedAt
+
+  updatedAt
+  createdAt
+}
+
+query clusterDetails($teamId: UUID!, $clusterId: UUID!) {
+  team(id: $teamId) {
+    id
+    cluster(id: $clusterId) {
+      id
+      ...ClusterDetailV1
+    }
+  }
+}
+
+query clusterRevisions($teamId: UUID!, $clusterId: UUID!) {
+  team(id: $teamId) {
+    id
+    cluster(id: $clusterId) {
+      id
+      configurationRevisions {
+        nodes {
+          ...RevisionDetailV1
+        }
+      }
+    }
+  }
+}
+
+query clusterStatus($teamId: UUID!, $clusterId: UUID!) {
+  team(id: $teamId) {
+    id
+    cluster(id: $clusterId) {
+      id
+      status
+    }
+  }
+}

@@ -1,0 +1,49 @@
+fragment HelmCommon on HelmChart {
+  id
+  name
+  description
+  logoImage
+  version
+  app_version
+  repository {
+    id
+    name
+    url
+  }
+}
+
+query helmChart($url: String!, $name: String!) {
+  helmRepository(url: $url) {
+    id
+    chart(name: $name) {
+      id
+      ...HelmCommon
+    }
+  }
+}
+
+query projectHelmChart($id: ID!) {
+  currentUser {
+    id
+    repo(id: $id) {
+      id
+      helmChart {
+        id
+        ...HelmCommon
+      }
+    }
+  }
+}
+
+query searchHelmCharts($input: SearchHelmChartsInput!) {
+  searchHelmCharts(input: $input) {
+    totalCount
+    nodes {
+      id
+      ...HelmCommon
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+}

@@ -1,0 +1,38 @@
+fragment RepoCustomization on Repo {
+  ...RepoCommon
+  kubernetesCustomization {
+    serviceAccountName
+    podAnnotations
+    serviceAnnotations
+    ingressAnnotations
+    podSpecPatch
+    ingressSpecPatch
+  }
+}
+
+query repoCustomization($id: UUID!) {
+  repo(id: $id) {
+    id
+    ...RepoCustomization
+  }
+}
+
+query repoRenderPodSpecPatch($id: UUID!, $patch: String) {
+  repo(id: $id) {
+    id
+    productionBranchV2 {
+      id
+      renderPodSpec(patch: $patch)
+    }
+  }
+}
+
+query repoRenderIngressSpecPatch($id: UUID!, $patch: String) {
+  repo(id: $id) {
+    id
+    productionBranchV2 {
+      id
+      renderIngress(patch: $patch)
+    }
+  }
+}

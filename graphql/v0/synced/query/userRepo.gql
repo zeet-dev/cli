@@ -1,0 +1,155 @@
+query userRepo($id: ID!) {
+  currentUser {
+    id
+    repo(id: $id) {
+      id
+      ...RepoDetail
+    }
+  }
+}
+
+fragment RepoDeploy on Repo {
+  id
+  ...RepoCommon
+  canDeploy
+  deployTarget
+}
+
+query userRepoCloudOnboardByPath(
+  $projectPath: String
+  $projectId: UUID
+  $repoName: String!
+) {
+  project(path: $projectPath, id: $projectId) {
+    id
+    repo(name: $repoName) {
+      id
+      ...RepoDeploy
+    }
+  }
+}
+
+query repoForProjectEnvironment(
+  $path: String!
+  $environment: String!
+  $repo: String!
+) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      repo(name: $repo) {
+        ...RepoDetail
+      }
+    }
+  }
+}
+
+query repoForProject($path: String!, $repo: String!) {
+  project(path: $path) {
+    id
+    repo(name: $repo) {
+      ...RepoDetail
+    }
+  }
+}
+
+query repoPrometheus($userID: ID!, $clusterID: UUID!, $repoID: ID!) {
+  user(id: $userID) {
+    id
+    cluster(id: $clusterID) {
+      id
+      prometheus {
+        url
+        user
+        password
+        token
+      }
+    }
+    repo(id: $repoID) {
+      id
+      kappID
+    }
+  }
+}
+
+query repoDeployRevisions($repoId: ID!) {
+  currentUser {
+    id
+    repo(id: $repoId) {
+      id
+      deploymentConfigurationRevisions(page: { first: 50 }) {
+        pageInfo {
+          hasNextPage
+        }
+        totalCount
+        nodes {
+          ...RevisableEntityCommonFragment
+        }
+      }
+    }
+  }
+}
+
+fragment RevisableEntityCommonFragment on RevisableEntity {
+  revisionData
+  revisionMetadata {
+    id
+    description
+    sequenceId
+    createdBy {
+      id
+      login
+      name
+      avatar
+    }
+    createdAt
+  }
+}
+
+fragment RepoBranchDeployments on DeploymentConnection {
+  pageInfo {
+    startCursor
+    endCursor
+    hasNextPage
+    hasPreviousPage
+  }
+  nodes {
+    id
+    ...DeploymentCommon
+    awsLinks {
+      cloudwatchLogs
+    }
+    gcpLinks {
+      cloudLogging
+    }
+  }
+}
+
+query userRepoBranchesV2(
+  $id: ID!
+  $branch: String
+  $withBranch: Boolean!
+  $after: String!
+  $first: Int!
+) {
+  currentUser {
+    id
+    repo(id: $id) {
+      id
+      productionBranchV2 @skip(if: $withBranch) {
+        id
+        deployments(page: { after: $after, first: $first }) {
+          ...RepoBranchDeployments
+        }
+      }
+      branch(name: $branch) @include(if: $withBranch) {
+        id
+        deployments(page: { after: $after, first: $first }) {
+          ...RepoBranchDeployments
+        }
+      }
+    }
+  }
+}

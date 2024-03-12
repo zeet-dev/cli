@@ -1,0 +1,56 @@
+mutation buildRepo($id: ID!, $branch: String, $noCache: Boolean) {
+  buildRepo(id: $id, branch: $branch, noCache: $noCache) {
+    ...RepoDetail
+  }
+}
+
+mutation setPaymentMethod($paymentMethod: String!) {
+  setPaymentMethod(paymentMethod: $paymentMethod) {
+    id
+    hasPaymentMethod
+  }
+}
+
+mutation setRepoEnvs($input: SetRepoEnvsInput!) {
+  setRepoEnvs(input: $input) {
+    id
+    envs {
+      id
+      name
+      value
+      visible
+      sealed
+    }
+  }
+}
+
+mutation addProjectCollaborator($input: AddProjectCollaboratorInput!) {
+  addProjectCollaborator(input: $input) {
+    id
+    collaborators {
+      ...CollaboratorCommon
+    }
+  }
+}
+
+mutation removeProjectCollaborator($id: ID!) {
+  removeProjectCollaborator(id: $id) {
+    id
+    collaborators {
+      ...CollaboratorCommon
+    }
+  }
+}
+
+mutation copyEnvVars($from: ID!, $to: ID!) {
+  copyEnvVars(from: $from, to: $to) {
+    id
+    envs {
+      id
+      name
+      value
+      visible
+      sealed
+    }
+  }
+}

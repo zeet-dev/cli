@@ -1,0 +1,15 @@
+mutation createRepoPipelineLink($input: CreateRepoPipelineLinkInput!) {
+  createRepoPipelineLink(input: $input) {
+    ...RepoPipelineLinkDetail
+  }
+}
+
+mutation deleteRepoPipelineLink($id: UUID!) {
+  deleteRepoPipelineLink(id: $id)
+}
+
+mutation updateRepoPipelineLink($input: UpdateRepoPipelineLinkInput!) {
+  updateRepoPipelineLink(input: $input) {
+    ...RepoPipelineLinkDetail
+  }
+}

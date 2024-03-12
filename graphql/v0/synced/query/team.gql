@@ -1,0 +1,197 @@
+fragment TeamCommon on Team {
+  id
+  plan {
+    tier
+    billingPeriod
+  }
+  user {
+    id
+    ...UserCommon
+  }
+}
+
+fragment TeamDetail on Team {
+  id
+  ...TeamCommon
+  user {
+    id
+    ...UserDetail
+  }
+}
+
+fragment TeamMember on Team {
+  id
+  members {
+    id
+    user {
+      ...UserPublicCommon
+    }
+    role
+  }
+  memberInvitations {
+    id
+    ...TeamInvite
+  }
+}
+
+query teamCloud($id: ID!) {
+  currentUser {
+    id
+    team(id: $id) {
+      id
+      awsAccounts {
+        iamUsers {
+          arn
+          userId
+          username
+          attachedAwsPolicies {
+            arn
+            policyName
+            groupName
+          }
+        }
+        userIamConnections {
+          userId
+          awsIamArn
+          awsAccountId
+          id
+        }
+        accountID
+        id
+      }
+    }
+  }
+}
+
+query userTeam($id: ID!) {
+  currentUser {
+    id
+    team(id: $id) {
+      id
+      ...TeamDetail
+    }
+  }
+}
+
+query teamByName($name: String!) {
+  team(path: $name) {
+    id
+    ...TeamDetail
+  }
+}
+
+query userTeams {
+  currentUser {
+    id
+    teams {
+      id
+      team {
+        id
+        ...TeamCommon
+      }
+      role
+    }
+  }
+}
+
+query userTeamMember($id: ID!) {
+  currentUser {
+    id
+    team(id: $id) {
+      id
+      ...TeamCommon
+      ...TeamMember
+    }
+  }
+}
+
+query newTeamMemberSuggestions {
+  currentUser {
+    id
+    repos {
+      id
+      collaborators {
+        id
+        user {
+          ...UserPublicCommon
+        }
+        role
+      }
+    }
+  }
+}
+
+query newTeamProjectSuggestions {
+  currentUser {
+    id
+    repos {
+      ...RepoCommon
+      volumes {
+        mountPath
+        size
+      }
+      collaborators {
+        id
+        user {
+          id
+          name
+        }
+        role
+      }
+    }
+  }
+}
+
+query currentUsageMetrics(
+  $id: ID!
+  $teamID: ID!
+  $permissionsUserId: UUID!
+  $pageInput: PageInput!
+) {
+  user(id: $id) {
+    id
+    projectV3Adapters(filter: { filter: {} }) {
+      totalCount
+    }
+    clusters {
+      id 
+    }
+    awsAccounts {
+      id
+    }
+    coreweaveAccounts {
+      id
+    }
+    doAccounts {
+      id
+    }
+    gcpAccounts {
+      id
+    }
+    linodeAccounts {
+      id
+    }
+    vultrAccounts {
+      id
+    }
+    blueprints(page: $pageInput) {
+      totalCount
+      nodes {
+        owner {
+          login
+        }
+      }
+    }
+  }
+  currentUser {
+    permissions {
+      user(userID: $permissionsUserId) {
+        mutations
+      }
+    }
+    team(id: $teamID) {
+      id
+      ...TeamMember
+    }
+  }
+}

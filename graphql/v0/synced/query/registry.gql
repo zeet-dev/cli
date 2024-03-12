@@ -1,0 +1,23 @@
+fragment UserContainerRegistries on User {
+  containerRegistries {
+    id
+    name
+    registry
+    username
+  }
+}
+
+query userContainerRegistries($id: ID!) {
+  user(id: $id) {
+    id
+    clusters {
+      id
+      containerRegistry {
+        id
+        name
+        credentialProvider
+      }
+    }
+    ...UserContainerRegistries
+  }
+}

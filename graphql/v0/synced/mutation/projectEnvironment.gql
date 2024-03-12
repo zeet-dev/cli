@@ -1,0 +1,34 @@
+mutation createProjectEnvironment($input: CreateProjectEnvironmentInput!) {
+  createProjectEnvironment(input: $input) {
+    id
+    name
+  }
+}
+
+mutation updateProjectEnvironment($input: UpdateProjectEnvironmentInput!) {
+  updateProjectEnvironment(input: $input) {
+    id
+    name
+  }
+}
+
+mutation deleteProjectEnvironment($id: UUID!) {
+  deleteProjectEnvironment(id: $id)
+}
+
+mutation updateProjectEnvironmentVariables($input: UpdateProjectV2Input!) {
+  updateProjectV2(input: $input) {
+    id
+  }
+}
+
+mutation updateEnvironmentEnvironmentVariables(
+  $input: UpdateProjectEnvironmentInput!
+) {
+  updateProjectEnvironment(input: $input) {
+    envs {
+      ...EnvVarDetail
+    }
+    ...ProjectEnvironmentBasic
+  }
+}

@@ -1,0 +1,632 @@
+fragment UserPublicCommon on User {
+  id
+  name
+  login
+  avatar
+  isTeam
+}
+
+fragment UserCommon on User {
+  id
+  ...UserPublicCommon
+  email
+  createdAt
+  freeTrialEndsAt
+  hasPaymentMethod
+  paymentError
+  paymentAuthorizationError
+  advanced
+}
+
+fragment RepoBasic on Repo {
+  id
+  path
+  name: path
+  enabled
+  image
+  owner {
+    id
+    login
+  }
+  project {
+    id
+    ...ProjectBasic
+  }
+  projectEnvironment {
+    id
+    ...ProjectEnvironmentBasic
+  }
+}
+
+fragment RepoCommon on Repo {
+  id
+  path
+  name: path
+  enabled
+  source {
+    id
+    type
+    name
+  }
+  deployTarget
+  deployType
+
+  deployService
+  deployJob
+
+  awsAccount {
+    id
+    accountID
+  }
+  gcpAccount {
+    id
+    projectID
+  }
+  image
+  cpu
+  memory
+  gpu {
+    type
+    count
+  }
+  tpu {
+    tfVersion
+    type
+    cores
+  }
+  updatedAt
+  disableReason
+  cluster {
+    id
+    name
+    domain
+    ...ClusterCloudNames
+  }
+  databaseProvider
+  databaseEngine
+
+  autoscaling {
+    minReplicas
+    maxReplicas
+  }
+
+  owner {
+    id
+    ...UserPublicCommon
+    advanced
+  }
+  project {
+    id
+    ...ProjectBasic
+  }
+  projectEnvironment {
+    id
+    ...ProjectEnvironmentBasic
+  }
+}
+
+fragment RepoListItem on Repo {
+  ...RepoCommon
+  productionDeployment {
+    id
+    ...DeploymentCommon
+  }
+}
+
+fragment DeploymentCommon on Deployment {
+  id
+  description
+  version
+  status
+  branch
+
+  endpoints
+  privateEndpoint
+  errorMessage
+
+  deployStatus {
+    active
+    replicas
+    publicIPs
+    state
+    errorMessage
+    troubleshooting {
+      issue {
+        blocks {
+          blockType
+          content
+        }
+      }
+    }
+  }
+
+  build {
+    image
+  }
+  alternativeImages {
+    reference
+    tag
+    name
+  }
+
+  updatedAt
+  createdAt
+}
+
+fragment DeploymentDetail on Deployment {
+  ...DeploymentCommon
+  branch
+  buildStage {
+    id
+  }
+  releaseStage {
+    id
+  }
+  deployStage {
+    id
+  }
+  repo {
+    id
+    ports {
+      https
+      public
+    }
+    ...RepoCommon
+  }
+  awsLinks {
+    ...LambdaLinks
+    rds
+  }
+  gcpLinks {
+    ...CloudFunctionsLinks
+  }
+  deploymentError {
+    errorID
+    errorCode
+    message
+  }
+
+  createdAt
+  updatedAt
+}
+
+fragment Resources on ContainerResourcesSpec {
+  cpu
+  memory
+  ephemeralStorage
+  spot
+  accelerator {
+    type
+    count
+  }
+}
+
+fragment ProbeDetail on Probe {
+  command
+  http {
+    host
+    port
+    path
+  }
+  tcp {
+    host
+    port
+  }
+  initialDelaySeconds
+  periodSeconds
+  successThreshold
+  failureThreshold
+  timeoutSeconds
+}
+
+fragment LambdaLinks on AWSLinks {
+  cloudformation
+  lambda
+  apiGateway
+  cloudwatchLogs
+  cloudwatchMetrics
+}
+
+fragment CloudFunctionsLinks on GCPLinks {
+  deploymentManager
+  cloudRun
+  cloudFunctions
+  cloudFunctionsTrigger
+  cloudLogging
+  cloudMonitoring
+}
+
+fragment RepoBuild on Repo {
+  buildMethod {
+    name
+    type
+    workingDirectory
+    dockerfilePath
+    buildCommand
+    staticPath
+    runCommand
+    releaseCommand
+    nodejsVersion
+    pythonVersion
+    golangVersion
+  }
+  buildResources {
+    cpu
+    memory
+    ephemeralStorage
+    spot
+  }
+  buildSpec {
+    cpu
+    memory
+  }
+  noBuildCache
+  gitSubmodules
+  kanikoFlags {
+    compressedCaching
+  }
+  alternativeImageTagTemplates
+}
+
+fragment RepoDetail on Repo {
+  secretMounts {
+    secretName
+    mountPath
+    readOnly
+  }
+
+  kubernetesCustomization {
+    serviceAccountName
+    podAnnotations
+    serviceAnnotations
+    ingressAnnotations
+  }
+
+  manifest {
+    manifests
+    manifestValue
+    kustomizeDirs
+  }
+
+  appID
+  defaultIngressDomain
+  kappID
+  useHumanReadableKubernetesName
+
+  ...RepoCommon
+  ...RepoNetwork
+  ...RepoBuild
+
+  project {
+    id
+    name
+    environments {
+      ...ProjectEnvironmentBasic
+    }
+    envs {
+      id
+      name
+      value
+      visible
+      sealed
+      source {
+        type
+      }
+    }
+  }
+
+  productionDeployment {
+    ...DeploymentCommon
+    awsLinks {
+      ...LambdaLinks
+      rds
+    }
+    gcpLinks {
+      ...CloudFunctionsLinks
+    }
+    loadBalancers {
+      dns
+      ips
+      ports
+    }
+  }
+
+  namespace
+
+  envs {
+    id
+    name
+    value
+    visible
+    sealed
+    source {
+      type
+    }
+  }
+  collaborators {
+    id
+    ...CollaboratorCommon
+  }
+  volumes {
+    mountPath
+    size
+  }
+  replication {
+    region
+    replicas
+    cluster {
+      id
+      name
+      region
+    }
+  }
+  deployTarget
+  cluster {
+    id
+    name
+    region
+    ingressIP
+    connected
+    staticIPs
+    cloudProvider
+    clusterProvider
+    state
+  }
+  awsAccount {
+    id
+    accountID
+  }
+  gcpAccount {
+    id
+    projectID
+  }
+  logShipper {
+    type
+    logz {
+      token
+      url
+    }
+    syslog {
+      host
+      port
+      mode
+    }
+    logDNA {
+      key
+    }
+    datadog {
+      key
+      host
+    }
+    betterstack {
+      token
+    }
+  }
+  readinessProbe {
+    ...ProbeDetail
+  }
+  livenessProbe {
+    ...ProbeDetail
+  }
+  startupProbe {
+    ...ProbeDetail
+  }
+  manualDeploy
+  deployStrategy
+  free
+  cpu
+  memory
+  gpu {
+    type
+    count
+  }
+  tpu {
+    type
+    cores
+    tfVersion
+  }
+  ephemeralStorage
+  dedicated
+  githubIntegration {
+    id
+    githubRepository {
+      id
+      owner
+      name
+    }
+    autoDeployBranch
+    autoStopBranch
+    branchIgnore
+    branchStopIgnore
+  }
+  gitlabIntegration {
+    id
+    autoDeployBranch
+    autoStopBranch
+    branchIgnore
+    branchStopIgnore
+  }
+  productionBranch
+  branchResources {
+    ...Resources
+  }
+  serverlessResources {
+    cpu
+    memory
+  }
+  serverlessRegion
+  prometheusScrape {
+    path
+    port
+  }
+  helmValues
+  terraformVersion
+  terraformVariables
+  jobRuns {
+    totalCount
+  }
+  deployService
+  deployJob
+  preStopSleep
+  terminationGracePeriodSeconds
+  autoscaling {
+    kedaScaledObjectSpec
+    minReplicas
+    maxReplicas
+    coolDownPeriod
+    triggers {
+      type
+      spec
+    }
+  }
+  containerRegistry {
+    id
+  }
+
+  databaseProvider
+  databaseEngine
+  databaseVersion
+  databaseEnvs {
+    name
+    value
+  }
+  databaseLinks {
+    id
+    envPrefix
+    envs {
+      name
+      value
+    }
+    database {
+      ...RepoCommon
+    }
+  }
+  linkedProjects {
+    id
+    envPrefix
+    repo {
+      ...RepoCommon
+    }
+  }
+  autoRetry
+  autoRollback
+  canDeploy
+  pipelineCluster {
+    id
+  }
+
+  awsIamRole
+  gcpServiceAccount
+
+  datadogApmEnabled
+
+  projectEnvironment {
+    id
+    name
+    envs {
+      id
+      name
+      value
+      visible
+      sealed
+      source {
+        type
+      }
+    }
+  }
+
+  pipelineLinks {
+    ...RepoPipelineLinkDetail
+  }
+
+  deployTimeoutSeconds
+}
+
+fragment RepoPipelineLinkDetail on RepoPipelineLink {
+  id
+  source {
+    id
+  }
+  sourceEvent
+  targetGroup {
+    id
+    selector {
+      matchLabels
+    }
+  }
+  targetAction
+}
+
+fragment UserDetail on User {
+  id
+  ...UserCommon
+  hasZeetCloud
+  hasOnboarded
+  canDeploy
+}
+
+fragment GitHubRepo on GitHubRepository {
+  id
+  name
+  owner
+  url
+  description
+  isFork
+  isPrivate
+  primaryLanguage
+  updatedAt
+}
+
+fragment CollaboratorCommon on ProjectCollaborator {
+  id
+  user {
+    ...UserPublicCommon
+  }
+  role
+}
+
+fragment ProjectConnectionComon on ProjectConnection {
+  pageInfo {
+    startCursor
+    endCursor
+    hasNextPage
+    hasPreviousPage
+  }
+  nodes {
+    id
+    repo {
+      ...RepoCommon
+    }
+  }
+}
+
+fragment EnvVarDetail on EnvVar {
+  id
+  name
+  value
+  visible
+  sealed
+  source {
+    type
+  }
+}
+
+fragment MetricStream on MetricStream {
+  type
+  query
+  annotations {
+    type
+    direction
+    function
+    label
+    value
+  }
+  labels {
+    label
+    value
+  }
+  entries {
+    value
+    timestamp
+  }
+}

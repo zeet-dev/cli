@@ -1,0 +1,13 @@
+mutation createUserPersonalAccessToken($userId: UUID!, $name: String!)
+{
+  createPersonalAccessTokenForUser(userId: $userId, input: { name: $name }) {
+    id
+    name
+    token
+    createdAt
+  }
+}
+
+mutation deleteUserPersonalAccessToken($id: UUID!) {
+  deletePersonalAccessToken(id: $id)
+}

@@ -1,0 +1,11 @@
+query userPersonalAccessTokens($id: UUID!) {
+  user(id: $id) {
+    id
+    personalAccessTokens {
+      id
+      name
+      token
+      createdAt
+    }
+  }
+}

@@ -1,0 +1,33 @@
+query getPriceTotal($input: CheckPriceInput!) {
+  checkPrice(input: $input) {
+    total {
+      explanation
+      cost
+    }
+    subTotal {
+      explanation
+      cost
+    }
+  }
+}
+
+query unitPrice {
+  prices {
+    ramGB
+    cpuCore
+    dedicatedGPU
+    dedicatedRamGB
+    dedicatedCpuCore
+    storageGB
+  }
+}
+
+query freeTierEligible($input: CheckPriceInput!) {
+  checkPrice(input: $input) {
+    canBeFreeTier
+  }
+  currentUser {
+    id
+    freeQuota
+  }
+}

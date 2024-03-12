@@ -1,0 +1,16 @@
+query userBranchResources($repoId: ID!, $branch: String) {
+  currentUser {
+    id
+    repo(id: $repoId) {
+      id
+      branch(name: $branch) {
+        resources {
+          id
+          resourceType
+          shared
+          region
+        }
+      }
+    }
+  }
+}

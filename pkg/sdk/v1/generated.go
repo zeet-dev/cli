@@ -127,6 +127,92 @@ func (v *AwsSamTargetConfigurationInput) GetAwsRegion() *string { return v.AwsRe
 // GetStackName returns AwsSamTargetConfigurationInput.StackName, and is useful for accessing the field via an interface.
 func (v *AwsSamTargetConfigurationInput) GetStackName() *string { return v.StackName }
 
+// BlueprintByIdBlueprint includes the requested fields of the GraphQL type Blueprint.
+type BlueprintByIdBlueprint struct {
+	BlueprintDetail `json:"-"`
+}
+
+// GetId returns BlueprintByIdBlueprint.Id, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdBlueprint) GetId() uuid.UUID { return v.BlueprintDetail.Id }
+
+// GetType returns BlueprintByIdBlueprint.Type, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdBlueprint) GetType() BlueprintType { return v.BlueprintDetail.Type }
+
+// GetIsOfficial returns BlueprintByIdBlueprint.IsOfficial, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdBlueprint) GetIsOfficial() *bool { return v.BlueprintDetail.IsOfficial }
+
+// GetEnabled returns BlueprintByIdBlueprint.Enabled, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdBlueprint) GetEnabled() *bool { return v.BlueprintDetail.Enabled }
+
+// GetConfiguration returns BlueprintByIdBlueprint.Configuration, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdBlueprint) GetConfiguration() BlueprintDetailConfigurationBlueprintConfiguration {
+	return v.BlueprintDetail.Configuration
+}
+
+func (v *BlueprintByIdBlueprint) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*BlueprintByIdBlueprint
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.BlueprintByIdBlueprint = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.BlueprintDetail)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalBlueprintByIdBlueprint struct {
+	Id uuid.UUID `json:"id"`
+
+	Type BlueprintType `json:"type"`
+
+	IsOfficial *bool `json:"isOfficial"`
+
+	Enabled *bool `json:"enabled"`
+
+	Configuration BlueprintDetailConfigurationBlueprintConfiguration `json:"configuration"`
+}
+
+func (v *BlueprintByIdBlueprint) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *BlueprintByIdBlueprint) __premarshalJSON() (*__premarshalBlueprintByIdBlueprint, error) {
+	var retval __premarshalBlueprintByIdBlueprint
+
+	retval.Id = v.BlueprintDetail.Id
+	retval.Type = v.BlueprintDetail.Type
+	retval.IsOfficial = v.BlueprintDetail.IsOfficial
+	retval.Enabled = v.BlueprintDetail.Enabled
+	retval.Configuration = v.BlueprintDetail.Configuration
+	return &retval, nil
+}
+
+// blueprintByIdResponse is returned by blueprintById on success.
+type BlueprintByIdResponse struct {
+	Blueprint *BlueprintByIdBlueprint `json:"blueprint"`
+}
+
+// GetBlueprint returns BlueprintByIdResponse.Blueprint, and is useful for accessing the field via an interface.
+func (v *BlueprintByIdResponse) GetBlueprint() *BlueprintByIdBlueprint { return v.Blueprint }
+
 // BlueprintConfigurationDetail includes the GraphQL fields of BlueprintConfiguration requested by the fragment BlueprintConfigurationDetail.
 type BlueprintConfigurationDetail struct {
 	// An identifier for this blueprint, unique within the owner's namespace.
@@ -25656,6 +25742,14 @@ func (v *__approveWorkflowRunStepInput) GetStepId() uuid.UUID { return v.StepId 
 // GetProjectId returns __approveWorkflowRunStepInput.ProjectId, and is useful for accessing the field via an interface.
 func (v *__approveWorkflowRunStepInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
+// __blueprintByIdInput is used internally by genqlient
+type __blueprintByIdInput struct {
+	BlueprintId uuid.UUID `json:"blueprintId"`
+}
+
+// GetBlueprintId returns __blueprintByIdInput.BlueprintId, and is useful for accessing the field via an interface.
+func (v *__blueprintByIdInput) GetBlueprintId() uuid.UUID { return v.BlueprintId }
+
 // __blueprintInput is used internally by genqlient
 type __blueprintInput struct {
 	TeamId      uuid.UUID `json:"teamId"`
@@ -26669,6 +26763,59 @@ func BlueprintQuery(
 	var err_ error
 
 	var data_ BlueprintResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by blueprintById.
+const blueprintById_Operation = `
+query blueprintById ($blueprintId: UUID!) {
+	blueprint(id: $blueprintId) {
+		... BlueprintDetail
+	}
+}
+fragment BlueprintDetail on Blueprint {
+	id
+	type
+	isOfficial
+	enabled
+	configuration {
+		... BlueprintConfigurationDetail
+	}
+}
+fragment BlueprintConfigurationDetail on BlueprintConfiguration {
+	slug
+	displayName
+	published
+	description
+	tags
+	logoUrl
+	richInputSchema
+}
+`
+
+func BlueprintByIdQuery(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	blueprintId uuid.UUID,
+) (*BlueprintByIdResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "blueprintById",
+		Query:  blueprintById_Operation,
+		Variables: &__blueprintByIdInput{
+			BlueprintId: blueprintId,
+		},
+	}
+	var err_ error
+
+	var data_ BlueprintByIdResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(

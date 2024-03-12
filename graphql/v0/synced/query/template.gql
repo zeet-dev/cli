@@ -1,0 +1,69 @@
+fragment TemplateCommon on Template {
+  id
+  name
+  description
+  image
+  homepageURL
+  repositoryURL
+
+  stats {
+    deploys
+    forks
+    stars
+  }
+
+  projects {
+    id
+    name
+    description
+    image
+
+    source {
+      type
+      name
+    }
+    envs {
+      name
+      description
+      value
+      generator
+      reference
+      required
+      locked
+      hidden
+      options
+    }
+    ports {
+      port
+      protocol
+      public
+      https
+    }
+    volumes {
+      mountPath
+      size
+    }
+    cpu
+    memory
+    gpu
+    dedicated
+    replication {
+      region
+      replicas
+    }
+  }
+}
+
+query template($id: UUID, $slug: String, $url: String) {
+  template(id: $id, slug: $slug, url: $url) {
+    id
+    ...TemplateCommon
+  }
+}
+
+query suggestTemplateName($user: ID!, $input: SuggestTemplateNameInput!) {
+  user(id: $user) {
+    id
+    suggestTemplateName(input: $input)
+  }
+}

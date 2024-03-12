@@ -1,0 +1,12 @@
+query userAPIKeys($id: ID!) {
+  user(id: $id) {
+    id
+    apiKeys {
+      id
+      token
+      name
+      description
+      createdAt
+    }
+  }
+}

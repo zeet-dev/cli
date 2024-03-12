@@ -1,0 +1,415 @@
+fragment BridgeProjectV3List on ProjectV3Adapter {
+  name
+  id
+  status
+  isDeployV2
+  projectV3 {
+    ...ProjectV3ListItem
+  }
+  repo {
+    ...RepoListItem
+  }
+  project {
+    id
+    name
+  }
+  projectEnvironment {
+    id
+    name
+  }
+  updatedAt
+}
+
+fragment WorkflowStep on BlueprintDriverWorkflowStep {
+  action
+  status
+  execution {
+    id
+    driver
+    action
+    approvedAt
+    jobRun {
+      id
+      state
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+fragment WorkflowStepWithLogs on BlueprintDriverWorkflowStep {
+  action
+  status
+  execution {
+    id
+    driver
+    action
+    approvedAt
+    jobRun {
+      id
+      state
+      logs {
+        id
+        completed
+        expired
+        entries {
+          text
+          timestamp
+        }
+      }
+      createdAt
+      updatedAt
+    }
+  }
+}
+
+fragment BlueprintDriverWorkflowList on BlueprintDriverWorkflow {
+  id
+  status
+  steps {
+    ...WorkflowStep
+  }
+  createdAt
+  updatedAt
+}
+
+fragment BlueprintDriverWorkflowDetail on BlueprintDriverWorkflow {
+  id
+  status
+  steps {
+    ...WorkflowStepWithLogs
+  }
+  createdAt
+  updatedAt
+}
+
+fragment ProjectV3Detail on ProjectV3 {
+  id
+  requirePlanApproval
+  name
+  blueprintID
+  blueprintConfiguration {
+    ...ProjectBlueprintConfigurationDetail
+  }
+  configuration {
+    ... on TerraformProjectV3Configuration {
+      stateBackend {
+        s3Bucket {
+          awsAccountID
+          bucketName
+          region
+          key
+        }
+        gcsBucket {
+          gcpAccountID
+          bucketName
+          location
+          prefix
+        }
+      }
+      provider {
+        awsAccount {
+          id
+        }
+        gcpAccount {
+          id
+        }
+        region
+      }
+    }
+    ... on HelmProjectV3Configuration {
+      clusterID
+      namespace
+      releaseName
+      values
+    }
+    ... on ManifestProjectV3Configuration {
+      clusterID
+      namespace
+    }
+  }
+  variables {
+    ... on BlueprintVariableString {
+      id
+      variableSpecID
+      name
+      stringValue: value
+    }
+    ... on BlueprintVariableBoolean {
+      id
+      variableSpecID
+      name
+      booleanValue: value
+    }
+    ... on BlueprintVariableInt {
+      id
+      variableSpecID
+      name
+      intValue: value
+    }
+    ... on BlueprintVariableFloat {
+      id
+      variableSpecID
+      name
+      floatValue: value
+    }
+    ... on BlueprintVariableJSON {
+      id
+      variableSpecID
+      name
+      jsonValue: value
+    }
+  }
+  driverWorkflows {
+    ...BlueprintDriverWorkflowList
+  }
+}
+
+fragment ProjectV3AdapterDetail on ProjectV3Adapter {
+  name
+  id
+  status
+  isDeployV2
+  repo {
+    id
+  }
+  projectV3 {
+    ...ProjectV3Detail
+  }
+  project {
+    id
+    name
+  }
+  projectEnvironment {
+    id
+    name
+  }
+}
+
+fragment ProjectV3AdapterConnectionCommon on ProjectV3AdapterConnection {
+  pageInfo {
+    startCursor
+    endCursor
+    hasNextPage
+    hasPreviousPage
+  }
+  nodes {
+    id
+    name
+    project {
+      id
+      name
+    }
+    projectEnvironment {
+      id
+      name
+    }
+  }
+  totalCount
+}
+
+fragment ProjectV3ListItem on ProjectV3 {
+  id
+  name
+  blueprintID
+}
+
+fragment ProjectV3ListItemConnection on ProjectV3AdapterConnection {
+  nodes {
+    name
+    id
+    status
+    isDeployV2
+    projectV3 {
+      ...ProjectV3ListItem
+    }
+    repo {
+      ...RepoCommon
+    }
+    project {
+      id
+      name
+      defaultRepo {
+        id
+      }
+    }
+    projectEnvironment {
+      id
+      name
+    }
+    updatedAt
+  }
+}
+
+query userProjectV3($userId: ID!, $projectName: String!, $page: PageInput!) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: {
+              name: { value: $projectName, operator: CONTAINS }
+            }
+          }
+        }
+        page: $page
+      }
+    ) {
+      totalCount
+      ...ProjectV3ListItemConnection
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+}
+
+query userProjectV3Deployments(
+  $userId: ID!
+  $projectName: String!
+  $page: PageInput!
+) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: {
+              name: { value: $projectName, operator: CONTAINS }
+            }
+          }
+        }
+        page: $page
+      }
+    ) {
+      totalCount
+      ...ProjectV3ProductionDeploymentConnection
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+}
+
+query projectV3sForEnvironment(
+  $userId: ID!
+  $groupName: String!
+  $subgroupName: String!
+  $page: PageInput!
+  $projectName: String!
+) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: {
+              projectName: { value: $groupName, operator: EQUALS }
+              environmentName: { value: $subgroupName, operator: EQUALS }
+              name: { value: $projectName, operator: CONTAINS }
+            }
+          }
+        }
+        page: $page
+      }
+    ) {
+      totalCount
+      ...ProjectV3ListItemConnection
+      pageInfo {
+        startCursor
+        endCursor
+        hasNextPage
+        hasPreviousPage
+      }
+    }
+  }
+}
+
+fragment ProjectV3ProductionDeploymentConnection on ProjectV3AdapterConnection {
+  nodes {
+    id
+    repo {
+      id
+      productionDeployment {
+        id
+        ...DeploymentCommon
+      }
+    }
+  }
+}
+
+query projectV3sForEnvironmentProductionDeployments(
+  $userId: ID!
+  $groupName: String!
+  $subgroupName: String!
+  $page: PageInput!
+  $projectName: String!
+) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: {
+              projectName: { value: $groupName, operator: EQUALS }
+              environmentName: { value: $subgroupName, operator: EQUALS }
+              name: { value: $projectName, operator: CONTAINS }
+            }
+          }
+        }
+        page: $page
+      }
+    ) {
+      ...ProjectV3ProductionDeploymentConnection
+    }
+  }
+}
+
+query projectV3(
+  $userId: ID!
+  $projectName: String!
+  $environmentName: String!
+  $name: String!
+) {
+  user(id: $userId) {
+    id
+    projectV3Adapters(
+      filter: {
+        filter: {
+          criterion: {
+            resourceAdapterFilter: {
+              projectName: { value: $projectName, operator: EQUALS }
+              environmentName: { value: $environmentName, operator: EQUALS }
+              name: { value: $name, operator: EQUALS }
+            }
+          }
+        }
+        page: { first: 1 }
+      }
+    ) {
+      totalCount
+      nodes {
+        ...ProjectV3AdapterDetail
+      }
+    }
+  }
+}
+
+query blueprintDriverWorkflow($id: UUID!, $userId: ID!) {
+  user(id: $userId) {
+    id
+    blueprintDriverWorkflow(id: $id) {
+      ...BlueprintDriverWorkflowDetail
+    }
+  }
+}

@@ -1,0 +1,190 @@
+query userRepos($id: ID!) {
+  user(id: $id) {
+    id
+    repos(input: { showDisabled: true }) {
+      id
+      ...RepoListItem
+    }
+  }
+}
+
+query reposForProjectEnvironment($path: String!, $environment: String!) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      repos {
+        ...RepoListItem
+      }
+    }
+  }
+}
+
+query reposForProjectEnvironmentBasic($path: String!, $environment: String!) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      repos {
+        ...RepoBasic
+      }
+    }
+  }
+}
+
+query paginatedReposForProjectEnvironment(
+  $path: String!
+  $environment: String!
+  $filter: String!
+  $first: Int!
+  $after: String!
+  $sort: String
+  $statusFilter: [DeploymentStatus]
+) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      overview {
+        deploymentStatus
+        count
+      }
+      repoConnection(
+        page: { first: $first, after: $after, filter: $filter, sort: $sort }
+        repoFilter: { deploymentStatus: $statusFilter }
+      ) {
+        totalCount
+        nodes {
+          ...RepoCommon
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
+query paginatedRepoDeploymentsForProjectEnvironment(
+  $path: String!
+  $environment: String!
+  $filter: String!
+  $first: Int!
+  $after: String!
+  $sort: String
+  $statusFilter: [DeploymentStatus]
+) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      overview {
+        deploymentStatus
+        count
+      }
+      repoConnection(
+        page: { first: $first, after: $after, filter: $filter, sort: $sort }
+        repoFilter: { deploymentStatus: $statusFilter }
+      ) {
+        totalCount
+        nodes {
+          id
+          productionDeployment {
+            id
+            ...DeploymentCommon
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+}
+
+query reposForProject($project: String!) {
+  project(path: $project) {
+    id
+    name
+    repos {
+      ...RepoListItem
+    }
+  }
+}
+
+fragment RepoCommonWithDB on Repo {
+  id
+  ...RepoCommon
+  databaseProvider
+  databaseEngine
+  databaseVersion
+  databaseLinks {
+    id
+    envPrefix
+    envs {
+      name
+      value
+    }
+    database {
+      ...RepoCommon
+    }
+  }
+  linkedProjects {
+    id
+    envPrefix
+    repo {
+      ...RepoCommon
+    }
+  }
+}
+
+query userReposWithDB($id: ID!) {
+  user(id: $id) {
+    id
+    repos(input: { showDisabled: true }) {
+      id
+      ...RepoCommonWithDB
+    }
+  }
+}
+
+query userBasicRepos($id: ID!) {
+  user(id: $id) {
+    id
+    login
+    repos(input: { showDisabled: true }) {
+      id
+      ...RepoBasic
+    }
+  }
+}
+
+query userAllBasicRepos {
+  currentUser {
+    id
+    teams {
+      id
+      team {
+        id
+        user {
+          id
+          login
+          repos(input: { showDisabled: true }) {
+            id
+            ...RepoBasic
+          }
+        }
+      }
+    }
+  }
+}

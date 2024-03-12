@@ -1,0 +1,33 @@
+mutation createBlueprint($input: CreateBlueprintInput!) {
+  createBlueprint(input: $input) {
+    id
+  }
+}
+
+mutation maybeCreateBlueprintFromMetadata($slug: String!, $version: String!) {
+  maybeCreateBlueprintFromMetadata(slug: $slug, version: $version) {
+    id
+  }
+}
+
+mutation updateBlueprint($id: UUID!, $input: UpdateBlueprintInput!) {
+  updateBlueprint(blueprintID: $id, input: $input) {
+    id
+  }
+}
+
+mutation updateMarketplaceBlueprint($input: UpdateMarketplaceBlueprintInput!) {
+  updateMarketplaceBlueprint(input: $input) {
+    id
+  }
+}
+
+mutation duplicateBlueprint($input: DuplicateBlueprintInput!) {
+  duplicateBlueprint(input: $input) {
+    id
+  }
+}
+
+mutation deleteBlueprint($id: UUID!) {
+  deleteBlueprint(id: $id)
+}

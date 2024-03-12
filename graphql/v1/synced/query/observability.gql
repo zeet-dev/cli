@@ -1,0 +1,130 @@
+query observabilityConfig($teamId: UUID!, $projectId: UUID!) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      observabilityConfig {
+        selector {
+          type
+          namespace
+          resourceName
+          containerName
+          labels {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment CloudResource on CloudResource {
+  name
+  status
+  type
+  createdAt
+  owners {
+    name
+    type
+  }
+  events {
+    type
+    reason
+    message
+    action
+    occurredAt
+    firstOccurrenceAt
+    lastOccurrenceAt
+    count
+  }
+}
+
+fragment MetricStreamV1 on MetricStream {
+  type
+  query
+  annotations {
+    type
+    direction
+    function
+    label
+    value
+  }
+  labels {
+    label
+    value
+  }
+  entries {
+    value
+    timestamp
+  }
+}
+
+query resourcesWithMetrics(
+  $teamId: UUID!
+  $projectId: UUID!
+  $clusterId: UUID!
+  $metricTypes: [MetricType!]!
+  $selector: ObservabilityResourceSelectorInput
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      resources(clusterId: $clusterId, selector: $selector) {
+        ...CloudResource
+
+        # 2 depth only
+        resources {
+          ...CloudResource
+
+          resources {
+            ...CloudResource
+          }
+        }
+
+        metric(
+          clusterId: $clusterId
+          projectId: $projectId
+          types: $metricTypes
+        ) {
+          ...MetricStreamV1
+        }
+      }
+    }
+  }
+}
+
+query resourcesWithLogs(
+  $teamId: UUID!
+  $projectId: UUID!
+  $clusterId: UUID!
+  $selector: ObservabilityResourceSelectorInput
+) {
+  team(id: $teamId) {
+    id
+    project(id: $projectId) {
+      id
+      resources(clusterId: $clusterId, selector: $selector) {
+        ...CloudResource
+
+        # 2 depth only
+        resources {
+          ...CloudResource
+
+          resources {
+            ...CloudResource
+          }
+        }
+
+        log(clusterId: $clusterId, projectId: $projectId) {
+          name
+          entries {
+            text
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}

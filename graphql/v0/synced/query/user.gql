@@ -1,0 +1,75 @@
+query currentUser {
+  currentUser {
+    id
+    ...UserDetail
+  }
+}
+
+query user($id: ID!) {
+  user(id: $id) {
+    id
+    ...UserDetail
+  }
+}
+
+query freeQuota($id: ID!) {
+  user(id: $id) {
+    id
+    freeQuota
+  }
+}
+
+query userBilling($id: ID!) {
+  user(id: $id) {
+    id
+    billingURL
+  }
+}
+
+query userBalance($id: ID!) {
+  user(id: $id) {
+    id
+    stripe {
+      id
+      balance
+    }
+  }
+}
+
+query awsPolicyJson(
+  $userId: ID!
+  $awsAccountId: UUID!
+  $awsPolicyJsonInput: awsPolicyJsonInput!
+) {
+  user(id: $userId) {
+    id
+    awsAccount(id: $awsAccountId) {
+      awsPolicyJson(input: $awsPolicyJsonInput) {
+        awsPolicyJson
+      }
+    }
+  }
+}
+
+query userAwsAccountConnected($id: ID!, $awsAccountId: UUID!) {
+  user(id: $id) {
+    id
+    awsAccount(id: $awsAccountId) {
+      id
+      connected
+      cloudFormationURL
+    }
+  }
+}
+
+query userCrispAuth($id: ID!) {
+  user(id: $id) {
+    id
+    crispAuth {
+      email
+      hmac
+      nickname
+      participants
+    }
+  }
+}

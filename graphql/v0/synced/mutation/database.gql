@@ -1,0 +1,15 @@
+mutation linkDatabase($input: LinkDatabaseInput!) {
+  linkDatabase(input: $input) {
+    ...RepoDetail
+  }
+}
+
+mutation unlinkDatabase($id: UUID!) {
+  unlinkDatabase(id: $id)
+}
+
+mutation updateDatabaseLink($input: updateDatabaseLinkInput!) {
+  updateDatabaseLink(input: $input) {
+    ...RepoDetail
+  }
+}

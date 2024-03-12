@@ -1,0 +1,3 @@
+mutation generateDownloadableLogLinkForWorkflowRunStep($actionStepId: UUID!) {
+  generateDownloadableLogLinkForWorkflowRunStep(actionStepId: $actionStepId)
+}

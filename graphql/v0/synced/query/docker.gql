@@ -1,0 +1,50 @@
+query dockerInfo($image: String!) {
+  currentUser {
+    id
+    dockerRepository(image: $image) {
+      id
+      name
+      url
+      ports {
+        port
+        protocol
+        public
+        https
+      }
+      volumes {
+        mountPath
+        size
+      }
+    }
+  }
+}
+
+query loggedOutDockerInfo($image: String!) {
+  dockerRepository(image: $image) {
+    id
+    name
+    url
+    ports {
+      port
+      protocol
+      public
+      https
+    }
+    volumes {
+      mountPath
+      size
+    }
+  }
+}
+
+query dockerRepositoryPorts($image: String!) {
+  dockerRepository(image: $image) {
+    id
+    ports {
+      port
+      protocol
+      public
+      https
+    }
+  }
+}

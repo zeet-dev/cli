@@ -1,0 +1,104 @@
+mutation addAWSAccount($input: AddAWSAccountInput!) {
+  addAWSAccount(input: $input) {
+    id
+    ...AWSAccountDetail
+  }
+}
+
+mutation removeAWSAccount($id: UUID!) {
+  removeAWSAccount(id: $id)
+}
+
+mutation updateAWSAccount($input: UpdateAWSAccountInput!) {
+  updateAWSAccount(input: $input)
+}
+
+mutation addGCPAccount($input: AddGCPAccountInput!) {
+  addGCPAccount(input: $input) {
+    id
+    ...GCPAccountDetail
+  }
+}
+
+mutation removeGCPAccount($id: UUID!) {
+  removeGCPAccount(id: $id)
+}
+
+mutation updateGCPAccount($input: UpdateGCPAccountInput!) {
+  updateGCPAccount(input: $input)
+}
+
+mutation addDOAccount($input: AddDOAccountInput!) {
+  addDOAccount(input: $input) {
+    id
+    ...DOAccountDetail
+  }
+}
+
+mutation removeDOAccount($id: UUID!) {
+  removeDOAccount(id: $id)
+}
+
+mutation updateDOAccount($input: UpdateDOAccountInput!) {
+  updateDOAccount(input: $input)
+}
+
+mutation addLinodeAccount($input: AddLinodeAccountInput!) {
+  addLinodeAccount(input: $input) {
+    id
+    ...LinodeAccountDetail
+  }
+}
+
+mutation removeLinodeAccount($id: UUID!) {
+  removeLinodeAccount(id: $id)
+}
+
+mutation updateLinodeAccount($input: UpdateLinodeAccountInput!) {
+  updateLinodeAccount(input: $input)
+}
+
+mutation addVultrAccount($input: AddVultrAccountInput!) {
+  addVultrAccount(input: $input) {
+    id
+    ...VultrAccountDetail
+  }
+}
+
+mutation removeVultrAccount($id: UUID!) {
+  removeVultrAccount(id: $id)
+}
+
+mutation updateVultrAccount($input: UpdateVultrAccountInput!) {
+  updateVultrAccount(input: $input)
+}
+
+mutation addCoreWeaveAccount($input: AddCoreWeaveAccountInput!) {
+  addCoreWeaveAccount(input: $input) {
+    id
+    ...CWAccountDetail
+  }
+}
+
+mutation removeCoreWeaveAccount($id: UUID!) {
+  removeCoreWeaveAccount(id: $id)
+}
+
+mutation updateCoreWeaveAccount($input: UpdateCoreWeaveAccountInput!) {
+  updateCoreWeaveAccount(input: $input)
+}
+
+mutation addAzureAccount($input: AddAzureAccountInput!) {
+  addAzureAccount(input: $input) {
+    id
+    ...AzureAccountDetail
+  }
+}
+
+mutation removeAzureAccount($id: UUID!) {
+  removeAzureAccount(id: $id)
+}
+
+mutation updateAzureAccount($input: UpdateAzureAccountInput!) {
+  updateAzureAccount(input: $input)
+}

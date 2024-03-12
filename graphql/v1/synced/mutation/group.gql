@@ -1,0 +1,7 @@
+mutation deleteGroup($id: UUID!) {
+  deleteGroup(id: $id)
+}
+
+mutation deleteSubGroup($id: UUID!) {
+  deleteSubGroup(id: $id)
+}
