@@ -224,7 +224,7 @@ type BlueprintConfigurationDetail struct {
 	// A description of the purpose and behavior of this blueprint.
 	Description *string `json:"description,omitempty"`
 	// Relevant classifications for this blueprint.
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,omitempty"`
 	// A url for a logo image.
 	LogoUrl *string `json:"logoUrl,omitempty"`
 	// A schema for rich input widgets. Used to generate forms which capture the
@@ -418,7 +418,7 @@ type __premarshalBlueprintDetailConfigurationBlueprintConfiguration struct {
 
 	Description *string `json:"description,omitempty"`
 
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,omitempty"`
 
 	LogoUrl *string `json:"logoUrl,omitempty"`
 
@@ -526,7 +526,7 @@ func (v *BlueprintRevisionsTeamBlueprint) GetConfigurationRevisions() BlueprintR
 
 // BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigurationConnection includes the requested fields of the GraphQL type BlueprintConfigurationConnection.
 type BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigurationConnection struct {
-	Nodes []BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigurationConnectionNodesBlueprintConfiguration `json:"nodes"`
+	Nodes []BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigurationConnectionNodesBlueprintConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -624,7 +624,7 @@ type __premarshalBlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintC
 
 	Description *string `json:"description,omitempty"`
 
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,omitempty"`
 
 	LogoUrl *string `json:"logoUrl,omitempty"`
 
@@ -869,7 +869,7 @@ func (v *BuildArtifactsTeamProjectBuild) GetRuns() BuildArtifactsTeamProjectBuil
 type BuildArtifactsTeamProjectBuildRunsBuildRunConnection struct {
 	TotalCount int                                                                 `json:"totalCount"`
 	PageInfo   BuildArtifactsTeamProjectBuildRunsBuildRunConnectionPageInfo        `json:"pageInfo"`
-	Nodes      []BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun `json:"nodes"`
+	Nodes      []BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns BuildArtifactsTeamProjectBuildRunsBuildRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -891,7 +891,7 @@ func (v *BuildArtifactsTeamProjectBuildRunsBuildRunConnection) GetNodes() []Buil
 type BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun struct {
 	Id        uuid.UUID                                                                                 `json:"id"`
 	Sequence  int                                                                                       `json:"sequence"`
-	Artifacts []BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRunArtifactsBuildArtifact `json:"artifacts"`
+	Artifacts []BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRunArtifactsBuildArtifact `json:"artifacts,omitempty"`
 }
 
 // GetId returns BuildArtifactsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun.Id, and is useful for accessing the field via an interface.
@@ -1039,7 +1039,7 @@ type BuildRunDetail struct {
 	JobRun      *BuildRunDetailJobRun                    `json:"jobRun,omitempty"`
 	TriggeredBy *BuildRunDetailTriggeredByWorkflowRun    `json:"triggeredBy,omitempty"`
 	Definition  *BuildRunDetailDefinitionBuildDefinition `json:"definition,omitempty"`
-	Artifacts   []BuildRunDetailArtifactsBuildArtifact   `json:"artifacts"`
+	Artifacts   []BuildRunDetailArtifactsBuildArtifact   `json:"artifacts,omitempty"`
 }
 
 // GetId returns BuildRunDetail.Id, and is useful for accessing the field via an interface.
@@ -1205,7 +1205,7 @@ type __premarshalBuildRunDetailTeamProjectBuildRun struct {
 
 	Definition *BuildRunDetailDefinitionBuildDefinition `json:"definition,omitempty"`
 
-	Artifacts []BuildRunDetailArtifactsBuildArtifact `json:"artifacts"`
+	Artifacts []BuildRunDetailArtifactsBuildArtifact `json:"artifacts,omitempty"`
 }
 
 func (v *BuildRunDetailTeamProjectBuildRun) MarshalJSON() ([]byte, error) {
@@ -1336,7 +1336,7 @@ func (v *BuildRunsTeamProjectBuild) GetRuns() BuildRunsTeamProjectBuildRunsBuild
 type BuildRunsTeamProjectBuildRunsBuildRunConnection struct {
 	TotalCount int                                                            `json:"totalCount"`
 	PageInfo   BuildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo        `json:"pageInfo"`
-	Nodes      []BuildRunsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun `json:"nodes"`
+	Nodes      []BuildRunsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns BuildRunsTeamProjectBuildRunsBuildRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -1443,7 +1443,7 @@ func (v *BuildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNextPage
 type BuildTargetInput struct {
 	Type                         BuildTargetType              `json:"type"`
 	Repository                   *string                      `json:"repository,omitempty"`
-	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates"`
+	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates,omitempty"`
 	Integration                  *BuildTargetIntegrationInput `json:"integration,omitempty"`
 }
 
@@ -1540,8 +1540,8 @@ type CloudResource struct {
 	Status    ResourceStatus                     `json:"status"`
 	Type      ResourceType                       `json:"type"`
 	CreatedAt *time.Time                         `json:"createdAt,omitempty"`
-	Owners    []CloudResourceOwnersResourceOwner `json:"owners"`
-	Events    []CloudResourceEventsResourceEvent `json:"events"`
+	Owners    []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
+	Events    []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 // GetName returns CloudResource.Name, and is useful for accessing the field via an interface.
@@ -1874,7 +1874,7 @@ func (v *CloudRevisionsTeamCloudAccountAWSAccount) GetConfigurationRevisions() C
 
 // CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnection includes the requested fields of the GraphQL type AWSAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnectionNodesAWSAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnectionNodesAWSAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -1964,7 +1964,7 @@ func (v *CloudRevisionsTeamCloudAccountAzureAccount) GetConfigurationRevisions()
 
 // CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnection includes the requested fields of the GraphQL type AzureAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnectionNodesAzureAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnectionNodesAzureAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2054,7 +2054,7 @@ func (v *CloudRevisionsTeamCloudAccountCoreWeaveAccount) GetConfigurationRevisio
 
 // CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnection includes the requested fields of the GraphQL type CoreWeaveAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnectionNodesCoreWeaveAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnectionNodesCoreWeaveAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2144,7 +2144,7 @@ func (v *CloudRevisionsTeamCloudAccountDOAccount) GetConfigurationRevisions() Cl
 
 // CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnection includes the requested fields of the GraphQL type DOAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnectionNodesDOAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnectionNodesDOAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2234,7 +2234,7 @@ func (v *CloudRevisionsTeamCloudAccountGCPAccount) GetConfigurationRevisions() C
 
 // CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnection includes the requested fields of the GraphQL type GCPAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnectionNodesGCPAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnectionNodesGCPAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2324,7 +2324,7 @@ func (v *CloudRevisionsTeamCloudAccountLinodeAccount) GetConfigurationRevisions(
 
 // CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnection includes the requested fields of the GraphQL type LinodeAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnectionNodesLinodeAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnectionNodesLinodeAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2414,7 +2414,7 @@ func (v *CloudRevisionsTeamCloudAccountVultrAccount) GetConfigurationRevisions()
 
 // CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnection includes the requested fields of the GraphQL type VultrAccountConfigurationConnection.
 type CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnection struct {
-	Nodes []CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnectionNodesVultrAccountConfiguration `json:"nodes"`
+	Nodes []CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnectionNodesVultrAccountConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2693,7 +2693,7 @@ func (v *ClusterRevisionsTeamCluster) GetConfigurationRevisions() ClusterRevisio
 
 // ClusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationConnection includes the requested fields of the GraphQL type ClusterConfigurationConnection.
 type ClusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationConnection struct {
-	Nodes []ClusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationConnectionNodesClusterConfiguration `json:"nodes"`
+	Nodes []ClusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationConnectionNodesClusterConfiguration `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ClusterRevisionsTeamClusterConfigurationRevisionsClusterConfigurationConnection.Nodes, and is useful for accessing the field via an interface.
@@ -2898,7 +2898,7 @@ func (v *CreateDeployRunResponse) GetCreateDeployRun() CreateDeployRunCreateDepl
 type CreateGroupCreateGroup struct {
 	Id        uuid.UUID                          `json:"id"`
 	Name      string                             `json:"name"`
-	Envs      []CreateGroupCreateGroupEnvsEnvVar `json:"envs"`
+	Envs      []CreateGroupCreateGroupEnvsEnvVar `json:"envs,omitempty"`
 	Owner     CreateGroupCreateGroupOwnerTeam    `json:"owner"`
 	CreatedAt time.Time                          `json:"createdAt"`
 	UpdatedAt time.Time                          `json:"updatedAt"`
@@ -2957,7 +2957,7 @@ func (v *CreateGroupCreateGroupOwnerTeam) GetName() string { return v.Name }
 type CreateGroupInput struct {
 	TeamId uuid.UUID     `json:"teamId"`
 	Name   string        `json:"name"`
-	Envs   []EnvVarInput `json:"envs"`
+	Envs   []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetTeamId returns CreateGroupInput.TeamId, and is useful for accessing the field via an interface.
@@ -3013,9 +3013,9 @@ type CreateProjectInput struct {
 	Enabled      *bool                          `json:"enabled,omitempty"`
 	Workflow     *WorkflowDefinitionInput       `json:"workflow,omitempty"`
 	Build        *BuildDefinitionInput          `json:"build,omitempty"`
-	Jobs         []JobDefinitionInput           `json:"jobs"`
-	Deploys      []DeploymentConfigurationInput `json:"deploys"`
-	Envs         []EnvVarInput                  `json:"envs"`
+	Jobs         []JobDefinitionInput           `json:"jobs,omitempty"`
+	Deploys      []DeploymentConfigurationInput `json:"deploys,omitempty"`
+	Envs         []EnvVarInput                  `json:"envs,omitempty"`
 	BlueprintId  *uuid.UUID                     `json:"blueprintId,omitempty"`
 }
 
@@ -3070,7 +3070,7 @@ func (v *CreateProjectResponse) GetCreateProject() CreateProjectCreateProject { 
 type CreateSubGroupCreateSubGroup struct {
 	Id        uuid.UUID                                `json:"id"`
 	Name      string                                   `json:"name"`
-	Envs      []CreateSubGroupCreateSubGroupEnvsEnvVar `json:"envs"`
+	Envs      []CreateSubGroupCreateSubGroupEnvsEnvVar `json:"envs,omitempty"`
 	Group     *CreateSubGroupCreateSubGroupGroup       `json:"group,omitempty"`
 	CreatedAt time.Time                                `json:"createdAt"`
 	UpdatedAt time.Time                                `json:"updatedAt"`
@@ -3123,7 +3123,7 @@ func (v *CreateSubGroupCreateSubGroupGroup) GetName() string { return v.Name }
 type CreateSubGroupInput struct {
 	GroupId uuid.UUID     `json:"groupId"`
 	Name    string        `json:"name"`
-	Envs    []EnvVarInput `json:"envs"`
+	Envs    []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetGroupId returns CreateSubGroupInput.GroupId, and is useful for accessing the field via an interface.
@@ -3333,9 +3333,9 @@ func (v *DeployConfigurationDetail) GetConfiguration() *DeployConfigurationDetai
 // DeployConfigurationDetailConfigurationDeploymentConfiguration includes the requested fields of the GraphQL type DeploymentConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfiguration struct {
 	Id                   uuid.UUID                                                                                               `json:"id"`
-	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction                                                                     `json:"defaultWorkflowSteps"`
+	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction                                                                     `json:"defaultWorkflowSteps,omitempty"`
 	RequirePlanApproval  *bool                                                                                                   `json:"requirePlanApproval,omitempty"`
-	Variables            []DeployConfigurationDetailConfigurationDeploymentConfigurationVariablesDeployVariable                  `json:"variables"`
+	Variables            []DeployConfigurationDetailConfigurationDeploymentConfigurationVariablesDeployVariable                  `json:"variables,omitempty"`
 	Kubernetes           *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes                                `json:"kubernetes,omitempty"`
 	Helm                 *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm `json:"helm,omitempty"`
 	Terraform            *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform                                 `json:"terraform,omitempty"`
@@ -3406,7 +3406,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam) Ge
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration includes the requested fields of the GraphQL type AwsSamGeneratorConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration struct {
-	EnvVars                    []DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar `json:"envVars"`
+	EnvVars                    []DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar `json:"envVars,omitempty"`
 	RunCommand                 *string                                                                                                                 `json:"runCommand,omitempty"`
 	ServerlessMemory           *int                                                                                                                    `json:"serverlessMemory,omitempty"`
 	ServerlessArch             *string                                                                                                                 `json:"serverlessArch,omitempty"`
@@ -3558,7 +3558,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRu
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration includes the requested fields of the GraphQL type GcpCloudRunGeneratorConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration struct {
-	EnvVars         []DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar `json:"envVars"`
+	EnvVars         []DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar `json:"envVars,omitempty"`
 	ContainerMemory *float64                                                                                                                          `json:"containerMemory,omitempty"`
 	Name            string                                                                                                                            `json:"name"`
 	HttpPort        *string                                                                                                                           `json:"httpPort,omitempty"`
@@ -4836,7 +4836,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBluep
 	// Disable the 'automatic output' handler, which produces a single map named 'outputs' containing all module outputs.
 	Disabled *bool `json:"disabled,omitempty"`
 	// The keys of any module outputs that should be excluded from the automatic output value. Ignored when 'disabled' is true.
-	Excluded []string `json:"excluded"`
+	Excluded []string `json:"excluded,omitempty"`
 	// Mark the automatic output as sensitive. This MUST be 'true' when any sensitive
 	// module output is not specified 'excluded' *and* 'disabled' is false.
 	Sensitive *bool `json:"sensitive,omitempty"`
@@ -5287,9 +5287,9 @@ func (v *DeploymentConfigurationGcpCloudRunInput) GetGenerator() *GcpCloudRunGen
 }
 
 type DeploymentConfigurationInput struct {
-	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps"`
+	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps,omitempty"`
 	RequirePlanApproval  *bool                                       `json:"requirePlanApproval,omitempty"`
-	Variables            []BlueprintVariableInput                    `json:"variables"`
+	Variables            []BlueprintVariableInput                    `json:"variables,omitempty"`
 	Kubernetes           *DeploymentConfigurationKubernetesInput     `json:"kubernetes,omitempty"`
 	Helm                 *DeploymentConfigurationKubernetesHelmInput `json:"helm,omitempty"`
 	Terraform            *DeploymentConfigurationTerraformInput      `json:"terraform,omitempty"`
@@ -5769,7 +5769,7 @@ func (v *GroupSubGroupsTeam) GetGroups() GroupSubGroupsTeamGroupsGroupConnection
 
 // GroupSubGroupsTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
 type GroupSubGroupsTeamGroupsGroupConnection struct {
-	Nodes []GroupSubGroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+	Nodes []GroupSubGroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes,omitempty"`
 }
 
 // GetNodes returns GroupSubGroupsTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
@@ -5780,7 +5780,7 @@ func (v *GroupSubGroupsTeamGroupsGroupConnection) GetNodes() []GroupSubGroupsTea
 // GroupSubGroupsTeamGroupsGroupConnectionNodesGroup includes the requested fields of the GraphQL type Group.
 type GroupSubGroupsTeamGroupsGroupConnectionNodesGroup struct {
 	Id        uuid.UUID                                                            `json:"id"`
-	SubGroups []GroupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup `json:"subGroups"`
+	SubGroups []GroupSubGroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup `json:"subGroups,omitempty"`
 }
 
 // GetId returns GroupSubGroupsTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
@@ -5837,7 +5837,7 @@ func (v *GroupTeam) GetGroups() GroupTeamGroupsGroupConnection { return v.Groups
 
 // GroupTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
 type GroupTeamGroupsGroupConnection struct {
-	Nodes []GroupTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+	Nodes []GroupTeamGroupsGroupConnectionNodesGroup `json:"nodes,omitempty"`
 }
 
 // GetNodes returns GroupTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
@@ -5849,7 +5849,7 @@ func (v *GroupTeamGroupsGroupConnection) GetNodes() []GroupTeamGroupsGroupConnec
 type GroupTeamGroupsGroupConnectionNodesGroup struct {
 	Id        uuid.UUID                                            `json:"id"`
 	Name      string                                               `json:"name"`
-	Envs      []GroupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar `json:"envs"`
+	Envs      []GroupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar `json:"envs,omitempty"`
 	CreatedAt time.Time                                            `json:"createdAt"`
 	UpdatedAt time.Time                                            `json:"updatedAt"`
 }
@@ -5925,7 +5925,7 @@ func (v *GroupsTeam) GetGroups() GroupsTeamGroupsGroupConnection { return v.Grou
 // GroupsTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
 type GroupsTeamGroupsGroupConnection struct {
 	PageInfo GroupsTeamGroupsGroupConnectionPageInfo     `json:"pageInfo"`
-	Nodes    []GroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+	Nodes    []GroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes,omitempty"`
 }
 
 // GetPageInfo returns GroupsTeamGroupsGroupConnection.PageInfo, and is useful for accessing the field via an interface.
@@ -6010,7 +6010,7 @@ func (v *GroupsWithSubgroupsTeam) GetGroups() GroupsWithSubgroupsTeamGroupsGroup
 
 // GroupsWithSubgroupsTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
 type GroupsWithSubgroupsTeamGroupsGroupConnection struct {
-	Nodes []GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+	Nodes []GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroup `json:"nodes,omitempty"`
 }
 
 // GetNodes returns GroupsWithSubgroupsTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
@@ -6022,7 +6022,7 @@ func (v *GroupsWithSubgroupsTeamGroupsGroupConnection) GetNodes() []GroupsWithSu
 type GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroup struct {
 	Id        uuid.UUID                                                                 `json:"id"`
 	Name      string                                                                    `json:"name"`
-	SubGroups []GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup `json:"subGroups"`
+	SubGroups []GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup `json:"subGroups,omitempty"`
 }
 
 // GetId returns GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroup.Id, and is useful for accessing the field via an interface.
@@ -6348,7 +6348,7 @@ func (v *JobDetailItemDefinitionJobDefinition) GetJobName() *string { return v.J
 type JobDetailItemRunsJobRunConnection struct {
 	TotalCount int                                            `json:"totalCount"`
 	PageInfo   JobDetailItemRunsJobRunConnectionPageInfo      `json:"pageInfo"`
-	Nodes      []JobDetailItemRunsJobRunConnectionNodesJobRun `json:"nodes"`
+	Nodes      []JobDetailItemRunsJobRunConnectionNodesJobRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns JobDetailItemRunsJobRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -6510,7 +6510,7 @@ func (v *JobListTeam) GetProject() *JobListTeamProject { return v.Project }
 
 // JobListTeamProject includes the requested fields of the GraphQL type Project.
 type JobListTeamProject struct {
-	Jobs []JobListTeamProjectJobsJob `json:"jobs"`
+	Jobs []JobListTeamProjectJobsJob `json:"jobs,omitempty"`
 }
 
 // GetJobs returns JobListTeamProject.Jobs, and is useful for accessing the field via an interface.
@@ -6960,7 +6960,7 @@ type JobRunLogsLogs struct {
 	Id        string                          `json:"id"`
 	Completed bool                            `json:"completed"`
 	Expired   *bool                           `json:"expired,omitempty"`
-	Entries   []JobRunLogsLogsEntriesLogEntry `json:"entries"`
+	Entries   []JobRunLogsLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns JobRunLogsLogs.Id, and is useful for accessing the field via an interface.
@@ -7392,9 +7392,9 @@ const (
 type MetricStreamV1 struct {
 	Type        *MetricType                                 `json:"type,omitempty"`
 	Query       string                                      `json:"query"`
-	Annotations []MetricStreamV1AnnotationsMetricAnnotation `json:"annotations"`
-	Labels      []MetricStreamV1LabelsMetricStreamLabel     `json:"labels"`
-	Entries     []MetricStreamV1EntriesMetricEntry          `json:"entries"`
+	Annotations []MetricStreamV1AnnotationsMetricAnnotation `json:"annotations,omitempty"`
+	Labels      []MetricStreamV1LabelsMetricStreamLabel     `json:"labels,omitempty"`
+	Entries     []MetricStreamV1EntriesMetricEntry          `json:"entries,omitempty"`
 }
 
 // GetType returns MetricStreamV1.Type, and is useful for accessing the field via an interface.
@@ -7485,7 +7485,7 @@ const (
 )
 
 type MultiEntityCriterion struct {
-	Value []uuid.UUID `json:"value"`
+	Value []uuid.UUID `json:"value,omitempty"`
 }
 
 // GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
@@ -7558,7 +7558,7 @@ type ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResou
 	Namespace     *string                                                                                                                          `json:"namespace,omitempty"`
 	ResourceName  *string                                                                                                                          `json:"resourceName,omitempty"`
 	ContainerName *string                                                                                                                          `json:"containerName,omitempty"`
-	Labels        []ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelectorLabelsObservabilityResourceSelectorLabel `json:"labels"`
+	Labels        []ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelectorLabelsObservabilityResourceSelectorLabel `json:"labels,omitempty"`
 }
 
 // GetType returns ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector.Type, and is useful for accessing the field via an interface.
@@ -7607,7 +7607,7 @@ type ObservabilityResourceSelectorInput struct {
 	Namespace     *string                                   `json:"namespace,omitempty"`
 	ResourceName  *string                                   `json:"resourceName,omitempty"`
 	ContainerName *string                                   `json:"containerName,omitempty"`
-	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels"`
+	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels,omitempty"`
 }
 
 // GetType returns ObservabilityResourceSelectorInput.Type, and is useful for accessing the field via an interface.
@@ -7772,7 +7772,7 @@ func (v *ProjectAvailableProvidersTeam) GetProject() *ProjectAvailableProvidersT
 // ProjectAvailableProvidersTeamProject includes the requested fields of the GraphQL type Project.
 type ProjectAvailableProvidersTeamProject struct {
 	Id                 uuid.UUID                                                       `json:"id"`
-	AvailableProviders []ProjectAvailableProvidersTeamProjectAvailableProvidersProject `json:"availableProviders"`
+	AvailableProviders []ProjectAvailableProvidersTeamProjectAvailableProvidersProject `json:"availableProviders,omitempty"`
 }
 
 // GetId returns ProjectAvailableProvidersTeamProject.Id, and is useful for accessing the field via an interface.
@@ -7938,7 +7938,7 @@ type __premarshalProjectBlueprintDetailConfigurationBlueprintConfiguration struc
 
 	Description *string `json:"description,omitempty"`
 
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,omitempty"`
 
 	LogoUrl *string `json:"logoUrl,omitempty"`
 
@@ -8035,7 +8035,7 @@ func (v *ProjectClustersTeamProject) UnmarshalJSON(b []byte) error {
 type __premarshalProjectClustersTeamProject struct {
 	Id uuid.UUID `json:"id"`
 
-	Clusters []ProjectWithClustersClustersCluster `json:"clusters"`
+	Clusters []ProjectWithClustersClustersCluster `json:"clusters,omitempty"`
 }
 
 func (v *ProjectClustersTeamProject) MarshalJSON() ([]byte, error) {
@@ -8087,7 +8087,7 @@ func (v *ProjectDeployDetailResponse) GetTeam() *ProjectDeployDetailTeam { retur
 // ProjectDeployDetailRunsDeployRunConnection includes the requested fields of the GraphQL type DeployRunConnection.
 type ProjectDeployDetailRunsDeployRunConnection struct {
 	TotalCount int                                                        `json:"totalCount"`
-	Nodes      []ProjectDeployDetailRunsDeployRunConnectionNodesDeployRun `json:"nodes"`
+	Nodes      []ProjectDeployDetailRunsDeployRunConnectionNodesDeployRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns ProjectDeployDetailRunsDeployRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -8273,7 +8273,7 @@ func (v *ProjectDeployList) GetRuns() *ProjectDeployListRunsDeployRunConnection 
 // ProjectDeployListRunsDeployRunConnection includes the requested fields of the GraphQL type DeployRunConnection.
 type ProjectDeployListRunsDeployRunConnection struct {
 	TotalCount int                                                      `json:"totalCount"`
-	Nodes      []ProjectDeployListRunsDeployRunConnectionNodesDeployRun `json:"nodes"`
+	Nodes      []ProjectDeployListRunsDeployRunConnectionNodesDeployRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns ProjectDeployListRunsDeployRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -8342,7 +8342,7 @@ func (v *ProjectDeployRevisionsTeamProject) GetDeploys() ProjectDeployRevisionsT
 
 // ProjectDeployRevisionsTeamProjectDeploysDeployConnection includes the requested fields of the GraphQL type DeployConnection.
 type ProjectDeployRevisionsTeamProjectDeploysDeployConnection struct {
-	Nodes []ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeploy `json:"nodes"`
+	Nodes []ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeploy `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectDeployRevisionsTeamProjectDeploysDeployConnection.Nodes, and is useful for accessing the field via an interface.
@@ -8377,7 +8377,7 @@ func (v *ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeploy) Ge
 type ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnection struct {
 	TotalCount int                                                                                                                                                      `json:"totalCount"`
 	PageInfo   ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnectionPageInfo                       `json:"pageInfo"`
-	Nodes      []ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnectionNodesDeploymentConfiguration `json:"nodes"`
+	Nodes      []ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnectionNodesDeploymentConfiguration `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -8561,7 +8561,7 @@ func (v *ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection
 type __premarshalProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection struct {
 	TotalCount int `json:"totalCount"`
 
-	Nodes []json.RawMessage `json:"nodes"`
+	Nodes []json.RawMessage `json:"nodes,omitempty"`
 }
 
 func (v *ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection) MarshalJSON() ([]byte, error) {
@@ -8930,7 +8930,7 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnection) 
 type __premarshalProjectDeployRunListResultDeploymentResultResourcesResourceConnection struct {
 	TotalCount int `json:"totalCount"`
 
-	Nodes []json.RawMessage `json:"nodes"`
+	Nodes []json.RawMessage `json:"nodes,omitempty"`
 }
 
 func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnection) MarshalJSON() ([]byte, error) {
@@ -9045,7 +9045,7 @@ type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesC
 	Id        string                                                                                                           `json:"id"`
 	Completed bool                                                                                                             `json:"completed"`
 	Expired   *bool                                                                                                            `json:"expired,omitempty"`
-	Entries   []ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry `json:"entries"`
+	Entries   []ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs.Id, and is useful for accessing the field via an interface.
@@ -9257,7 +9257,7 @@ func (v *ProjectDeploysTeamProject) GetDeploys() ProjectDeploysTeamProjectDeploy
 
 // ProjectDeploysTeamProjectDeploysDeployConnection includes the requested fields of the GraphQL type DeployConnection.
 type ProjectDeploysTeamProjectDeploysDeployConnection struct {
-	Nodes []ProjectDeploysTeamProjectDeploysDeployConnectionNodesDeploy `json:"nodes"`
+	Nodes []ProjectDeploysTeamProjectDeploysDeployConnectionNodesDeploy `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectDeploysTeamProjectDeploysDeployConnection.Nodes, and is useful for accessing the field via an interface.
@@ -9429,7 +9429,7 @@ type __premarshalProjectDetail struct {
 
 	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
-	Jobs []ProjectInfoJobsJob `json:"jobs"`
+	Jobs []ProjectInfoJobsJob `json:"jobs,omitempty"`
 }
 
 func (v *ProjectDetail) MarshalJSON() ([]byte, error) {
@@ -9546,7 +9546,7 @@ func (v *ProjectDetailBuildDefinition) GetId() uuid.UUID { return v.Id }
 
 // ProjectDetailDeploysDeployConnection includes the requested fields of the GraphQL type DeployConnection.
 type ProjectDetailDeploysDeployConnection struct {
-	Nodes []ProjectDetailDeploysDeployConnectionNodesDeploy `json:"nodes"`
+	Nodes []ProjectDetailDeploysDeployConnectionNodesDeploy `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectDetailDeploysDeployConnection.Nodes, and is useful for accessing the field via an interface.
@@ -9789,7 +9789,7 @@ type __premarshalProjectDetailTeamProject struct {
 
 	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
-	Jobs []ProjectInfoJobsJob `json:"jobs"`
+	Jobs []ProjectInfoJobsJob `json:"jobs,omitempty"`
 }
 
 func (v *ProjectDetailTeamProject) MarshalJSON() ([]byte, error) {
@@ -9821,7 +9821,7 @@ func (v *ProjectDetailTeamProject) __premarshalJSON() (*__premarshalProjectDetai
 // Available filters for querying Projects. The result set is the intersection of all specified filters.
 type ProjectFilter struct {
 	// Selects only the Projects having one of these ids.
-	Ids []uuid.UUID `json:"ids"`
+	Ids []uuid.UUID `json:"ids,omitempty"`
 	// Filter Projects by name, status, groupName and subGroupName
 	Status       *ProjectStatusCriterion `json:"status,omitempty"`
 	Name         *StringCriterion        `json:"name,omitempty"`
@@ -9854,7 +9854,7 @@ type ProjectInfo struct {
 	Build     *ProjectInfoBuild                  `json:"build,omitempty"`
 	Deploys   ProjectInfoDeploysDeployConnection `json:"deploys"`
 	Workflow  *ProjectInfoWorkflow               `json:"workflow,omitempty"`
-	Jobs      []ProjectInfoJobsJob               `json:"jobs"`
+	Jobs      []ProjectInfoJobsJob               `json:"jobs,omitempty"`
 	Blueprint *ProjectInfoBlueprint              `json:"blueprint,omitempty"`
 }
 
@@ -10031,7 +10031,7 @@ type __premarshalProjectInfoTeamProject struct {
 
 	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
-	Jobs []ProjectInfoJobsJob `json:"jobs"`
+	Jobs []ProjectInfoJobsJob `json:"jobs,omitempty"`
 
 	Blueprint *ProjectInfoBlueprint `json:"blueprint,omitempty"`
 }
@@ -10074,7 +10074,7 @@ func (v *ProjectInfoWorkflow) GetRuns() ProjectInfoWorkflowRunsWorkflowRunConnec
 
 // ProjectInfoWorkflowRunsWorkflowRunConnection includes the requested fields of the GraphQL type WorkflowRunConnection.
 type ProjectInfoWorkflowRunsWorkflowRunConnection struct {
-	Nodes []ProjectInfoWorkflowRunsWorkflowRunConnectionNodesWorkflowRun `json:"nodes"`
+	Nodes []ProjectInfoWorkflowRunsWorkflowRunConnectionNodesWorkflowRun `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectInfoWorkflowRunsWorkflowRunConnection.Nodes, and is useful for accessing the field via an interface.
@@ -10202,7 +10202,7 @@ type ProjectLinkDetail struct {
 	Provider  ProjectLinkDetailProviderProject         `json:"provider"`
 	LinkType  ProjectLinkType                          `json:"linkType"`
 	EnvPrefix *string                                  `json:"envPrefix,omitempty"`
-	Envs      []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs"`
+	Envs      []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs,omitempty"`
 }
 
 // GetId returns ProjectLinkDetail.Id, and is useful for accessing the field via an interface.
@@ -10421,7 +10421,7 @@ func (v *ProjectLinkedProjectsTeamProject) GetLinkedProjects() ProjectLinkedProj
 
 // ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnection includes the requested fields of the GraphQL type ProjectLinkConnection.
 type ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnection struct {
-	Nodes []ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNodesProjectLink `json:"nodes"`
+	Nodes []ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNodesProjectLink `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnection.Nodes, and is useful for accessing the field via an interface.
@@ -10500,7 +10500,7 @@ type __premarshalProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnec
 
 	EnvPrefix *string `json:"envPrefix,omitempty"`
 
-	Envs []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs"`
+	Envs []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs,omitempty"`
 }
 
 func (v *ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNodesProjectLink) MarshalJSON() ([]byte, error) {
@@ -10533,7 +10533,7 @@ func (v *ProjectOutput) GetOutput() *ProjectOutputOutputProjectOutput { return v
 
 // ProjectOutputOutputProjectOutput includes the requested fields of the GraphQL type ProjectOutput.
 type ProjectOutputOutputProjectOutput struct {
-	Entries []ProjectOutputOutputProjectOutputEntriesProjectOutputEntry `json:"entries"`
+	Entries []ProjectOutputOutputProjectOutputEntriesProjectOutputEntry `json:"entries,omitempty"`
 }
 
 // GetEntries returns ProjectOutputOutputProjectOutput.Entries, and is useful for accessing the field via an interface.
@@ -10756,7 +10756,7 @@ func (v *ProjectOutputsTeamProject) GetWorkflow() *ProjectOutputsTeamProjectWork
 // ProjectOutputsTeamProjectConnector includes the requested fields of the GraphQL type ProjectConnector.
 type ProjectOutputsTeamProjectConnector struct {
 	Type   *ProjectConnectorType                                           `json:"type,omitempty"`
-	Fields []ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField `json:"fields"`
+	Fields []ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField `json:"fields,omitempty"`
 }
 
 // GetType returns ProjectOutputsTeamProjectConnector.Type, and is useful for accessing the field via an interface.
@@ -11001,7 +11001,7 @@ const (
 )
 
 type ProjectStatusCriterion struct {
-	Value []string `json:"value"`
+	Value []string `json:"value,omitempty"`
 }
 
 // GetValue returns ProjectStatusCriterion.Value, and is useful for accessing the field via an interface.
@@ -11095,7 +11095,7 @@ func (v *ProjectWithBlueprintBlueprintConfiguration) GetLogoUrl() *string { retu
 // ProjectWithClusters includes the GraphQL fields of Project requested by the fragment ProjectWithClusters.
 type ProjectWithClusters struct {
 	Id       uuid.UUID                            `json:"id"`
-	Clusters []ProjectWithClustersClustersCluster `json:"clusters"`
+	Clusters []ProjectWithClustersClustersCluster `json:"clusters,omitempty"`
 }
 
 // GetId returns ProjectWithClusters.Id, and is useful for accessing the field via an interface.
@@ -11339,7 +11339,7 @@ func (v *ProjectsWithBlueprintTeam) GetProjects() *ProjectsWithBlueprintTeamProj
 
 // ProjectsWithBlueprintTeamProjectsProjectConnection includes the requested fields of the GraphQL type ProjectConnection.
 type ProjectsWithBlueprintTeamProjectsProjectConnection struct {
-	Nodes []ProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject `json:"nodes"`
+	Nodes []ProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectsWithBlueprintTeamProjectsProjectConnection.Nodes, and is useful for accessing the field via an interface.
@@ -11443,7 +11443,7 @@ func (v *ProjectsWithDeploymentTimesTeam) GetProjects() *ProjectsWithDeploymentT
 
 // ProjectsWithDeploymentTimesTeamProjectsProjectConnection includes the requested fields of the GraphQL type ProjectConnection.
 type ProjectsWithDeploymentTimesTeamProjectsProjectConnection struct {
-	Nodes []ProjectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject `json:"nodes"`
+	Nodes []ProjectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectsWithDeploymentTimesTeamProjectsProjectConnection.Nodes, and is useful for accessing the field via an interface.
@@ -11553,7 +11553,7 @@ func (v *ProjectsWithStatusTeam) GetProjects() *ProjectsWithStatusTeamProjectsPr
 
 // ProjectsWithStatusTeamProjectsProjectConnection includes the requested fields of the GraphQL type ProjectConnection.
 type ProjectsWithStatusTeamProjectsProjectConnection struct {
-	Nodes []ProjectsWithStatusTeamProjectsProjectConnectionNodesProject `json:"nodes"`
+	Nodes []ProjectsWithStatusTeamProjectsProjectConnectionNodesProject `json:"nodes,omitempty"`
 }
 
 // GetNodes returns ProjectsWithStatusTeamProjectsProjectConnection.Nodes, and is useful for accessing the field via an interface.
@@ -11803,7 +11803,7 @@ type ResourceLogsLogs struct {
 	Id        string                            `json:"id"`
 	Completed bool                              `json:"completed"`
 	Expired   *bool                             `json:"expired,omitempty"`
-	Entries   []ResourceLogsLogsEntriesLogEntry `json:"entries"`
+	Entries   []ResourceLogsLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns ResourceLogsLogs.Id, and is useful for accessing the field via an interface.
@@ -12367,7 +12367,7 @@ func (v *ResourcesWithLogsTeam) GetProject() *ResourcesWithLogsTeamProject { ret
 // ResourcesWithLogsTeamProject includes the requested fields of the GraphQL type Project.
 type ResourcesWithLogsTeamProject struct {
 	Id        uuid.UUID                                            `json:"id"`
-	Resources []ResourcesWithLogsTeamProjectResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithLogsTeamProjectResourcesCloudResource `json:"resources,omitempty"`
 }
 
 // GetId returns ResourcesWithLogsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -12381,8 +12381,8 @@ func (v *ResourcesWithLogsTeamProject) GetResources() []ResourcesWithLogsTeamPro
 // ResourcesWithLogsTeamProjectResourcesCloudResource includes the requested fields of the GraphQL type CloudResource.
 type ResourcesWithLogsTeamProjectResourcesCloudResource struct {
 	CloudResource `json:"-"`
-	Resources     []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources"`
-	Log           []ResourcesWithLogsTeamProjectResourcesCloudResourceLog                    `json:"log"`
+	Resources     []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
+	Log           []ResourcesWithLogsTeamProjectResourcesCloudResourceLog                    `json:"log,omitempty"`
 }
 
 // GetResources returns ResourcesWithLogsTeamProjectResourcesCloudResource.Resources, and is useful for accessing the field via an interface.
@@ -12451,9 +12451,9 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResource) UnmarshalJSON(b []b
 }
 
 type __premarshalResourcesWithLogsTeamProjectResourcesCloudResource struct {
-	Resources []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 
-	Log []ResourcesWithLogsTeamProjectResourcesCloudResourceLog `json:"log"`
+	Log []ResourcesWithLogsTeamProjectResourcesCloudResourceLog `json:"log,omitempty"`
 
 	Name string `json:"name"`
 
@@ -12463,9 +12463,9 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResource struct {
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithLogsTeamProjectResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -12493,7 +12493,7 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResource) __premarshalJSON() 
 // ResourcesWithLogsTeamProjectResourcesCloudResourceLog includes the requested fields of the GraphQL type Log.
 type ResourcesWithLogsTeamProjectResourcesCloudResourceLog struct {
 	Name    string                                                                 `json:"name"`
-	Entries []ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry `json:"entries"`
+	Entries []ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetName returns ResourcesWithLogsTeamProjectResourcesCloudResourceLog.Name, and is useful for accessing the field via an interface.
@@ -12523,7 +12523,7 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry) G
 // ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource includes the requested fields of the GraphQL type CloudResource.
 type ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource struct {
 	CloudResource `json:"-"`
-	Resources     []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources     []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 }
 
 // GetResources returns ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource.Resources, and is useful for accessing the field via an interface.
@@ -12587,7 +12587,7 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourc
 }
 
 type __premarshalResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource struct {
-	Resources []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 
 	Name string `json:"name"`
 
@@ -12597,9 +12597,9 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResourceResourcesClou
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -12692,9 +12692,9 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResourceResourcesClou
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -12748,7 +12748,7 @@ func (v *ResourcesWithMetricsTeam) GetProject() *ResourcesWithMetricsTeamProject
 // ResourcesWithMetricsTeamProject includes the requested fields of the GraphQL type Project.
 type ResourcesWithMetricsTeamProject struct {
 	Id        uuid.UUID                                               `json:"id"`
-	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResource `json:"resources,omitempty"`
 }
 
 // GetId returns ResourcesWithMetricsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -12762,8 +12762,8 @@ func (v *ResourcesWithMetricsTeamProject) GetResources() []ResourcesWithMetricsT
 // ResourcesWithMetricsTeamProjectResourcesCloudResource includes the requested fields of the GraphQL type CloudResource.
 type ResourcesWithMetricsTeamProjectResourcesCloudResource struct {
 	CloudResource `json:"-"`
-	Resources     []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources"`
-	Metric        []ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream     `json:"metric"`
+	Resources     []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
+	Metric        []ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream     `json:"metric,omitempty"`
 }
 
 // GetResources returns ResourcesWithMetricsTeamProjectResourcesCloudResource.Resources, and is useful for accessing the field via an interface.
@@ -12832,9 +12832,9 @@ func (v *ResourcesWithMetricsTeamProjectResourcesCloudResource) UnmarshalJSON(b 
 }
 
 type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResource struct {
-	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 
-	Metric []ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream `json:"metric"`
+	Metric []ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream `json:"metric,omitempty"`
 
 	Name string `json:"name"`
 
@@ -12844,9 +12844,9 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResource struct {
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithMetricsTeamProjectResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -12931,11 +12931,11 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetr
 
 	Query string `json:"query"`
 
-	Annotations []MetricStreamV1AnnotationsMetricAnnotation `json:"annotations"`
+	Annotations []MetricStreamV1AnnotationsMetricAnnotation `json:"annotations,omitempty"`
 
-	Labels []MetricStreamV1LabelsMetricStreamLabel `json:"labels"`
+	Labels []MetricStreamV1LabelsMetricStreamLabel `json:"labels,omitempty"`
 
-	Entries []MetricStreamV1EntriesMetricEntry `json:"entries"`
+	Entries []MetricStreamV1EntriesMetricEntry `json:"entries,omitempty"`
 }
 
 func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream) MarshalJSON() ([]byte, error) {
@@ -12960,7 +12960,7 @@ func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream
 // ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource includes the requested fields of the GraphQL type CloudResource.
 type ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource struct {
 	CloudResource `json:"-"`
-	Resources     []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources     []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 }
 
 // GetResources returns ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource.Resources, and is useful for accessing the field via an interface.
@@ -13024,7 +13024,7 @@ func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudReso
 }
 
 type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource struct {
-	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources"`
+	Resources []ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource `json:"resources,omitempty"`
 
 	Name string `json:"name"`
 
@@ -13034,9 +13034,9 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesC
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -13129,9 +13129,9 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesC
 
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
-	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
+	Owners []CloudResourceOwnersResourceOwner `json:"owners,omitempty"`
 
-	Events []CloudResourceEventsResourceEvent `json:"events"`
+	Events []CloudResourceEventsResourceEvent `json:"events,omitempty"`
 }
 
 func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesCloudResourceResourcesCloudResource) MarshalJSON() ([]byte, error) {
@@ -13664,7 +13664,7 @@ func (v *SubGroupTeam) GetGroups() SubGroupTeamGroupsGroupConnection { return v.
 
 // SubGroupTeamGroupsGroupConnection includes the requested fields of the GraphQL type GroupConnection.
 type SubGroupTeamGroupsGroupConnection struct {
-	Nodes []SubGroupTeamGroupsGroupConnectionNodesGroup `json:"nodes"`
+	Nodes []SubGroupTeamGroupsGroupConnectionNodesGroup `json:"nodes,omitempty"`
 }
 
 // GetNodes returns SubGroupTeamGroupsGroupConnection.Nodes, and is useful for accessing the field via an interface.
@@ -13690,7 +13690,7 @@ func (v *SubGroupTeamGroupsGroupConnectionNodesGroup) GetSubGroup() SubGroupTeam
 type SubGroupTeamGroupsGroupConnectionNodesGroupSubGroup struct {
 	Id        uuid.UUID                                                       `json:"id"`
 	Name      string                                                          `json:"name"`
-	Envs      []SubGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar `json:"envs"`
+	Envs      []SubGroupTeamGroupsGroupConnectionNodesGroupSubGroupEnvsEnvVar `json:"envs,omitempty"`
 	CreatedAt time.Time                                                       `json:"createdAt"`
 	UpdatedAt time.Time                                                       `json:"updatedAt"`
 }
@@ -13793,7 +13793,7 @@ func (v *TeamTeam) GetName() string { return v.Name }
 type TerraformAutomaticOutputConfigurationInput struct {
 	Disabled  *bool    `json:"disabled,omitempty"`
 	Sensitive *bool    `json:"sensitive,omitempty"`
-	Excluded  []string `json:"excluded"`
+	Excluded  []string `json:"excluded,omitempty"`
 }
 
 // GetDisabled returns TerraformAutomaticOutputConfigurationInput.Disabled, and is useful for accessing the field via an interface.
@@ -13913,7 +13913,7 @@ func (v *TriggerConfigurationInput) GetAction() *ActionTriggerConfigurationInput
 
 type TriggerDefinitionInput struct {
 	Action        TriggerActionType         `json:"action"`
-	Events        []TriggerEventType        `json:"events"`
+	Events        []TriggerEventType        `json:"events,omitempty"`
 	Configuration TriggerConfigurationInput `json:"configuration"`
 }
 
@@ -13973,7 +13973,7 @@ func (v *UpdateDeployUpdateDeploy) GetId() uuid.UUID { return v.Id }
 type UpdateGroupInput struct {
 	Id   uuid.UUID     `json:"id"`
 	Name *string       `json:"name,omitempty"`
-	Envs []EnvVarInput `json:"envs"`
+	Envs []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetId returns UpdateGroupInput.Id, and is useful for accessing the field via an interface.
@@ -13997,7 +13997,7 @@ func (v *UpdateGroupResponse) GetUpdateGroup() UpdateGroupUpdateGroup { return v
 type UpdateGroupUpdateGroup struct {
 	Id        uuid.UUID                          `json:"id"`
 	Name      string                             `json:"name"`
-	Envs      []UpdateGroupUpdateGroupEnvsEnvVar `json:"envs"`
+	Envs      []UpdateGroupUpdateGroupEnvsEnvVar `json:"envs,omitempty"`
 	CreatedAt time.Time                          `json:"createdAt"`
 	UpdatedAt time.Time                          `json:"updatedAt"`
 }
@@ -14035,7 +14035,7 @@ type UpdateProjectInput struct {
 	SubGroupId          *uuid.UUID                `json:"subGroupId,omitempty"`
 	SubGroupName        *string                   `json:"subGroupName,omitempty"`
 	Name                *string                   `json:"name,omitempty"`
-	Envs                []EnvVarInput             `json:"envs"`
+	Envs                []EnvVarInput             `json:"envs,omitempty"`
 	ObservabilityConfig *ObservabilityConfigInput `json:"observabilityConfig,omitempty"`
 }
 
@@ -14085,7 +14085,7 @@ func (v *UpdateProjectUpdateProject) GetName() string { return v.Name }
 type UpdateSubGroupInput struct {
 	Id   uuid.UUID     `json:"id"`
 	Name *string       `json:"name,omitempty"`
-	Envs []EnvVarInput `json:"envs"`
+	Envs []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetId returns UpdateSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -14111,7 +14111,7 @@ func (v *UpdateSubGroupResponse) GetUpdateSubGroup() UpdateSubGroupUpdateSubGrou
 type UpdateSubGroupUpdateSubGroup struct {
 	Id        uuid.UUID                                `json:"id"`
 	Name      string                                   `json:"name"`
-	Envs      []UpdateSubGroupUpdateSubGroupEnvsEnvVar `json:"envs"`
+	Envs      []UpdateSubGroupUpdateSubGroupEnvsEnvVar `json:"envs,omitempty"`
 	CreatedAt time.Time                                `json:"createdAt"`
 	UpdatedAt time.Time                                `json:"updatedAt"`
 }
@@ -14214,7 +14214,7 @@ func (v *UserPersonalAccessTokensResponse) GetUser() UserPersonalAccessTokensUse
 // UserPersonalAccessTokensUser includes the requested fields of the GraphQL type User.
 type UserPersonalAccessTokensUser struct {
 	Id                   uuid.UUID                                                             `json:"id"`
-	PersonalAccessTokens []UserPersonalAccessTokensUserPersonalAccessTokensPersonalAccessToken `json:"personalAccessTokens"`
+	PersonalAccessTokens []UserPersonalAccessTokensUserPersonalAccessTokensPersonalAccessToken `json:"personalAccessTokens,omitempty"`
 }
 
 // GetId returns UserPersonalAccessTokensUser.Id, and is useful for accessing the field via an interface.
@@ -14285,7 +14285,7 @@ func (v *WorkflowBranchDefinitionInput) GetName() string { return v.Name }
 func (v *WorkflowBranchDefinitionInput) GetCommitSha() string { return v.CommitSha }
 
 type WorkflowDefinitionInput struct {
-	Steps             []WorkflowStepDefinitionInput  `json:"steps"`
+	Steps             []WorkflowStepDefinitionInput  `json:"steps,omitempty"`
 	Source            *SourceInput                   `json:"source,omitempty"`
 	Branch            *WorkflowBranchDefinitionInput `json:"branch,omitempty"`
 	WorkflowClusterId *uuid.UUID                     `json:"workflowClusterId,omitempty"`
@@ -14306,7 +14306,7 @@ func (v *WorkflowDefinitionInput) GetWorkflowClusterId() *uuid.UUID { return v.W
 // WorkflowDetail includes the GraphQL fields of Workflow requested by the fragment WorkflowDetail.
 type WorkflowDetail struct {
 	Id       uuid.UUID                                   `json:"id"`
-	Steps    []WorkflowDetailStepsWorkflowStepDefinition `json:"steps"`
+	Steps    []WorkflowDetailStepsWorkflowStepDefinition `json:"steps,omitempty"`
 	Triggers WorkflowDetailTriggersTriggerConnection     `json:"triggers"`
 }
 
@@ -14417,7 +14417,7 @@ func (v *WorkflowDetailTeamProjectWorkflow) UnmarshalJSON(b []byte) error {
 type __premarshalWorkflowDetailTeamProjectWorkflow struct {
 	Id uuid.UUID `json:"id"`
 
-	Steps []WorkflowDetailStepsWorkflowStepDefinition `json:"steps"`
+	Steps []WorkflowDetailStepsWorkflowStepDefinition `json:"steps,omitempty"`
 
 	Triggers WorkflowDetailTriggersTriggerConnection `json:"triggers"`
 }
@@ -14442,7 +14442,7 @@ func (v *WorkflowDetailTeamProjectWorkflow) __premarshalJSON() (*__premarshalWor
 // WorkflowDetailTriggersTriggerConnection includes the requested fields of the GraphQL type TriggerConnection.
 type WorkflowDetailTriggersTriggerConnection struct {
 	TotalCount int                                                   `json:"totalCount"`
-	Nodes      []WorkflowDetailTriggersTriggerConnectionNodesTrigger `json:"nodes"`
+	Nodes      []WorkflowDetailTriggersTriggerConnectionNodesTrigger `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns WorkflowDetailTriggersTriggerConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -14457,7 +14457,7 @@ func (v *WorkflowDetailTriggersTriggerConnection) GetNodes() []WorkflowDetailTri
 type WorkflowDetailTriggersTriggerConnectionNodesTrigger struct {
 	Id            uuid.UUID                                                         `json:"id"`
 	Action        TriggerActionType                                                 `json:"action"`
-	Events        []TriggerEventType                                                `json:"events"`
+	Events        []TriggerEventType                                                `json:"events,omitempty"`
 	Configuration *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration `json:"configuration,omitempty"`
 }
 
@@ -14558,7 +14558,7 @@ const (
 )
 
 type WorkflowRunDefinitionInput struct {
-	Steps  []WorkflowRunStepDefinitionInput `json:"steps"`
+	Steps  []WorkflowRunStepDefinitionInput `json:"steps,omitempty"`
 	Source *SourceInput                     `json:"source,omitempty"`
 	Branch *WorkflowBranchDefinitionInput   `json:"branch,omitempty"`
 }
@@ -14968,7 +14968,7 @@ type WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs struct {
 	Id        string                                                                           `json:"id"`
 	Completed bool                                                                             `json:"completed"`
 	Expired   *bool                                                                            `json:"expired,omitempty"`
-	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry `json:"entries"`
+	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs.Id, and is useful for accessing the field via an interface.
@@ -15056,7 +15056,7 @@ type WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs struct {
 	Id        string                                                                         `json:"id"`
 	Completed bool                                                                           `json:"completed"`
 	Expired   *bool                                                                          `json:"expired,omitempty"`
-	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
+	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
@@ -15197,7 +15197,7 @@ type __premarshalWorkflowRunDetailStepsBuildRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -15355,7 +15355,7 @@ type __premarshalWorkflowRunDetailStepsClusterPrecheckStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -15513,7 +15513,7 @@ type __premarshalWorkflowRunDetailStepsDeployRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -15666,7 +15666,7 @@ type __premarshalWorkflowRunDetailStepsDestroyRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -15816,7 +15816,7 @@ type __premarshalWorkflowRunDetailStepsJobRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -16388,7 +16388,7 @@ type __premarshalWorkflowRunListItemStepsBuildRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -16561,7 +16561,7 @@ type __premarshalWorkflowRunListItemStepsClusterPrecheckStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -16719,7 +16719,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -17017,7 +17017,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunSt
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -17183,7 +17183,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPre
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -17349,7 +17349,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -17515,7 +17515,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -17681,7 +17681,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -18183,7 +18183,7 @@ type __premarshalWorkflowRunListItemStepsDestroyRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -18335,7 +18335,7 @@ type __premarshalWorkflowRunListItemStepsJobRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -18749,7 +18749,7 @@ const (
 
 type WorkflowRunStepDefinitionInput struct {
 	Action         WorkflowStepActionType                   `json:"action"`
-	DependsOn      []int                                    `json:"dependsOn"`
+	DependsOn      []int                                    `json:"dependsOn,omitempty"`
 	Disabled       *bool                                    `json:"disabled,omitempty"`
 	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
 	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
@@ -18779,7 +18779,7 @@ func (v *WorkflowRunStepDefinitionInput) GetMetadata() *WorkflowRunStepDefinitio
 }
 
 type WorkflowRunStepDefinitionMetadataInput struct {
-	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps"`
+	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps,omitempty"`
 }
 
 // GetDeploySteps returns WorkflowRunStepDefinitionMetadataInput.DeploySteps, and is useful for accessing the field via an interface.
@@ -19036,7 +19036,7 @@ type __premarshalWorkflowRunStepDetailBuildRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -19289,7 +19289,7 @@ type __premarshalWorkflowRunStepDetailClusterPrecheckStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -19627,7 +19627,7 @@ type __premarshalWorkflowRunStepDetailDeployRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -19782,7 +19782,7 @@ type __premarshalWorkflowRunStepDetailDestroyRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -19932,7 +19932,7 @@ type __premarshalWorkflowRunStepDetailJobRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -20237,7 +20237,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -20410,7 +20410,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -20581,7 +20581,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -20754,7 +20754,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -20925,7 +20925,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -21964,7 +21964,7 @@ type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkf
 	Id        string                                                                                                               `json:"id"`
 	Completed bool                                                                                                                 `json:"completed"`
 	Expired   *bool                                                                                                                `json:"expired,omitempty"`
-	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
+	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
@@ -22342,7 +22342,7 @@ type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWork
 	Id        string                                                                                                                `json:"id"`
 	Completed bool                                                                                                                  `json:"completed"`
 	Expired   *bool                                                                                                                 `json:"expired,omitempty"`
-	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
+	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
@@ -22957,7 +22957,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -23132,7 +23132,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -23307,7 +23307,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -23482,7 +23482,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -23657,7 +23657,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -24339,7 +24339,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -24514,7 +24514,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -24689,7 +24689,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -24864,7 +24864,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -25039,7 +25039,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	Action GenericWorkflowStepActionType `json:"action"`
 
-	DependsOn []json.RawMessage `json:"dependsOn"`
+	DependsOn []json.RawMessage `json:"dependsOn,omitempty"`
 
 	Status WorkflowRunStepStatus `json:"status"`
 
@@ -25535,7 +25535,7 @@ func (v *WorkflowRunsTeamProjectWorkflow) GetRuns() WorkflowRunsTeamProjectWorkf
 type WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnection struct {
 	TotalCount int                                                                        `json:"totalCount"`
 	PageInfo   WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionPageInfo           `json:"pageInfo"`
-	Nodes      []WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionNodesWorkflowRun `json:"nodes"`
+	Nodes      []WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionNodesWorkflowRun `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -25680,7 +25680,7 @@ const (
 
 type WorkflowStepDefinitionInput struct {
 	Action         WorkflowStepActionType                   `json:"action"`
-	DependsOn      []int                                    `json:"dependsOn"`
+	DependsOn      []int                                    `json:"dependsOn,omitempty"`
 	Disabled       *bool                                    `json:"disabled,omitempty"`
 	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
 	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
@@ -26391,7 +26391,7 @@ type __resourcesWithMetricsInput struct {
 	TeamId      uuid.UUID                           `json:"teamId"`
 	ProjectId   uuid.UUID                           `json:"projectId"`
 	ClusterId   uuid.UUID                           `json:"clusterId"`
-	MetricTypes []MetricType                        `json:"metricTypes"`
+	MetricTypes []MetricType                        `json:"metricTypes,omitempty"`
 	Selector    *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
