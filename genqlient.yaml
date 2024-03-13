@@ -6,15 +6,16 @@ operations:
 generated: pkg/api/generated.go
 allow_broken_features: true
 bindings:
+  YAML:
+    type: string
   UUID:
     type: github.com/google/uuid.UUID
   Time:
     type: time.Time
+  Duration:
+    type: time.Duration
   ID:
-    type: github.com/google/uuid.UUID
-  # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
-  Upload:
-    type: string
+    type: string 
   Login:
     type: string
   JSON:
@@ -23,3 +24,10 @@ bindings:
     type: string
   MapString:
     type: map[string]string
+  VariableValueInput:
+    type: string
+  PermissibleMutation:
+    type: string
+  # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
+  Upload:
+    type: string

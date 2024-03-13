@@ -17,10 +17,7 @@ bindings:
   Duration:
     type: time.Duration
   ID:
-    type: github.com/google/uuid.UUID
-  # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
-  Upload:
-    type: string
+    type: string 
   Login:
     type: string
   JSON:
@@ -33,4 +30,6 @@ bindings:
     type: string
   PermissibleMutation:
     type: string
-
+  # genqlient doesn't actually support uploads, this is just a workaround to prevent an error when it sees an Upload scalar
+  Upload:
+    type: string

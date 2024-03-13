@@ -21,7 +21,7 @@ type AbortWorkflowRunResponse struct {
 func (v *AbortWorkflowRunResponse) GetAbortWorkflowRun() bool { return v.AbortWorkflowRun }
 
 type ActionTriggerConfigurationInput struct {
-	WorkflowId *uuid.UUID `json:"workflowId"`
+	WorkflowId *uuid.UUID `json:"workflowId,omitempty"`
 }
 
 // GetWorkflowId returns ActionTriggerConfigurationInput.WorkflowId, and is useful for accessing the field via an interface.
@@ -38,12 +38,12 @@ func (v *ApproveWorkflowRunStepResponse) GetApproveWorkflowRunStep() bool {
 }
 
 type AutoscalingDataInput struct {
-	MinReplicas          int                        `json:"minReplicas"`
-	MaxReplicas          int                        `json:"maxReplicas"`
-	CoolDownPeriod       int                        `json:"coolDownPeriod"`
-	Spec                 string                     `json:"spec"`
-	Triggers             []*AutoscalingTriggerInput `json:"triggers"`
-	KedaScaledObjectSpec *string                    `json:"kedaScaledObjectSpec"`
+	MinReplicas          int                        `json:"minReplicas,omitempty"`
+	MaxReplicas          int                        `json:"maxReplicas,omitempty"`
+	CoolDownPeriod       int                        `json:"coolDownPeriod,omitempty"`
+	Spec                 string                     `json:"spec,omitempty"`
+	Triggers             []*AutoscalingTriggerInput `json:"triggers,omitempty"`
+	KedaScaledObjectSpec *string                    `json:"kedaScaledObjectSpec,omitempty"`
 }
 
 // GetMinReplicas returns AutoscalingDataInput.MinReplicas, and is useful for accessing the field via an interface.
@@ -65,8 +65,8 @@ func (v *AutoscalingDataInput) GetTriggers() []*AutoscalingTriggerInput { return
 func (v *AutoscalingDataInput) GetKedaScaledObjectSpec() *string { return v.KedaScaledObjectSpec }
 
 type AutoscalingTriggerInput struct {
-	Type string `json:"type"`
-	Spec string `json:"spec"`
+	Type string `json:"type,omitempty"`
+	Spec string `json:"spec,omitempty"`
 }
 
 // GetType returns AutoscalingTriggerInput.Type, and is useful for accessing the field via an interface.
@@ -76,14 +76,14 @@ func (v *AutoscalingTriggerInput) GetType() string { return v.Type }
 func (v *AutoscalingTriggerInput) GetSpec() string { return v.Spec }
 
 type AwsSamGeneratorConfigurationInput struct {
-	EnvVars                    []*EnvVarInput `json:"envVars"`
-	RunCommand                 *string        `json:"runCommand"`
-	ServerlessMemory           *int           `json:"serverlessMemory"`
-	ServerlessArch             *string        `json:"serverlessArch"`
-	CustomDomainHost           *string        `json:"customDomainHost"`
-	CustomDomainCertificateArn *string        `json:"customDomainCertificateArn"`
-	HttpPort                   *string        `json:"httpPort"`
-	BuildImage                 *string        `json:"buildImage"`
+	EnvVars                    []*EnvVarInput `json:"envVars,omitempty"`
+	RunCommand                 *string        `json:"runCommand,omitempty"`
+	ServerlessMemory           *int           `json:"serverlessMemory,omitempty"`
+	ServerlessArch             *string        `json:"serverlessArch,omitempty"`
+	CustomDomainHost           *string        `json:"customDomainHost,omitempty"`
+	CustomDomainCertificateArn *string        `json:"customDomainCertificateArn,omitempty"`
+	HttpPort                   *string        `json:"httpPort,omitempty"`
+	BuildImage                 *string        `json:"buildImage,omitempty"`
 }
 
 // GetEnvVars returns AwsSamGeneratorConfigurationInput.EnvVars, and is useful for accessing the field via an interface.
@@ -113,9 +113,9 @@ func (v *AwsSamGeneratorConfigurationInput) GetHttpPort() *string { return v.Htt
 func (v *AwsSamGeneratorConfigurationInput) GetBuildImage() *string { return v.BuildImage }
 
 type AwsSamTargetConfigurationInput struct {
-	AwsAccountId *uuid.UUID `json:"awsAccountId"`
-	AwsRegion    *string    `json:"awsRegion"`
-	StackName    *string    `json:"stackName"`
+	AwsAccountId *uuid.UUID `json:"awsAccountId,omitempty"`
+	AwsRegion    *string    `json:"awsRegion,omitempty"`
+	StackName    *string    `json:"stackName,omitempty"`
 }
 
 // GetAwsAccountId returns AwsSamTargetConfigurationInput.AwsAccountId, and is useful for accessing the field via an interface.
@@ -457,15 +457,15 @@ const (
 )
 
 type BlueprintHelmConfigurationInput struct {
-	Source *SourceInput `json:"source"`
+	Source *SourceInput `json:"source,omitempty"`
 }
 
 // GetSource returns BlueprintHelmConfigurationInput.Source, and is useful for accessing the field via an interface.
 func (v *BlueprintHelmConfigurationInput) GetSource() *SourceInput { return v.Source }
 
 type BlueprintManifestConfigurationInput struct {
-	Source       *SourceInput `json:"source"`
-	UseKustomize *bool        `json:"useKustomize"`
+	Source       *SourceInput `json:"source,omitempty"`
+	UseKustomize *bool        `json:"useKustomize,omitempty"`
 }
 
 // GetSource returns BlueprintManifestConfigurationInput.Source, and is useful for accessing the field via an interface.
@@ -757,9 +757,9 @@ func (v *BlueprintTeamBlueprint) __premarshalJSON() (*__premarshalBlueprintTeamB
 }
 
 type BlueprintTerraformConfigurationInput struct {
-	Source              *SourceInput                       `json:"source"`
-	OutputConfiguration *TerraformOutputConfigurationInput `json:"outputConfiguration"`
-	TerraformVersion    *string                            `json:"terraformVersion"`
+	Source              *SourceInput                       `json:"source,omitempty"`
+	OutputConfiguration *TerraformOutputConfigurationInput `json:"outputConfiguration,omitempty"`
+	TerraformVersion    *string                            `json:"terraformVersion,omitempty"`
 }
 
 // GetSource returns BlueprintTerraformConfigurationInput.Source, and is useful for accessing the field via an interface.
@@ -790,15 +790,15 @@ const (
 
 type BlueprintVariableInput struct {
 	// ID of the corresponding variable spec. Must be present if name is not specified.
-	SpecId *uuid.UUID `json:"specId"`
+	SpecId *uuid.UUID `json:"specId,omitempty"`
 	// Name of the corresponding variable spec, or name to use when declaring a variable without referencing a variable spec.
 	// Must be present if specId is not specified.
-	Name *string `json:"name"`
+	Name *string `json:"name,omitempty"`
 	// The variable value. Always a string value, which will be parsed according to the variableType, determined either
 	// by the referenced variableSpec, or the provided variableType
-	Value string `json:"value"`
+	Value string `json:"value,omitempty"`
 	// Type specification is required when variable is being declared without referencing a variable spec.
-	Type *BlueprintVariableType `json:"type"`
+	Type *BlueprintVariableType `json:"type,omitempty"`
 }
 
 // GetSpecId returns BlueprintVariableInput.SpecId, and is useful for accessing the field via an interface.
@@ -942,26 +942,26 @@ func (v *BuildArtifactsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNex
 }
 
 type BuildDefinitionInput struct {
-	BuildAppId       *string           `json:"buildAppId"`
-	BuildAppName     *string           `json:"buildAppName"`
-	GitSource        *GitSourceInput   `json:"gitSource"`
-	BuildClusterId   *uuid.UUID        `json:"buildClusterId"`
-	Target           *BuildTargetInput `json:"target"`
-	Type             *BuildType        `json:"type"`
-	Engine           *BuildEngine      `json:"engine"`
-	NodeJsVersion    *string           `json:"nodeJsVersion"`
-	PythonVersion    *string           `json:"pythonVersion"`
-	GolangVersion    *string           `json:"golangVersion"`
-	StaticPath       *string           `json:"staticPath"`
-	DockerfilePath   *string           `json:"dockerfilePath"`
-	DockerfileText   *string           `json:"dockerfileText"`
-	WorkingDirectory *string           `json:"workingDirectory"`
-	BuildCommand     *string           `json:"buildCommand"`
-	TestCommand      *string           `json:"testCommand"`
-	RunCommand       *string           `json:"runCommand"`
-	NoBuildCache     *bool             `json:"noBuildCache"`
-	AutoRetry        *bool             `json:"autoRetry"`
-	KanikoFlags      []*string         `json:"kanikoFlags"`
+	BuildAppId       *string           `json:"buildAppId,omitempty"`
+	BuildAppName     *string           `json:"buildAppName,omitempty"`
+	GitSource        *GitSourceInput   `json:"gitSource,omitempty"`
+	BuildClusterId   *uuid.UUID        `json:"buildClusterId,omitempty"`
+	Target           *BuildTargetInput `json:"target,omitempty"`
+	Type             *BuildType        `json:"type,omitempty"`
+	Engine           *BuildEngine      `json:"engine,omitempty"`
+	NodeJsVersion    *string           `json:"nodeJsVersion,omitempty"`
+	PythonVersion    *string           `json:"pythonVersion,omitempty"`
+	GolangVersion    *string           `json:"golangVersion,omitempty"`
+	StaticPath       *string           `json:"staticPath,omitempty"`
+	DockerfilePath   *string           `json:"dockerfilePath,omitempty"`
+	DockerfileText   *string           `json:"dockerfileText,omitempty"`
+	WorkingDirectory *string           `json:"workingDirectory,omitempty"`
+	BuildCommand     *string           `json:"buildCommand,omitempty"`
+	TestCommand      *string           `json:"testCommand,omitempty"`
+	RunCommand       *string           `json:"runCommand,omitempty"`
+	NoBuildCache     *bool             `json:"noBuildCache,omitempty"`
+	AutoRetry        *bool             `json:"autoRetry,omitempty"`
+	KanikoFlags      []*string         `json:"kanikoFlags,omitempty"`
 }
 
 // GetBuildAppId returns BuildDefinitionInput.BuildAppId, and is useful for accessing the field via an interface.
@@ -1441,10 +1441,10 @@ func (v *BuildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNextPage
 }
 
 type BuildTargetInput struct {
-	Type                         BuildTargetType              `json:"type"`
-	Repository                   *string                      `json:"repository"`
-	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates"`
-	Integration                  *BuildTargetIntegrationInput `json:"integration"`
+	Type                         BuildTargetType              `json:"type,omitempty"`
+	Repository                   *string                      `json:"repository,omitempty"`
+	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates,omitempty"`
+	Integration                  *BuildTargetIntegrationInput `json:"integration,omitempty"`
 }
 
 // GetType returns BuildTargetInput.Type, and is useful for accessing the field via an interface.
@@ -1462,12 +1462,12 @@ func (v *BuildTargetInput) GetAlternativeImageTagTemplates() []string {
 func (v *BuildTargetInput) GetIntegration() *BuildTargetIntegrationInput { return v.Integration }
 
 type BuildTargetIntegrationInput struct {
-	RegistryId        *uuid.UUID `json:"registryId"`
-	RegistryClusterId *uuid.UUID `json:"registryClusterId"`
-	AwsAccountId      *uuid.UUID `json:"awsAccountId"`
-	AwsRegion         *string    `json:"awsRegion"`
-	GcpAccountId      *uuid.UUID `json:"gcpAccountId"`
-	GcpRegion         *string    `json:"gcpRegion"`
+	RegistryId        *uuid.UUID `json:"registryId,omitempty"`
+	RegistryClusterId *uuid.UUID `json:"registryClusterId,omitempty"`
+	AwsAccountId      *uuid.UUID `json:"awsAccountId,omitempty"`
+	AwsRegion         *string    `json:"awsRegion,omitempty"`
+	GcpAccountId      *uuid.UUID `json:"gcpAccountId,omitempty"`
+	GcpRegion         *string    `json:"gcpRegion,omitempty"`
 }
 
 // GetRegistryId returns BuildTargetIntegrationInput.RegistryId, and is useful for accessing the field via an interface.
@@ -2829,10 +2829,10 @@ func (v *ClusterStatusTeamCluster) GetId() uuid.UUID { return v.Id }
 func (v *ClusterStatusTeamCluster) GetStatus() *ClusterStatus { return v.Status }
 
 type ContainerRegistrySourceInput struct {
-	RegistryId  *uuid.UUID `json:"registryId"`
-	RegistryUrl *string    `json:"registryUrl"`
-	Repository  string     `json:"repository"`
-	Tag         *string    `json:"tag"`
+	RegistryId  *uuid.UUID `json:"registryId,omitempty"`
+	RegistryUrl *string    `json:"registryUrl,omitempty"`
+	Repository  string     `json:"repository,omitempty"`
+	Tag         *string    `json:"tag,omitempty"`
 }
 
 // GetRegistryId returns ContainerRegistrySourceInput.RegistryId, and is useful for accessing the field via an interface.
@@ -2874,8 +2874,8 @@ type CreateDeployRunCreateDeployRun struct {
 func (v *CreateDeployRunCreateDeployRun) GetId() uuid.UUID { return v.Id }
 
 type CreateDeployRunInput struct {
-	DeployId uuid.UUID  `json:"deployId"`
-	IntentId *uuid.UUID `json:"intentId"`
+	DeployId uuid.UUID  `json:"deployId,omitempty"`
+	IntentId *uuid.UUID `json:"intentId,omitempty"`
 }
 
 // GetDeployId returns CreateDeployRunInput.DeployId, and is useful for accessing the field via an interface.
@@ -2955,9 +2955,9 @@ func (v *CreateGroupCreateGroupOwnerTeam) GetId() uuid.UUID { return v.Id }
 func (v *CreateGroupCreateGroupOwnerTeam) GetName() string { return v.Name }
 
 type CreateGroupInput struct {
-	TeamId uuid.UUID     `json:"teamId"`
-	Name   string        `json:"name"`
-	Envs   []EnvVarInput `json:"envs"`
+	TeamId uuid.UUID     `json:"teamId,omitempty"`
+	Name   string        `json:"name,omitempty"`
+	Envs   []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetTeamId returns CreateGroupInput.TeamId, and is useful for accessing the field via an interface.
@@ -3004,19 +3004,19 @@ type CreateProjectCreateProjectWorkflow struct {
 func (v *CreateProjectCreateProjectWorkflow) GetId() uuid.UUID { return v.Id }
 
 type CreateProjectInput struct {
-	TeamId       uuid.UUID                      `json:"teamId"`
-	GroupId      *uuid.UUID                     `json:"groupId"`
-	GroupName    *string                        `json:"groupName"`
-	SubGroupId   *uuid.UUID                     `json:"subGroupId"`
-	SubGroupName *string                        `json:"subGroupName"`
-	Name         string                         `json:"name"`
-	Enabled      *bool                          `json:"enabled"`
-	Workflow     *WorkflowDefinitionInput       `json:"workflow"`
-	Build        *BuildDefinitionInput          `json:"build"`
-	Jobs         []JobDefinitionInput           `json:"jobs"`
-	Deploys      []DeploymentConfigurationInput `json:"deploys"`
-	Envs         []EnvVarInput                  `json:"envs"`
-	BlueprintId  *uuid.UUID                     `json:"blueprintId"`
+	TeamId       uuid.UUID                      `json:"teamId,omitempty"`
+	GroupId      *uuid.UUID                     `json:"groupId,omitempty"`
+	GroupName    *string                        `json:"groupName,omitempty"`
+	SubGroupId   *uuid.UUID                     `json:"subGroupId,omitempty"`
+	SubGroupName *string                        `json:"subGroupName,omitempty"`
+	Name         string                         `json:"name,omitempty"`
+	Enabled      *bool                          `json:"enabled,omitempty"`
+	Workflow     *WorkflowDefinitionInput       `json:"workflow,omitempty"`
+	Build        *BuildDefinitionInput          `json:"build,omitempty"`
+	Jobs         []JobDefinitionInput           `json:"jobs,omitempty"`
+	Deploys      []DeploymentConfigurationInput `json:"deploys,omitempty"`
+	Envs         []EnvVarInput                  `json:"envs,omitempty"`
+	BlueprintId  *uuid.UUID                     `json:"blueprintId,omitempty"`
 }
 
 // GetTeamId returns CreateProjectInput.TeamId, and is useful for accessing the field via an interface.
@@ -3121,9 +3121,9 @@ func (v *CreateSubGroupCreateSubGroupGroup) GetId() uuid.UUID { return v.Id }
 func (v *CreateSubGroupCreateSubGroupGroup) GetName() string { return v.Name }
 
 type CreateSubGroupInput struct {
-	GroupId uuid.UUID     `json:"groupId"`
-	Name    string        `json:"name"`
-	Envs    []EnvVarInput `json:"envs"`
+	GroupId uuid.UUID     `json:"groupId,omitempty"`
+	Name    string        `json:"name,omitempty"`
+	Envs    []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetGroupId returns CreateSubGroupInput.GroupId, and is useful for accessing the field via an interface.
@@ -3146,8 +3146,8 @@ func (v *CreateSubGroupResponse) GetCreateSubGroup() CreateSubGroupCreateSubGrou
 }
 
 type CreateTriggerInput struct {
-	Definition TriggerDefinitionInput `json:"definition"`
-	ParentId   uuid.UUID              `json:"parentId"`
+	Definition TriggerDefinitionInput `json:"definition,omitempty"`
+	ParentId   uuid.UUID              `json:"parentId,omitempty"`
 }
 
 // GetDefinition returns CreateTriggerInput.Definition, and is useful for accessing the field via an interface.
@@ -3213,7 +3213,7 @@ func (v *CreateWorkflowTriggerResponse) GetCreateTrigger() CreateWorkflowTrigger
 }
 
 type CronJobEventTriggerConfigurationInput struct {
-	Expression *string `json:"expression"`
+	Expression *string `json:"expression,omitempty"`
 }
 
 // GetExpression returns CronJobEventTriggerConfigurationInput.Expression, and is useful for accessing the field via an interface.
@@ -3458,7 +3458,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGene
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar includes the requested fields of the GraphQL type EnvVar.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar struct {
-	Id        uuid.UUID                                                                                                                    `json:"id"`
+	Id        string                                                                                                                       `json:"id"`
 	Name      string                                                                                                                       `json:"name"`
 	Value     string                                                                                                                       `json:"value"`
 	Visible   bool                                                                                                                         `json:"visible"`
@@ -3469,7 +3469,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGenerato
 }
 
 // GetId returns DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar.Id, and is useful for accessing the field via an interface.
-func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar) GetId() uuid.UUID {
+func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar) GetId() string {
 	return v.Id
 }
 
@@ -3598,7 +3598,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRu
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar includes the requested fields of the GraphQL type EnvVar.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar struct {
-	Id        uuid.UUID                                                                                                                              `json:"id"`
+	Id        string                                                                                                                                 `json:"id"`
 	Name      string                                                                                                                                 `json:"name"`
 	Value     string                                                                                                                                 `json:"value"`
 	Visible   bool                                                                                                                                   `json:"visible"`
@@ -3609,7 +3609,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGen
 }
 
 // GetId returns DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar.Id, and is useful for accessing the field via an interface.
-func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar) GetId() uuid.UUID {
+func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar) GetId() string {
 	return v.Id
 }
 
@@ -4312,7 +4312,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar struct {
-	Id        uuid.UUID                                                                                                                         `json:"id"`
+	Id        string                                                                                                                            `json:"id"`
 	Name      string                                                                                                                            `json:"name"`
 	Value     string                                                                                                                            `json:"value"`
 	Visible   bool                                                                                                                              `json:"visible"`
@@ -4323,7 +4323,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGene
 }
 
 // GetId returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar.Id, and is useful for accessing the field via an interface.
-func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar) GetId() uuid.UUID {
+func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar) GetId() string {
 	return v.Id
 }
 
@@ -5257,8 +5257,8 @@ func (v *DeployVariableDetail) GetValueFloat() *float64 { return v.ValueFloat }
 func (v *DeployVariableDetail) GetValueJson() *string { return v.ValueJson }
 
 type DeploymentConfigurationAwsSamInput struct {
-	Target    *AwsSamTargetConfigurationInput    `json:"target"`
-	Generator *AwsSamGeneratorConfigurationInput `json:"generator"`
+	Target    *AwsSamTargetConfigurationInput    `json:"target,omitempty"`
+	Generator *AwsSamGeneratorConfigurationInput `json:"generator,omitempty"`
 }
 
 // GetTarget returns DeploymentConfigurationAwsSamInput.Target, and is useful for accessing the field via an interface.
@@ -5272,8 +5272,8 @@ func (v *DeploymentConfigurationAwsSamInput) GetGenerator() *AwsSamGeneratorConf
 }
 
 type DeploymentConfigurationGcpCloudRunInput struct {
-	Target    *GcpCloudRunTargetConfigurationInput    `json:"target"`
-	Generator *GcpCloudRunGeneratorConfigurationInput `json:"generator"`
+	Target    *GcpCloudRunTargetConfigurationInput    `json:"target,omitempty"`
+	Generator *GcpCloudRunGeneratorConfigurationInput `json:"generator,omitempty"`
 }
 
 // GetTarget returns DeploymentConfigurationGcpCloudRunInput.Target, and is useful for accessing the field via an interface.
@@ -5287,14 +5287,14 @@ func (v *DeploymentConfigurationGcpCloudRunInput) GetGenerator() *GcpCloudRunGen
 }
 
 type DeploymentConfigurationInput struct {
-	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps"`
-	RequirePlanApproval  *bool                                       `json:"requirePlanApproval"`
-	Variables            []BlueprintVariableInput                    `json:"variables"`
-	Kubernetes           *DeploymentConfigurationKubernetesInput     `json:"kubernetes"`
-	Helm                 *DeploymentConfigurationKubernetesHelmInput `json:"helm"`
-	Terraform            *DeploymentConfigurationTerraformInput      `json:"terraform"`
-	AwsSam               *DeploymentConfigurationAwsSamInput         `json:"awsSam"`
-	GcpCloudRun          *DeploymentConfigurationGcpCloudRunInput    `json:"gcpCloudRun"`
+	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps,omitempty"`
+	RequirePlanApproval  *bool                                       `json:"requirePlanApproval,omitempty"`
+	Variables            []BlueprintVariableInput                    `json:"variables,omitempty"`
+	Kubernetes           *DeploymentConfigurationKubernetesInput     `json:"kubernetes,omitempty"`
+	Helm                 *DeploymentConfigurationKubernetesHelmInput `json:"helm,omitempty"`
+	Terraform            *DeploymentConfigurationTerraformInput      `json:"terraform,omitempty"`
+	AwsSam               *DeploymentConfigurationAwsSamInput         `json:"awsSam,omitempty"`
+	GcpCloudRun          *DeploymentConfigurationGcpCloudRunInput    `json:"gcpCloudRun,omitempty"`
 }
 
 // GetDefaultWorkflowSteps returns DeploymentConfigurationInput.DefaultWorkflowSteps, and is useful for accessing the field via an interface.
@@ -5334,9 +5334,9 @@ func (v *DeploymentConfigurationInput) GetGcpCloudRun() *DeploymentConfiguration
 }
 
 type DeploymentConfigurationKubernetesHelmInput struct {
-	Blueprint *BlueprintHelmConfigurationInput `json:"blueprint"`
-	Target    *HelmTargetConfigurationInput    `json:"target"`
-	Values    *string                          `json:"values"`
+	Blueprint *BlueprintHelmConfigurationInput `json:"blueprint,omitempty"`
+	Target    *HelmTargetConfigurationInput    `json:"target,omitempty"`
+	Values    *string                          `json:"values,omitempty"`
 }
 
 // GetBlueprint returns DeploymentConfigurationKubernetesHelmInput.Blueprint, and is useful for accessing the field via an interface.
@@ -5353,9 +5353,9 @@ func (v *DeploymentConfigurationKubernetesHelmInput) GetTarget() *HelmTargetConf
 func (v *DeploymentConfigurationKubernetesHelmInput) GetValues() *string { return v.Values }
 
 type DeploymentConfigurationKubernetesInput struct {
-	Blueprint *BlueprintManifestConfigurationInput   `json:"blueprint"`
-	Target    *ManifestTargetConfigurationInput      `json:"target"`
-	Generator *KubernetesGeneratorConfigurationInput `json:"generator"`
+	Blueprint *BlueprintManifestConfigurationInput   `json:"blueprint,omitempty"`
+	Target    *ManifestTargetConfigurationInput      `json:"target,omitempty"`
+	Generator *KubernetesGeneratorConfigurationInput `json:"generator,omitempty"`
 }
 
 // GetBlueprint returns DeploymentConfigurationKubernetesInput.Blueprint, and is useful for accessing the field via an interface.
@@ -5374,8 +5374,8 @@ func (v *DeploymentConfigurationKubernetesInput) GetGenerator() *KubernetesGener
 }
 
 type DeploymentConfigurationTerraformInput struct {
-	Blueprint *BlueprintTerraformConfigurationInput `json:"blueprint"`
-	Target    *TerraformTargetConfigurationInput    `json:"target"`
+	Blueprint *BlueprintTerraformConfigurationInput `json:"blueprint,omitempty"`
+	Target    *TerraformTargetConfigurationInput    `json:"target,omitempty"`
 }
 
 // GetBlueprint returns DeploymentConfigurationTerraformInput.Blueprint, and is useful for accessing the field via an interface.
@@ -5447,11 +5447,11 @@ func (v *DuplicateProjectDuplicateProjectSubGroup) GetId() uuid.UUID { return v.
 func (v *DuplicateProjectDuplicateProjectSubGroup) GetName() string { return v.Name }
 
 type DuplicateProjectInput struct {
-	GroupId      *uuid.UUID `json:"groupId"`
-	GroupName    *string    `json:"groupName"`
-	SubGroupId   *uuid.UUID `json:"subGroupId"`
-	SubGroupName *string    `json:"subGroupName"`
-	Name         string     `json:"name"`
+	GroupId      *uuid.UUID `json:"groupId,omitempty"`
+	GroupName    *string    `json:"groupName,omitempty"`
+	SubGroupId   *uuid.UUID `json:"subGroupId,omitempty"`
+	SubGroupName *string    `json:"subGroupName,omitempty"`
+	Name         string     `json:"name,omitempty"`
 }
 
 // GetGroupId returns DuplicateProjectInput.GroupId, and is useful for accessing the field via an interface.
@@ -5494,11 +5494,11 @@ func (v *EjectClusterComponentEjectClusterComponent) GetStatus() ClusterComponen
 }
 
 type EjectClusterComponentInput struct {
-	Name         string               `json:"name"`
-	Type         ClusterComponentType `json:"type"`
-	GroupName    string               `json:"groupName"`
-	SubGroupName string               `json:"subGroupName"`
-	ProjectName  string               `json:"projectName"`
+	Name         string               `json:"name,omitempty"`
+	Type         ClusterComponentType `json:"type,omitempty"`
+	GroupName    string               `json:"groupName,omitempty"`
+	SubGroupName string               `json:"subGroupName,omitempty"`
+	ProjectName  string               `json:"projectName,omitempty"`
 }
 
 // GetName returns EjectClusterComponentInput.Name, and is useful for accessing the field via an interface.
@@ -5527,9 +5527,9 @@ func (v *EjectClusterComponentResponse) GetEjectClusterComponent() EjectClusterC
 }
 
 type EnvVarInput struct {
-	Name   string `json:"name"`
-	Value  string `json:"value"`
-	Sealed *bool  `json:"sealed"`
+	Name   string `json:"name,omitempty"`
+	Value  string `json:"value,omitempty"`
+	Sealed *bool  `json:"sealed,omitempty"`
 }
 
 // GetName returns EnvVarInput.Name, and is useful for accessing the field via an interface.
@@ -5553,8 +5553,8 @@ const (
 )
 
 type EventTriggerConfigurationInput struct {
-	Git     *GitEventTriggerConfigurationInput     `json:"git"`
-	CronJob *CronJobEventTriggerConfigurationInput `json:"cronJob"`
+	Git     *GitEventTriggerConfigurationInput     `json:"git,omitempty"`
+	CronJob *CronJobEventTriggerConfigurationInput `json:"cronJob,omitempty"`
 }
 
 // GetGit returns EventTriggerConfigurationInput.Git, and is useful for accessing the field via an interface.
@@ -5578,10 +5578,10 @@ const (
 )
 
 type GCSBucketBackendInput struct {
-	GcpAccountId uuid.UUID `json:"gcpAccountId"`
-	BucketName   string    `json:"bucketName"`
-	Location     *string   `json:"location"`
-	Prefix       *string   `json:"prefix"`
+	GcpAccountId uuid.UUID `json:"gcpAccountId,omitempty"`
+	BucketName   string    `json:"bucketName,omitempty"`
+	Location     *string   `json:"location,omitempty"`
+	Prefix       *string   `json:"prefix,omitempty"`
 }
 
 // GetGcpAccountId returns GCSBucketBackendInput.GcpAccountId, and is useful for accessing the field via an interface.
@@ -5597,12 +5597,12 @@ func (v *GCSBucketBackendInput) GetLocation() *string { return v.Location }
 func (v *GCSBucketBackendInput) GetPrefix() *string { return v.Prefix }
 
 type GcpCloudRunGeneratorConfigurationInput struct {
-	EnvVars         []*EnvVarInput `json:"envVars"`
-	Name            string         `json:"name"`
-	HttpPort        *string        `json:"httpPort"`
-	ContainerMemory *float64       `json:"containerMemory"`
-	ContainerCpu    *float64       `json:"containerCpu"`
-	RunCommand      *string        `json:"runCommand"`
+	EnvVars         []*EnvVarInput `json:"envVars,omitempty"`
+	Name            string         `json:"name,omitempty"`
+	HttpPort        *string        `json:"httpPort,omitempty"`
+	ContainerMemory *float64       `json:"containerMemory,omitempty"`
+	ContainerCpu    *float64       `json:"containerCpu,omitempty"`
+	RunCommand      *string        `json:"runCommand,omitempty"`
 }
 
 // GetEnvVars returns GcpCloudRunGeneratorConfigurationInput.EnvVars, and is useful for accessing the field via an interface.
@@ -5626,8 +5626,8 @@ func (v *GcpCloudRunGeneratorConfigurationInput) GetContainerCpu() *float64 { re
 func (v *GcpCloudRunGeneratorConfigurationInput) GetRunCommand() *string { return v.RunCommand }
 
 type GcpCloudRunTargetConfigurationInput struct {
-	GcpAccountId *uuid.UUID `json:"gcpAccountId"`
-	GcpRegion    *string    `json:"gcpRegion"`
+	GcpAccountId *uuid.UUID `json:"gcpAccountId,omitempty"`
+	GcpRegion    *string    `json:"gcpRegion,omitempty"`
 }
 
 // GetGcpAccountId returns GcpCloudRunTargetConfigurationInput.GcpAccountId, and is useful for accessing the field via an interface.
@@ -5662,11 +5662,11 @@ const (
 )
 
 type GitEventTriggerConfigurationInput struct {
-	RepoId             *string `json:"repoId"`
-	RepoBranchName     *string `json:"repoBranchName"`
-	RepoOwner          *string `json:"repoOwner"`
-	RepoName           *string `json:"repoName"`
-	GithubConnectionId *int    `json:"githubConnectionId"`
+	RepoId             *string `json:"repoId,omitempty"`
+	RepoBranchName     *string `json:"repoBranchName,omitempty"`
+	RepoOwner          *string `json:"repoOwner,omitempty"`
+	RepoName           *string `json:"repoName,omitempty"`
+	GithubConnectionId *int    `json:"githubConnectionId,omitempty"`
 }
 
 // GetRepoId returns GitEventTriggerConfigurationInput.RepoId, and is useful for accessing the field via an interface.
@@ -5685,10 +5685,10 @@ func (v *GitEventTriggerConfigurationInput) GetRepoName() *string { return v.Rep
 func (v *GitEventTriggerConfigurationInput) GetGithubConnectionId() *int { return v.GithubConnectionId }
 
 type GitSourceInput struct {
-	Repository  string                     `json:"repository"`
-	Ref         *string                    `json:"ref"`
-	Path        *string                    `json:"path"`
-	Integration *GitSourceIntegrationInput `json:"integration"`
+	Repository  string                     `json:"repository,omitempty"`
+	Ref         *string                    `json:"ref,omitempty"`
+	Path        *string                    `json:"path,omitempty"`
+	Integration *GitSourceIntegrationInput `json:"integration,omitempty"`
 }
 
 // GetRepository returns GitSourceInput.Repository, and is useful for accessing the field via an interface.
@@ -5704,10 +5704,10 @@ func (v *GitSourceInput) GetPath() *string { return v.Path }
 func (v *GitSourceInput) GetIntegration() *GitSourceIntegrationInput { return v.Integration }
 
 type GitSourceIntegrationInput struct {
-	GithubInstallationId   *int       `json:"githubInstallationId"`
-	GithubIntegrationId    *uuid.UUID `json:"githubIntegrationId"`
-	GitlabIntegrationId    *uuid.UUID `json:"gitlabIntegrationId"`
-	BitbucketIntegrationId *uuid.UUID `json:"bitbucketIntegrationId"`
+	GithubInstallationId   *int       `json:"githubInstallationId,omitempty"`
+	GithubIntegrationId    *uuid.UUID `json:"githubIntegrationId,omitempty"`
+	GitlabIntegrationId    *uuid.UUID `json:"gitlabIntegrationId,omitempty"`
+	BitbucketIntegrationId *uuid.UUID `json:"bitbucketIntegrationId,omitempty"`
 }
 
 // GetGithubInstallationId returns GitSourceIntegrationInput.GithubInstallationId, and is useful for accessing the field via an interface.
@@ -5725,8 +5725,8 @@ func (v *GitSourceIntegrationInput) GetBitbucketIntegrationId() *uuid.UUID {
 }
 
 type GroupFilter struct {
-	Id   *MultiEntityCriterion `json:"id"`
-	Name *StringCriterion      `json:"name"`
+	Id   *MultiEntityCriterion `json:"id,omitempty"`
+	Name *StringCriterion      `json:"name,omitempty"`
 }
 
 // GetId returns GroupFilter.Id, and is useful for accessing the field via an interface.
@@ -5884,9 +5884,9 @@ func (v *GroupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar) GetName() string { 
 func (v *GroupTeamGroupsGroupConnectionNodesGroupEnvsEnvVar) GetValue() string { return v.Value }
 
 type GroupsInput struct {
-	Sort   *SortInput   `json:"sort"`
-	Page   *PageInput   `json:"page"`
-	Filter *GroupFilter `json:"filter"`
+	Sort   *SortInput   `json:"sort,omitempty"`
+	Page   *PageInput   `json:"page,omitempty"`
+	Filter *GroupFilter `json:"filter,omitempty"`
 }
 
 // GetSort returns GroupsInput.Sort, and is useful for accessing the field via an interface.
@@ -6053,9 +6053,9 @@ func (v *GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup
 }
 
 type HTTPProbeInput struct {
-	Host string `json:"host"`
-	Port string `json:"port"`
-	Path string `json:"path"`
+	Host string `json:"host,omitempty"`
+	Port string `json:"port,omitempty"`
+	Path string `json:"path,omitempty"`
 }
 
 // GetHost returns HTTPProbeInput.Host, and is useful for accessing the field via an interface.
@@ -6068,9 +6068,9 @@ func (v *HTTPProbeInput) GetPort() string { return v.Port }
 func (v *HTTPProbeInput) GetPath() string { return v.Path }
 
 type HelmRepositorySourceInput struct {
-	RepositoryUrl string  `json:"repositoryUrl"`
-	Chart         string  `json:"chart"`
-	Version       *string `json:"version"`
+	RepositoryUrl string  `json:"repositoryUrl,omitempty"`
+	Chart         string  `json:"chart,omitempty"`
+	Version       *string `json:"version,omitempty"`
 }
 
 // GetRepositoryUrl returns HelmRepositorySourceInput.RepositoryUrl, and is useful for accessing the field via an interface.
@@ -6083,9 +6083,9 @@ func (v *HelmRepositorySourceInput) GetChart() string { return v.Chart }
 func (v *HelmRepositorySourceInput) GetVersion() *string { return v.Version }
 
 type HelmTargetConfigurationInput struct {
-	ClusterId   uuid.UUID `json:"clusterId"`
-	Namespace   *string   `json:"namespace"`
-	ReleaseName *string   `json:"releaseName"`
+	ClusterId   uuid.UUID `json:"clusterId,omitempty"`
+	Namespace   *string   `json:"namespace,omitempty"`
+	ReleaseName *string   `json:"releaseName,omitempty"`
 }
 
 // GetClusterId returns HelmTargetConfigurationInput.ClusterId, and is useful for accessing the field via an interface.
@@ -6156,46 +6156,46 @@ func (v *InsightsClustersMetricResponse) GetInsights() *InsightsClustersMetricIn
 }
 
 type JobDefinitionInput struct {
-	ContainerRegistry    *ContainerRegistrySourceInput `json:"containerRegistry"`
-	ClusterId            *string                       `json:"clusterId"`
-	JobName              *string                       `json:"jobName"`
-	JobNamespace         *string                       `json:"jobNamespace"`
-	DockerEntrypoint     []*string                     `json:"dockerEntrypoint"`
-	DockerCommand        []*string                     `json:"dockerCommand"`
-	EnvVars              []*EnvVarInput                `json:"envVars"`
-	Parallelism          *int                          `json:"parallelism"`
-	TimeoutSeconds       *int                          `json:"timeoutSeconds"`
-	AppGeneratorVersion  *string                       `json:"appGeneratorVersion"`
-	BranchName           *string                       `json:"branchName"`
-	ProductionBranchName *string                       `json:"productionBranchName"`
-	CpuRequest           *string                       `json:"cpuRequest"`
-	MemoryRequest        *string                       `json:"memoryRequest"`
-	EphemeralStorage     *string                       `json:"ephemeralStorage"`
-	Dedicated            *bool                         `json:"dedicated"`
-	GpuRequest           *string                       `json:"gpuRequest"`
-	GpuType              *string                       `json:"gpuType"`
-	TpuType              *string                       `json:"tpuType"`
-	TpuTfVersion         *string                       `json:"tpuTfVersion"`
-	TpuCores             *int                          `json:"tpuCores"`
-	StaticIp             *bool                         `json:"staticIp"`
-	HostNetwork          *bool                         `json:"hostNetwork"`
-	Volumes              []*VolumeSpecInput            `json:"volumes"`
-	SecretMounts         []*SecretMountDataInput       `json:"secretMounts"`
-	LogShipperType       *LogShipperType               `json:"logShipperType"`
-	BetterstackToken     *string                       `json:"betterstackToken"`
-	DatadogApmEnabled    *bool                         `json:"datadogApmEnabled"`
-	DatadogHost          *string                       `json:"datadogHost"`
-	DatadogKey           *string                       `json:"datadogKey"`
-	LogDnaKey            *string                       `json:"logDnaKey"`
-	LogzToken            *string                       `json:"logzToken"`
-	LogzUrl              *string                       `json:"logzUrl"`
-	SyslogConfig         *string                       `json:"syslogConfig"`
-	AwsIamRole           *string                       `json:"awsIamRole"`
-	GcpServiceAccount    *string                       `json:"gcpServiceAccount"`
-	ServiceAccountName   *string                       `json:"serviceAccountName"`
-	Annotations          *map[string]string            `json:"annotations"`
-	NodeSelector         *map[string]string            `json:"nodeSelector"`
-	PodSpecPatch         *string                       `json:"podSpecPatch"`
+	ContainerRegistry    *ContainerRegistrySourceInput `json:"containerRegistry,omitempty"`
+	ClusterId            *string                       `json:"clusterId,omitempty"`
+	JobName              *string                       `json:"jobName,omitempty"`
+	JobNamespace         *string                       `json:"jobNamespace,omitempty"`
+	DockerEntrypoint     []*string                     `json:"dockerEntrypoint,omitempty"`
+	DockerCommand        []*string                     `json:"dockerCommand,omitempty"`
+	EnvVars              []*EnvVarInput                `json:"envVars,omitempty"`
+	Parallelism          *int                          `json:"parallelism,omitempty"`
+	TimeoutSeconds       *int                          `json:"timeoutSeconds,omitempty"`
+	AppGeneratorVersion  *string                       `json:"appGeneratorVersion,omitempty"`
+	BranchName           *string                       `json:"branchName,omitempty"`
+	ProductionBranchName *string                       `json:"productionBranchName,omitempty"`
+	CpuRequest           *string                       `json:"cpuRequest,omitempty"`
+	MemoryRequest        *string                       `json:"memoryRequest,omitempty"`
+	EphemeralStorage     *string                       `json:"ephemeralStorage,omitempty"`
+	Dedicated            *bool                         `json:"dedicated,omitempty"`
+	GpuRequest           *string                       `json:"gpuRequest,omitempty"`
+	GpuType              *string                       `json:"gpuType,omitempty"`
+	TpuType              *string                       `json:"tpuType,omitempty"`
+	TpuTfVersion         *string                       `json:"tpuTfVersion,omitempty"`
+	TpuCores             *int                          `json:"tpuCores,omitempty"`
+	StaticIp             *bool                         `json:"staticIp,omitempty"`
+	HostNetwork          *bool                         `json:"hostNetwork,omitempty"`
+	Volumes              []*VolumeSpecInput            `json:"volumes,omitempty"`
+	SecretMounts         []*SecretMountDataInput       `json:"secretMounts,omitempty"`
+	LogShipperType       *LogShipperType               `json:"logShipperType,omitempty"`
+	BetterstackToken     *string                       `json:"betterstackToken,omitempty"`
+	DatadogApmEnabled    *bool                         `json:"datadogApmEnabled,omitempty"`
+	DatadogHost          *string                       `json:"datadogHost,omitempty"`
+	DatadogKey           *string                       `json:"datadogKey,omitempty"`
+	LogDnaKey            *string                       `json:"logDnaKey,omitempty"`
+	LogzToken            *string                       `json:"logzToken,omitempty"`
+	LogzUrl              *string                       `json:"logzUrl,omitempty"`
+	SyslogConfig         *string                       `json:"syslogConfig,omitempty"`
+	AwsIamRole           *string                       `json:"awsIamRole,omitempty"`
+	GcpServiceAccount    *string                       `json:"gcpServiceAccount,omitempty"`
+	ServiceAccountName   *string                       `json:"serviceAccountName,omitempty"`
+	Annotations          *map[string]string            `json:"annotations,omitempty"`
+	NodeSelector         *map[string]string            `json:"nodeSelector,omitempty"`
+	PodSpecPatch         *string                       `json:"podSpecPatch,omitempty"`
 }
 
 // GetContainerRegistry returns JobDefinitionInput.ContainerRegistry, and is useful for accessing the field via an interface.
@@ -6957,14 +6957,14 @@ func (v *JobRunLogs) GetLogs() *JobRunLogsLogs { return v.Logs }
 
 // JobRunLogsLogs includes the requested fields of the GraphQL type Logs.
 type JobRunLogsLogs struct {
-	Id        uuid.UUID                       `json:"id"`
+	Id        string                          `json:"id"`
 	Completed bool                            `json:"completed"`
 	Expired   *bool                           `json:"expired"`
 	Entries   []JobRunLogsLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns JobRunLogsLogs.Id, and is useful for accessing the field via an interface.
-func (v *JobRunLogsLogs) GetId() uuid.UUID { return v.Id }
+func (v *JobRunLogsLogs) GetId() string { return v.Id }
 
 // GetCompleted returns JobRunLogsLogs.Completed, and is useful for accessing the field via an interface.
 func (v *JobRunLogsLogs) GetCompleted() bool { return v.Completed }
@@ -7084,54 +7084,54 @@ const (
 )
 
 type KubernetesGeneratorConfigurationInput struct {
-	ContainerRegistrySource       *ContainerRegistrySourceInput `json:"containerRegistrySource"`
-	AppId                         string                        `json:"appId"`
-	BranchName                    string                        `json:"branchName"`
-	ProductionBranchName          string                        `json:"productionBranchName"`
-	Envs                          []*EnvVarInput                `json:"envs"`
-	AppGeneratorVersion           string                        `json:"appGeneratorVersion"`
-	CpuRequest                    *string                       `json:"cpuRequest"`
-	MemoryRequest                 *string                       `json:"memoryRequest"`
-	EphemeralStorage              *string                       `json:"ephemeralStorage"`
-	Dedicated                     *bool                         `json:"dedicated"`
-	GpuRequest                    *string                       `json:"gpuRequest"`
-	GpuType                       *string                       `json:"gpuType"`
-	TpuType                       *string                       `json:"tpuType"`
-	TpuTfVersion                  *string                       `json:"tpuTfVersion"`
-	TpuCores                      *int                          `json:"tpuCores"`
-	Replicas                      *int                          `json:"replicas"`
-	Autoscaling                   *AutoscalingDataInput         `json:"autoscaling"`
-	Ports                         []*PortDataInput              `json:"ports"`
-	StaticIp                      *bool                         `json:"staticIp"`
-	HostNetwork                   *bool                         `json:"hostNetwork"`
-	Endpoint                      *string                       `json:"endpoint"`
-	DefaultIngressDomain          *string                       `json:"defaultIngressDomain"`
-	Volumes                       []*VolumeSpecInput            `json:"volumes"`
-	SecretMounts                  []*SecretMountDataInput       `json:"secretMounts"`
-	DeployStrategy                *DeployStrategy               `json:"deployStrategy"`
-	PreStopSleep                  *int                          `json:"preStopSleep"`
-	TerminationGracePeriodSeconds *int                          `json:"terminationGracePeriodSeconds"`
-	StartupProbe                  *ProbeDataInput               `json:"startupProbe"`
-	LivenessProbe                 *ProbeDataInput               `json:"livenessProbe"`
-	ReadinessProbe                *ProbeDataInput               `json:"readinessProbe"`
-	LogShipperType                *LogShipperType               `json:"logShipperType"`
-	BetterstackToken              *string                       `json:"betterstackToken"`
-	DatadogApmEnabled             *bool                         `json:"datadogApmEnabled"`
-	DatadogHost                   *string                       `json:"datadogHost"`
-	DatadogKey                    *string                       `json:"datadogKey"`
-	LogDnaKey                     *string                       `json:"logDnaKey"`
-	LogzToken                     *string                       `json:"logzToken"`
-	LogzUrl                       *string                       `json:"logzUrl"`
-	SyslogConfig                  *string                       `json:"syslogConfig"`
-	DockerEntrypoint              []*string                     `json:"dockerEntrypoint"`
-	DockerCommand                 []*string                     `json:"dockerCommand"`
-	AwsIamRole                    *string                       `json:"awsIamRole"`
-	GcpServiceAccount             *string                       `json:"gcpServiceAccount"`
-	ServiceAccountName            *string                       `json:"serviceAccountName"`
-	Annotations                   *map[string]string            `json:"annotations"`
-	ServiceAnnotations            *map[string]string            `json:"serviceAnnotations"`
-	NodeSelector                  *map[string]string            `json:"nodeSelector"`
-	PodSpecPatch                  *string                       `json:"podSpecPatch"`
+	ContainerRegistrySource       *ContainerRegistrySourceInput `json:"containerRegistrySource,omitempty"`
+	AppId                         string                        `json:"appId,omitempty"`
+	BranchName                    string                        `json:"branchName,omitempty"`
+	ProductionBranchName          string                        `json:"productionBranchName,omitempty"`
+	Envs                          []*EnvVarInput                `json:"envs,omitempty"`
+	AppGeneratorVersion           string                        `json:"appGeneratorVersion,omitempty"`
+	CpuRequest                    *string                       `json:"cpuRequest,omitempty"`
+	MemoryRequest                 *string                       `json:"memoryRequest,omitempty"`
+	EphemeralStorage              *string                       `json:"ephemeralStorage,omitempty"`
+	Dedicated                     *bool                         `json:"dedicated,omitempty"`
+	GpuRequest                    *string                       `json:"gpuRequest,omitempty"`
+	GpuType                       *string                       `json:"gpuType,omitempty"`
+	TpuType                       *string                       `json:"tpuType,omitempty"`
+	TpuTfVersion                  *string                       `json:"tpuTfVersion,omitempty"`
+	TpuCores                      *int                          `json:"tpuCores,omitempty"`
+	Replicas                      *int                          `json:"replicas,omitempty"`
+	Autoscaling                   *AutoscalingDataInput         `json:"autoscaling,omitempty"`
+	Ports                         []*PortDataInput              `json:"ports,omitempty"`
+	StaticIp                      *bool                         `json:"staticIp,omitempty"`
+	HostNetwork                   *bool                         `json:"hostNetwork,omitempty"`
+	Endpoint                      *string                       `json:"endpoint,omitempty"`
+	DefaultIngressDomain          *string                       `json:"defaultIngressDomain,omitempty"`
+	Volumes                       []*VolumeSpecInput            `json:"volumes,omitempty"`
+	SecretMounts                  []*SecretMountDataInput       `json:"secretMounts,omitempty"`
+	DeployStrategy                *DeployStrategy               `json:"deployStrategy,omitempty"`
+	PreStopSleep                  *int                          `json:"preStopSleep,omitempty"`
+	TerminationGracePeriodSeconds *int                          `json:"terminationGracePeriodSeconds,omitempty"`
+	StartupProbe                  *ProbeDataInput               `json:"startupProbe,omitempty"`
+	LivenessProbe                 *ProbeDataInput               `json:"livenessProbe,omitempty"`
+	ReadinessProbe                *ProbeDataInput               `json:"readinessProbe,omitempty"`
+	LogShipperType                *LogShipperType               `json:"logShipperType,omitempty"`
+	BetterstackToken              *string                       `json:"betterstackToken,omitempty"`
+	DatadogApmEnabled             *bool                         `json:"datadogApmEnabled,omitempty"`
+	DatadogHost                   *string                       `json:"datadogHost,omitempty"`
+	DatadogKey                    *string                       `json:"datadogKey,omitempty"`
+	LogDnaKey                     *string                       `json:"logDnaKey,omitempty"`
+	LogzToken                     *string                       `json:"logzToken,omitempty"`
+	LogzUrl                       *string                       `json:"logzUrl,omitempty"`
+	SyslogConfig                  *string                       `json:"syslogConfig,omitempty"`
+	DockerEntrypoint              []*string                     `json:"dockerEntrypoint,omitempty"`
+	DockerCommand                 []*string                     `json:"dockerCommand,omitempty"`
+	AwsIamRole                    *string                       `json:"awsIamRole,omitempty"`
+	GcpServiceAccount             *string                       `json:"gcpServiceAccount,omitempty"`
+	ServiceAccountName            *string                       `json:"serviceAccountName,omitempty"`
+	Annotations                   *map[string]string            `json:"annotations,omitempty"`
+	ServiceAnnotations            *map[string]string            `json:"serviceAnnotations,omitempty"`
+	NodeSelector                  *map[string]string            `json:"nodeSelector,omitempty"`
+	PodSpecPatch                  *string                       `json:"podSpecPatch,omitempty"`
 }
 
 // GetContainerRegistrySource returns KubernetesGeneratorConfigurationInput.ContainerRegistrySource, and is useful for accessing the field via an interface.
@@ -7349,8 +7349,8 @@ const (
 )
 
 type ManifestTargetConfigurationInput struct {
-	ClusterId uuid.UUID `json:"clusterId"`
-	Namespace *string   `json:"namespace"`
+	ClusterId uuid.UUID `json:"clusterId,omitempty"`
+	Namespace *string   `json:"namespace,omitempty"`
 }
 
 // GetClusterId returns ManifestTargetConfigurationInput.ClusterId, and is useful for accessing the field via an interface.
@@ -7485,14 +7485,14 @@ const (
 )
 
 type MultiEntityCriterion struct {
-	Value []uuid.UUID `json:"value"`
+	Value []uuid.UUID `json:"value,omitempty"`
 }
 
 // GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
 func (v *MultiEntityCriterion) GetValue() []uuid.UUID { return v.Value }
 
 type ObservabilityConfigInput struct {
-	Selector *ObservabilityResourceSelectorInput `json:"selector"`
+	Selector *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
 // GetSelector returns ObservabilityConfigInput.Selector, and is useful for accessing the field via an interface.
@@ -7603,11 +7603,11 @@ func (v *ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityR
 }
 
 type ObservabilityResourceSelectorInput struct {
-	Type          ResourceType                              `json:"type"`
-	Namespace     *string                                   `json:"namespace"`
-	ResourceName  *string                                   `json:"resourceName"`
-	ContainerName *string                                   `json:"containerName"`
-	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels"`
+	Type          ResourceType                              `json:"type,omitempty"`
+	Namespace     *string                                   `json:"namespace,omitempty"`
+	ResourceName  *string                                   `json:"resourceName,omitempty"`
+	ContainerName *string                                   `json:"containerName,omitempty"`
+	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels,omitempty"`
 }
 
 // GetType returns ObservabilityResourceSelectorInput.Type, and is useful for accessing the field via an interface.
@@ -7628,8 +7628,8 @@ func (v *ObservabilityResourceSelectorInput) GetLabels() []ObservabilityResource
 }
 
 type ObservabilityResourceSelectorLabelInput struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 // GetName returns ObservabilityResourceSelectorLabelInput.Name, and is useful for accessing the field via an interface.
@@ -7659,10 +7659,10 @@ func (v *OutputEntryDetail) GetType() *VariableType { return v.Type }
 func (v *OutputEntryDetail) GetValue() *string { return v.Value }
 
 type PageInput struct {
-	First  *int    `json:"first"`
-	Last   *int    `json:"last"`
-	After  *string `json:"after"`
-	Before *string `json:"before"`
+	First  *int    `json:"first,omitempty"`
+	Last   *int    `json:"last,omitempty"`
+	After  *string `json:"after,omitempty"`
+	Before *string `json:"before,omitempty"`
 }
 
 // GetFirst returns PageInput.First, and is useful for accessing the field via an interface.
@@ -7678,12 +7678,12 @@ func (v *PageInput) GetAfter() *string { return v.After }
 func (v *PageInput) GetBefore() *string { return v.Before }
 
 type PortDataInput struct {
-	Port         string  `json:"port"`
-	Https        *bool   `json:"https"`
-	Grpc         *bool   `json:"grpc"`
-	Public       *bool   `json:"public"`
-	Protocol     *string `json:"protocol"`
-	LoadBalancer *bool   `json:"loadBalancer"`
+	Port         string  `json:"port,omitempty"`
+	Https        *bool   `json:"https,omitempty"`
+	Grpc         *bool   `json:"grpc,omitempty"`
+	Public       *bool   `json:"public,omitempty"`
+	Protocol     *string `json:"protocol,omitempty"`
+	LoadBalancer *bool   `json:"loadBalancer,omitempty"`
 }
 
 // GetPort returns PortDataInput.Port, and is useful for accessing the field via an interface.
@@ -7705,14 +7705,14 @@ func (v *PortDataInput) GetProtocol() *string { return v.Protocol }
 func (v *PortDataInput) GetLoadBalancer() *bool { return v.LoadBalancer }
 
 type ProbeDataInput struct {
-	Command             *string         `json:"command"`
-	Http                *HTTPProbeInput `json:"http"`
-	Tcp                 *TCPProbeInput  `json:"tcp"`
-	InitialDelaySeconds *int            `json:"initialDelaySeconds"`
-	PeriodSeconds       *int            `json:"periodSeconds"`
-	SuccessThreshold    *int            `json:"successThreshold"`
-	FailureThreshold    *int            `json:"failureThreshold"`
-	TimeoutSeconds      *int            `json:"timeoutSeconds"`
+	Command             *string         `json:"command,omitempty"`
+	Http                *HTTPProbeInput `json:"http,omitempty"`
+	Tcp                 *TCPProbeInput  `json:"tcp,omitempty"`
+	InitialDelaySeconds *int            `json:"initialDelaySeconds,omitempty"`
+	PeriodSeconds       *int            `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int            `json:"successThreshold,omitempty"`
+	FailureThreshold    *int            `json:"failureThreshold,omitempty"`
+	TimeoutSeconds      *int            `json:"timeoutSeconds,omitempty"`
 }
 
 // GetCommand returns ProbeDataInput.Command, and is useful for accessing the field via an interface.
@@ -9042,14 +9042,14 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNo
 
 // ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs includes the requested fields of the GraphQL type Logs.
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs struct {
-	Id        uuid.UUID                                                                                                        `json:"id"`
+	Id        string                                                                                                           `json:"id"`
 	Completed bool                                                                                                             `json:"completed"`
 	Expired   *bool                                                                                                            `json:"expired"`
 	Entries   []ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs.Id, and is useful for accessing the field via an interface.
-func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs) GetId() uuid.UUID {
+func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs) GetId() string {
 	return v.Id
 }
 
@@ -9821,12 +9821,12 @@ func (v *ProjectDetailTeamProject) __premarshalJSON() (*__premarshalProjectDetai
 // Available filters for querying Projects. The result set is the intersection of all specified filters.
 type ProjectFilter struct {
 	// Selects only the Projects having one of these ids.
-	Ids []uuid.UUID `json:"ids"`
+	Ids []uuid.UUID `json:"ids,omitempty"`
 	// Filter Projects by name, status, groupName and subGroupName
-	Status       *ProjectStatusCriterion `json:"status"`
-	Name         *StringCriterion        `json:"name"`
-	GroupName    *StringCriterion        `json:"groupName"`
-	SubGroupName *StringCriterion        `json:"subGroupName"`
+	Status       *ProjectStatusCriterion `json:"status,omitempty"`
+	Name         *StringCriterion        `json:"name,omitempty"`
+	GroupName    *StringCriterion        `json:"groupName,omitempty"`
+	SubGroupName *StringCriterion        `json:"subGroupName,omitempty"`
 }
 
 // GetIds returns ProjectFilter.Ids, and is useful for accessing the field via an interface.
@@ -10352,10 +10352,10 @@ func (v *ProjectLinkDetailProviderProject) __premarshalJSON() (*__premarshalProj
 }
 
 type ProjectLinkInput struct {
-	ProjectId  uuid.UUID       `json:"projectId"`
-	ProviderId uuid.UUID       `json:"providerId"`
-	LinkType   ProjectLinkType `json:"linkType"`
-	EnvPrefix  *string         `json:"envPrefix"`
+	ProjectId  uuid.UUID       `json:"projectId,omitempty"`
+	ProviderId uuid.UUID       `json:"providerId,omitempty"`
+	LinkType   ProjectLinkType `json:"linkType,omitempty"`
+	EnvPrefix  *string         `json:"envPrefix,omitempty"`
 }
 
 // GetProjectId returns ProjectLinkInput.ProjectId, and is useful for accessing the field via an interface.
@@ -11001,7 +11001,7 @@ const (
 )
 
 type ProjectStatusCriterion struct {
-	Value []string `json:"value"`
+	Value []string `json:"value,omitempty"`
 }
 
 // GetValue returns ProjectStatusCriterion.Value, and is useful for accessing the field via an interface.
@@ -11293,9 +11293,9 @@ func (v *ProjectsCountTeamProjectsProjectConnection) GetTotalCount() int { retur
 // Filter a ProjectConnection result set.
 type ProjectsInput struct {
 	// Sorting is applied before pagination.
-	Sort   *SortInput     `json:"sort"`
-	Page   *PageInput     `json:"page"`
-	Filter *ProjectFilter `json:"filter"`
+	Sort   *SortInput     `json:"sort,omitempty"`
+	Page   *PageInput     `json:"page,omitempty"`
+	Filter *ProjectFilter `json:"filter,omitempty"`
 }
 
 // GetSort returns ProjectsInput.Sort, and is useful for accessing the field via an interface.
@@ -11800,14 +11800,14 @@ func (v *ResourceLogsEndpointResource) GetStatus() *string { return v.Status }
 
 // ResourceLogsLogs includes the requested fields of the GraphQL type Logs.
 type ResourceLogsLogs struct {
-	Id        uuid.UUID                         `json:"id"`
+	Id        string                            `json:"id"`
 	Completed bool                              `json:"completed"`
 	Expired   *bool                             `json:"expired"`
 	Entries   []ResourceLogsLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns ResourceLogsLogs.Id, and is useful for accessing the field via an interface.
-func (v *ResourceLogsLogs) GetId() uuid.UUID { return v.Id }
+func (v *ResourceLogsLogs) GetId() string { return v.Id }
 
 // GetCompleted returns ResourceLogsLogs.Completed, and is useful for accessing the field via an interface.
 func (v *ResourceLogsLogs) GetCompleted() bool { return v.Completed }
@@ -13555,10 +13555,10 @@ func (v *RevisionDetailV1VultrAccountConfiguration) GetRevisionMetadata() Revisi
 }
 
 type S3BucketBackendInput struct {
-	AwsAccountId uuid.UUID `json:"awsAccountId"`
-	BucketName   string    `json:"bucketName"`
-	Region       string    `json:"region"`
-	Key          *string   `json:"key"`
+	AwsAccountId uuid.UUID `json:"awsAccountId,omitempty"`
+	BucketName   string    `json:"bucketName,omitempty"`
+	Region       string    `json:"region,omitempty"`
+	Key          *string   `json:"key,omitempty"`
 }
 
 // GetAwsAccountId returns S3BucketBackendInput.AwsAccountId, and is useful for accessing the field via an interface.
@@ -13574,9 +13574,9 @@ func (v *S3BucketBackendInput) GetRegion() string { return v.Region }
 func (v *S3BucketBackendInput) GetKey() *string { return v.Key }
 
 type SecretMountDataInput struct {
-	SecretName string `json:"secretName"`
-	MountPath  string `json:"mountPath"`
-	ReadOnly   *bool  `json:"readOnly"`
+	SecretName string `json:"secretName,omitempty"`
+	MountPath  string `json:"mountPath,omitempty"`
+	ReadOnly   *bool  `json:"readOnly,omitempty"`
 }
 
 // GetSecretName returns SecretMountDataInput.SecretName, and is useful for accessing the field via an interface.
@@ -13596,8 +13596,8 @@ const (
 )
 
 type SortInput struct {
-	Direction *SortDirection `json:"direction"`
-	Field     *string        `json:"field"`
+	Direction *SortDirection `json:"direction,omitempty"`
+	Field     *string        `json:"field,omitempty"`
 }
 
 // GetDirection returns SortInput.Direction, and is useful for accessing the field via an interface.
@@ -13607,10 +13607,10 @@ func (v *SortInput) GetDirection() *SortDirection { return v.Direction }
 func (v *SortInput) GetField() *string { return v.Field }
 
 type SourceInput struct {
-	Git               *GitSourceInput               `json:"git"`
-	TerraformModule   *TerraformModuleSourceInput   `json:"terraformModule"`
-	HelmRepository    *HelmRepositorySourceInput    `json:"helmRepository"`
-	ContainerRegistry *ContainerRegistrySourceInput `json:"containerRegistry"`
+	Git               *GitSourceInput               `json:"git,omitempty"`
+	TerraformModule   *TerraformModuleSourceInput   `json:"terraformModule,omitempty"`
+	HelmRepository    *HelmRepositorySourceInput    `json:"helmRepository,omitempty"`
+	ContainerRegistry *ContainerRegistrySourceInput `json:"containerRegistry,omitempty"`
 }
 
 // GetGit returns SourceInput.Git, and is useful for accessing the field via an interface.
@@ -13628,8 +13628,8 @@ func (v *SourceInput) GetContainerRegistry() *ContainerRegistrySourceInput {
 }
 
 type StringCriterion struct {
-	Value    *string                      `json:"value"`
-	Operator *FilterCriterionOperatorType `json:"operator"`
+	Value    *string                      `json:"value,omitempty"`
+	Operator *FilterCriterionOperatorType `json:"operator,omitempty"`
 }
 
 // GetValue returns StringCriterion.Value, and is useful for accessing the field via an interface.
@@ -13751,8 +13751,8 @@ type SubmitWorkflowRunSubmitWorkflowWorkflowRun struct {
 func (v *SubmitWorkflowRunSubmitWorkflowWorkflowRun) GetId() uuid.UUID { return v.Id }
 
 type TCPProbeInput struct {
-	Host string `json:"host"`
-	Port string `json:"port"`
+	Host string `json:"host,omitempty"`
+	Port string `json:"port,omitempty"`
 }
 
 // GetHost returns TCPProbeInput.Host, and is useful for accessing the field via an interface.
@@ -13791,9 +13791,9 @@ func (v *TeamTeam) GetName() string { return v.Name }
 
 // See TerraformAutomaticOutputConfiguration.
 type TerraformAutomaticOutputConfigurationInput struct {
-	Disabled  *bool    `json:"disabled"`
-	Sensitive *bool    `json:"sensitive"`
-	Excluded  []string `json:"excluded"`
+	Disabled  *bool    `json:"disabled,omitempty"`
+	Sensitive *bool    `json:"sensitive,omitempty"`
+	Excluded  []string `json:"excluded,omitempty"`
 }
 
 // GetDisabled returns TerraformAutomaticOutputConfigurationInput.Disabled, and is useful for accessing the field via an interface.
@@ -13806,9 +13806,9 @@ func (v *TerraformAutomaticOutputConfigurationInput) GetSensitive() *bool { retu
 func (v *TerraformAutomaticOutputConfigurationInput) GetExcluded() []string { return v.Excluded }
 
 type TerraformModuleSourceInput struct {
-	Source      string                                 `json:"source"`
-	Version     *string                                `json:"version"`
-	Integration *TerraformModuleSourceIntegrationInput `json:"integration"`
+	Source      string                                 `json:"source,omitempty"`
+	Version     *string                                `json:"version,omitempty"`
+	Integration *TerraformModuleSourceIntegrationInput `json:"integration,omitempty"`
 }
 
 // GetSource returns TerraformModuleSourceInput.Source, and is useful for accessing the field via an interface.
@@ -13823,7 +13823,7 @@ func (v *TerraformModuleSourceInput) GetIntegration() *TerraformModuleSourceInte
 }
 
 type TerraformModuleSourceIntegrationInput struct {
-	Git *GitSourceIntegrationInput `json:"git"`
+	Git *GitSourceIntegrationInput `json:"git,omitempty"`
 }
 
 // GetGit returns TerraformModuleSourceIntegrationInput.Git, and is useful for accessing the field via an interface.
@@ -13831,8 +13831,8 @@ func (v *TerraformModuleSourceIntegrationInput) GetGit() *GitSourceIntegrationIn
 
 // See TerraformOutputConfiguration.
 type TerraformOutputConfigurationInput struct {
-	Automatic     *TerraformAutomaticOutputConfigurationInput `json:"automatic"`
-	Customization *string                                     `json:"customization"`
+	Automatic     *TerraformAutomaticOutputConfigurationInput `json:"automatic,omitempty"`
+	Customization *string                                     `json:"customization,omitempty"`
 }
 
 // GetAutomatic returns TerraformOutputConfigurationInput.Automatic, and is useful for accessing the field via an interface.
@@ -13845,13 +13845,13 @@ func (v *TerraformOutputConfigurationInput) GetCustomization() *string { return 
 
 type TerraformProviderInput struct {
 	// Zeet ID for a connected AWS Account
-	AwsAccountId *uuid.UUID `json:"awsAccountId"`
+	AwsAccountId *uuid.UUID `json:"awsAccountId,omitempty"`
 	// Zeet ID for a connected GCP Account
-	GcpAccountId *uuid.UUID `json:"gcpAccountId"`
+	GcpAccountId *uuid.UUID `json:"gcpAccountId,omitempty"`
 	// Zeet ID for a connected DigitalOcean Account
-	DoAccountId *uuid.UUID `json:"doAccountId"`
+	DoAccountId *uuid.UUID `json:"doAccountId,omitempty"`
 	// Region name, when applicable
-	Region *string `json:"region"`
+	Region *string `json:"region,omitempty"`
 }
 
 // GetAwsAccountId returns TerraformProviderInput.AwsAccountId, and is useful for accessing the field via an interface.
@@ -13867,8 +13867,8 @@ func (v *TerraformProviderInput) GetDoAccountId() *uuid.UUID { return v.DoAccoun
 func (v *TerraformProviderInput) GetRegion() *string { return v.Region }
 
 type TerraformStateBackendInput struct {
-	S3Bucket  *S3BucketBackendInput  `json:"s3Bucket"`
-	GcsBucket *GCSBucketBackendInput `json:"gcsBucket"`
+	S3Bucket  *S3BucketBackendInput  `json:"s3Bucket,omitempty"`
+	GcsBucket *GCSBucketBackendInput `json:"gcsBucket,omitempty"`
 }
 
 // GetS3Bucket returns TerraformStateBackendInput.S3Bucket, and is useful for accessing the field via an interface.
@@ -13878,9 +13878,9 @@ func (v *TerraformStateBackendInput) GetS3Bucket() *S3BucketBackendInput { retur
 func (v *TerraformStateBackendInput) GetGcsBucket() *GCSBucketBackendInput { return v.GcsBucket }
 
 type TerraformTargetConfigurationInput struct {
-	StateBackend TerraformStateBackendInput `json:"stateBackend"`
-	ModuleName   *string                    `json:"moduleName"`
-	Provider     TerraformProviderInput     `json:"provider"`
+	StateBackend TerraformStateBackendInput `json:"stateBackend,omitempty"`
+	ModuleName   *string                    `json:"moduleName,omitempty"`
+	Provider     TerraformProviderInput     `json:"provider,omitempty"`
 }
 
 // GetStateBackend returns TerraformTargetConfigurationInput.StateBackend, and is useful for accessing the field via an interface.
@@ -13901,8 +13901,8 @@ const (
 )
 
 type TriggerConfigurationInput struct {
-	Event  *EventTriggerConfigurationInput  `json:"event"`
-	Action *ActionTriggerConfigurationInput `json:"action"`
+	Event  *EventTriggerConfigurationInput  `json:"event,omitempty"`
+	Action *ActionTriggerConfigurationInput `json:"action,omitempty"`
 }
 
 // GetEvent returns TriggerConfigurationInput.Event, and is useful for accessing the field via an interface.
@@ -13912,9 +13912,9 @@ func (v *TriggerConfigurationInput) GetEvent() *EventTriggerConfigurationInput {
 func (v *TriggerConfigurationInput) GetAction() *ActionTriggerConfigurationInput { return v.Action }
 
 type TriggerDefinitionInput struct {
-	Action        TriggerActionType         `json:"action"`
-	Events        []TriggerEventType        `json:"events"`
-	Configuration TriggerConfigurationInput `json:"configuration"`
+	Action        TriggerActionType         `json:"action,omitempty"`
+	Events        []TriggerEventType        `json:"events,omitempty"`
+	Configuration TriggerConfigurationInput `json:"configuration,omitempty"`
 }
 
 // GetAction returns TriggerDefinitionInput.Action, and is useful for accessing the field via an interface.
@@ -13948,7 +13948,7 @@ type UnlinkProjectResponse struct {
 func (v *UnlinkProjectResponse) GetUnlinkProject() bool { return v.UnlinkProject }
 
 type UpdateDeployInput struct {
-	Configuration *DeploymentConfigurationInput `json:"configuration"`
+	Configuration *DeploymentConfigurationInput `json:"configuration,omitempty"`
 }
 
 // GetConfiguration returns UpdateDeployInput.Configuration, and is useful for accessing the field via an interface.
@@ -13971,9 +13971,9 @@ type UpdateDeployUpdateDeploy struct {
 func (v *UpdateDeployUpdateDeploy) GetId() uuid.UUID { return v.Id }
 
 type UpdateGroupInput struct {
-	Id   uuid.UUID     `json:"id"`
-	Name *string       `json:"name"`
-	Envs []EnvVarInput `json:"envs"`
+	Id   uuid.UUID     `json:"id,omitempty"`
+	Name *string       `json:"name,omitempty"`
+	Envs []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetId returns UpdateGroupInput.Id, and is useful for accessing the field via an interface.
@@ -14030,13 +14030,13 @@ func (v *UpdateGroupUpdateGroupEnvsEnvVar) GetName() string { return v.Name }
 func (v *UpdateGroupUpdateGroupEnvsEnvVar) GetValue() string { return v.Value }
 
 type UpdateProjectInput struct {
-	GroupId             *uuid.UUID                `json:"groupId"`
-	GroupName           *string                   `json:"groupName"`
-	SubGroupId          *uuid.UUID                `json:"subGroupId"`
-	SubGroupName        *string                   `json:"subGroupName"`
-	Name                *string                   `json:"name"`
-	Envs                []EnvVarInput             `json:"envs"`
-	ObservabilityConfig *ObservabilityConfigInput `json:"observabilityConfig"`
+	GroupId             *uuid.UUID                `json:"groupId,omitempty"`
+	GroupName           *string                   `json:"groupName,omitempty"`
+	SubGroupId          *uuid.UUID                `json:"subGroupId,omitempty"`
+	SubGroupName        *string                   `json:"subGroupName,omitempty"`
+	Name                *string                   `json:"name,omitempty"`
+	Envs                []EnvVarInput             `json:"envs,omitempty"`
+	ObservabilityConfig *ObservabilityConfigInput `json:"observabilityConfig,omitempty"`
 }
 
 // GetGroupId returns UpdateProjectInput.GroupId, and is useful for accessing the field via an interface.
@@ -14083,9 +14083,9 @@ func (v *UpdateProjectUpdateProject) GetId() uuid.UUID { return v.Id }
 func (v *UpdateProjectUpdateProject) GetName() string { return v.Name }
 
 type UpdateSubGroupInput struct {
-	Id   uuid.UUID     `json:"id"`
-	Name *string       `json:"name"`
-	Envs []EnvVarInput `json:"envs"`
+	Id   uuid.UUID     `json:"id,omitempty"`
+	Name *string       `json:"name,omitempty"`
+	Envs []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetId returns UpdateSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -14146,8 +14146,8 @@ func (v *UpdateSubGroupUpdateSubGroupEnvsEnvVar) GetName() string { return v.Nam
 func (v *UpdateSubGroupUpdateSubGroupEnvsEnvVar) GetValue() string { return v.Value }
 
 type UpdateTriggerInput struct {
-	TriggerId  uuid.UUID               `json:"triggerId"`
-	Definition *TriggerDefinitionInput `json:"definition"`
+	TriggerId  uuid.UUID               `json:"triggerId,omitempty"`
+	Definition *TriggerDefinitionInput `json:"definition,omitempty"`
 }
 
 // GetTriggerId returns UpdateTriggerInput.TriggerId, and is useful for accessing the field via an interface.
@@ -14157,8 +14157,8 @@ func (v *UpdateTriggerInput) GetTriggerId() uuid.UUID { return v.TriggerId }
 func (v *UpdateTriggerInput) GetDefinition() *TriggerDefinitionInput { return v.Definition }
 
 type UpdateWorkflowInput struct {
-	Name       *string                  `json:"name"`
-	Definition *WorkflowDefinitionInput `json:"definition"`
+	Name       *string                  `json:"name,omitempty"`
+	Definition *WorkflowDefinitionInput `json:"definition,omitempty"`
 }
 
 // GetName returns UpdateWorkflowInput.Name, and is useful for accessing the field via an interface.
@@ -14263,8 +14263,8 @@ const (
 )
 
 type VolumeSpecInput struct {
-	Size      int    `json:"size"`
-	MountPath string `json:"mountPath"`
+	Size      int    `json:"size,omitempty"`
+	MountPath string `json:"mountPath,omitempty"`
 }
 
 // GetSize returns VolumeSpecInput.Size, and is useful for accessing the field via an interface.
@@ -14274,8 +14274,8 @@ func (v *VolumeSpecInput) GetSize() int { return v.Size }
 func (v *VolumeSpecInput) GetMountPath() string { return v.MountPath }
 
 type WorkflowBranchDefinitionInput struct {
-	Name      string `json:"name"`
-	CommitSha string `json:"commitSha"`
+	Name      string `json:"name,omitempty"`
+	CommitSha string `json:"commitSha,omitempty"`
 }
 
 // GetName returns WorkflowBranchDefinitionInput.Name, and is useful for accessing the field via an interface.
@@ -14285,10 +14285,10 @@ func (v *WorkflowBranchDefinitionInput) GetName() string { return v.Name }
 func (v *WorkflowBranchDefinitionInput) GetCommitSha() string { return v.CommitSha }
 
 type WorkflowDefinitionInput struct {
-	Steps             []WorkflowStepDefinitionInput  `json:"steps"`
-	Source            *SourceInput                   `json:"source"`
-	Branch            *WorkflowBranchDefinitionInput `json:"branch"`
-	WorkflowClusterId *uuid.UUID                     `json:"workflowClusterId"`
+	Steps             []WorkflowStepDefinitionInput  `json:"steps,omitempty"`
+	Source            *SourceInput                   `json:"source,omitempty"`
+	Branch            *WorkflowBranchDefinitionInput `json:"branch,omitempty"`
+	WorkflowClusterId *uuid.UUID                     `json:"workflowClusterId,omitempty"`
 }
 
 // GetSteps returns WorkflowDefinitionInput.Steps, and is useful for accessing the field via an interface.
@@ -14558,9 +14558,9 @@ const (
 )
 
 type WorkflowRunDefinitionInput struct {
-	Steps  []WorkflowRunStepDefinitionInput `json:"steps"`
-	Source *SourceInput                     `json:"source"`
-	Branch *WorkflowBranchDefinitionInput   `json:"branch"`
+	Steps  []WorkflowRunStepDefinitionInput `json:"steps,omitempty"`
+	Source *SourceInput                     `json:"source,omitempty"`
+	Branch *WorkflowBranchDefinitionInput   `json:"branch,omitempty"`
 }
 
 // GetSteps returns WorkflowRunDefinitionInput.Steps, and is useful for accessing the field via an interface.
@@ -14965,16 +14965,14 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStep) GetLogs() 
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs includes the requested fields of the GraphQL type Logs.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs struct {
-	Id        uuid.UUID                                                                        `json:"id"`
+	Id        string                                                                           `json:"id"`
 	Completed bool                                                                             `json:"completed"`
 	Expired   *bool                                                                            `json:"expired"`
 	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs.Id, and is useful for accessing the field via an interface.
-func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs) GetId() uuid.UUID {
-	return v.Id
-}
+func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs) GetId() string { return v.Id }
 
 // GetCompleted returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs.Completed, and is useful for accessing the field via an interface.
 func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs) GetCompleted() bool {
@@ -15055,16 +15053,14 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStep) GetLogs() *W
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs includes the requested fields of the GraphQL type Logs.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs struct {
-	Id        uuid.UUID                                                                      `json:"id"`
+	Id        string                                                                         `json:"id"`
 	Completed bool                                                                           `json:"completed"`
 	Expired   *bool                                                                          `json:"expired"`
 	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
-func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs) GetId() uuid.UUID {
-	return v.Id
-}
+func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs) GetId() string { return v.Id }
 
 // GetCompleted returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs.Completed, and is useful for accessing the field via an interface.
 func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs) GetCompleted() bool {
@@ -18752,12 +18748,12 @@ const (
 )
 
 type WorkflowRunStepDefinitionInput struct {
-	Action         WorkflowStepActionType                   `json:"action"`
-	DependsOn      []int                                    `json:"dependsOn"`
-	Disabled       *bool                                    `json:"disabled"`
-	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule"`
-	SequenceNumber *int                                     `json:"sequenceNumber"`
-	Metadata       *WorkflowRunStepDefinitionMetadataInput  `json:"metadata"`
+	Action         WorkflowStepActionType                   `json:"action,omitempty"`
+	DependsOn      []int                                    `json:"dependsOn,omitempty"`
+	Disabled       *bool                                    `json:"disabled,omitempty"`
+	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
+	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
+	Metadata       *WorkflowRunStepDefinitionMetadataInput  `json:"metadata,omitempty"`
 }
 
 // GetAction returns WorkflowRunStepDefinitionInput.Action, and is useful for accessing the field via an interface.
@@ -18783,7 +18779,7 @@ func (v *WorkflowRunStepDefinitionInput) GetMetadata() *WorkflowRunStepDefinitio
 }
 
 type WorkflowRunStepDefinitionMetadataInput struct {
-	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps"`
+	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps,omitempty"`
 }
 
 // GetDeploySteps returns WorkflowRunStepDefinitionMetadataInput.DeploySteps, and is useful for accessing the field via an interface.
@@ -21965,14 +21961,14 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs includes the requested fields of the GraphQL type Logs.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs struct {
-	Id        uuid.UUID                                                                                                            `json:"id"`
+	Id        string                                                                                                               `json:"id"`
 	Completed bool                                                                                                                 `json:"completed"`
 	Expired   *bool                                                                                                                `json:"expired"`
 	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
-func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs) GetId() uuid.UUID {
+func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs) GetId() string {
 	return v.Id
 }
 
@@ -22343,14 +22339,14 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs includes the requested fields of the GraphQL type Logs.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs struct {
-	Id        uuid.UUID                                                                                                             `json:"id"`
+	Id        string                                                                                                                `json:"id"`
 	Completed bool                                                                                                                  `json:"completed"`
 	Expired   *bool                                                                                                                 `json:"expired"`
 	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs.Id, and is useful for accessing the field via an interface.
-func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs) GetId() uuid.UUID {
+func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs) GetId() string {
 	return v.Id
 }
 
@@ -25683,11 +25679,11 @@ const (
 )
 
 type WorkflowStepDefinitionInput struct {
-	Action         WorkflowStepActionType                   `json:"action"`
-	DependsOn      []int                                    `json:"dependsOn"`
-	Disabled       *bool                                    `json:"disabled"`
-	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule"`
-	SequenceNumber *int                                     `json:"sequenceNumber"`
+	Action         WorkflowStepActionType                   `json:"action,omitempty"`
+	DependsOn      []int                                    `json:"dependsOn,omitempty"`
+	Disabled       *bool                                    `json:"disabled,omitempty"`
+	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
+	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
 }
 
 // GetAction returns WorkflowStepDefinitionInput.Action, and is useful for accessing the field via an interface.
@@ -25708,9 +25704,9 @@ func (v *WorkflowStepDefinitionInput) GetMatchingRule() *WorkflowStepDefinitionM
 func (v *WorkflowStepDefinitionInput) GetSequenceNumber() *int { return v.SequenceNumber }
 
 type WorkflowStepDefinitionMatchingRuleInput struct {
-	Label      *string    `json:"label"`
-	EntityId   *uuid.UUID `json:"entityId"`
-	BranchName *string    `json:"branchName"`
+	Label      *string    `json:"label,omitempty"`
+	EntityId   *uuid.UUID `json:"entityId,omitempty"`
+	BranchName *string    `json:"branchName,omitempty"`
 }
 
 // GetLabel returns WorkflowStepDefinitionMatchingRuleInput.Label, and is useful for accessing the field via an interface.
@@ -25724,7 +25720,7 @@ func (v *WorkflowStepDefinitionMatchingRuleInput) GetBranchName() *string { retu
 
 // __abortWorkflowRunInput is used internally by genqlient
 type __abortWorkflowRunInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __abortWorkflowRunInput.Id, and is useful for accessing the field via an interface.
@@ -25732,8 +25728,8 @@ func (v *__abortWorkflowRunInput) GetId() uuid.UUID { return v.Id }
 
 // __approveWorkflowRunStepInput is used internally by genqlient
 type __approveWorkflowRunStepInput struct {
-	StepId    uuid.UUID `json:"stepId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	StepId    uuid.UUID `json:"stepId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetStepId returns __approveWorkflowRunStepInput.StepId, and is useful for accessing the field via an interface.
@@ -25744,7 +25740,7 @@ func (v *__approveWorkflowRunStepInput) GetProjectId() uuid.UUID { return v.Proj
 
 // __blueprintByIdInput is used internally by genqlient
 type __blueprintByIdInput struct {
-	BlueprintId uuid.UUID `json:"blueprintId"`
+	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
 }
 
 // GetBlueprintId returns __blueprintByIdInput.BlueprintId, and is useful for accessing the field via an interface.
@@ -25752,8 +25748,8 @@ func (v *__blueprintByIdInput) GetBlueprintId() uuid.UUID { return v.BlueprintId
 
 // __blueprintInput is used internally by genqlient
 type __blueprintInput struct {
-	TeamId      uuid.UUID `json:"teamId"`
-	BlueprintId uuid.UUID `json:"blueprintId"`
+	TeamId      uuid.UUID `json:"teamId,omitempty"`
+	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
 }
 
 // GetTeamId returns __blueprintInput.TeamId, and is useful for accessing the field via an interface.
@@ -25764,8 +25760,8 @@ func (v *__blueprintInput) GetBlueprintId() uuid.UUID { return v.BlueprintId }
 
 // __blueprintRevisionsInput is used internally by genqlient
 type __blueprintRevisionsInput struct {
-	TeamId      uuid.UUID `json:"teamId"`
-	BlueprintId uuid.UUID `json:"blueprintId"`
+	TeamId      uuid.UUID `json:"teamId,omitempty"`
+	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
 }
 
 // GetTeamId returns __blueprintRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25776,9 +25772,9 @@ func (v *__blueprintRevisionsInput) GetBlueprintId() uuid.UUID { return v.Bluepr
 
 // __buildArtifactsInput is used internally by genqlient
 type __buildArtifactsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	Page      PageInput `json:"page"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	Page      PageInput `json:"page,omitempty"`
 }
 
 // GetTeamId returns __buildArtifactsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25792,9 +25788,9 @@ func (v *__buildArtifactsInput) GetPage() PageInput { return v.Page }
 
 // __buildRunDetailInput is used internally by genqlient
 type __buildRunDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	RunId     uuid.UUID `json:"runId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	RunId     uuid.UUID `json:"runId,omitempty"`
 }
 
 // GetTeamId returns __buildRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -25808,9 +25804,9 @@ func (v *__buildRunDetailInput) GetRunId() uuid.UUID { return v.RunId }
 
 // __buildRunsInput is used internally by genqlient
 type __buildRunsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	Page      PageInput `json:"page"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	Page      PageInput `json:"page,omitempty"`
 }
 
 // GetTeamId returns __buildRunsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25824,8 +25820,8 @@ func (v *__buildRunsInput) GetPage() PageInput { return v.Page }
 
 // __cloudRevisionsInput is used internally by genqlient
 type __cloudRevisionsInput struct {
-	TeamId  uuid.UUID `json:"teamId"`
-	CloudId uuid.UUID `json:"cloudId"`
+	TeamId  uuid.UUID `json:"teamId,omitempty"`
+	CloudId uuid.UUID `json:"cloudId,omitempty"`
 }
 
 // GetTeamId returns __cloudRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25836,8 +25832,8 @@ func (v *__cloudRevisionsInput) GetCloudId() uuid.UUID { return v.CloudId }
 
 // __clusterDetailsInput is used internally by genqlient
 type __clusterDetailsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ClusterId uuid.UUID `json:"clusterId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ClusterId uuid.UUID `json:"clusterId,omitempty"`
 }
 
 // GetTeamId returns __clusterDetailsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25848,8 +25844,8 @@ func (v *__clusterDetailsInput) GetClusterId() uuid.UUID { return v.ClusterId }
 
 // __clusterRevisionsInput is used internally by genqlient
 type __clusterRevisionsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ClusterId uuid.UUID `json:"clusterId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ClusterId uuid.UUID `json:"clusterId,omitempty"`
 }
 
 // GetTeamId returns __clusterRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25860,8 +25856,8 @@ func (v *__clusterRevisionsInput) GetClusterId() uuid.UUID { return v.ClusterId 
 
 // __clusterStatusInput is used internally by genqlient
 type __clusterStatusInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ClusterId uuid.UUID `json:"clusterId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ClusterId uuid.UUID `json:"clusterId,omitempty"`
 }
 
 // GetTeamId returns __clusterStatusInput.TeamId, and is useful for accessing the field via an interface.
@@ -25872,7 +25868,7 @@ func (v *__clusterStatusInput) GetClusterId() uuid.UUID { return v.ClusterId }
 
 // __createBuildRunInput is used internally by genqlient
 type __createBuildRunInput struct {
-	BuildId uuid.UUID `json:"buildId"`
+	BuildId uuid.UUID `json:"buildId,omitempty"`
 }
 
 // GetBuildId returns __createBuildRunInput.BuildId, and is useful for accessing the field via an interface.
@@ -25880,7 +25876,7 @@ func (v *__createBuildRunInput) GetBuildId() uuid.UUID { return v.BuildId }
 
 // __createDeployRunInput is used internally by genqlient
 type __createDeployRunInput struct {
-	Input CreateDeployRunInput `json:"input"`
+	Input CreateDeployRunInput `json:"input,omitempty"`
 }
 
 // GetInput returns __createDeployRunInput.Input, and is useful for accessing the field via an interface.
@@ -25888,7 +25884,7 @@ func (v *__createDeployRunInput) GetInput() CreateDeployRunInput { return v.Inpu
 
 // __createGroupInput is used internally by genqlient
 type __createGroupInput struct {
-	Input CreateGroupInput `json:"input"`
+	Input CreateGroupInput `json:"input,omitempty"`
 }
 
 // GetInput returns __createGroupInput.Input, and is useful for accessing the field via an interface.
@@ -25896,7 +25892,7 @@ func (v *__createGroupInput) GetInput() CreateGroupInput { return v.Input }
 
 // __createProjectInput is used internally by genqlient
 type __createProjectInput struct {
-	Input CreateProjectInput `json:"input"`
+	Input CreateProjectInput `json:"input,omitempty"`
 }
 
 // GetInput returns __createProjectInput.Input, and is useful for accessing the field via an interface.
@@ -25904,7 +25900,7 @@ func (v *__createProjectInput) GetInput() CreateProjectInput { return v.Input }
 
 // __createSubGroupInput is used internally by genqlient
 type __createSubGroupInput struct {
-	Input CreateSubGroupInput `json:"input"`
+	Input CreateSubGroupInput `json:"input,omitempty"`
 }
 
 // GetInput returns __createSubGroupInput.Input, and is useful for accessing the field via an interface.
@@ -25912,8 +25908,8 @@ func (v *__createSubGroupInput) GetInput() CreateSubGroupInput { return v.Input 
 
 // __createUserPersonalAccessTokenInput is used internally by genqlient
 type __createUserPersonalAccessTokenInput struct {
-	UserId uuid.UUID `json:"userId"`
-	Name   string    `json:"name"`
+	UserId uuid.UUID `json:"userId,omitempty"`
+	Name   string    `json:"name,omitempty"`
 }
 
 // GetUserId returns __createUserPersonalAccessTokenInput.UserId, and is useful for accessing the field via an interface.
@@ -25924,7 +25920,7 @@ func (v *__createUserPersonalAccessTokenInput) GetName() string { return v.Name 
 
 // __createWorkflowTriggerInput is used internally by genqlient
 type __createWorkflowTriggerInput struct {
-	Input CreateTriggerInput `json:"input"`
+	Input CreateTriggerInput `json:"input,omitempty"`
 }
 
 // GetInput returns __createWorkflowTriggerInput.Input, and is useful for accessing the field via an interface.
@@ -25932,7 +25928,7 @@ func (v *__createWorkflowTriggerInput) GetInput() CreateTriggerInput { return v.
 
 // __deleteGroupInput is used internally by genqlient
 type __deleteGroupInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __deleteGroupInput.Id, and is useful for accessing the field via an interface.
@@ -25940,8 +25936,8 @@ func (v *__deleteGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteProjectAndResourcesInput is used internally by genqlient
 type __deleteProjectAndResourcesInput struct {
-	Id              uuid.UUID `json:"id"`
-	DeleteOnFailure *bool     `json:"deleteOnFailure"`
+	Id              uuid.UUID `json:"id,omitempty"`
+	DeleteOnFailure *bool     `json:"deleteOnFailure,omitempty"`
 }
 
 // GetId returns __deleteProjectAndResourcesInput.Id, and is useful for accessing the field via an interface.
@@ -25952,8 +25948,8 @@ func (v *__deleteProjectAndResourcesInput) GetDeleteOnFailure() *bool { return v
 
 // __deleteProjectInput is used internally by genqlient
 type __deleteProjectInput struct {
-	Id    uuid.UUID `json:"id"`
-	Force *bool     `json:"force"`
+	Id    uuid.UUID `json:"id,omitempty"`
+	Force *bool     `json:"force,omitempty"`
 }
 
 // GetId returns __deleteProjectInput.Id, and is useful for accessing the field via an interface.
@@ -25964,7 +25960,7 @@ func (v *__deleteProjectInput) GetForce() *bool { return v.Force }
 
 // __deleteProjectResourcesInput is used internally by genqlient
 type __deleteProjectResourcesInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __deleteProjectResourcesInput.Id, and is useful for accessing the field via an interface.
@@ -25972,7 +25968,7 @@ func (v *__deleteProjectResourcesInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteSubGroupInput is used internally by genqlient
 type __deleteSubGroupInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __deleteSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -25980,7 +25976,7 @@ func (v *__deleteSubGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteUserPersonalAccessTokenInput is used internally by genqlient
 type __deleteUserPersonalAccessTokenInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __deleteUserPersonalAccessTokenInput.Id, and is useful for accessing the field via an interface.
@@ -25988,7 +25984,7 @@ func (v *__deleteUserPersonalAccessTokenInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteWorkflowTriggerInput is used internally by genqlient
 type __deleteWorkflowTriggerInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __deleteWorkflowTriggerInput.Id, and is useful for accessing the field via an interface.
@@ -25996,8 +25992,8 @@ func (v *__deleteWorkflowTriggerInput) GetId() uuid.UUID { return v.Id }
 
 // __duplicateProjectInput is used internally by genqlient
 type __duplicateProjectInput struct {
-	Id    uuid.UUID             `json:"id"`
-	Input DuplicateProjectInput `json:"input"`
+	Id    uuid.UUID             `json:"id,omitempty"`
+	Input DuplicateProjectInput `json:"input,omitempty"`
 }
 
 // GetId returns __duplicateProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26008,8 +26004,8 @@ func (v *__duplicateProjectInput) GetInput() DuplicateProjectInput { return v.In
 
 // __ejectClusterComponentInput is used internally by genqlient
 type __ejectClusterComponentInput struct {
-	ClusterId uuid.UUID                  `json:"clusterId"`
-	Input     EjectClusterComponentInput `json:"input"`
+	ClusterId uuid.UUID                  `json:"clusterId,omitempty"`
+	Input     EjectClusterComponentInput `json:"input,omitempty"`
 }
 
 // GetClusterId returns __ejectClusterComponentInput.ClusterId, and is useful for accessing the field via an interface.
@@ -26020,7 +26016,7 @@ func (v *__ejectClusterComponentInput) GetInput() EjectClusterComponentInput { r
 
 // __generateDownloadableLogLinkForWorkflowRunStepInput is used internally by genqlient
 type __generateDownloadableLogLinkForWorkflowRunStepInput struct {
-	ActionStepId uuid.UUID `json:"actionStepId"`
+	ActionStepId uuid.UUID `json:"actionStepId,omitempty"`
 }
 
 // GetActionStepId returns __generateDownloadableLogLinkForWorkflowRunStepInput.ActionStepId, and is useful for accessing the field via an interface.
@@ -26030,8 +26026,8 @@ func (v *__generateDownloadableLogLinkForWorkflowRunStepInput) GetActionStepId()
 
 // __groupInput is used internally by genqlient
 type __groupInput struct {
-	TeamId uuid.UUID `json:"teamId"`
-	Id     uuid.UUID `json:"id"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
+	Id     uuid.UUID `json:"id,omitempty"`
 }
 
 // GetTeamId returns __groupInput.TeamId, and is useful for accessing the field via an interface.
@@ -26042,8 +26038,8 @@ func (v *__groupInput) GetId() uuid.UUID { return v.Id }
 
 // __groupSubGroupsInput is used internally by genqlient
 type __groupSubGroupsInput struct {
-	TeamId  uuid.UUID `json:"teamId"`
-	GroupId uuid.UUID `json:"groupId"`
+	TeamId  uuid.UUID `json:"teamId,omitempty"`
+	GroupId uuid.UUID `json:"groupId,omitempty"`
 }
 
 // GetTeamId returns __groupSubGroupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26054,8 +26050,8 @@ func (v *__groupSubGroupsInput) GetGroupId() uuid.UUID { return v.GroupId }
 
 // __groupsInput is used internally by genqlient
 type __groupsInput struct {
-	TeamId uuid.UUID   `json:"teamId"`
-	Input  GroupsInput `json:"input"`
+	TeamId uuid.UUID   `json:"teamId,omitempty"`
+	Input  GroupsInput `json:"input,omitempty"`
 }
 
 // GetTeamId returns __groupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26066,7 +26062,7 @@ func (v *__groupsInput) GetInput() GroupsInput { return v.Input }
 
 // __groupsWithSubgroupsInput is used internally by genqlient
 type __groupsWithSubgroupsInput struct {
-	TeamId uuid.UUID `json:"teamId"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetTeamId returns __groupsWithSubgroupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26074,7 +26070,7 @@ func (v *__groupsWithSubgroupsInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __insightsCloudsMetricInput is used internally by genqlient
 type __insightsCloudsMetricInput struct {
-	TeamId uuid.UUID `json:"teamId"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetTeamId returns __insightsCloudsMetricInput.TeamId, and is useful for accessing the field via an interface.
@@ -26082,7 +26078,7 @@ func (v *__insightsCloudsMetricInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __insightsClustersMetricInput is used internally by genqlient
 type __insightsClustersMetricInput struct {
-	TeamId uuid.UUID `json:"teamId"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetTeamId returns __insightsClustersMetricInput.TeamId, and is useful for accessing the field via an interface.
@@ -26090,8 +26086,8 @@ func (v *__insightsClustersMetricInput) GetTeamId() uuid.UUID { return v.TeamId 
 
 // __jobListInput is used internally by genqlient
 type __jobListInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __jobListInput.TeamId, and is useful for accessing the field via an interface.
@@ -26102,8 +26098,8 @@ func (v *__jobListInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __jobRunDetailInput is used internally by genqlient
 type __jobRunDetailInput struct {
-	Id     uuid.UUID `json:"id"`
-	TeamId uuid.UUID `json:"teamId"`
+	Id     uuid.UUID `json:"id,omitempty"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetId returns __jobRunDetailInput.Id, and is useful for accessing the field via an interface.
@@ -26114,9 +26110,9 @@ func (v *__jobRunDetailInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __jobRunListInput is used internally by genqlient
 type __jobRunListInput struct {
-	Id     uuid.UUID `json:"id"`
-	TeamId uuid.UUID `json:"teamId"`
-	Page   PageInput `json:"page"`
+	Id     uuid.UUID `json:"id,omitempty"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
+	Page   PageInput `json:"page,omitempty"`
 }
 
 // GetId returns __jobRunListInput.Id, and is useful for accessing the field via an interface.
@@ -26130,8 +26126,8 @@ func (v *__jobRunListInput) GetPage() PageInput { return v.Page }
 
 // __jobRunLogsInput is used internally by genqlient
 type __jobRunLogsInput struct {
-	Id     uuid.UUID `json:"id"`
-	TeamId uuid.UUID `json:"teamId"`
+	Id     uuid.UUID `json:"id,omitempty"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetId returns __jobRunLogsInput.Id, and is useful for accessing the field via an interface.
@@ -26142,7 +26138,7 @@ func (v *__jobRunLogsInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __linkProjectInput is used internally by genqlient
 type __linkProjectInput struct {
-	Input ProjectLinkInput `json:"input"`
+	Input ProjectLinkInput `json:"input,omitempty"`
 }
 
 // GetInput returns __linkProjectInput.Input, and is useful for accessing the field via an interface.
@@ -26150,8 +26146,8 @@ func (v *__linkProjectInput) GetInput() ProjectLinkInput { return v.Input }
 
 // __observabilityConfigInput is used internally by genqlient
 type __observabilityConfigInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __observabilityConfigInput.TeamId, and is useful for accessing the field via an interface.
@@ -26162,9 +26158,9 @@ func (v *__observabilityConfigInput) GetProjectId() uuid.UUID { return v.Project
 
 // __projectAvailableProvidersInput is used internally by genqlient
 type __projectAvailableProvidersInput struct {
-	TeamId    uuid.UUID       `json:"teamId"`
-	ProjectId uuid.UUID       `json:"projectId"`
-	LinkType  ProjectLinkType `json:"linkType"`
+	TeamId    uuid.UUID       `json:"teamId,omitempty"`
+	ProjectId uuid.UUID       `json:"projectId,omitempty"`
+	LinkType  ProjectLinkType `json:"linkType,omitempty"`
 }
 
 // GetTeamId returns __projectAvailableProvidersInput.TeamId, and is useful for accessing the field via an interface.
@@ -26178,8 +26174,8 @@ func (v *__projectAvailableProvidersInput) GetLinkType() ProjectLinkType { retur
 
 // __projectClustersInput is used internally by genqlient
 type __projectClustersInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectClustersInput.TeamId, and is useful for accessing the field via an interface.
@@ -26190,8 +26186,8 @@ func (v *__projectClustersInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectDeployDetailInput is used internally by genqlient
 type __projectDeployDetailInput struct {
-	TeamId   uuid.UUID `json:"teamId"`
-	DeployId uuid.UUID `json:"deployId"`
+	TeamId   uuid.UUID `json:"teamId,omitempty"`
+	DeployId uuid.UUID `json:"deployId,omitempty"`
 }
 
 // GetTeamId returns __projectDeployDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26202,9 +26198,9 @@ func (v *__projectDeployDetailInput) GetDeployId() uuid.UUID { return v.DeployId
 
 // __projectDeployRevisionsInput is used internally by genqlient
 type __projectDeployRevisionsInput struct {
-	TeamId    uuid.UUID  `json:"teamId"`
-	ProjectId uuid.UUID  `json:"projectId"`
-	Page      *PageInput `json:"page"`
+	TeamId    uuid.UUID  `json:"teamId,omitempty"`
+	ProjectId uuid.UUID  `json:"projectId,omitempty"`
+	Page      *PageInput `json:"page,omitempty"`
 }
 
 // GetTeamId returns __projectDeployRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26218,8 +26214,8 @@ func (v *__projectDeployRevisionsInput) GetPage() *PageInput { return v.Page }
 
 // __projectDeployRunDetailInput is used internally by genqlient
 type __projectDeployRunDetailInput struct {
-	TeamId      uuid.UUID `json:"teamId"`
-	DeployRunId uuid.UUID `json:"deployRunId"`
+	TeamId      uuid.UUID `json:"teamId,omitempty"`
+	DeployRunId uuid.UUID `json:"deployRunId,omitempty"`
 }
 
 // GetTeamId returns __projectDeployRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26230,8 +26226,8 @@ func (v *__projectDeployRunDetailInput) GetDeployRunId() uuid.UUID { return v.De
 
 // __projectDeploysInput is used internally by genqlient
 type __projectDeploysInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectDeploysInput.TeamId, and is useful for accessing the field via an interface.
@@ -26242,8 +26238,8 @@ func (v *__projectDeploysInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectDetailInput is used internally by genqlient
 type __projectDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26254,8 +26250,8 @@ func (v *__projectDetailInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectInfoInput is used internally by genqlient
 type __projectInfoInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectInfoInput.TeamId, and is useful for accessing the field via an interface.
@@ -26266,9 +26262,9 @@ func (v *__projectInfoInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectLinkedProjectsInput is used internally by genqlient
 type __projectLinkedProjectsInput struct {
-	TeamId    uuid.UUID       `json:"teamId"`
-	ProjectId uuid.UUID       `json:"projectId"`
-	LinkType  ProjectLinkType `json:"linkType"`
+	TeamId    uuid.UUID       `json:"teamId,omitempty"`
+	ProjectId uuid.UUID       `json:"projectId,omitempty"`
+	LinkType  ProjectLinkType `json:"linkType,omitempty"`
 }
 
 // GetTeamId returns __projectLinkedProjectsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26282,8 +26278,8 @@ func (v *__projectLinkedProjectsInput) GetLinkType() ProjectLinkType { return v.
 
 // __projectOutputInput is used internally by genqlient
 type __projectOutputInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectOutputInput.TeamId, and is useful for accessing the field via an interface.
@@ -26294,8 +26290,8 @@ func (v *__projectOutputInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectOutputsInput is used internally by genqlient
 type __projectOutputsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectOutputsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26306,8 +26302,8 @@ func (v *__projectOutputsInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectStatusOnlyInput is used internally by genqlient
 type __projectStatusOnlyInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __projectStatusOnlyInput.TeamId, and is useful for accessing the field via an interface.
@@ -26318,7 +26314,7 @@ func (v *__projectStatusOnlyInput) GetProjectId() uuid.UUID { return v.ProjectId
 
 // __projectsCountInput is used internally by genqlient
 type __projectsCountInput struct {
-	TeamId uuid.UUID `json:"teamId"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetTeamId returns __projectsCountInput.TeamId, and is useful for accessing the field via an interface.
@@ -26326,7 +26322,7 @@ func (v *__projectsCountInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __projectsWithBlueprintInput is used internally by genqlient
 type __projectsWithBlueprintInput struct {
-	TeamId uuid.UUID `json:"teamId"`
+	TeamId uuid.UUID `json:"teamId,omitempty"`
 }
 
 // GetTeamId returns __projectsWithBlueprintInput.TeamId, and is useful for accessing the field via an interface.
@@ -26334,8 +26330,8 @@ func (v *__projectsWithBlueprintInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __projectsWithDeploymentTimesInput is used internally by genqlient
 type __projectsWithDeploymentTimesInput struct {
-	TeamId uuid.UUID     `json:"teamId"`
-	Input  ProjectsInput `json:"input"`
+	TeamId uuid.UUID     `json:"teamId,omitempty"`
+	Input  ProjectsInput `json:"input,omitempty"`
 }
 
 // GetTeamId returns __projectsWithDeploymentTimesInput.TeamId, and is useful for accessing the field via an interface.
@@ -26346,8 +26342,8 @@ func (v *__projectsWithDeploymentTimesInput) GetInput() ProjectsInput { return v
 
 // __projectsWithStatusInput is used internally by genqlient
 type __projectsWithStatusInput struct {
-	TeamId uuid.UUID     `json:"teamId"`
-	Input  ProjectsInput `json:"input"`
+	TeamId uuid.UUID     `json:"teamId,omitempty"`
+	Input  ProjectsInput `json:"input,omitempty"`
 }
 
 // GetTeamId returns __projectsWithStatusInput.TeamId, and is useful for accessing the field via an interface.
@@ -26358,8 +26354,8 @@ func (v *__projectsWithStatusInput) GetInput() ProjectsInput { return v.Input }
 
 // __resourceLogsInput is used internally by genqlient
 type __resourceLogsInput struct {
-	TeamId     uuid.UUID `json:"teamId"`
-	ResourceId uuid.UUID `json:"resourceId"`
+	TeamId     uuid.UUID `json:"teamId,omitempty"`
+	ResourceId uuid.UUID `json:"resourceId,omitempty"`
 }
 
 // GetTeamId returns __resourceLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26370,10 +26366,10 @@ func (v *__resourceLogsInput) GetResourceId() uuid.UUID { return v.ResourceId }
 
 // __resourcesWithLogsInput is used internally by genqlient
 type __resourcesWithLogsInput struct {
-	TeamId    uuid.UUID                           `json:"teamId"`
-	ProjectId uuid.UUID                           `json:"projectId"`
-	ClusterId uuid.UUID                           `json:"clusterId"`
-	Selector  *ObservabilityResourceSelectorInput `json:"selector"`
+	TeamId    uuid.UUID                           `json:"teamId,omitempty"`
+	ProjectId uuid.UUID                           `json:"projectId,omitempty"`
+	ClusterId uuid.UUID                           `json:"clusterId,omitempty"`
+	Selector  *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
 // GetTeamId returns __resourcesWithLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26392,11 +26388,11 @@ func (v *__resourcesWithLogsInput) GetSelector() *ObservabilityResourceSelectorI
 
 // __resourcesWithMetricsInput is used internally by genqlient
 type __resourcesWithMetricsInput struct {
-	TeamId      uuid.UUID                           `json:"teamId"`
-	ProjectId   uuid.UUID                           `json:"projectId"`
-	ClusterId   uuid.UUID                           `json:"clusterId"`
-	MetricTypes []MetricType                        `json:"metricTypes"`
-	Selector    *ObservabilityResourceSelectorInput `json:"selector"`
+	TeamId      uuid.UUID                           `json:"teamId,omitempty"`
+	ProjectId   uuid.UUID                           `json:"projectId,omitempty"`
+	ClusterId   uuid.UUID                           `json:"clusterId,omitempty"`
+	MetricTypes []MetricType                        `json:"metricTypes,omitempty"`
+	Selector    *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
 // GetTeamId returns __resourcesWithMetricsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26418,9 +26414,9 @@ func (v *__resourcesWithMetricsInput) GetSelector() *ObservabilityResourceSelect
 
 // __subGroupInput is used internally by genqlient
 type __subGroupInput struct {
-	TeamId  uuid.UUID `json:"teamId"`
-	GroupId uuid.UUID `json:"groupId"`
-	Id      uuid.UUID `json:"id"`
+	TeamId  uuid.UUID `json:"teamId,omitempty"`
+	GroupId uuid.UUID `json:"groupId,omitempty"`
+	Id      uuid.UUID `json:"id,omitempty"`
 }
 
 // GetTeamId returns __subGroupInput.TeamId, and is useful for accessing the field via an interface.
@@ -26434,8 +26430,8 @@ func (v *__subGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __submitWorkflowRunInput is used internally by genqlient
 type __submitWorkflowRunInput struct {
-	WorkflowId uuid.UUID                   `json:"workflowId"`
-	Definition *WorkflowRunDefinitionInput `json:"definition"`
+	WorkflowId uuid.UUID                   `json:"workflowId,omitempty"`
+	Definition *WorkflowRunDefinitionInput `json:"definition,omitempty"`
 }
 
 // GetWorkflowId returns __submitWorkflowRunInput.WorkflowId, and is useful for accessing the field via an interface.
@@ -26446,7 +26442,7 @@ func (v *__submitWorkflowRunInput) GetDefinition() *WorkflowRunDefinitionInput {
 
 // __teamInput is used internally by genqlient
 type __teamInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __teamInput.Id, and is useful for accessing the field via an interface.
@@ -26454,7 +26450,7 @@ func (v *__teamInput) GetId() uuid.UUID { return v.Id }
 
 // __unlinkProjectInput is used internally by genqlient
 type __unlinkProjectInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __unlinkProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26462,8 +26458,8 @@ func (v *__unlinkProjectInput) GetId() uuid.UUID { return v.Id }
 
 // __updateDeployInput is used internally by genqlient
 type __updateDeployInput struct {
-	Id    uuid.UUID         `json:"id"`
-	Input UpdateDeployInput `json:"input"`
+	Id    uuid.UUID         `json:"id,omitempty"`
+	Input UpdateDeployInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateDeployInput.Id, and is useful for accessing the field via an interface.
@@ -26474,8 +26470,8 @@ func (v *__updateDeployInput) GetInput() UpdateDeployInput { return v.Input }
 
 // __updateGroupInput is used internally by genqlient
 type __updateGroupInput struct {
-	Id    uuid.UUID        `json:"id"`
-	Input UpdateGroupInput `json:"input"`
+	Id    uuid.UUID        `json:"id,omitempty"`
+	Input UpdateGroupInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateGroupInput.Id, and is useful for accessing the field via an interface.
@@ -26486,8 +26482,8 @@ func (v *__updateGroupInput) GetInput() UpdateGroupInput { return v.Input }
 
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
-	Id    uuid.UUID          `json:"id"`
-	Input UpdateProjectInput `json:"input"`
+	Id    uuid.UUID          `json:"id,omitempty"`
+	Input UpdateProjectInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26498,8 +26494,8 @@ func (v *__updateProjectInput) GetInput() UpdateProjectInput { return v.Input }
 
 // __updateSubGroupInput is used internally by genqlient
 type __updateSubGroupInput struct {
-	Id    uuid.UUID           `json:"id"`
-	Input UpdateSubGroupInput `json:"input"`
+	Id    uuid.UUID           `json:"id,omitempty"`
+	Input UpdateSubGroupInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -26510,8 +26506,8 @@ func (v *__updateSubGroupInput) GetInput() UpdateSubGroupInput { return v.Input 
 
 // __updateWorkflowInput is used internally by genqlient
 type __updateWorkflowInput struct {
-	Id    uuid.UUID           `json:"id"`
-	Input UpdateWorkflowInput `json:"input"`
+	Id    uuid.UUID           `json:"id,omitempty"`
+	Input UpdateWorkflowInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateWorkflowInput.Id, and is useful for accessing the field via an interface.
@@ -26522,8 +26518,8 @@ func (v *__updateWorkflowInput) GetInput() UpdateWorkflowInput { return v.Input 
 
 // __updateWorkflowTriggerInput is used internally by genqlient
 type __updateWorkflowTriggerInput struct {
-	Id    uuid.UUID          `json:"id"`
-	Input UpdateTriggerInput `json:"input"`
+	Id    uuid.UUID          `json:"id,omitempty"`
+	Input UpdateTriggerInput `json:"input,omitempty"`
 }
 
 // GetId returns __updateWorkflowTriggerInput.Id, and is useful for accessing the field via an interface.
@@ -26534,7 +26530,7 @@ func (v *__updateWorkflowTriggerInput) GetInput() UpdateTriggerInput { return v.
 
 // __userPersonalAccessTokensInput is used internally by genqlient
 type __userPersonalAccessTokensInput struct {
-	Id uuid.UUID `json:"id"`
+	Id uuid.UUID `json:"id,omitempty"`
 }
 
 // GetId returns __userPersonalAccessTokensInput.Id, and is useful for accessing the field via an interface.
@@ -26542,8 +26538,8 @@ func (v *__userPersonalAccessTokensInput) GetId() uuid.UUID { return v.Id }
 
 // __workflowDetailInput is used internally by genqlient
 type __workflowDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
 }
 
 // GetTeamId returns __workflowDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26554,9 +26550,9 @@ func (v *__workflowDetailInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __workflowRunDetailInput is used internally by genqlient
 type __workflowRunDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	RunId     uuid.UUID `json:"runId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	RunId     uuid.UUID `json:"runId,omitempty"`
 }
 
 // GetTeamId returns __workflowRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26570,10 +26566,10 @@ func (v *__workflowRunDetailInput) GetRunId() uuid.UUID { return v.RunId }
 
 // __workflowRunDetailLogsInput is used internally by genqlient
 type __workflowRunDetailLogsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	RunId     uuid.UUID `json:"runId"`
-	StepId    uuid.UUID `json:"stepId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	RunId     uuid.UUID `json:"runId,omitempty"`
+	StepId    uuid.UUID `json:"stepId,omitempty"`
 }
 
 // GetTeamId returns __workflowRunDetailLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26590,10 +26586,10 @@ func (v *__workflowRunDetailLogsInput) GetStepId() uuid.UUID { return v.StepId }
 
 // __workflowRunStepNestedDetailInput is used internally by genqlient
 type __workflowRunStepNestedDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	RunId     uuid.UUID `json:"runId"`
-	StepId    uuid.UUID `json:"stepId"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	RunId     uuid.UUID `json:"runId,omitempty"`
+	StepId    uuid.UUID `json:"stepId,omitempty"`
 }
 
 // GetTeamId returns __workflowRunStepNestedDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26610,11 +26606,11 @@ func (v *__workflowRunStepNestedDetailInput) GetStepId() uuid.UUID { return v.St
 
 // __workflowRunStepNestedDetailLogsInput is used internally by genqlient
 type __workflowRunStepNestedDetailLogsInput struct {
-	TeamId       uuid.UUID `json:"teamId"`
-	ProjectId    uuid.UUID `json:"projectId"`
-	RunId        uuid.UUID `json:"runId"`
-	StepId       uuid.UUID `json:"stepId"`
-	ActionStepId uuid.UUID `json:"actionStepId"`
+	TeamId       uuid.UUID `json:"teamId,omitempty"`
+	ProjectId    uuid.UUID `json:"projectId,omitempty"`
+	RunId        uuid.UUID `json:"runId,omitempty"`
+	StepId       uuid.UUID `json:"stepId,omitempty"`
+	ActionStepId uuid.UUID `json:"actionStepId,omitempty"`
 }
 
 // GetTeamId returns __workflowRunStepNestedDetailLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26634,9 +26630,9 @@ func (v *__workflowRunStepNestedDetailLogsInput) GetActionStepId() uuid.UUID { r
 
 // __workflowRunsInput is used internally by genqlient
 type __workflowRunsInput struct {
-	TeamId    uuid.UUID `json:"teamId"`
-	ProjectId uuid.UUID `json:"projectId"`
-	Page      PageInput `json:"page"`
+	TeamId    uuid.UUID `json:"teamId,omitempty"`
+	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	Page      PageInput `json:"page,omitempty"`
 }
 
 // GetTeamId returns __workflowRunsInput.TeamId, and is useful for accessing the field via an interface.
@@ -27443,10 +27439,8 @@ mutation createGroup ($input: CreateGroupInput!) {
 			value
 		}
 		owner {
-			... on Team {
-				id
-				name
-			}
+			id
+			name
 		}
 		createdAt
 		updatedAt
