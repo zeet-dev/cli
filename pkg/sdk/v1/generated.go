@@ -38,10 +38,10 @@ func (v *ApproveWorkflowRunStepResponse) GetApproveWorkflowRunStep() bool {
 }
 
 type AutoscalingDataInput struct {
-	MinReplicas          int                        `json:"minReplicas,omitempty"`
-	MaxReplicas          int                        `json:"maxReplicas,omitempty"`
-	CoolDownPeriod       int                        `json:"coolDownPeriod,omitempty"`
-	Spec                 string                     `json:"spec,omitempty"`
+	MinReplicas          int                        `json:"minReplicas"`
+	MaxReplicas          int                        `json:"maxReplicas"`
+	CoolDownPeriod       int                        `json:"coolDownPeriod"`
+	Spec                 string                     `json:"spec"`
 	Triggers             []*AutoscalingTriggerInput `json:"triggers,omitempty"`
 	KedaScaledObjectSpec *string                    `json:"kedaScaledObjectSpec,omitempty"`
 }
@@ -65,8 +65,8 @@ func (v *AutoscalingDataInput) GetTriggers() []*AutoscalingTriggerInput { return
 func (v *AutoscalingDataInput) GetKedaScaledObjectSpec() *string { return v.KedaScaledObjectSpec }
 
 type AutoscalingTriggerInput struct {
-	Type string `json:"type,omitempty"`
-	Spec string `json:"spec,omitempty"`
+	Type string `json:"type"`
+	Spec string `json:"spec"`
 }
 
 // GetType returns AutoscalingTriggerInput.Type, and is useful for accessing the field via an interface.
@@ -179,9 +179,9 @@ type __premarshalBlueprintByIdBlueprint struct {
 
 	Type BlueprintType `json:"type"`
 
-	IsOfficial *bool `json:"isOfficial"`
+	IsOfficial *bool `json:"isOfficial,omitempty"`
 
-	Enabled *bool `json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 
 	Configuration BlueprintDetailConfigurationBlueprintConfiguration `json:"configuration"`
 }
@@ -207,7 +207,7 @@ func (v *BlueprintByIdBlueprint) __premarshalJSON() (*__premarshalBlueprintByIdB
 
 // blueprintByIdResponse is returned by blueprintById on success.
 type BlueprintByIdResponse struct {
-	Blueprint *BlueprintByIdBlueprint `json:"blueprint"`
+	Blueprint *BlueprintByIdBlueprint `json:"blueprint,omitempty"`
 }
 
 // GetBlueprint returns BlueprintByIdResponse.Blueprint, and is useful for accessing the field via an interface.
@@ -222,14 +222,14 @@ type BlueprintConfigurationDetail struct {
 	// Whether this blueprint is currently available to be used by projects. Does not affect existing projects.
 	Published bool `json:"published"`
 	// A description of the purpose and behavior of this blueprint.
-	Description *string `json:"description"`
+	Description *string `json:"description,omitempty"`
 	// Relevant classifications for this blueprint.
 	Tags []string `json:"tags"`
 	// A url for a logo image.
-	LogoUrl *string `json:"logoUrl"`
+	LogoUrl *string `json:"logoUrl,omitempty"`
 	// A schema for rich input widgets. Used to generate forms which capture the
 	// necessary configuration for instantiating a project from this blueprint.
-	RichInputSchema *string `json:"richInputSchema"`
+	RichInputSchema *string `json:"richInputSchema,omitempty"`
 }
 
 // GetSlug returns BlueprintConfigurationDetail.Slug, and is useful for accessing the field via an interface.
@@ -320,9 +320,9 @@ type BlueprintDetail struct {
 	Id   uuid.UUID     `json:"id"`
 	Type BlueprintType `json:"type"`
 	// Whether this blueprint is officially supported.
-	IsOfficial *bool `json:"isOfficial"`
+	IsOfficial *bool `json:"isOfficial,omitempty"`
 	// Whether this blueprint is enabled for your team. Does not affect existing projects.
-	Enabled *bool `json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 	// Query the revision history of this blueprint.
 	Configuration BlueprintDetailConfigurationBlueprintConfiguration `json:"configuration"`
 }
@@ -416,13 +416,13 @@ type __premarshalBlueprintDetailConfigurationBlueprintConfiguration struct {
 
 	Published bool `json:"published"`
 
-	Description *string `json:"description"`
+	Description *string `json:"description,omitempty"`
 
 	Tags []string `json:"tags"`
 
-	LogoUrl *string `json:"logoUrl"`
+	LogoUrl *string `json:"logoUrl,omitempty"`
 
-	RichInputSchema *string `json:"richInputSchema"`
+	RichInputSchema *string `json:"richInputSchema,omitempty"`
 }
 
 func (v *BlueprintDetailConfigurationBlueprintConfiguration) MarshalJSON() ([]byte, error) {
@@ -476,7 +476,7 @@ func (v *BlueprintManifestConfigurationInput) GetUseKustomize() *bool { return v
 
 // blueprintResponse is returned by blueprint on success.
 type BlueprintResponse struct {
-	Team *BlueprintTeam `json:"team"`
+	Team *BlueprintTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns BlueprintResponse.Team, and is useful for accessing the field via an interface.
@@ -484,7 +484,7 @@ func (v *BlueprintResponse) GetTeam() *BlueprintTeam { return v.Team }
 
 // blueprintRevisionsResponse is returned by blueprintRevisions on success.
 type BlueprintRevisionsResponse struct {
-	Team *BlueprintRevisionsTeam `json:"team"`
+	Team *BlueprintRevisionsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns BlueprintRevisionsResponse.Team, and is useful for accessing the field via an interface.
@@ -501,7 +501,7 @@ func (v *BlueprintRevisionsResponse) GetTeam() *BlueprintRevisionsTeam { return 
 // Being a member of sub-team does not confer access to the parent team.
 type BlueprintRevisionsTeam struct {
 	Id        uuid.UUID                        `json:"id"`
-	Blueprint *BlueprintRevisionsTeamBlueprint `json:"blueprint"`
+	Blueprint *BlueprintRevisionsTeamBlueprint `json:"blueprint,omitempty"`
 }
 
 // GetId returns BlueprintRevisionsTeam.Id, and is useful for accessing the field via an interface.
@@ -622,13 +622,13 @@ type __premarshalBlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintC
 
 	Published bool `json:"published"`
 
-	Description *string `json:"description"`
+	Description *string `json:"description,omitempty"`
 
 	Tags []string `json:"tags"`
 
-	LogoUrl *string `json:"logoUrl"`
+	LogoUrl *string `json:"logoUrl,omitempty"`
 
-	RichInputSchema *string `json:"richInputSchema"`
+	RichInputSchema *string `json:"richInputSchema,omitempty"`
 
 	RevisionData string `json:"revisionData"`
 
@@ -669,7 +669,7 @@ func (v *BlueprintRevisionsTeamBlueprintConfigurationRevisionsBlueprintConfigura
 // Being a member of sub-team does not confer access to the parent team.
 type BlueprintTeam struct {
 	Id        uuid.UUID               `json:"id"`
-	Blueprint *BlueprintTeamBlueprint `json:"blueprint"`
+	Blueprint *BlueprintTeamBlueprint `json:"blueprint,omitempty"`
 }
 
 // GetId returns BlueprintTeam.Id, and is useful for accessing the field via an interface.
@@ -730,9 +730,9 @@ type __premarshalBlueprintTeamBlueprint struct {
 
 	Type BlueprintType `json:"type"`
 
-	IsOfficial *bool `json:"isOfficial"`
+	IsOfficial *bool `json:"isOfficial,omitempty"`
 
-	Enabled *bool `json:"enabled"`
+	Enabled *bool `json:"enabled,omitempty"`
 
 	Configuration BlueprintDetailConfigurationBlueprintConfiguration `json:"configuration"`
 }
@@ -796,7 +796,7 @@ type BlueprintVariableInput struct {
 	Name *string `json:"name,omitempty"`
 	// The variable value. Always a string value, which will be parsed according to the variableType, determined either
 	// by the referenced variableSpec, or the provided variableType
-	Value string `json:"value,omitempty"`
+	Value string `json:"value"`
 	// Type specification is required when variable is being declared without referencing a variable spec.
 	Type *BlueprintVariableType `json:"type,omitempty"`
 }
@@ -825,7 +825,7 @@ const (
 
 // buildArtifactsResponse is returned by buildArtifacts on success.
 type BuildArtifactsResponse struct {
-	Team *BuildArtifactsTeam `json:"team"`
+	Team *BuildArtifactsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns BuildArtifactsResponse.Team, and is useful for accessing the field via an interface.
@@ -841,7 +841,7 @@ func (v *BuildArtifactsResponse) GetTeam() *BuildArtifactsTeam { return v.Team }
 // A member of parent team will have equal access to all sub-teams.
 // Being a member of sub-team does not confer access to the parent team.
 type BuildArtifactsTeam struct {
-	Project *BuildArtifactsTeamProject `json:"project"`
+	Project *BuildArtifactsTeamProject `json:"project,omitempty"`
 }
 
 // GetProject returns BuildArtifactsTeam.Project, and is useful for accessing the field via an interface.
@@ -849,7 +849,7 @@ func (v *BuildArtifactsTeam) GetProject() *BuildArtifactsTeamProject { return v.
 
 // BuildArtifactsTeamProject includes the requested fields of the GraphQL type Project.
 type BuildArtifactsTeamProject struct {
-	Build *BuildArtifactsTeamProjectBuild `json:"build"`
+	Build *BuildArtifactsTeamProjectBuild `json:"build,omitempty"`
 }
 
 // GetBuild returns BuildArtifactsTeamProject.Build, and is useful for accessing the field via an interface.
@@ -1036,9 +1036,9 @@ const (
 type BuildRunDetail struct {
 	Id          uuid.UUID                                `json:"id"`
 	Sequence    int                                      `json:"sequence"`
-	JobRun      *BuildRunDetailJobRun                    `json:"jobRun"`
-	TriggeredBy *BuildRunDetailTriggeredByWorkflowRun    `json:"triggeredBy"`
-	Definition  *BuildRunDetailDefinitionBuildDefinition `json:"definition"`
+	JobRun      *BuildRunDetailJobRun                    `json:"jobRun,omitempty"`
+	TriggeredBy *BuildRunDetailTriggeredByWorkflowRun    `json:"triggeredBy,omitempty"`
+	Definition  *BuildRunDetailDefinitionBuildDefinition `json:"definition,omitempty"`
 	Artifacts   []BuildRunDetailArtifactsBuildArtifact   `json:"artifacts"`
 }
 
@@ -1096,7 +1096,7 @@ func (v *BuildRunDetailJobRun) GetId() uuid.UUID { return v.Id }
 
 // buildRunDetailResponse is returned by buildRunDetail on success.
 type BuildRunDetailResponse struct {
-	Team *BuildRunDetailTeam `json:"team"`
+	Team *BuildRunDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns BuildRunDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -1112,7 +1112,7 @@ func (v *BuildRunDetailResponse) GetTeam() *BuildRunDetailTeam { return v.Team }
 // A member of parent team will have equal access to all sub-teams.
 // Being a member of sub-team does not confer access to the parent team.
 type BuildRunDetailTeam struct {
-	Project *BuildRunDetailTeamProject `json:"project"`
+	Project *BuildRunDetailTeamProject `json:"project,omitempty"`
 }
 
 // GetProject returns BuildRunDetailTeam.Project, and is useful for accessing the field via an interface.
@@ -1120,7 +1120,7 @@ func (v *BuildRunDetailTeam) GetProject() *BuildRunDetailTeamProject { return v.
 
 // BuildRunDetailTeamProject includes the requested fields of the GraphQL type Project.
 type BuildRunDetailTeamProject struct {
-	Build *BuildRunDetailTeamProjectBuild `json:"build"`
+	Build *BuildRunDetailTeamProjectBuild `json:"build,omitempty"`
 }
 
 // GetBuild returns BuildRunDetailTeamProject.Build, and is useful for accessing the field via an interface.
@@ -1129,7 +1129,7 @@ func (v *BuildRunDetailTeamProject) GetBuild() *BuildRunDetailTeamProjectBuild {
 // BuildRunDetailTeamProjectBuild includes the requested fields of the GraphQL type Build.
 type BuildRunDetailTeamProjectBuild struct {
 	Id  uuid.UUID                          `json:"id"`
-	Run *BuildRunDetailTeamProjectBuildRun `json:"run"`
+	Run *BuildRunDetailTeamProjectBuildRun `json:"run,omitempty"`
 }
 
 // GetId returns BuildRunDetailTeamProjectBuild.Id, and is useful for accessing the field via an interface.
@@ -1199,11 +1199,11 @@ type __premarshalBuildRunDetailTeamProjectBuildRun struct {
 
 	Sequence int `json:"sequence"`
 
-	JobRun *BuildRunDetailJobRun `json:"jobRun"`
+	JobRun *BuildRunDetailJobRun `json:"jobRun,omitempty"`
 
-	TriggeredBy *BuildRunDetailTriggeredByWorkflowRun `json:"triggeredBy"`
+	TriggeredBy *BuildRunDetailTriggeredByWorkflowRun `json:"triggeredBy,omitempty"`
 
-	Definition *BuildRunDetailDefinitionBuildDefinition `json:"definition"`
+	Definition *BuildRunDetailDefinitionBuildDefinition `json:"definition,omitempty"`
 
 	Artifacts []BuildRunDetailArtifactsBuildArtifact `json:"artifacts"`
 }
@@ -1244,8 +1244,8 @@ func (v *BuildRunDetailTriggeredByWorkflowRun) GetSequence() int { return v.Sequ
 type BuildRunListItem struct {
 	Id          uuid.UUID                               `json:"id"`
 	Sequence    int                                     `json:"sequence"`
-	JobRun      *BuildRunListItemJobRun                 `json:"jobRun"`
-	TriggeredBy *BuildRunListItemTriggeredByWorkflowRun `json:"triggeredBy"`
+	JobRun      *BuildRunListItemJobRun                 `json:"jobRun,omitempty"`
+	TriggeredBy *BuildRunListItemTriggeredByWorkflowRun `json:"triggeredBy,omitempty"`
 }
 
 // GetId returns BuildRunListItem.Id, and is useful for accessing the field via an interface.
@@ -1288,7 +1288,7 @@ func (v *BuildRunListItemTriggeredByWorkflowRun) GetSequence() int { return v.Se
 
 // buildRunsResponse is returned by buildRuns on success.
 type BuildRunsResponse struct {
-	Team *BuildRunsTeam `json:"team"`
+	Team *BuildRunsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns BuildRunsResponse.Team, and is useful for accessing the field via an interface.
@@ -1304,7 +1304,7 @@ func (v *BuildRunsResponse) GetTeam() *BuildRunsTeam { return v.Team }
 // A member of parent team will have equal access to all sub-teams.
 // Being a member of sub-team does not confer access to the parent team.
 type BuildRunsTeam struct {
-	Project *BuildRunsTeamProject `json:"project"`
+	Project *BuildRunsTeamProject `json:"project,omitempty"`
 }
 
 // GetProject returns BuildRunsTeam.Project, and is useful for accessing the field via an interface.
@@ -1312,7 +1312,7 @@ func (v *BuildRunsTeam) GetProject() *BuildRunsTeamProject { return v.Project }
 
 // BuildRunsTeamProject includes the requested fields of the GraphQL type Project.
 type BuildRunsTeamProject struct {
-	Build *BuildRunsTeamProjectBuild `json:"build"`
+	Build *BuildRunsTeamProjectBuild `json:"build,omitempty"`
 }
 
 // GetBuild returns BuildRunsTeamProject.Build, and is useful for accessing the field via an interface.
@@ -1407,9 +1407,9 @@ type __premarshalBuildRunsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun st
 
 	Sequence int `json:"sequence"`
 
-	JobRun *BuildRunListItemJobRun `json:"jobRun"`
+	JobRun *BuildRunListItemJobRun `json:"jobRun,omitempty"`
 
-	TriggeredBy *BuildRunListItemTriggeredByWorkflowRun `json:"triggeredBy"`
+	TriggeredBy *BuildRunListItemTriggeredByWorkflowRun `json:"triggeredBy,omitempty"`
 }
 
 func (v *BuildRunsTeamProjectBuildRunsBuildRunConnectionNodesBuildRun) MarshalJSON() ([]byte, error) {
@@ -1441,9 +1441,9 @@ func (v *BuildRunsTeamProjectBuildRunsBuildRunConnectionPageInfo) GetHasNextPage
 }
 
 type BuildTargetInput struct {
-	Type                         BuildTargetType              `json:"type,omitempty"`
+	Type                         BuildTargetType              `json:"type"`
 	Repository                   *string                      `json:"repository,omitempty"`
-	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates,omitempty"`
+	AlternativeImageTagTemplates []string                     `json:"alternativeImageTagTemplates"`
 	Integration                  *BuildTargetIntegrationInput `json:"integration,omitempty"`
 }
 
@@ -1539,7 +1539,7 @@ type CloudResource struct {
 	Name      string                             `json:"name"`
 	Status    ResourceStatus                     `json:"status"`
 	Type      ResourceType                       `json:"type"`
-	CreatedAt *time.Time                         `json:"createdAt"`
+	CreatedAt *time.Time                         `json:"createdAt,omitempty"`
 	Owners    []CloudResourceOwnersResourceOwner `json:"owners"`
 	Events    []CloudResourceEventsResourceEvent `json:"events"`
 }
@@ -1568,9 +1568,9 @@ type CloudResourceEventsResourceEvent struct {
 	Reason            string            `json:"reason"`
 	Message           string            `json:"message"`
 	Action            string            `json:"action"`
-	OccurredAt        *time.Time        `json:"occurredAt"`
-	FirstOccurrenceAt *time.Time        `json:"firstOccurrenceAt"`
-	LastOccurrenceAt  *time.Time        `json:"lastOccurrenceAt"`
+	OccurredAt        *time.Time        `json:"occurredAt,omitempty"`
+	FirstOccurrenceAt *time.Time        `json:"firstOccurrenceAt,omitempty"`
+	LastOccurrenceAt  *time.Time        `json:"lastOccurrenceAt,omitempty"`
 	Count             int               `json:"count"`
 }
 
@@ -1616,7 +1616,7 @@ func (v *CloudResourceOwnersResourceOwner) GetType() ResourceType { return v.Typ
 
 // cloudRevisionsResponse is returned by cloudRevisions on success.
 type CloudRevisionsResponse struct {
-	Team *CloudRevisionsTeam `json:"team"`
+	Team *CloudRevisionsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns CloudRevisionsResponse.Team, and is useful for accessing the field via an interface.
@@ -1679,7 +1679,7 @@ func (v *CloudRevisionsTeam) UnmarshalJSON(b []byte) error {
 type __premarshalCloudRevisionsTeam struct {
 	Id uuid.UUID `json:"id"`
 
-	CloudAccount json.RawMessage `json:"cloudAccount"`
+	CloudAccount json.RawMessage `json:"cloudAccount,omitempty"`
 }
 
 func (v *CloudRevisionsTeam) MarshalJSON() ([]byte, error) {
@@ -1856,7 +1856,7 @@ func __marshalCloudRevisionsTeamCloudAccount(v *CloudRevisionsTeamCloudAccount) 
 
 // CloudRevisionsTeamCloudAccountAWSAccount includes the requested fields of the GraphQL type AWSAccount.
 type CloudRevisionsTeamCloudAccountAWSAccount struct {
-	Typename               *string                                                                                         `json:"__typename"`
+	Typename               *string                                                                                         `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                       `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -1946,7 +1946,7 @@ func (v *CloudRevisionsTeamCloudAccountAWSAccountConfigurationRevisionsAWSAccoun
 
 // CloudRevisionsTeamCloudAccountAzureAccount includes the requested fields of the GraphQL type AzureAccount.
 type CloudRevisionsTeamCloudAccountAzureAccount struct {
-	Typename               *string                                                                                             `json:"__typename"`
+	Typename               *string                                                                                             `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                           `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2036,7 +2036,7 @@ func (v *CloudRevisionsTeamCloudAccountAzureAccountConfigurationRevisionsAzureAc
 
 // CloudRevisionsTeamCloudAccountCoreWeaveAccount includes the requested fields of the GraphQL type CoreWeaveAccount.
 type CloudRevisionsTeamCloudAccountCoreWeaveAccount struct {
-	Typename               *string                                                                                                     `json:"__typename"`
+	Typename               *string                                                                                                     `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                                   `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCoreWeaveAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2126,7 +2126,7 @@ func (v *CloudRevisionsTeamCloudAccountCoreWeaveAccountConfigurationRevisionsCor
 
 // CloudRevisionsTeamCloudAccountDOAccount includes the requested fields of the GraphQL type DOAccount.
 type CloudRevisionsTeamCloudAccountDOAccount struct {
-	Typename               *string                                                                                       `json:"__typename"`
+	Typename               *string                                                                                       `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                     `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2216,7 +2216,7 @@ func (v *CloudRevisionsTeamCloudAccountDOAccountConfigurationRevisionsDOAccountC
 
 // CloudRevisionsTeamCloudAccountGCPAccount includes the requested fields of the GraphQL type GCPAccount.
 type CloudRevisionsTeamCloudAccountGCPAccount struct {
-	Typename               *string                                                                                         `json:"__typename"`
+	Typename               *string                                                                                         `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                       `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2306,7 +2306,7 @@ func (v *CloudRevisionsTeamCloudAccountGCPAccountConfigurationRevisionsGCPAccoun
 
 // CloudRevisionsTeamCloudAccountLinodeAccount includes the requested fields of the GraphQL type LinodeAccount.
 type CloudRevisionsTeamCloudAccountLinodeAccount struct {
-	Typename               *string                                                                                               `json:"__typename"`
+	Typename               *string                                                                                               `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                             `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinodeAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2396,7 +2396,7 @@ func (v *CloudRevisionsTeamCloudAccountLinodeAccountConfigurationRevisionsLinode
 
 // CloudRevisionsTeamCloudAccountVultrAccount includes the requested fields of the GraphQL type VultrAccount.
 type CloudRevisionsTeamCloudAccountVultrAccount struct {
-	Typename               *string                                                                                             `json:"__typename"`
+	Typename               *string                                                                                             `json:"__typename,omitempty"`
 	Id                     uuid.UUID                                                                                           `json:"id"`
 	ConfigurationRevisions CloudRevisionsTeamCloudAccountVultrAccountConfigurationRevisionsVultrAccountConfigurationConnection `json:"configurationRevisions"`
 }
@@ -2503,8 +2503,8 @@ type ClusterDetailV1 struct {
 	Id            uuid.UUID      `json:"id"`
 	DisplayName   string         `json:"displayName"`
 	State         ClusterState   `json:"state"`
-	Connected     *bool          `json:"connected"`
-	CloudProvider *CloudProvider `json:"cloudProvider"`
+	Connected     *bool          `json:"connected,omitempty"`
+	CloudProvider *CloudProvider `json:"cloudProvider,omitempty"`
 	CreatedAt     time.Time      `json:"createdAt"`
 	UpdatedAt     time.Time      `json:"updatedAt"`
 }
@@ -2532,7 +2532,7 @@ func (v *ClusterDetailV1) GetUpdatedAt() time.Time { return v.UpdatedAt }
 
 // clusterDetailsResponse is returned by clusterDetails on success.
 type ClusterDetailsResponse struct {
-	Team *ClusterDetailsTeam `json:"team"`
+	Team *ClusterDetailsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ClusterDetailsResponse.Team, and is useful for accessing the field via an interface.
@@ -2549,7 +2549,7 @@ func (v *ClusterDetailsResponse) GetTeam() *ClusterDetailsTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ClusterDetailsTeam struct {
 	Id      uuid.UUID                  `json:"id"`
-	Cluster *ClusterDetailsTeamCluster `json:"cluster"`
+	Cluster *ClusterDetailsTeamCluster `json:"cluster,omitempty"`
 }
 
 // GetId returns ClusterDetailsTeam.Id, and is useful for accessing the field via an interface.
@@ -2619,9 +2619,9 @@ type __premarshalClusterDetailsTeamCluster struct {
 
 	State ClusterState `json:"state"`
 
-	Connected *bool `json:"connected"`
+	Connected *bool `json:"connected,omitempty"`
 
-	CloudProvider *CloudProvider `json:"cloudProvider"`
+	CloudProvider *CloudProvider `json:"cloudProvider,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -2651,7 +2651,7 @@ func (v *ClusterDetailsTeamCluster) __premarshalJSON() (*__premarshalClusterDeta
 
 // clusterRevisionsResponse is returned by clusterRevisions on success.
 type ClusterRevisionsResponse struct {
-	Team *ClusterRevisionsTeam `json:"team"`
+	Team *ClusterRevisionsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ClusterRevisionsResponse.Team, and is useful for accessing the field via an interface.
@@ -2668,7 +2668,7 @@ func (v *ClusterRevisionsResponse) GetTeam() *ClusterRevisionsTeam { return v.Te
 // Being a member of sub-team does not confer access to the parent team.
 type ClusterRevisionsTeam struct {
 	Id      uuid.UUID                    `json:"id"`
-	Cluster *ClusterRevisionsTeamCluster `json:"cluster"`
+	Cluster *ClusterRevisionsTeamCluster `json:"cluster,omitempty"`
 }
 
 // GetId returns ClusterRevisionsTeam.Id, and is useful for accessing the field via an interface.
@@ -2790,7 +2790,7 @@ const (
 
 // clusterStatusResponse is returned by clusterStatus on success.
 type ClusterStatusResponse struct {
-	Team *ClusterStatusTeam `json:"team"`
+	Team *ClusterStatusTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ClusterStatusResponse.Team, and is useful for accessing the field via an interface.
@@ -2807,7 +2807,7 @@ func (v *ClusterStatusResponse) GetTeam() *ClusterStatusTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ClusterStatusTeam struct {
 	Id      uuid.UUID                 `json:"id"`
-	Cluster *ClusterStatusTeamCluster `json:"cluster"`
+	Cluster *ClusterStatusTeamCluster `json:"cluster,omitempty"`
 }
 
 // GetId returns ClusterStatusTeam.Id, and is useful for accessing the field via an interface.
@@ -2819,7 +2819,7 @@ func (v *ClusterStatusTeam) GetCluster() *ClusterStatusTeamCluster { return v.Cl
 // ClusterStatusTeamCluster includes the requested fields of the GraphQL type Cluster.
 type ClusterStatusTeamCluster struct {
 	Id     uuid.UUID      `json:"id"`
-	Status *ClusterStatus `json:"status"`
+	Status *ClusterStatus `json:"status,omitempty"`
 }
 
 // GetId returns ClusterStatusTeamCluster.Id, and is useful for accessing the field via an interface.
@@ -2831,7 +2831,7 @@ func (v *ClusterStatusTeamCluster) GetStatus() *ClusterStatus { return v.Status 
 type ContainerRegistrySourceInput struct {
 	RegistryId  *uuid.UUID `json:"registryId,omitempty"`
 	RegistryUrl *string    `json:"registryUrl,omitempty"`
-	Repository  string     `json:"repository,omitempty"`
+	Repository  string     `json:"repository"`
 	Tag         *string    `json:"tag,omitempty"`
 }
 
@@ -2874,7 +2874,7 @@ type CreateDeployRunCreateDeployRun struct {
 func (v *CreateDeployRunCreateDeployRun) GetId() uuid.UUID { return v.Id }
 
 type CreateDeployRunInput struct {
-	DeployId uuid.UUID  `json:"deployId,omitempty"`
+	DeployId uuid.UUID  `json:"deployId"`
 	IntentId *uuid.UUID `json:"intentId,omitempty"`
 }
 
@@ -2955,9 +2955,9 @@ func (v *CreateGroupCreateGroupOwnerTeam) GetId() uuid.UUID { return v.Id }
 func (v *CreateGroupCreateGroupOwnerTeam) GetName() string { return v.Name }
 
 type CreateGroupInput struct {
-	TeamId uuid.UUID     `json:"teamId,omitempty"`
-	Name   string        `json:"name,omitempty"`
-	Envs   []EnvVarInput `json:"envs,omitempty"`
+	TeamId uuid.UUID     `json:"teamId"`
+	Name   string        `json:"name"`
+	Envs   []EnvVarInput `json:"envs"`
 }
 
 // GetTeamId returns CreateGroupInput.TeamId, and is useful for accessing the field via an interface.
@@ -2981,7 +2981,7 @@ func (v *CreateGroupResponse) GetCreateGroup() CreateGroupCreateGroup { return v
 type CreateProjectCreateProject struct {
 	Id       uuid.UUID                           `json:"id"`
 	Name     string                              `json:"name"`
-	Workflow *CreateProjectCreateProjectWorkflow `json:"workflow"`
+	Workflow *CreateProjectCreateProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns CreateProjectCreateProject.Id, and is useful for accessing the field via an interface.
@@ -3004,18 +3004,18 @@ type CreateProjectCreateProjectWorkflow struct {
 func (v *CreateProjectCreateProjectWorkflow) GetId() uuid.UUID { return v.Id }
 
 type CreateProjectInput struct {
-	TeamId       uuid.UUID                      `json:"teamId,omitempty"`
+	TeamId       uuid.UUID                      `json:"teamId"`
 	GroupId      *uuid.UUID                     `json:"groupId,omitempty"`
 	GroupName    *string                        `json:"groupName,omitempty"`
 	SubGroupId   *uuid.UUID                     `json:"subGroupId,omitempty"`
 	SubGroupName *string                        `json:"subGroupName,omitempty"`
-	Name         string                         `json:"name,omitempty"`
+	Name         string                         `json:"name"`
 	Enabled      *bool                          `json:"enabled,omitempty"`
 	Workflow     *WorkflowDefinitionInput       `json:"workflow,omitempty"`
 	Build        *BuildDefinitionInput          `json:"build,omitempty"`
-	Jobs         []JobDefinitionInput           `json:"jobs,omitempty"`
-	Deploys      []DeploymentConfigurationInput `json:"deploys,omitempty"`
-	Envs         []EnvVarInput                  `json:"envs,omitempty"`
+	Jobs         []JobDefinitionInput           `json:"jobs"`
+	Deploys      []DeploymentConfigurationInput `json:"deploys"`
+	Envs         []EnvVarInput                  `json:"envs"`
 	BlueprintId  *uuid.UUID                     `json:"blueprintId,omitempty"`
 }
 
@@ -3071,7 +3071,7 @@ type CreateSubGroupCreateSubGroup struct {
 	Id        uuid.UUID                                `json:"id"`
 	Name      string                                   `json:"name"`
 	Envs      []CreateSubGroupCreateSubGroupEnvsEnvVar `json:"envs"`
-	Group     *CreateSubGroupCreateSubGroupGroup       `json:"group"`
+	Group     *CreateSubGroupCreateSubGroupGroup       `json:"group,omitempty"`
 	CreatedAt time.Time                                `json:"createdAt"`
 	UpdatedAt time.Time                                `json:"updatedAt"`
 }
@@ -3121,9 +3121,9 @@ func (v *CreateSubGroupCreateSubGroupGroup) GetId() uuid.UUID { return v.Id }
 func (v *CreateSubGroupCreateSubGroupGroup) GetName() string { return v.Name }
 
 type CreateSubGroupInput struct {
-	GroupId uuid.UUID     `json:"groupId,omitempty"`
-	Name    string        `json:"name,omitempty"`
-	Envs    []EnvVarInput `json:"envs,omitempty"`
+	GroupId uuid.UUID     `json:"groupId"`
+	Name    string        `json:"name"`
+	Envs    []EnvVarInput `json:"envs"`
 }
 
 // GetGroupId returns CreateSubGroupInput.GroupId, and is useful for accessing the field via an interface.
@@ -3146,8 +3146,8 @@ func (v *CreateSubGroupResponse) GetCreateSubGroup() CreateSubGroupCreateSubGrou
 }
 
 type CreateTriggerInput struct {
-	Definition TriggerDefinitionInput `json:"definition,omitempty"`
-	ParentId   uuid.UUID              `json:"parentId,omitempty"`
+	Definition TriggerDefinitionInput `json:"definition"`
+	ParentId   uuid.UUID              `json:"parentId"`
 }
 
 // GetDefinition returns CreateTriggerInput.Definition, and is useful for accessing the field via an interface.
@@ -3253,7 +3253,7 @@ func (v *DeleteGroupResponse) GetDeleteGroup() bool { return v.DeleteGroup }
 
 // deleteProjectAndResourcesResponse is returned by deleteProjectAndResources on success.
 type DeleteProjectAndResourcesResponse struct {
-	DeleteProjectAndResources *uuid.UUID `json:"deleteProjectAndResources"`
+	DeleteProjectAndResources *uuid.UUID `json:"deleteProjectAndResources,omitempty"`
 }
 
 // GetDeleteProjectAndResources returns DeleteProjectAndResourcesResponse.DeleteProjectAndResources, and is useful for accessing the field via an interface.
@@ -3263,7 +3263,7 @@ func (v *DeleteProjectAndResourcesResponse) GetDeleteProjectAndResources() *uuid
 
 // deleteProjectResourcesResponse is returned by deleteProjectResources on success.
 type DeleteProjectResourcesResponse struct {
-	DeleteProjectResources *uuid.UUID `json:"deleteProjectResources"`
+	DeleteProjectResources *uuid.UUID `json:"deleteProjectResources,omitempty"`
 }
 
 // GetDeleteProjectResources returns DeleteProjectResourcesResponse.DeleteProjectResources, and is useful for accessing the field via an interface.
@@ -3309,11 +3309,11 @@ func (v *DeleteWorkflowTriggerResponse) GetDeleteTrigger() bool { return v.Delet
 type DeployConfigurationDetail struct {
 	Id         uuid.UUID `json:"id"`
 	Name       string    `json:"name"`
-	BranchName *string   `json:"branchName"`
+	BranchName *string   `json:"branchName,omitempty"`
 	// When querying history by revisionId or sequenceId, only the revisionMetadata and revisionData will be available,
 	// when querying the current configuration (neither revisionId nor sequenceId is
 	// specified), all fields _except_ revisionMetadata and revisionData will be available.
-	Configuration *DeployConfigurationDetailConfigurationDeploymentConfiguration `json:"configuration"`
+	Configuration *DeployConfigurationDetailConfigurationDeploymentConfiguration `json:"configuration,omitempty"`
 }
 
 // GetId returns DeployConfigurationDetail.Id, and is useful for accessing the field via an interface.
@@ -3334,13 +3334,13 @@ func (v *DeployConfigurationDetail) GetConfiguration() *DeployConfigurationDetai
 type DeployConfigurationDetailConfigurationDeploymentConfiguration struct {
 	Id                   uuid.UUID                                                                                               `json:"id"`
 	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction                                                                     `json:"defaultWorkflowSteps"`
-	RequirePlanApproval  *bool                                                                                                   `json:"requirePlanApproval"`
+	RequirePlanApproval  *bool                                                                                                   `json:"requirePlanApproval,omitempty"`
 	Variables            []DeployConfigurationDetailConfigurationDeploymentConfigurationVariablesDeployVariable                  `json:"variables"`
-	Kubernetes           *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes                                `json:"kubernetes"`
-	Helm                 *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm `json:"helm"`
-	Terraform            *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform                                 `json:"terraform"`
-	AwsSam               *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam                                    `json:"awsSam"`
-	GcpCloudRun          *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRun                               `json:"gcpCloudRun"`
+	Kubernetes           *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes                                `json:"kubernetes,omitempty"`
+	Helm                 *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm `json:"helm,omitempty"`
+	Terraform            *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform                                 `json:"terraform,omitempty"`
+	AwsSam               *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam                                    `json:"awsSam,omitempty"`
+	GcpCloudRun          *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRun                               `json:"gcpCloudRun,omitempty"`
 }
 
 // GetId returns DeployConfigurationDetailConfigurationDeploymentConfiguration.Id, and is useful for accessing the field via an interface.
@@ -3390,8 +3390,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfiguration) GetGcpCl
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam includes the requested fields of the GraphQL type DeploymentConfigurationAwsSam.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam struct {
-	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTargetAwsSamTargetConfiguration       `json:"target"`
-	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration `json:"generator"`
+	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTargetAwsSamTargetConfiguration       `json:"target,omitempty"`
+	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration `json:"generator,omitempty"`
 }
 
 // GetTarget returns DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam.Target, and is useful for accessing the field via an interface.
@@ -3407,13 +3407,13 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSam) Ge
 // DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration includes the requested fields of the GraphQL type AwsSamGeneratorConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration struct {
 	EnvVars                    []DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVar `json:"envVars"`
-	RunCommand                 *string                                                                                                                 `json:"runCommand"`
-	ServerlessMemory           *int                                                                                                                    `json:"serverlessMemory"`
-	ServerlessArch             *string                                                                                                                 `json:"serverlessArch"`
-	CustomDomainHost           *string                                                                                                                 `json:"customDomainHost"`
-	CustomDomainCertificateArn *string                                                                                                                 `json:"customDomainCertificateArn"`
-	HttpPort                   *string                                                                                                                 `json:"httpPort"`
-	BuildImage                 *string                                                                                                                 `json:"buildImage"`
+	RunCommand                 *string                                                                                                                 `json:"runCommand,omitempty"`
+	ServerlessMemory           *int                                                                                                                    `json:"serverlessMemory,omitempty"`
+	ServerlessArch             *string                                                                                                                 `json:"serverlessArch,omitempty"`
+	CustomDomainHost           *string                                                                                                                 `json:"customDomainHost,omitempty"`
+	CustomDomainCertificateArn *string                                                                                                                 `json:"customDomainCertificateArn,omitempty"`
+	HttpPort                   *string                                                                                                                 `json:"httpPort,omitempty"`
+	BuildImage                 *string                                                                                                                 `json:"buildImage,omitempty"`
 }
 
 // GetEnvVars returns DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfiguration.EnvVars, and is useful for accessing the field via an interface.
@@ -3463,7 +3463,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGenerato
 	Value     string                                                                                                                       `json:"value"`
 	Visible   bool                                                                                                                         `json:"visible"`
 	Sealed    bool                                                                                                                         `json:"sealed"`
-	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVarSource `json:"source"`
+	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGeneratorAwsSamGeneratorConfigurationEnvVarsEnvVarSource `json:"source,omitempty"`
 	CreatedAt time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt time.Time                                                                                                                    `json:"updatedAt"`
 }
@@ -3520,9 +3520,9 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamGene
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTargetAwsSamTargetConfiguration includes the requested fields of the GraphQL type AwsSamTargetConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTargetAwsSamTargetConfiguration struct {
-	AwsAccountId *uuid.UUID `json:"awsAccountId"`
-	AwsRegion    *string    `json:"awsRegion"`
-	StackName    *string    `json:"stackName"`
+	AwsAccountId *uuid.UUID `json:"awsAccountId,omitempty"`
+	AwsRegion    *string    `json:"awsRegion,omitempty"`
+	StackName    *string    `json:"stackName,omitempty"`
 }
 
 // GetAwsAccountId returns DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTargetAwsSamTargetConfiguration.AwsAccountId, and is useful for accessing the field via an interface.
@@ -3542,8 +3542,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationAwsSamTarg
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRun includes the requested fields of the GraphQL type DeploymentConfigurationGcpCloudRun.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRun struct {
-	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunTargetGcpCloudRunTargetConfiguration       `json:"target"`
-	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration `json:"generator"`
+	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunTargetGcpCloudRunTargetConfiguration       `json:"target,omitempty"`
+	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration `json:"generator,omitempty"`
 }
 
 // GetTarget returns DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRun.Target, and is useful for accessing the field via an interface.
@@ -3559,11 +3559,11 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRu
 // DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration includes the requested fields of the GraphQL type GcpCloudRunGeneratorConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration struct {
 	EnvVars         []DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVar `json:"envVars"`
-	ContainerMemory *float64                                                                                                                          `json:"containerMemory"`
+	ContainerMemory *float64                                                                                                                          `json:"containerMemory,omitempty"`
 	Name            string                                                                                                                            `json:"name"`
-	HttpPort        *string                                                                                                                           `json:"httpPort"`
-	RunCommand      *string                                                                                                                           `json:"runCommand"`
-	ContainerCpu    *float64                                                                                                                          `json:"containerCpu"`
+	HttpPort        *string                                                                                                                           `json:"httpPort,omitempty"`
+	RunCommand      *string                                                                                                                           `json:"runCommand,omitempty"`
+	ContainerCpu    *float64                                                                                                                          `json:"containerCpu,omitempty"`
 }
 
 // GetEnvVars returns DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfiguration.EnvVars, and is useful for accessing the field via an interface.
@@ -3603,7 +3603,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGen
 	Value     string                                                                                                                                 `json:"value"`
 	Visible   bool                                                                                                                                   `json:"visible"`
 	Sealed    bool                                                                                                                                   `json:"sealed"`
-	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVarSource `json:"source"`
+	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunGeneratorGcpCloudRunGeneratorConfigurationEnvVarsEnvVarSource `json:"source,omitempty"`
 	CreatedAt time.Time                                                                                                                              `json:"createdAt"`
 	UpdatedAt time.Time                                                                                                                              `json:"updatedAt"`
 }
@@ -3660,8 +3660,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRu
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunTargetGcpCloudRunTargetConfiguration includes the requested fields of the GraphQL type GcpCloudRunTargetConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunTargetGcpCloudRunTargetConfiguration struct {
-	GcpAccountId *uuid.UUID `json:"gcpAccountId"`
-	GcpRegion    *string    `json:"gcpRegion"`
+	GcpAccountId *uuid.UUID `json:"gcpAccountId,omitempty"`
+	GcpRegion    *string    `json:"gcpRegion,omitempty"`
 }
 
 // GetGcpAccountId returns DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRunTargetGcpCloudRunTargetConfiguration.GcpAccountId, and is useful for accessing the field via an interface.
@@ -3676,9 +3676,9 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationGcpCloudRu
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm includes the requested fields of the GraphQL type DeploymentConfigurationKubernetesHelm.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm struct {
-	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfiguration `json:"blueprint"`
-	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmTargetHelmTargetConfiguration       `json:"target"`
-	Values    *string                                                                                                                                    `json:"values"`
+	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfiguration `json:"blueprint,omitempty"`
+	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmTargetHelmTargetConfiguration       `json:"target,omitempty"`
+	Values    *string                                                                                                                                    `json:"values,omitempty"`
 }
 
 // GetBlueprint returns DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelm.Blueprint, and is useful for accessing the field via an interface.
@@ -3698,7 +3698,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploy
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfiguration includes the requested fields of the GraphQL type BlueprintHelmConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfiguration struct {
-	Source *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfigurationSource `json:"source"`
+	Source *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfigurationSource `json:"source,omitempty"`
 }
 
 // GetSource returns DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfiguration.Source, and is useful for accessing the field via an interface.
@@ -3757,13 +3757,13 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploy
 }
 
 type __premarshalDeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfigurationSource struct {
-	Git *ProjectSourceDetailGitGitSource `json:"git"`
+	Git *ProjectSourceDetailGitGitSource `json:"git,omitempty"`
 
-	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule"`
+	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule,omitempty"`
 
-	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository"`
+	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository,omitempty"`
 
-	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry"`
+	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry,omitempty"`
 }
 
 func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmBlueprintBlueprintHelmConfigurationSource) MarshalJSON() ([]byte, error) {
@@ -3787,8 +3787,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploy
 // DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmTargetHelmTargetConfiguration includes the requested fields of the GraphQL type HelmTargetConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmTargetHelmTargetConfiguration struct {
 	ClusterId   uuid.UUID `json:"clusterId"`
-	Namespace   *string   `json:"namespace"`
-	ReleaseName *string   `json:"releaseName"`
+	Namespace   *string   `json:"namespace,omitempty"`
+	ReleaseName *string   `json:"releaseName,omitempty"`
 }
 
 // GetClusterId returns DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploymentConfigurationKubernetesHelmTargetHelmTargetConfiguration.ClusterId, and is useful for accessing the field via an interface.
@@ -3808,9 +3808,9 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationHelmDeploy
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes includes the requested fields of the GraphQL type DeploymentConfigurationKubernetes.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes struct {
-	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfiguration   `json:"blueprint"`
-	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesTargetManifestTargetConfiguration         `json:"target"`
-	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfiguration `json:"generator"`
+	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfiguration   `json:"blueprint,omitempty"`
+	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesTargetManifestTargetConfiguration         `json:"target,omitempty"`
+	Generator *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfiguration `json:"generator,omitempty"`
 }
 
 // GetBlueprint returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes.Blueprint, and is useful for accessing the field via an interface.
@@ -3830,8 +3830,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfiguration includes the requested fields of the GraphQL type BlueprintManifestConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfiguration struct {
-	Source       *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfigurationSource `json:"source"`
-	UseKustomize *bool                                                                                                                 `json:"useKustomize"`
+	Source       *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfigurationSource `json:"source,omitempty"`
+	UseKustomize *bool                                                                                                                 `json:"useKustomize,omitempty"`
 }
 
 // GetSource returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfiguration.Source, and is useful for accessing the field via an interface.
@@ -3895,13 +3895,13 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 }
 
 type __premarshalDeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfigurationSource struct {
-	Git *ProjectSourceDetailGitGitSource `json:"git"`
+	Git *ProjectSourceDetailGitGitSource `json:"git,omitempty"`
 
-	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule"`
+	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule,omitempty"`
 
-	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository"`
+	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository,omitempty"`
 
-	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry"`
+	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry,omitempty"`
 }
 
 func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesBlueprintBlueprintManifestConfigurationSource) MarshalJSON() ([]byte, error) {
@@ -3924,55 +3924,55 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfiguration includes the requested fields of the GraphQL type KubernetesGeneratorConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfiguration struct {
-	ContainerRegistrySource       *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationContainerRegistrySource       `json:"containerRegistrySource"`
+	ContainerRegistrySource       *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationContainerRegistrySource       `json:"containerRegistrySource,omitempty"`
 	AppId                         string                                                                                                                                         `json:"appId"`
 	BranchName                    string                                                                                                                                         `json:"branchName"`
 	ProductionBranchName          string                                                                                                                                         `json:"productionBranchName"`
-	Envs                          []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar                  `json:"envs"`
+	Envs                          []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVar                  `json:"envs,omitempty"`
 	AppGeneratorVersion           string                                                                                                                                         `json:"appGeneratorVersion"`
-	CpuRequest                    *string                                                                                                                                        `json:"cpuRequest"`
-	MemoryRequest                 *string                                                                                                                                        `json:"memoryRequest"`
-	EphemeralStorage              *string                                                                                                                                        `json:"ephemeralStorage"`
-	Dedicated                     *bool                                                                                                                                          `json:"dedicated"`
-	GpuRequest                    *string                                                                                                                                        `json:"gpuRequest"`
-	GpuType                       *string                                                                                                                                        `json:"gpuType"`
-	TpuType                       *string                                                                                                                                        `json:"tpuType"`
-	TpuTfVersion                  *string                                                                                                                                        `json:"tpuTfVersion"`
-	TpuCores                      *int                                                                                                                                           `json:"tpuCores"`
-	Replicas                      *int                                                                                                                                           `json:"replicas"`
-	Autoscaling                   *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationAutoscalingAutoscalingData    `json:"autoscaling"`
-	Ports                         []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationPortsPortData               `json:"ports"`
-	StaticIp                      *bool                                                                                                                                          `json:"staticIp"`
-	HostNetwork                   *bool                                                                                                                                          `json:"hostNetwork"`
-	Endpoint                      *string                                                                                                                                        `json:"endpoint"`
-	DefaultIngressDomain          *string                                                                                                                                        `json:"defaultIngressDomain"`
-	Volumes                       []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationVolumesVolumeSpec           `json:"volumes"`
-	SecretMounts                  []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationSecretMountsSecretMountData `json:"secretMounts"`
-	DeployStrategy                *DeployStrategy                                                                                                                                `json:"deployStrategy"`
-	PreStopSleep                  *int                                                                                                                                           `json:"preStopSleep"`
-	TerminationGracePeriodSeconds *int                                                                                                                                           `json:"terminationGracePeriodSeconds"`
-	StartupProbe                  *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeData         `json:"startupProbe"`
-	LivenessProbe                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeData        `json:"livenessProbe"`
-	ReadinessProbe                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeData       `json:"readinessProbe"`
-	LogShipperType                *LogShipperType                                                                                                                                `json:"logShipperType"`
-	BetterstackToken              *string                                                                                                                                        `json:"betterstackToken"`
-	DatadogApmEnabled             *bool                                                                                                                                          `json:"datadogApmEnabled"`
-	DatadogHost                   *string                                                                                                                                        `json:"datadogHost"`
-	DatadogKey                    *string                                                                                                                                        `json:"datadogKey"`
-	LogDnaKey                     *string                                                                                                                                        `json:"logDnaKey"`
-	LogzToken                     *string                                                                                                                                        `json:"logzToken"`
-	LogzUrl                       *string                                                                                                                                        `json:"logzUrl"`
-	SyslogConfig                  *string                                                                                                                                        `json:"syslogConfig"`
-	DockerEntrypoint              []*string                                                                                                                                      `json:"dockerEntrypoint"`
-	DockerCommand                 []*string                                                                                                                                      `json:"dockerCommand"`
-	AwsIamRole                    *string                                                                                                                                        `json:"awsIamRole"`
-	GcpServiceAccount             *string                                                                                                                                        `json:"gcpServiceAccount"`
-	ServiceAccountName            *string                                                                                                                                        `json:"serviceAccountName"`
-	Annotations                   *map[string]string                                                                                                                             `json:"annotations"`
-	ServiceAnnotations            *map[string]string                                                                                                                             `json:"serviceAnnotations"`
-	NodeSelector                  *map[string]string                                                                                                                             `json:"nodeSelector"`
-	PodSpecPatch                  *string                                                                                                                                        `json:"podSpecPatch"`
-	LegacyRepo                    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLegacyRepo                    `json:"legacyRepo"`
+	CpuRequest                    *string                                                                                                                                        `json:"cpuRequest,omitempty"`
+	MemoryRequest                 *string                                                                                                                                        `json:"memoryRequest,omitempty"`
+	EphemeralStorage              *string                                                                                                                                        `json:"ephemeralStorage,omitempty"`
+	Dedicated                     *bool                                                                                                                                          `json:"dedicated,omitempty"`
+	GpuRequest                    *string                                                                                                                                        `json:"gpuRequest,omitempty"`
+	GpuType                       *string                                                                                                                                        `json:"gpuType,omitempty"`
+	TpuType                       *string                                                                                                                                        `json:"tpuType,omitempty"`
+	TpuTfVersion                  *string                                                                                                                                        `json:"tpuTfVersion,omitempty"`
+	TpuCores                      *int                                                                                                                                           `json:"tpuCores,omitempty"`
+	Replicas                      *int                                                                                                                                           `json:"replicas,omitempty"`
+	Autoscaling                   *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationAutoscalingAutoscalingData    `json:"autoscaling,omitempty"`
+	Ports                         []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationPortsPortData               `json:"ports,omitempty"`
+	StaticIp                      *bool                                                                                                                                          `json:"staticIp,omitempty"`
+	HostNetwork                   *bool                                                                                                                                          `json:"hostNetwork,omitempty"`
+	Endpoint                      *string                                                                                                                                        `json:"endpoint,omitempty"`
+	DefaultIngressDomain          *string                                                                                                                                        `json:"defaultIngressDomain,omitempty"`
+	Volumes                       []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationVolumesVolumeSpec           `json:"volumes,omitempty"`
+	SecretMounts                  []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationSecretMountsSecretMountData `json:"secretMounts,omitempty"`
+	DeployStrategy                *DeployStrategy                                                                                                                                `json:"deployStrategy,omitempty"`
+	PreStopSleep                  *int                                                                                                                                           `json:"preStopSleep,omitempty"`
+	TerminationGracePeriodSeconds *int                                                                                                                                           `json:"terminationGracePeriodSeconds,omitempty"`
+	StartupProbe                  *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeData         `json:"startupProbe,omitempty"`
+	LivenessProbe                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeData        `json:"livenessProbe,omitempty"`
+	ReadinessProbe                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeData       `json:"readinessProbe,omitempty"`
+	LogShipperType                *LogShipperType                                                                                                                                `json:"logShipperType,omitempty"`
+	BetterstackToken              *string                                                                                                                                        `json:"betterstackToken,omitempty"`
+	DatadogApmEnabled             *bool                                                                                                                                          `json:"datadogApmEnabled,omitempty"`
+	DatadogHost                   *string                                                                                                                                        `json:"datadogHost,omitempty"`
+	DatadogKey                    *string                                                                                                                                        `json:"datadogKey,omitempty"`
+	LogDnaKey                     *string                                                                                                                                        `json:"logDnaKey,omitempty"`
+	LogzToken                     *string                                                                                                                                        `json:"logzToken,omitempty"`
+	LogzUrl                       *string                                                                                                                                        `json:"logzUrl,omitempty"`
+	SyslogConfig                  *string                                                                                                                                        `json:"syslogConfig,omitempty"`
+	DockerEntrypoint              []*string                                                                                                                                      `json:"dockerEntrypoint,omitempty"`
+	DockerCommand                 []*string                                                                                                                                      `json:"dockerCommand,omitempty"`
+	AwsIamRole                    *string                                                                                                                                        `json:"awsIamRole,omitempty"`
+	GcpServiceAccount             *string                                                                                                                                        `json:"gcpServiceAccount,omitempty"`
+	ServiceAccountName            *string                                                                                                                                        `json:"serviceAccountName,omitempty"`
+	Annotations                   *map[string]string                                                                                                                             `json:"annotations,omitempty"`
+	ServiceAnnotations            *map[string]string                                                                                                                             `json:"serviceAnnotations,omitempty"`
+	NodeSelector                  *map[string]string                                                                                                                             `json:"nodeSelector,omitempty"`
+	PodSpecPatch                  *string                                                                                                                                        `json:"podSpecPatch,omitempty"`
+	LegacyRepo                    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLegacyRepo                    `json:"legacyRepo,omitempty"`
 }
 
 // GetContainerRegistrySource returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfiguration.ContainerRegistrySource, and is useful for accessing the field via an interface.
@@ -4226,8 +4226,8 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGene
 	MaxReplicas          int                                                                                                                                                                     `json:"maxReplicas"`
 	CoolDownPeriod       int                                                                                                                                                                     `json:"coolDownPeriod"`
 	Spec                 string                                                                                                                                                                  `json:"spec"`
-	Triggers             []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationAutoscalingAutoscalingDataTriggersAutoscalingTrigger `json:"triggers"`
-	KedaScaledObjectSpec *string                                                                                                                                                                 `json:"kedaScaledObjectSpec"`
+	Triggers             []*DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationAutoscalingAutoscalingDataTriggersAutoscalingTrigger `json:"triggers,omitempty"`
+	KedaScaledObjectSpec *string                                                                                                                                                                 `json:"kedaScaledObjectSpec,omitempty"`
 }
 
 // GetMinReplicas returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationAutoscalingAutoscalingData.MinReplicas, and is useful for accessing the field via an interface.
@@ -4278,11 +4278,11 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationContainerRegistrySource includes the requested fields of the GraphQL type ContainerRegistrySource.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationContainerRegistrySource struct {
-	RegistryId  *uuid.UUID `json:"registryId"`
-	RegistryUrl *string    `json:"registryUrl"`
+	RegistryId  *uuid.UUID `json:"registryId,omitempty"`
+	RegistryUrl *string    `json:"registryUrl,omitempty"`
 	Repository  string     `json:"repository"`
-	Tag         *string    `json:"tag"`
-	Digest      *string    `json:"digest"`
+	Tag         *string    `json:"tag,omitempty"`
+	Digest      *string    `json:"digest,omitempty"`
 }
 
 // GetRegistryId returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationContainerRegistrySource.RegistryId, and is useful for accessing the field via an interface.
@@ -4317,7 +4317,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGene
 	Value     string                                                                                                                            `json:"value"`
 	Visible   bool                                                                                                                              `json:"visible"`
 	Sealed    bool                                                                                                                              `json:"sealed"`
-	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVarSource `json:"source"`
+	Source    *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationEnvsEnvVarSource `json:"source,omitempty"`
 	CreatedAt time.Time                                                                                                                         `json:"createdAt"`
 	UpdatedAt time.Time                                                                                                                         `json:"updatedAt"`
 }
@@ -4396,14 +4396,14 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeData includes the requested fields of the GraphQL type ProbeData.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeData struct {
-	Command             *string                                                                                                                                              `json:"command"`
-	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeDataHttpHTTPProbe `json:"http"`
-	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeDataTcpTCPProbe   `json:"tcp"`
-	InitialDelaySeconds *int                                                                                                                                                 `json:"initialDelaySeconds"`
-	PeriodSeconds       *int                                                                                                                                                 `json:"periodSeconds"`
-	SuccessThreshold    *int                                                                                                                                                 `json:"successThreshold"`
-	FailureThreshold    *int                                                                                                                                                 `json:"failureThreshold"`
-	TimeoutSeconds      *int                                                                                                                                                 `json:"timeoutSeconds"`
+	Command             *string                                                                                                                                              `json:"command,omitempty"`
+	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeDataHttpHTTPProbe `json:"http,omitempty"`
+	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeDataTcpTCPProbe   `json:"tcp,omitempty"`
+	InitialDelaySeconds *int                                                                                                                                                 `json:"initialDelaySeconds,omitempty"`
+	PeriodSeconds       *int                                                                                                                                                 `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int                                                                                                                                                 `json:"successThreshold,omitempty"`
+	FailureThreshold    *int                                                                                                                                                 `json:"failureThreshold,omitempty"`
+	TimeoutSeconds      *int                                                                                                                                                 `json:"timeoutSeconds,omitempty"`
 }
 
 // GetCommand returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationLivenessProbeProbeData.Command, and is useful for accessing the field via an interface.
@@ -4487,11 +4487,11 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationPortsPortData includes the requested fields of the GraphQL type PortData.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationPortsPortData struct {
 	Port         string  `json:"port"`
-	Https        *bool   `json:"https"`
-	Grpc         *bool   `json:"grpc"`
-	Public       *bool   `json:"public"`
-	Protocol     *string `json:"protocol"`
-	LoadBalancer *bool   `json:"loadBalancer"`
+	Https        *bool   `json:"https,omitempty"`
+	Grpc         *bool   `json:"grpc,omitempty"`
+	Public       *bool   `json:"public,omitempty"`
+	Protocol     *string `json:"protocol,omitempty"`
+	LoadBalancer *bool   `json:"loadBalancer,omitempty"`
 }
 
 // GetPort returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationPortsPortData.Port, and is useful for accessing the field via an interface.
@@ -4526,14 +4526,14 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeData includes the requested fields of the GraphQL type ProbeData.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeData struct {
-	Command             *string                                                                                                                                               `json:"command"`
-	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeDataHttpHTTPProbe `json:"http"`
-	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeDataTcpTCPProbe   `json:"tcp"`
-	InitialDelaySeconds *int                                                                                                                                                  `json:"initialDelaySeconds"`
-	PeriodSeconds       *int                                                                                                                                                  `json:"periodSeconds"`
-	SuccessThreshold    *int                                                                                                                                                  `json:"successThreshold"`
-	FailureThreshold    *int                                                                                                                                                  `json:"failureThreshold"`
-	TimeoutSeconds      *int                                                                                                                                                  `json:"timeoutSeconds"`
+	Command             *string                                                                                                                                               `json:"command,omitempty"`
+	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeDataHttpHTTPProbe `json:"http,omitempty"`
+	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeDataTcpTCPProbe   `json:"tcp,omitempty"`
+	InitialDelaySeconds *int                                                                                                                                                  `json:"initialDelaySeconds,omitempty"`
+	PeriodSeconds       *int                                                                                                                                                  `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int                                                                                                                                                  `json:"successThreshold,omitempty"`
+	FailureThreshold    *int                                                                                                                                                  `json:"failureThreshold,omitempty"`
+	TimeoutSeconds      *int                                                                                                                                                  `json:"timeoutSeconds,omitempty"`
 }
 
 // GetCommand returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationReadinessProbeProbeData.Command, and is useful for accessing the field via an interface.
@@ -4618,7 +4618,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationSecretMountsSecretMountData struct {
 	SecretName string `json:"secretName"`
 	MountPath  string `json:"mountPath"`
-	ReadOnly   *bool  `json:"readOnly"`
+	ReadOnly   *bool  `json:"readOnly,omitempty"`
 }
 
 // GetSecretName returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationSecretMountsSecretMountData.SecretName, and is useful for accessing the field via an interface.
@@ -4638,14 +4638,14 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeData includes the requested fields of the GraphQL type ProbeData.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeData struct {
-	Command             *string                                                                                                                                             `json:"command"`
-	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeDataHttpHTTPProbe `json:"http"`
-	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeDataTcpTCPProbe   `json:"tcp"`
-	InitialDelaySeconds *int                                                                                                                                                `json:"initialDelaySeconds"`
-	PeriodSeconds       *int                                                                                                                                                `json:"periodSeconds"`
-	SuccessThreshold    *int                                                                                                                                                `json:"successThreshold"`
-	FailureThreshold    *int                                                                                                                                                `json:"failureThreshold"`
-	TimeoutSeconds      *int                                                                                                                                                `json:"timeoutSeconds"`
+	Command             *string                                                                                                                                             `json:"command,omitempty"`
+	Http                *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeDataHttpHTTPProbe `json:"http,omitempty"`
+	Tcp                 *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeDataTcpTCPProbe   `json:"tcp,omitempty"`
+	InitialDelaySeconds *int                                                                                                                                                `json:"initialDelaySeconds,omitempty"`
+	PeriodSeconds       *int                                                                                                                                                `json:"periodSeconds,omitempty"`
+	SuccessThreshold    *int                                                                                                                                                `json:"successThreshold,omitempty"`
+	FailureThreshold    *int                                                                                                                                                `json:"failureThreshold,omitempty"`
+	TimeoutSeconds      *int                                                                                                                                                `json:"timeoutSeconds,omitempty"`
 }
 
 // GetCommand returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesGeneratorKubernetesGeneratorConfigurationStartupProbeProbeData.Command, and is useful for accessing the field via an interface.
@@ -4745,7 +4745,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 // DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesTargetManifestTargetConfiguration includes the requested fields of the GraphQL type ManifestTargetConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesTargetManifestTargetConfiguration struct {
 	ClusterId uuid.UUID `json:"clusterId"`
-	Namespace *string   `json:"namespace"`
+	Namespace *string   `json:"namespace,omitempty"`
 }
 
 // GetClusterId returns DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetesTargetManifestTargetConfiguration.ClusterId, and is useful for accessing the field via an interface.
@@ -4760,8 +4760,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationKubernetes
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform includes the requested fields of the GraphQL type DeploymentConfigurationTerraform.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform struct {
-	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfiguration `json:"blueprint"`
-	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfiguration       `json:"target"`
+	Blueprint *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfiguration `json:"blueprint,omitempty"`
+	Target    *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfiguration       `json:"target,omitempty"`
 }
 
 // GetBlueprint returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform.Blueprint, and is useful for accessing the field via an interface.
@@ -4776,9 +4776,9 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraform)
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfiguration includes the requested fields of the GraphQL type BlueprintTerraformConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfiguration struct {
-	Source              *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationSource                                          `json:"source"`
-	OutputConfiguration *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfiguration `json:"outputConfiguration"`
-	TerraformVersion    *string                                                                                                                                                        `json:"terraformVersion"`
+	Source              *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationSource                                          `json:"source,omitempty"`
+	OutputConfiguration *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfiguration `json:"outputConfiguration,omitempty"`
+	TerraformVersion    *string                                                                                                                                                        `json:"terraformVersion,omitempty"`
 }
 
 // GetSource returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfiguration.Source, and is useful for accessing the field via an interface.
@@ -4799,7 +4799,7 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformB
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfiguration includes the requested fields of the GraphQL type TerraformOutputConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfiguration struct {
 	// Configuration for the automatic output handler. This configuration does not affect output defined via 'customization'.
-	Automatic *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfigurationAutomaticTerraformAutomaticOutputConfiguration `json:"automatic"`
+	Automatic *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfigurationAutomaticTerraformAutomaticOutputConfiguration `json:"automatic,omitempty"`
 	// A JSON object using Terraform configuration syntax
 	// (https://developer.hashicorp.com/terraform/language/syntax/json), constituting
 	// a valid "output" block.
@@ -4818,7 +4818,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBluep
 	// This must include the "output" key at the top level.
 	//
 	// To reference module values, use the expression mapping syntax: https://developer.hashicorp.com/terraform/language/syntax/json#expression-mapping
-	Customization *string `json:"customization"`
+	Customization *string `json:"customization,omitempty"`
 }
 
 // GetAutomatic returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfiguration.Automatic, and is useful for accessing the field via an interface.
@@ -4834,12 +4834,12 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformB
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfigurationAutomaticTerraformAutomaticOutputConfiguration includes the requested fields of the GraphQL type TerraformAutomaticOutputConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfigurationAutomaticTerraformAutomaticOutputConfiguration struct {
 	// Disable the 'automatic output' handler, which produces a single map named 'outputs' containing all module outputs.
-	Disabled *bool `json:"disabled"`
+	Disabled *bool `json:"disabled,omitempty"`
 	// The keys of any module outputs that should be excluded from the automatic output value. Ignored when 'disabled' is true.
 	Excluded []string `json:"excluded"`
 	// Mark the automatic output as sensitive. This MUST be 'true' when any sensitive
 	// module output is not specified 'excluded' *and* 'disabled' is false.
-	Sensitive *bool `json:"sensitive"`
+	Sensitive *bool `json:"sensitive,omitempty"`
 }
 
 // GetDisabled returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationOutputConfigurationTerraformOutputConfigurationAutomaticTerraformAutomaticOutputConfiguration.Disabled, and is useful for accessing the field via an interface.
@@ -4908,13 +4908,13 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformB
 }
 
 type __premarshalDeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationSource struct {
-	Git *ProjectSourceDetailGitGitSource `json:"git"`
+	Git *ProjectSourceDetailGitGitSource `json:"git,omitempty"`
 
-	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule"`
+	TerraformModule *ProjectSourceDetailTerraformModuleTerraformModuleSource `json:"terraformModule,omitempty"`
 
-	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository"`
+	HelmRepository *ProjectSourceDetailHelmRepositoryHelmRepositorySource `json:"helmRepository,omitempty"`
 
-	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry"`
+	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry,omitempty"`
 }
 
 func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformBlueprintBlueprintTerraformConfigurationSource) MarshalJSON() ([]byte, error) {
@@ -4937,9 +4937,9 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformB
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfiguration includes the requested fields of the GraphQL type TerraformTargetConfiguration.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfiguration struct {
-	ModuleName   *string                                                                                                                                    `json:"moduleName"`
-	StateBackend *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackend `json:"stateBackend"`
-	Provider     *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProvider         `json:"provider"`
+	ModuleName   *string                                                                                                                                    `json:"moduleName,omitempty"`
+	StateBackend *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackend `json:"stateBackend,omitempty"`
+	Provider     *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProvider         `json:"provider,omitempty"`
 }
 
 // GetModuleName returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfiguration.ModuleName, and is useful for accessing the field via an interface.
@@ -4962,11 +4962,11 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformT
 //
 // The Zeet-connected cloud account which will be mapped to a terraform provider
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProvider struct {
-	AwsAccount *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderAwsAccountAWSAccount `json:"awsAccount"`
-	GcpAccount *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderGcpAccountGCPAccount `json:"gcpAccount"`
-	DoAccount  *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderDoAccountDOAccount   `json:"doAccount"`
+	AwsAccount *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderAwsAccountAWSAccount `json:"awsAccount,omitempty"`
+	GcpAccount *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderGcpAccountGCPAccount `json:"gcpAccount,omitempty"`
+	DoAccount  *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProviderDoAccountDOAccount   `json:"doAccount,omitempty"`
 	// Region name, when applicable
-	Region *string `json:"region"`
+	Region *string `json:"region,omitempty"`
 }
 
 // GetAwsAccount returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationProviderTerraformProvider.AwsAccount, and is useful for accessing the field via an interface.
@@ -5021,8 +5021,8 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformT
 
 // DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackend includes the requested fields of the GraphQL type TerraformStateBackend.
 type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackend struct {
-	S3Bucket  *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendS3BucketS3BucketConfiguration   `json:"s3Bucket"`
-	GcsBucket *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendGcsBucketGCSBucketConfiguration `json:"gcsBucket"`
+	S3Bucket  *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendS3BucketS3BucketConfiguration   `json:"s3Bucket,omitempty"`
+	GcsBucket *DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendGcsBucketGCSBucketConfiguration `json:"gcsBucket,omitempty"`
 }
 
 // GetS3Bucket returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackend.S3Bucket, and is useful for accessing the field via an interface.
@@ -5040,7 +5040,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTarge
 	GcpAccountId uuid.UUID `json:"gcpAccountId"`
 	Location     string    `json:"location"`
 	BucketName   string    `json:"bucketName"`
-	Prefix       *string   `json:"prefix"`
+	Prefix       *string   `json:"prefix,omitempty"`
 }
 
 // GetGcpAccountId returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendGcsBucketGCSBucketConfiguration.GcpAccountId, and is useful for accessing the field via an interface.
@@ -5068,7 +5068,7 @@ type DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTarge
 	AwsAccountId uuid.UUID `json:"awsAccountId"`
 	Region       string    `json:"region"`
 	BucketName   string    `json:"bucketName"`
-	Key          *string   `json:"key"`
+	Key          *string   `json:"key,omitempty"`
 }
 
 // GetAwsAccountId returns DeployConfigurationDetailConfigurationDeploymentConfigurationTerraformTargetTerraformTargetConfigurationStateBackendTerraformStateBackendS3BucketS3BucketConfiguration.AwsAccountId, and is useful for accessing the field via an interface.
@@ -5169,21 +5169,21 @@ func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationVariablesD
 type __premarshalDeployConfigurationDetailConfigurationDeploymentConfigurationVariablesDeployVariable struct {
 	Id uuid.UUID `json:"id"`
 
-	SpecId *uuid.UUID `json:"specId"`
+	SpecId *uuid.UUID `json:"specId,omitempty"`
 
 	Name string `json:"name"`
 
 	Value string `json:"value"`
 
-	ValueString *string `json:"valueString"`
+	ValueString *string `json:"valueString,omitempty"`
 
-	ValueBoolean *bool `json:"valueBoolean"`
+	ValueBoolean *bool `json:"valueBoolean,omitempty"`
 
-	ValueInt *int `json:"valueInt"`
+	ValueInt *int `json:"valueInt,omitempty"`
 
-	ValueFloat *float64 `json:"valueFloat"`
+	ValueFloat *float64 `json:"valueFloat,omitempty"`
 
-	ValueJson *string `json:"valueJson"`
+	ValueJson *string `json:"valueJson,omitempty"`
 }
 
 func (v *DeployConfigurationDetailConfigurationDeploymentConfigurationVariablesDeployVariable) MarshalJSON() ([]byte, error) {
@@ -5219,14 +5219,14 @@ const (
 // DeployVariableDetail includes the GraphQL fields of DeployVariable requested by the fragment DeployVariableDetail.
 type DeployVariableDetail struct {
 	Id           uuid.UUID  `json:"id"`
-	SpecId       *uuid.UUID `json:"specId"`
+	SpecId       *uuid.UUID `json:"specId,omitempty"`
 	Name         string     `json:"name"`
 	Value        string     `json:"value"`
-	ValueString  *string    `json:"valueString"`
-	ValueBoolean *bool      `json:"valueBoolean"`
-	ValueInt     *int       `json:"valueInt"`
-	ValueFloat   *float64   `json:"valueFloat"`
-	ValueJson    *string    `json:"valueJson"`
+	ValueString  *string    `json:"valueString,omitempty"`
+	ValueBoolean *bool      `json:"valueBoolean,omitempty"`
+	ValueInt     *int       `json:"valueInt,omitempty"`
+	ValueFloat   *float64   `json:"valueFloat,omitempty"`
+	ValueJson    *string    `json:"valueJson,omitempty"`
 }
 
 // GetId returns DeployVariableDetail.Id, and is useful for accessing the field via an interface.
@@ -5287,9 +5287,9 @@ func (v *DeploymentConfigurationGcpCloudRunInput) GetGenerator() *GcpCloudRunGen
 }
 
 type DeploymentConfigurationInput struct {
-	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps,omitempty"`
+	DefaultWorkflowSteps []BlueprintDriverWorkflowStepAction         `json:"defaultWorkflowSteps"`
 	RequirePlanApproval  *bool                                       `json:"requirePlanApproval,omitempty"`
-	Variables            []BlueprintVariableInput                    `json:"variables,omitempty"`
+	Variables            []BlueprintVariableInput                    `json:"variables"`
 	Kubernetes           *DeploymentConfigurationKubernetesInput     `json:"kubernetes,omitempty"`
 	Helm                 *DeploymentConfigurationKubernetesHelmInput `json:"helm,omitempty"`
 	Terraform            *DeploymentConfigurationTerraformInput      `json:"terraform,omitempty"`
@@ -5402,8 +5402,8 @@ const (
 type DuplicateProjectDuplicateProject struct {
 	Id       uuid.UUID                                 `json:"id"`
 	Name     string                                    `json:"name"`
-	Group    *DuplicateProjectDuplicateProjectGroup    `json:"group"`
-	SubGroup *DuplicateProjectDuplicateProjectSubGroup `json:"subGroup"`
+	Group    *DuplicateProjectDuplicateProjectGroup    `json:"group,omitempty"`
+	SubGroup *DuplicateProjectDuplicateProjectSubGroup `json:"subGroup,omitempty"`
 }
 
 // GetId returns DuplicateProjectDuplicateProject.Id, and is useful for accessing the field via an interface.
@@ -5451,7 +5451,7 @@ type DuplicateProjectInput struct {
 	GroupName    *string    `json:"groupName,omitempty"`
 	SubGroupId   *uuid.UUID `json:"subGroupId,omitempty"`
 	SubGroupName *string    `json:"subGroupName,omitempty"`
-	Name         string     `json:"name,omitempty"`
+	Name         string     `json:"name"`
 }
 
 // GetGroupId returns DuplicateProjectInput.GroupId, and is useful for accessing the field via an interface.
@@ -5494,11 +5494,11 @@ func (v *EjectClusterComponentEjectClusterComponent) GetStatus() ClusterComponen
 }
 
 type EjectClusterComponentInput struct {
-	Name         string               `json:"name,omitempty"`
-	Type         ClusterComponentType `json:"type,omitempty"`
-	GroupName    string               `json:"groupName,omitempty"`
-	SubGroupName string               `json:"subGroupName,omitempty"`
-	ProjectName  string               `json:"projectName,omitempty"`
+	Name         string               `json:"name"`
+	Type         ClusterComponentType `json:"type"`
+	GroupName    string               `json:"groupName"`
+	SubGroupName string               `json:"subGroupName"`
+	ProjectName  string               `json:"projectName"`
 }
 
 // GetName returns EjectClusterComponentInput.Name, and is useful for accessing the field via an interface.
@@ -5527,8 +5527,8 @@ func (v *EjectClusterComponentResponse) GetEjectClusterComponent() EjectClusterC
 }
 
 type EnvVarInput struct {
-	Name   string `json:"name,omitempty"`
-	Value  string `json:"value,omitempty"`
+	Name   string `json:"name"`
+	Value  string `json:"value"`
 	Sealed *bool  `json:"sealed,omitempty"`
 }
 
@@ -5578,8 +5578,8 @@ const (
 )
 
 type GCSBucketBackendInput struct {
-	GcpAccountId uuid.UUID `json:"gcpAccountId,omitempty"`
-	BucketName   string    `json:"bucketName,omitempty"`
+	GcpAccountId uuid.UUID `json:"gcpAccountId"`
+	BucketName   string    `json:"bucketName"`
 	Location     *string   `json:"location,omitempty"`
 	Prefix       *string   `json:"prefix,omitempty"`
 }
@@ -5598,7 +5598,7 @@ func (v *GCSBucketBackendInput) GetPrefix() *string { return v.Prefix }
 
 type GcpCloudRunGeneratorConfigurationInput struct {
 	EnvVars         []*EnvVarInput `json:"envVars,omitempty"`
-	Name            string         `json:"name,omitempty"`
+	Name            string         `json:"name"`
 	HttpPort        *string        `json:"httpPort,omitempty"`
 	ContainerMemory *float64       `json:"containerMemory,omitempty"`
 	ContainerCpu    *float64       `json:"containerCpu,omitempty"`
@@ -5685,7 +5685,7 @@ func (v *GitEventTriggerConfigurationInput) GetRepoName() *string { return v.Rep
 func (v *GitEventTriggerConfigurationInput) GetGithubConnectionId() *int { return v.GithubConnectionId }
 
 type GitSourceInput struct {
-	Repository  string                     `json:"repository,omitempty"`
+	Repository  string                     `json:"repository"`
 	Ref         *string                    `json:"ref,omitempty"`
 	Path        *string                    `json:"path,omitempty"`
 	Integration *GitSourceIntegrationInput `json:"integration,omitempty"`
@@ -5737,7 +5737,7 @@ func (v *GroupFilter) GetName() *StringCriterion { return v.Name }
 
 // groupResponse is returned by group on success.
 type GroupResponse struct {
-	Team *GroupTeam `json:"team"`
+	Team *GroupTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns GroupResponse.Team, and is useful for accessing the field via an interface.
@@ -5745,7 +5745,7 @@ func (v *GroupResponse) GetTeam() *GroupTeam { return v.Team }
 
 // groupSubGroupsResponse is returned by groupSubGroups on success.
 type GroupSubGroupsResponse struct {
-	Team *GroupSubGroupsTeam `json:"team"`
+	Team *GroupSubGroupsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns GroupSubGroupsResponse.Team, and is useful for accessing the field via an interface.
@@ -5900,7 +5900,7 @@ func (v *GroupsInput) GetFilter() *GroupFilter { return v.Filter }
 
 // groupsResponse is returned by groups on success.
 type GroupsResponse struct {
-	Team *GroupsTeam `json:"team"`
+	Team *GroupsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns GroupsResponse.Team, and is useful for accessing the field via an interface.
@@ -5980,7 +5980,7 @@ func (v *GroupsTeamGroupsGroupConnectionPageInfo) GetEndCursor() string { return
 
 // groupsWithSubgroupsResponse is returned by groupsWithSubgroups on success.
 type GroupsWithSubgroupsResponse struct {
-	Team *GroupsWithSubgroupsTeam `json:"team"`
+	Team *GroupsWithSubgroupsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns GroupsWithSubgroupsResponse.Team, and is useful for accessing the field via an interface.
@@ -6053,9 +6053,9 @@ func (v *GroupsWithSubgroupsTeamGroupsGroupConnectionNodesGroupSubGroupsSubGroup
 }
 
 type HTTPProbeInput struct {
-	Host string `json:"host,omitempty"`
-	Port string `json:"port,omitempty"`
-	Path string `json:"path,omitempty"`
+	Host string `json:"host"`
+	Port string `json:"port"`
+	Path string `json:"path"`
 }
 
 // GetHost returns HTTPProbeInput.Host, and is useful for accessing the field via an interface.
@@ -6068,8 +6068,8 @@ func (v *HTTPProbeInput) GetPort() string { return v.Port }
 func (v *HTTPProbeInput) GetPath() string { return v.Path }
 
 type HelmRepositorySourceInput struct {
-	RepositoryUrl string  `json:"repositoryUrl,omitempty"`
-	Chart         string  `json:"chart,omitempty"`
+	RepositoryUrl string  `json:"repositoryUrl"`
+	Chart         string  `json:"chart"`
 	Version       *string `json:"version,omitempty"`
 }
 
@@ -6083,7 +6083,7 @@ func (v *HelmRepositorySourceInput) GetChart() string { return v.Chart }
 func (v *HelmRepositorySourceInput) GetVersion() *string { return v.Version }
 
 type HelmTargetConfigurationInput struct {
-	ClusterId   uuid.UUID `json:"clusterId,omitempty"`
+	ClusterId   uuid.UUID `json:"clusterId"`
 	Namespace   *string   `json:"namespace,omitempty"`
 	ReleaseName *string   `json:"releaseName,omitempty"`
 }
@@ -6099,7 +6099,7 @@ func (v *HelmTargetConfigurationInput) GetReleaseName() *string { return v.Relea
 
 // InsightsCloudsMetricInsights includes the requested fields of the GraphQL type Insights.
 type InsightsCloudsMetricInsights struct {
-	Cloud *InsightsCloudsMetricInsightsCloudCloudInsights `json:"cloud"`
+	Cloud *InsightsCloudsMetricInsightsCloudCloudInsights `json:"cloud,omitempty"`
 }
 
 // GetCloud returns InsightsCloudsMetricInsights.Cloud, and is useful for accessing the field via an interface.
@@ -6109,7 +6109,7 @@ func (v *InsightsCloudsMetricInsights) GetCloud() *InsightsCloudsMetricInsightsC
 
 // InsightsCloudsMetricInsightsCloudCloudInsights includes the requested fields of the GraphQL type CloudInsights.
 type InsightsCloudsMetricInsightsCloudCloudInsights struct {
-	UnhealthyClouds *int `json:"unhealthyClouds"`
+	UnhealthyClouds *int `json:"unhealthyClouds,omitempty"`
 }
 
 // GetUnhealthyClouds returns InsightsCloudsMetricInsightsCloudCloudInsights.UnhealthyClouds, and is useful for accessing the field via an interface.
@@ -6119,7 +6119,7 @@ func (v *InsightsCloudsMetricInsightsCloudCloudInsights) GetUnhealthyClouds() *i
 
 // insightsCloudsMetricResponse is returned by insightsCloudsMetric on success.
 type InsightsCloudsMetricResponse struct {
-	Insights *InsightsCloudsMetricInsights `json:"insights"`
+	Insights *InsightsCloudsMetricInsights `json:"insights,omitempty"`
 }
 
 // GetInsights returns InsightsCloudsMetricResponse.Insights, and is useful for accessing the field via an interface.
@@ -6127,7 +6127,7 @@ func (v *InsightsCloudsMetricResponse) GetInsights() *InsightsCloudsMetricInsigh
 
 // InsightsClustersMetricInsights includes the requested fields of the GraphQL type Insights.
 type InsightsClustersMetricInsights struct {
-	Cloud *InsightsClustersMetricInsightsCloudCloudInsights `json:"cloud"`
+	Cloud *InsightsClustersMetricInsightsCloudCloudInsights `json:"cloud,omitempty"`
 }
 
 // GetCloud returns InsightsClustersMetricInsights.Cloud, and is useful for accessing the field via an interface.
@@ -6137,7 +6137,7 @@ func (v *InsightsClustersMetricInsights) GetCloud() *InsightsClustersMetricInsig
 
 // InsightsClustersMetricInsightsCloudCloudInsights includes the requested fields of the GraphQL type CloudInsights.
 type InsightsClustersMetricInsightsCloudCloudInsights struct {
-	UnreachableClusters *int `json:"unreachableClusters"`
+	UnreachableClusters *int `json:"unreachableClusters,omitempty"`
 }
 
 // GetUnreachableClusters returns InsightsClustersMetricInsightsCloudCloudInsights.UnreachableClusters, and is useful for accessing the field via an interface.
@@ -6147,7 +6147,7 @@ func (v *InsightsClustersMetricInsightsCloudCloudInsights) GetUnreachableCluster
 
 // insightsClustersMetricResponse is returned by insightsClustersMetric on success.
 type InsightsClustersMetricResponse struct {
-	Insights *InsightsClustersMetricInsights `json:"insights"`
+	Insights *InsightsClustersMetricInsights `json:"insights,omitempty"`
 }
 
 // GetInsights returns InsightsClustersMetricResponse.Insights, and is useful for accessing the field via an interface.
@@ -6338,7 +6338,7 @@ func (v *JobDetailItem) GetRuns() JobDetailItemRunsJobRunConnection { return v.R
 
 // JobDetailItemDefinitionJobDefinition includes the requested fields of the GraphQL type JobDefinition.
 type JobDetailItemDefinitionJobDefinition struct {
-	JobName *string `json:"jobName"`
+	JobName *string `json:"jobName,omitempty"`
 }
 
 // GetJobName returns JobDetailItemDefinitionJobDefinition.JobName, and is useful for accessing the field via an interface.
@@ -6415,7 +6415,7 @@ func (v *JobDetailItemRunsJobRunConnectionNodesJobRun) UnmarshalJSON(b []byte) e
 type __premarshalJobDetailItemRunsJobRunConnectionNodesJobRun struct {
 	Id uuid.UUID `json:"id"`
 
-	Sequence *int `json:"sequence"`
+	Sequence *int `json:"sequence,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -6466,7 +6466,7 @@ func (v *JobListItem) GetRuns() JobListItemRunsJobRunConnection { return v.Runs 
 
 // JobListItemDefinitionJobDefinition includes the requested fields of the GraphQL type JobDefinition.
 type JobListItemDefinitionJobDefinition struct {
-	JobName *string `json:"jobName"`
+	JobName *string `json:"jobName,omitempty"`
 }
 
 // GetJobName returns JobListItemDefinitionJobDefinition.JobName, and is useful for accessing the field via an interface.
@@ -6482,7 +6482,7 @@ func (v *JobListItemRunsJobRunConnection) GetTotalCount() int { return v.TotalCo
 
 // jobListResponse is returned by jobList on success.
 type JobListResponse struct {
-	Team *JobListTeam `json:"team"`
+	Team *JobListTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns JobListResponse.Team, and is useful for accessing the field via an interface.
@@ -6499,7 +6499,7 @@ func (v *JobListResponse) GetTeam() *JobListTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type JobListTeam struct {
 	Id      uuid.UUID           `json:"id"`
-	Project *JobListTeamProject `json:"project"`
+	Project *JobListTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns JobListTeam.Id, and is useful for accessing the field via an interface.
@@ -6589,8 +6589,8 @@ type JobRunDetail struct {
 	JobRunListItem `json:"-"`
 	UpdatedAt      time.Time                           `json:"updatedAt"`
 	Command        string                              `json:"command"`
-	ExitCode       *int                                `json:"exitCode"`
-	ErrorMessage   *string                             `json:"errorMessage"`
+	ExitCode       *int                                `json:"exitCode,omitempty"`
+	ErrorMessage   *string                             `json:"errorMessage,omitempty"`
 	Definition     JobRunDetailDefinitionJobDefinition `json:"definition"`
 }
 
@@ -6651,15 +6651,15 @@ type __premarshalJobRunDetail struct {
 
 	Command string `json:"command"`
 
-	ExitCode *int `json:"exitCode"`
+	ExitCode *int `json:"exitCode,omitempty"`
 
-	ErrorMessage *string `json:"errorMessage"`
+	ErrorMessage *string `json:"errorMessage,omitempty"`
 
 	Definition JobRunDetailDefinitionJobDefinition `json:"definition"`
 
 	Id uuid.UUID `json:"id"`
 
-	Sequence *int `json:"sequence"`
+	Sequence *int `json:"sequence,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -6691,7 +6691,7 @@ func (v *JobRunDetail) __premarshalJSON() (*__premarshalJobRunDetail, error) {
 
 // JobRunDetailDefinitionJobDefinition includes the requested fields of the GraphQL type JobDefinition.
 type JobRunDetailDefinitionJobDefinition struct {
-	JobName *string `json:"jobName"`
+	JobName *string `json:"jobName,omitempty"`
 }
 
 // GetJobName returns JobRunDetailDefinitionJobDefinition.JobName, and is useful for accessing the field via an interface.
@@ -6699,7 +6699,7 @@ func (v *JobRunDetailDefinitionJobDefinition) GetJobName() *string { return v.Jo
 
 // jobRunDetailResponse is returned by jobRunDetail on success.
 type JobRunDetailResponse struct {
-	Team *JobRunDetailTeam `json:"team"`
+	Team *JobRunDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns JobRunDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -6716,7 +6716,7 @@ func (v *JobRunDetailResponse) GetTeam() *JobRunDetailTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type JobRunDetailTeam struct {
 	Id     uuid.UUID               `json:"id"`
-	JobRun *JobRunDetailTeamJobRun `json:"jobRun"`
+	JobRun *JobRunDetailTeamJobRun `json:"jobRun,omitempty"`
 }
 
 // GetId returns JobRunDetailTeam.Id, and is useful for accessing the field via an interface.
@@ -6791,15 +6791,15 @@ type __premarshalJobRunDetailTeamJobRun struct {
 
 	Command string `json:"command"`
 
-	ExitCode *int `json:"exitCode"`
+	ExitCode *int `json:"exitCode,omitempty"`
 
-	ErrorMessage *string `json:"errorMessage"`
+	ErrorMessage *string `json:"errorMessage,omitempty"`
 
 	Definition JobRunDetailDefinitionJobDefinition `json:"definition"`
 
 	Id uuid.UUID `json:"id"`
 
-	Sequence *int `json:"sequence"`
+	Sequence *int `json:"sequence,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -6832,7 +6832,7 @@ func (v *JobRunDetailTeamJobRun) __premarshalJSON() (*__premarshalJobRunDetailTe
 // JobRunListItem includes the GraphQL fields of JobRun requested by the fragment JobRunListItem.
 type JobRunListItem struct {
 	Id        uuid.UUID   `json:"id"`
-	Sequence  *int        `json:"sequence"`
+	Sequence  *int        `json:"sequence,omitempty"`
 	CreatedAt time.Time   `json:"createdAt"`
 	State     JobRunState `json:"state"`
 }
@@ -6851,7 +6851,7 @@ func (v *JobRunListItem) GetState() JobRunState { return v.State }
 
 // jobRunListResponse is returned by jobRunList on success.
 type JobRunListResponse struct {
-	Team *JobRunListTeam `json:"team"`
+	Team *JobRunListTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns JobRunListResponse.Team, and is useful for accessing the field via an interface.
@@ -6868,7 +6868,7 @@ func (v *JobRunListResponse) GetTeam() *JobRunListTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type JobRunListTeam struct {
 	Id  uuid.UUID          `json:"id"`
-	Job *JobRunListTeamJob `json:"job"`
+	Job *JobRunListTeamJob `json:"job,omitempty"`
 }
 
 // GetId returns JobRunListTeam.Id, and is useful for accessing the field via an interface.
@@ -6946,7 +6946,7 @@ func (v *JobRunListTeamJob) __premarshalJSON() (*__premarshalJobRunListTeamJob, 
 // JobRunLogs includes the GraphQL fields of JobRun requested by the fragment JobRunLogs.
 type JobRunLogs struct {
 	Id   uuid.UUID       `json:"id"`
-	Logs *JobRunLogsLogs `json:"logs"`
+	Logs *JobRunLogsLogs `json:"logs,omitempty"`
 }
 
 // GetId returns JobRunLogs.Id, and is useful for accessing the field via an interface.
@@ -6959,7 +6959,7 @@ func (v *JobRunLogs) GetLogs() *JobRunLogsLogs { return v.Logs }
 type JobRunLogsLogs struct {
 	Id        string                          `json:"id"`
 	Completed bool                            `json:"completed"`
-	Expired   *bool                           `json:"expired"`
+	Expired   *bool                           `json:"expired,omitempty"`
 	Entries   []JobRunLogsLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -6977,7 +6977,7 @@ func (v *JobRunLogsLogs) GetEntries() []JobRunLogsLogsEntriesLogEntry { return v
 
 // JobRunLogsLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type JobRunLogsLogsEntriesLogEntry struct {
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Text      string     `json:"text"`
 }
 
@@ -6989,7 +6989,7 @@ func (v *JobRunLogsLogsEntriesLogEntry) GetText() string { return v.Text }
 
 // jobRunLogsResponse is returned by jobRunLogs on success.
 type JobRunLogsResponse struct {
-	Team *JobRunLogsTeam `json:"team"`
+	Team *JobRunLogsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns JobRunLogsResponse.Team, and is useful for accessing the field via an interface.
@@ -7006,7 +7006,7 @@ func (v *JobRunLogsResponse) GetTeam() *JobRunLogsTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type JobRunLogsTeam struct {
 	Id     uuid.UUID             `json:"id"`
-	JobRun *JobRunLogsTeamJobRun `json:"jobRun"`
+	JobRun *JobRunLogsTeamJobRun `json:"jobRun,omitempty"`
 }
 
 // GetId returns JobRunLogsTeam.Id, and is useful for accessing the field via an interface.
@@ -7054,7 +7054,7 @@ func (v *JobRunLogsTeamJobRun) UnmarshalJSON(b []byte) error {
 type __premarshalJobRunLogsTeamJobRun struct {
 	Id uuid.UUID `json:"id"`
 
-	Logs *JobRunLogsLogs `json:"logs"`
+	Logs *JobRunLogsLogs `json:"logs,omitempty"`
 }
 
 func (v *JobRunLogsTeamJobRun) MarshalJSON() ([]byte, error) {
@@ -7085,11 +7085,11 @@ const (
 
 type KubernetesGeneratorConfigurationInput struct {
 	ContainerRegistrySource       *ContainerRegistrySourceInput `json:"containerRegistrySource,omitempty"`
-	AppId                         string                        `json:"appId,omitempty"`
-	BranchName                    string                        `json:"branchName,omitempty"`
-	ProductionBranchName          string                        `json:"productionBranchName,omitempty"`
+	AppId                         string                        `json:"appId"`
+	BranchName                    string                        `json:"branchName"`
+	ProductionBranchName          string                        `json:"productionBranchName"`
 	Envs                          []*EnvVarInput                `json:"envs,omitempty"`
-	AppGeneratorVersion           string                        `json:"appGeneratorVersion,omitempty"`
+	AppGeneratorVersion           string                        `json:"appGeneratorVersion"`
 	CpuRequest                    *string                       `json:"cpuRequest,omitempty"`
 	MemoryRequest                 *string                       `json:"memoryRequest,omitempty"`
 	EphemeralStorage              *string                       `json:"ephemeralStorage,omitempty"`
@@ -7349,7 +7349,7 @@ const (
 )
 
 type ManifestTargetConfigurationInput struct {
-	ClusterId uuid.UUID `json:"clusterId,omitempty"`
+	ClusterId uuid.UUID `json:"clusterId"`
 	Namespace *string   `json:"namespace,omitempty"`
 }
 
@@ -7390,7 +7390,7 @@ const (
 
 // MetricStreamV1 includes the GraphQL fields of MetricStream requested by the fragment MetricStreamV1.
 type MetricStreamV1 struct {
-	Type        *MetricType                                 `json:"type"`
+	Type        *MetricType                                 `json:"type,omitempty"`
 	Query       string                                      `json:"query"`
 	Annotations []MetricStreamV1AnnotationsMetricAnnotation `json:"annotations"`
 	Labels      []MetricStreamV1LabelsMetricStreamLabel     `json:"labels"`
@@ -7418,9 +7418,9 @@ func (v *MetricStreamV1) GetEntries() []MetricStreamV1EntriesMetricEntry { retur
 type MetricStreamV1AnnotationsMetricAnnotation struct {
 	Type      MetricAnnotationType      `json:"type"`
 	Direction MetricAnnotationDirection `json:"direction"`
-	Function  *MetricAnnotationFunction `json:"function"`
-	Label     *string                   `json:"label"`
-	Value     *float64                  `json:"value"`
+	Function  *MetricAnnotationFunction `json:"function,omitempty"`
+	Label     *string                   `json:"label,omitempty"`
+	Value     *float64                  `json:"value,omitempty"`
 }
 
 // GetType returns MetricStreamV1AnnotationsMetricAnnotation.Type, and is useful for accessing the field via an interface.
@@ -7444,7 +7444,7 @@ func (v *MetricStreamV1AnnotationsMetricAnnotation) GetValue() *float64 { return
 
 // MetricStreamV1EntriesMetricEntry includes the requested fields of the GraphQL type MetricEntry.
 type MetricStreamV1EntriesMetricEntry struct {
-	Value     *float64  `json:"value"`
+	Value     *float64  `json:"value,omitempty"`
 	Timestamp time.Time `json:"timestamp"`
 }
 
@@ -7485,7 +7485,7 @@ const (
 )
 
 type MultiEntityCriterion struct {
-	Value []uuid.UUID `json:"value,omitempty"`
+	Value []uuid.UUID `json:"value"`
 }
 
 // GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
@@ -7502,7 +7502,7 @@ func (v *ObservabilityConfigInput) GetSelector() *ObservabilityResourceSelectorI
 
 // observabilityConfigResponse is returned by observabilityConfig on success.
 type ObservabilityConfigResponse struct {
-	Team *ObservabilityConfigTeam `json:"team"`
+	Team *ObservabilityConfigTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ObservabilityConfigResponse.Team, and is useful for accessing the field via an interface.
@@ -7519,7 +7519,7 @@ func (v *ObservabilityConfigResponse) GetTeam() *ObservabilityConfigTeam { retur
 // Being a member of sub-team does not confer access to the parent team.
 type ObservabilityConfigTeam struct {
 	Id      uuid.UUID                       `json:"id"`
-	Project *ObservabilityConfigTeamProject `json:"project"`
+	Project *ObservabilityConfigTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ObservabilityConfigTeam.Id, and is useful for accessing the field via an interface.
@@ -7531,7 +7531,7 @@ func (v *ObservabilityConfigTeam) GetProject() *ObservabilityConfigTeamProject {
 // ObservabilityConfigTeamProject includes the requested fields of the GraphQL type Project.
 type ObservabilityConfigTeamProject struct {
 	Id                  uuid.UUID                                          `json:"id"`
-	ObservabilityConfig *ObservabilityConfigTeamProjectObservabilityConfig `json:"observabilityConfig"`
+	ObservabilityConfig *ObservabilityConfigTeamProjectObservabilityConfig `json:"observabilityConfig,omitempty"`
 }
 
 // GetId returns ObservabilityConfigTeamProject.Id, and is useful for accessing the field via an interface.
@@ -7544,7 +7544,7 @@ func (v *ObservabilityConfigTeamProject) GetObservabilityConfig() *Observability
 
 // ObservabilityConfigTeamProjectObservabilityConfig includes the requested fields of the GraphQL type ObservabilityConfig.
 type ObservabilityConfigTeamProjectObservabilityConfig struct {
-	Selector *ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector `json:"selector"`
+	Selector *ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector `json:"selector,omitempty"`
 }
 
 // GetSelector returns ObservabilityConfigTeamProjectObservabilityConfig.Selector, and is useful for accessing the field via an interface.
@@ -7555,9 +7555,9 @@ func (v *ObservabilityConfigTeamProjectObservabilityConfig) GetSelector() *Obser
 // ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector includes the requested fields of the GraphQL type ObservabilityResourceSelector.
 type ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelector struct {
 	Type          ResourceType                                                                                                                     `json:"type"`
-	Namespace     *string                                                                                                                          `json:"namespace"`
-	ResourceName  *string                                                                                                                          `json:"resourceName"`
-	ContainerName *string                                                                                                                          `json:"containerName"`
+	Namespace     *string                                                                                                                          `json:"namespace,omitempty"`
+	ResourceName  *string                                                                                                                          `json:"resourceName,omitempty"`
+	ContainerName *string                                                                                                                          `json:"containerName,omitempty"`
 	Labels        []ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityResourceSelectorLabelsObservabilityResourceSelectorLabel `json:"labels"`
 }
 
@@ -7603,11 +7603,11 @@ func (v *ObservabilityConfigTeamProjectObservabilityConfigSelectorObservabilityR
 }
 
 type ObservabilityResourceSelectorInput struct {
-	Type          ResourceType                              `json:"type,omitempty"`
+	Type          ResourceType                              `json:"type"`
 	Namespace     *string                                   `json:"namespace,omitempty"`
 	ResourceName  *string                                   `json:"resourceName,omitempty"`
 	ContainerName *string                                   `json:"containerName,omitempty"`
-	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels,omitempty"`
+	Labels        []ObservabilityResourceSelectorLabelInput `json:"labels"`
 }
 
 // GetType returns ObservabilityResourceSelectorInput.Type, and is useful for accessing the field via an interface.
@@ -7628,8 +7628,8 @@ func (v *ObservabilityResourceSelectorInput) GetLabels() []ObservabilityResource
 }
 
 type ObservabilityResourceSelectorLabelInput struct {
-	Name  string `json:"name,omitempty"`
-	Value string `json:"value,omitempty"`
+	Name  string `json:"name"`
+	Value string `json:"value"`
 }
 
 // GetName returns ObservabilityResourceSelectorLabelInput.Name, and is useful for accessing the field via an interface.
@@ -7640,10 +7640,10 @@ func (v *ObservabilityResourceSelectorLabelInput) GetValue() string { return v.V
 
 // OutputEntryDetail includes the GraphQL fields of ProjectOutputEntry requested by the fragment OutputEntryDetail.
 type OutputEntryDetail struct {
-	DisplayName *string       `json:"displayName"`
-	Name        *string       `json:"name"`
-	Type        *VariableType `json:"type"`
-	Value       *string       `json:"value"`
+	DisplayName *string       `json:"displayName,omitempty"`
+	Name        *string       `json:"name,omitempty"`
+	Type        *VariableType `json:"type,omitempty"`
+	Value       *string       `json:"value,omitempty"`
 }
 
 // GetDisplayName returns OutputEntryDetail.DisplayName, and is useful for accessing the field via an interface.
@@ -7678,7 +7678,7 @@ func (v *PageInput) GetAfter() *string { return v.After }
 func (v *PageInput) GetBefore() *string { return v.Before }
 
 type PortDataInput struct {
-	Port         string  `json:"port,omitempty"`
+	Port         string  `json:"port"`
 	Https        *bool   `json:"https,omitempty"`
 	Grpc         *bool   `json:"grpc,omitempty"`
 	Public       *bool   `json:"public,omitempty"`
@@ -7741,7 +7741,7 @@ func (v *ProbeDataInput) GetTimeoutSeconds() *int { return v.TimeoutSeconds }
 
 // projectAvailableProvidersResponse is returned by projectAvailableProviders on success.
 type ProjectAvailableProvidersResponse struct {
-	Team *ProjectAvailableProvidersTeam `json:"team"`
+	Team *ProjectAvailableProvidersTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectAvailableProvidersResponse.Team, and is useful for accessing the field via an interface.
@@ -7758,7 +7758,7 @@ func (v *ProjectAvailableProvidersResponse) GetTeam() *ProjectAvailableProviders
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectAvailableProvidersTeam struct {
 	Id      uuid.UUID                             `json:"id"`
-	Project *ProjectAvailableProvidersTeamProject `json:"project"`
+	Project *ProjectAvailableProvidersTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectAvailableProvidersTeam.Id, and is useful for accessing the field via an interface.
@@ -7936,13 +7936,13 @@ type __premarshalProjectBlueprintDetailConfigurationBlueprintConfiguration struc
 
 	Published bool `json:"published"`
 
-	Description *string `json:"description"`
+	Description *string `json:"description,omitempty"`
 
 	Tags []string `json:"tags"`
 
-	LogoUrl *string `json:"logoUrl"`
+	LogoUrl *string `json:"logoUrl,omitempty"`
 
-	RichInputSchema *string `json:"richInputSchema"`
+	RichInputSchema *string `json:"richInputSchema,omitempty"`
 }
 
 func (v *ProjectBlueprintDetailConfigurationBlueprintConfiguration) MarshalJSON() ([]byte, error) {
@@ -7968,7 +7968,7 @@ func (v *ProjectBlueprintDetailConfigurationBlueprintConfiguration) __premarshal
 
 // projectClustersResponse is returned by projectClusters on success.
 type ProjectClustersResponse struct {
-	Team *ProjectClustersTeam `json:"team"`
+	Team *ProjectClustersTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectClustersResponse.Team, and is useful for accessing the field via an interface.
@@ -7985,7 +7985,7 @@ func (v *ProjectClustersResponse) GetTeam() *ProjectClustersTeam { return v.Team
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectClustersTeam struct {
 	Id      uuid.UUID                   `json:"id"`
-	Project *ProjectClustersTeamProject `json:"project"`
+	Project *ProjectClustersTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectClustersTeam.Id, and is useful for accessing the field via an interface.
@@ -8064,7 +8064,7 @@ const (
 type ProjectDeployDetail struct {
 	Id   uuid.UUID                                   `json:"id"`
 	Name string                                      `json:"name"`
-	Runs *ProjectDeployDetailRunsDeployRunConnection `json:"runs"`
+	Runs *ProjectDeployDetailRunsDeployRunConnection `json:"runs,omitempty"`
 }
 
 // GetId returns ProjectDeployDetail.Id, and is useful for accessing the field via an interface.
@@ -8078,7 +8078,7 @@ func (v *ProjectDeployDetail) GetRuns() *ProjectDeployDetailRunsDeployRunConnect
 
 // projectDeployDetailResponse is returned by projectDeployDetail on success.
 type ProjectDeployDetailResponse struct {
-	Team *ProjectDeployDetailTeam `json:"team"`
+	Team *ProjectDeployDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectDeployDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -8148,7 +8148,7 @@ type __premarshalProjectDeployDetailRunsDeployRunConnectionNodesDeployRun struct
 
 	Sequence int `json:"sequence"`
 
-	Result *ProjectDeployRunListResultDeploymentResult `json:"result"`
+	Result *ProjectDeployRunListResultDeploymentResult `json:"result,omitempty"`
 }
 
 func (v *ProjectDeployDetailRunsDeployRunConnectionNodesDeployRun) MarshalJSON() ([]byte, error) {
@@ -8179,7 +8179,7 @@ func (v *ProjectDeployDetailRunsDeployRunConnectionNodesDeployRun) __premarshalJ
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectDeployDetailTeam struct {
 	Id     uuid.UUID                      `json:"id"`
-	Deploy *ProjectDeployDetailTeamDeploy `json:"deploy"`
+	Deploy *ProjectDeployDetailTeamDeploy `json:"deploy,omitempty"`
 }
 
 // GetId returns ProjectDeployDetailTeam.Id, and is useful for accessing the field via an interface.
@@ -8234,7 +8234,7 @@ type __premarshalProjectDeployDetailTeamDeploy struct {
 
 	Name string `json:"name"`
 
-	Runs *ProjectDeployDetailRunsDeployRunConnection `json:"runs"`
+	Runs *ProjectDeployDetailRunsDeployRunConnection `json:"runs,omitempty"`
 }
 
 func (v *ProjectDeployDetailTeamDeploy) MarshalJSON() ([]byte, error) {
@@ -8258,7 +8258,7 @@ func (v *ProjectDeployDetailTeamDeploy) __premarshalJSON() (*__premarshalProject
 type ProjectDeployList struct {
 	Id   uuid.UUID                                 `json:"id"`
 	Name string                                    `json:"name"`
-	Runs *ProjectDeployListRunsDeployRunConnection `json:"runs"`
+	Runs *ProjectDeployListRunsDeployRunConnection `json:"runs,omitempty"`
 }
 
 // GetId returns ProjectDeployList.Id, and is useful for accessing the field via an interface.
@@ -8298,7 +8298,7 @@ func (v *ProjectDeployListRunsDeployRunConnectionNodesDeployRun) GetSequence() i
 
 // projectDeployRevisionsResponse is returned by projectDeployRevisions on success.
 type ProjectDeployRevisionsResponse struct {
-	Team *ProjectDeployRevisionsTeam `json:"team"`
+	Team *ProjectDeployRevisionsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectDeployRevisionsResponse.Team, and is useful for accessing the field via an interface.
@@ -8315,7 +8315,7 @@ func (v *ProjectDeployRevisionsResponse) GetTeam() *ProjectDeployRevisionsTeam {
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectDeployRevisionsTeam struct {
 	Id      uuid.UUID                          `json:"id"`
-	Project *ProjectDeployRevisionsTeamProject `json:"project"`
+	Project *ProjectDeployRevisionsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectDeployRevisionsTeam.Id, and is useful for accessing the field via an interface.
@@ -8355,7 +8355,7 @@ type ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeploy struct 
 	Id   uuid.UUID `json:"id"`
 	Name string    `json:"name"`
 	// Only the revisionMetadata and revisionData will be available.
-	ConfigurationRevisions *ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnection `json:"configurationRevisions"`
+	ConfigurationRevisions *ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConfigurationRevisionsDeploymentConfigurationConnection `json:"configurationRevisions,omitempty"`
 }
 
 // GetId returns ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeploy.Id, and is useful for accessing the field via an interface.
@@ -8471,7 +8471,7 @@ func (v *ProjectDeployRevisionsTeamProjectDeploysDeployConnectionNodesDeployConf
 type ProjectDeployRunDetail struct {
 	Id       uuid.UUID                                     `json:"id"`
 	Sequence int                                           `json:"sequence"`
-	Result   *ProjectDeployRunDetailResultDeploymentResult `json:"result"`
+	Result   *ProjectDeployRunDetailResultDeploymentResult `json:"result,omitempty"`
 }
 
 // GetId returns ProjectDeployRunDetail.Id, and is useful for accessing the field via an interface.
@@ -8487,7 +8487,7 @@ func (v *ProjectDeployRunDetail) GetResult() *ProjectDeployRunDetailResultDeploy
 
 // projectDeployRunDetailResponse is returned by projectDeployRunDetail on success.
 type ProjectDeployRunDetailResponse struct {
-	Team *ProjectDeployRunDetailTeam `json:"team"`
+	Team *ProjectDeployRunDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectDeployRunDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -8599,7 +8599,7 @@ func (v *ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection
 
 // ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesCertificateResource includes the requested fields of the GraphQL type CertificateResource.
 type ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesCertificateResource struct {
-	Typename    *string `json:"__typename"`
+	Typename    *string `json:"__typename,omitempty"`
 	DisplayName string  `json:"displayName"`
 	ExternalId  string  `json:"externalId"`
 }
@@ -8621,7 +8621,7 @@ func (v *ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection
 
 // ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesContainerResource includes the requested fields of the GraphQL type ContainerResource.
 type ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesContainerResource struct {
-	Typename    *string `json:"__typename"`
+	Typename    *string `json:"__typename,omitempty"`
 	DisplayName string  `json:"displayName"`
 	ExternalId  string  `json:"externalId"`
 }
@@ -8643,7 +8643,7 @@ func (v *ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnection
 
 // ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesEndpointResource includes the requested fields of the GraphQL type EndpointResource.
 type ProjectDeployRunDetailResultDeploymentResultResourcesResourceConnectionNodesEndpointResource struct {
-	Typename    *string `json:"__typename"`
+	Typename    *string `json:"__typename,omitempty"`
 	DisplayName string  `json:"displayName"`
 	ExternalId  string  `json:"externalId"`
 }
@@ -8824,7 +8824,7 @@ type __premarshalProjectDeployRunDetailTeamDeployRun struct {
 
 	Sequence int `json:"sequence"`
 
-	Result *ProjectDeployRunDetailResultDeploymentResult `json:"result"`
+	Result *ProjectDeployRunDetailResultDeploymentResult `json:"result,omitempty"`
 }
 
 func (v *ProjectDeployRunDetailTeamDeployRun) MarshalJSON() ([]byte, error) {
@@ -8848,7 +8848,7 @@ func (v *ProjectDeployRunDetailTeamDeployRun) __premarshalJSON() (*__premarshalP
 type ProjectDeployRunList struct {
 	Id       uuid.UUID                                   `json:"id"`
 	Sequence int                                         `json:"sequence"`
-	Result   *ProjectDeployRunListResultDeploymentResult `json:"result"`
+	Result   *ProjectDeployRunListResultDeploymentResult `json:"result,omitempty"`
 }
 
 // GetId returns ProjectDeployRunList.Id, and is useful for accessing the field via an interface.
@@ -8968,11 +8968,11 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnection) 
 
 // ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesCertificateResource includes the requested fields of the GraphQL type CertificateResource.
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesCertificateResource struct {
-	Typename     *string `json:"__typename"`
+	Typename     *string `json:"__typename,omitempty"`
 	DisplayName  string  `json:"displayName"`
 	ExternalId   string  `json:"externalId"`
-	ExternalLink *string `json:"externalLink"`
-	ExternalType *string `json:"externalType"`
+	ExternalLink *string `json:"externalLink,omitempty"`
+	ExternalType *string `json:"externalType,omitempty"`
 }
 
 // GetTypename returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesCertificateResource.Typename, and is useful for accessing the field via an interface.
@@ -9002,12 +9002,12 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNo
 
 // ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResource includes the requested fields of the GraphQL type ContainerResource.
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResource struct {
-	Typename     *string                                                                                          `json:"__typename"`
+	Typename     *string                                                                                          `json:"__typename,omitempty"`
 	DisplayName  string                                                                                           `json:"displayName"`
 	ExternalId   string                                                                                           `json:"externalId"`
-	ExternalLink *string                                                                                          `json:"externalLink"`
-	ExternalType *string                                                                                          `json:"externalType"`
-	Logs         *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs `json:"logs"`
+	ExternalLink *string                                                                                          `json:"externalLink,omitempty"`
+	ExternalType *string                                                                                          `json:"externalType,omitempty"`
+	Logs         *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs `json:"logs,omitempty"`
 }
 
 // GetTypename returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResource.Typename, and is useful for accessing the field via an interface.
@@ -9044,7 +9044,7 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNo
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogs struct {
 	Id        string                                                                                                           `json:"id"`
 	Completed bool                                                                                                             `json:"completed"`
-	Expired   *bool                                                                                                            `json:"expired"`
+	Expired   *bool                                                                                                            `json:"expired,omitempty"`
 	Entries   []ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -9071,7 +9071,7 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNo
 // ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry struct {
 	Text      string     `json:"text"`
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 }
 
 // GetText returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesContainerResourceLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
@@ -9086,11 +9086,11 @@ func (v *ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNo
 
 // ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesEndpointResource includes the requested fields of the GraphQL type EndpointResource.
 type ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesEndpointResource struct {
-	Typename     *string `json:"__typename"`
+	Typename     *string `json:"__typename,omitempty"`
 	DisplayName  string  `json:"displayName"`
 	ExternalId   string  `json:"externalId"`
-	ExternalLink *string `json:"externalLink"`
-	ExternalType *string `json:"externalType"`
+	ExternalLink *string `json:"externalLink,omitempty"`
+	ExternalType *string `json:"externalType,omitempty"`
 }
 
 // GetTypename returns ProjectDeployRunListResultDeploymentResultResourcesResourceConnectionNodesEndpointResource.Typename, and is useful for accessing the field via an interface.
@@ -9215,7 +9215,7 @@ func __marshalProjectDeployRunListResultDeploymentResultResourcesResourceConnect
 
 // projectDeploysResponse is returned by projectDeploys on success.
 type ProjectDeploysResponse struct {
-	Team *ProjectDeploysTeam `json:"team"`
+	Team *ProjectDeploysTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectDeploysResponse.Team, and is useful for accessing the field via an interface.
@@ -9232,7 +9232,7 @@ func (v *ProjectDeploysResponse) GetTeam() *ProjectDeploysTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectDeploysTeam struct {
 	Id      uuid.UUID                  `json:"id"`
-	Project *ProjectDeploysTeamProject `json:"project"`
+	Project *ProjectDeploysTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectDeploysTeam.Id, and is useful for accessing the field via an interface.
@@ -9315,7 +9315,7 @@ type __premarshalProjectDeploysTeamProjectDeploysDeployConnectionNodesDeploy str
 
 	Name string `json:"name"`
 
-	Runs *ProjectDeployListRunsDeployRunConnection `json:"runs"`
+	Runs *ProjectDeployListRunsDeployRunConnection `json:"runs,omitempty"`
 }
 
 func (v *ProjectDeploysTeamProjectDeploysDeployConnectionNodesDeploy) MarshalJSON() ([]byte, error) {
@@ -9339,10 +9339,10 @@ func (v *ProjectDeploysTeamProjectDeploysDeployConnectionNodesDeploy) __premarsh
 type ProjectDetail struct {
 	ProjectInfo `json:"-"`
 	Deploys     ProjectDetailDeploysDeployConnection `json:"deploys"`
-	Build       *ProjectDetailBuild                  `json:"build"`
-	Blueprint   *ProjectDetailBlueprint              `json:"blueprint"`
-	Group       *ProjectDetailGroup                  `json:"group"`
-	SubGroup    *ProjectDetailSubGroup               `json:"subGroup"`
+	Build       *ProjectDetailBuild                  `json:"build,omitempty"`
+	Blueprint   *ProjectDetailBlueprint              `json:"blueprint,omitempty"`
+	Group       *ProjectDetailGroup                  `json:"group,omitempty"`
+	SubGroup    *ProjectDetailSubGroup               `json:"subGroup,omitempty"`
 }
 
 // GetDeploys returns ProjectDetail.Deploys, and is useful for accessing the field via an interface.
@@ -9409,13 +9409,13 @@ func (v *ProjectDetail) UnmarshalJSON(b []byte) error {
 type __premarshalProjectDetail struct {
 	Deploys ProjectDetailDeploysDeployConnection `json:"deploys"`
 
-	Build *ProjectDetailBuild `json:"build"`
+	Build *ProjectDetailBuild `json:"build,omitempty"`
 
-	Blueprint *ProjectDetailBlueprint `json:"blueprint"`
+	Blueprint *ProjectDetailBlueprint `json:"blueprint,omitempty"`
 
-	Group *ProjectDetailGroup `json:"group"`
+	Group *ProjectDetailGroup `json:"group,omitempty"`
 
-	SubGroup *ProjectDetailSubGroup `json:"subGroup"`
+	SubGroup *ProjectDetailSubGroup `json:"subGroup,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -9427,7 +9427,7 @@ type __premarshalProjectDetail struct {
 
 	Status ProjectStatus `json:"status"`
 
-	Workflow *ProjectInfoWorkflow `json:"workflow"`
+	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
 	Jobs []ProjectInfoJobsJob `json:"jobs"`
 }
@@ -9609,9 +9609,9 @@ type __premarshalProjectDetailDeploysDeployConnectionNodesDeploy struct {
 
 	Name string `json:"name"`
 
-	BranchName *string `json:"branchName"`
+	BranchName *string `json:"branchName,omitempty"`
 
-	Configuration *DeployConfigurationDetailConfigurationDeploymentConfiguration `json:"configuration"`
+	Configuration *DeployConfigurationDetailConfigurationDeploymentConfiguration `json:"configuration,omitempty"`
 }
 
 func (v *ProjectDetailDeploysDeployConnectionNodesDeploy) MarshalJSON() ([]byte, error) {
@@ -9646,7 +9646,7 @@ func (v *ProjectDetailGroup) GetName() string { return v.Name }
 
 // projectDetailResponse is returned by projectDetail on success.
 type ProjectDetailResponse struct {
-	Team *ProjectDetailTeam `json:"team"`
+	Team *ProjectDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -9675,7 +9675,7 @@ func (v *ProjectDetailSubGroup) GetName() string { return v.Name }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectDetailTeam struct {
 	Id      uuid.UUID                 `json:"id"`
-	Project *ProjectDetailTeamProject `json:"project"`
+	Project *ProjectDetailTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectDetailTeam.Id, and is useful for accessing the field via an interface.
@@ -9769,13 +9769,13 @@ func (v *ProjectDetailTeamProject) UnmarshalJSON(b []byte) error {
 type __premarshalProjectDetailTeamProject struct {
 	Deploys ProjectDetailDeploysDeployConnection `json:"deploys"`
 
-	Build *ProjectDetailBuild `json:"build"`
+	Build *ProjectDetailBuild `json:"build,omitempty"`
 
-	Blueprint *ProjectDetailBlueprint `json:"blueprint"`
+	Blueprint *ProjectDetailBlueprint `json:"blueprint,omitempty"`
 
-	Group *ProjectDetailGroup `json:"group"`
+	Group *ProjectDetailGroup `json:"group,omitempty"`
 
-	SubGroup *ProjectDetailSubGroup `json:"subGroup"`
+	SubGroup *ProjectDetailSubGroup `json:"subGroup,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -9787,7 +9787,7 @@ type __premarshalProjectDetailTeamProject struct {
 
 	Status ProjectStatus `json:"status"`
 
-	Workflow *ProjectInfoWorkflow `json:"workflow"`
+	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
 	Jobs []ProjectInfoJobsJob `json:"jobs"`
 }
@@ -9821,7 +9821,7 @@ func (v *ProjectDetailTeamProject) __premarshalJSON() (*__premarshalProjectDetai
 // Available filters for querying Projects. The result set is the intersection of all specified filters.
 type ProjectFilter struct {
 	// Selects only the Projects having one of these ids.
-	Ids []uuid.UUID `json:"ids,omitempty"`
+	Ids []uuid.UUID `json:"ids"`
 	// Filter Projects by name, status, groupName and subGroupName
 	Status       *ProjectStatusCriterion `json:"status,omitempty"`
 	Name         *StringCriterion        `json:"name,omitempty"`
@@ -9851,11 +9851,11 @@ type ProjectInfo struct {
 	CreatedAt time.Time                          `json:"createdAt"`
 	UpdatedAt time.Time                          `json:"updatedAt"`
 	Status    ProjectStatus                      `json:"status"`
-	Build     *ProjectInfoBuild                  `json:"build"`
+	Build     *ProjectInfoBuild                  `json:"build,omitempty"`
 	Deploys   ProjectInfoDeploysDeployConnection `json:"deploys"`
-	Workflow  *ProjectInfoWorkflow               `json:"workflow"`
+	Workflow  *ProjectInfoWorkflow               `json:"workflow,omitempty"`
 	Jobs      []ProjectInfoJobsJob               `json:"jobs"`
-	Blueprint *ProjectInfoBlueprint              `json:"blueprint"`
+	Blueprint *ProjectInfoBlueprint              `json:"blueprint,omitempty"`
 }
 
 // GetId returns ProjectInfo.Id, and is useful for accessing the field via an interface.
@@ -9926,7 +9926,7 @@ func (v *ProjectInfoJobsJob) GetId() uuid.UUID { return v.Id }
 
 // projectInfoResponse is returned by projectInfo on success.
 type ProjectInfoResponse struct {
-	Team *ProjectInfoTeam `json:"team"`
+	Team *ProjectInfoTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectInfoResponse.Team, and is useful for accessing the field via an interface.
@@ -9943,7 +9943,7 @@ func (v *ProjectInfoResponse) GetTeam() *ProjectInfoTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectInfoTeam struct {
 	Id      uuid.UUID               `json:"id"`
-	Project *ProjectInfoTeamProject `json:"project"`
+	Project *ProjectInfoTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectInfoTeam.Id, and is useful for accessing the field via an interface.
@@ -10025,15 +10025,15 @@ type __premarshalProjectInfoTeamProject struct {
 
 	Status ProjectStatus `json:"status"`
 
-	Build *ProjectInfoBuild `json:"build"`
+	Build *ProjectInfoBuild `json:"build,omitempty"`
 
 	Deploys ProjectInfoDeploysDeployConnection `json:"deploys"`
 
-	Workflow *ProjectInfoWorkflow `json:"workflow"`
+	Workflow *ProjectInfoWorkflow `json:"workflow,omitempty"`
 
 	Jobs []ProjectInfoJobsJob `json:"jobs"`
 
-	Blueprint *ProjectInfoBlueprint `json:"blueprint"`
+	Blueprint *ProjectInfoBlueprint `json:"blueprint,omitempty"`
 }
 
 func (v *ProjectInfoTeamProject) MarshalJSON() ([]byte, error) {
@@ -10143,9 +10143,9 @@ func (v *ProjectInfoWorkflowRunsWorkflowRunConnectionNodesWorkflowRun) Unmarshal
 }
 
 type __premarshalProjectInfoWorkflowRunsWorkflowRunConnectionNodesWorkflowRun struct {
-	FinishedAt *time.Time `json:"finishedAt"`
+	FinishedAt *time.Time `json:"finishedAt,omitempty"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -10201,7 +10201,7 @@ type ProjectLinkDetail struct {
 	Project   ProjectLinkDetailProject                 `json:"project"`
 	Provider  ProjectLinkDetailProviderProject         `json:"provider"`
 	LinkType  ProjectLinkType                          `json:"linkType"`
-	EnvPrefix *string                                  `json:"envPrefix"`
+	EnvPrefix *string                                  `json:"envPrefix,omitempty"`
 	Envs      []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs"`
 }
 
@@ -10225,8 +10225,8 @@ func (v *ProjectLinkDetail) GetEnvs() []ProjectLinkDetailEnvsProjectLinkEnvVar {
 
 // ProjectLinkDetailEnvsProjectLinkEnvVar includes the requested fields of the GraphQL type ProjectLinkEnvVar.
 type ProjectLinkDetailEnvsProjectLinkEnvVar struct {
-	Name  *string `json:"name"`
-	Value *string `json:"value"`
+	Name  *string `json:"name,omitempty"`
+	Value *string `json:"value,omitempty"`
 }
 
 // GetName returns ProjectLinkDetailEnvsProjectLinkEnvVar.Name, and is useful for accessing the field via an interface.
@@ -10352,9 +10352,9 @@ func (v *ProjectLinkDetailProviderProject) __premarshalJSON() (*__premarshalProj
 }
 
 type ProjectLinkInput struct {
-	ProjectId  uuid.UUID       `json:"projectId,omitempty"`
-	ProviderId uuid.UUID       `json:"providerId,omitempty"`
-	LinkType   ProjectLinkType `json:"linkType,omitempty"`
+	ProjectId  uuid.UUID       `json:"projectId"`
+	ProviderId uuid.UUID       `json:"providerId"`
+	LinkType   ProjectLinkType `json:"linkType"`
 	EnvPrefix  *string         `json:"envPrefix,omitempty"`
 }
 
@@ -10379,7 +10379,7 @@ const (
 
 // projectLinkedProjectsResponse is returned by projectLinkedProjects on success.
 type ProjectLinkedProjectsResponse struct {
-	Team *ProjectLinkedProjectsTeam `json:"team"`
+	Team *ProjectLinkedProjectsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectLinkedProjectsResponse.Team, and is useful for accessing the field via an interface.
@@ -10396,7 +10396,7 @@ func (v *ProjectLinkedProjectsResponse) GetTeam() *ProjectLinkedProjectsTeam { r
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectLinkedProjectsTeam struct {
 	Id      uuid.UUID                         `json:"id"`
-	Project *ProjectLinkedProjectsTeamProject `json:"project"`
+	Project *ProjectLinkedProjectsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectLinkedProjectsTeam.Id, and is useful for accessing the field via an interface.
@@ -10498,7 +10498,7 @@ type __premarshalProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnec
 
 	LinkType ProjectLinkType `json:"linkType"`
 
-	EnvPrefix *string `json:"envPrefix"`
+	EnvPrefix *string `json:"envPrefix,omitempty"`
 
 	Envs []ProjectLinkDetailEnvsProjectLinkEnvVar `json:"envs"`
 }
@@ -10525,7 +10525,7 @@ func (v *ProjectLinkedProjectsTeamProjectLinkedProjectsProjectLinkConnectionNode
 
 // ProjectOutput includes the GraphQL fields of Project requested by the fragment ProjectOutput.
 type ProjectOutput struct {
-	Output *ProjectOutputOutputProjectOutput `json:"output"`
+	Output *ProjectOutputOutputProjectOutput `json:"output,omitempty"`
 }
 
 // GetOutput returns ProjectOutput.Output, and is useful for accessing the field via an interface.
@@ -10592,13 +10592,13 @@ func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) UnmarshalJSO
 }
 
 type __premarshalProjectOutputOutputProjectOutputEntriesProjectOutputEntry struct {
-	DisplayName *string `json:"displayName"`
+	DisplayName *string `json:"displayName,omitempty"`
 
-	Name *string `json:"name"`
+	Name *string `json:"name,omitempty"`
 
-	Type *VariableType `json:"type"`
+	Type *VariableType `json:"type,omitempty"`
 
-	Value *string `json:"value"`
+	Value *string `json:"value,omitempty"`
 }
 
 func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) MarshalJSON() ([]byte, error) {
@@ -10621,7 +10621,7 @@ func (v *ProjectOutputOutputProjectOutputEntriesProjectOutputEntry) __premarshal
 
 // projectOutputResponse is returned by projectOutput on success.
 type ProjectOutputResponse struct {
-	Team *ProjectOutputTeam `json:"team"`
+	Team *ProjectOutputTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectOutputResponse.Team, and is useful for accessing the field via an interface.
@@ -10638,7 +10638,7 @@ func (v *ProjectOutputResponse) GetTeam() *ProjectOutputTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectOutputTeam struct {
 	Id      uuid.UUID                 `json:"id"`
-	Project *ProjectOutputTeamProject `json:"project"`
+	Project *ProjectOutputTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectOutputTeam.Id, and is useful for accessing the field via an interface.
@@ -10683,7 +10683,7 @@ func (v *ProjectOutputTeamProject) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalProjectOutputTeamProject struct {
-	Output *ProjectOutputOutputProjectOutput `json:"output"`
+	Output *ProjectOutputOutputProjectOutput `json:"output,omitempty"`
 }
 
 func (v *ProjectOutputTeamProject) MarshalJSON() ([]byte, error) {
@@ -10703,7 +10703,7 @@ func (v *ProjectOutputTeamProject) __premarshalJSON() (*__premarshalProjectOutpu
 
 // projectOutputsResponse is returned by projectOutputs on success.
 type ProjectOutputsResponse struct {
-	Team *ProjectOutputsTeam `json:"team"`
+	Team *ProjectOutputsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectOutputsResponse.Team, and is useful for accessing the field via an interface.
@@ -10720,7 +10720,7 @@ func (v *ProjectOutputsResponse) GetTeam() *ProjectOutputsTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectOutputsTeam struct {
 	Id      uuid.UUID                  `json:"id"`
-	Project *ProjectOutputsTeamProject `json:"project"`
+	Project *ProjectOutputsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectOutputsTeam.Id, and is useful for accessing the field via an interface.
@@ -10733,8 +10733,8 @@ func (v *ProjectOutputsTeam) GetProject() *ProjectOutputsTeamProject { return v.
 type ProjectOutputsTeamProject struct {
 	Id        uuid.UUID                           `json:"id"`
 	Status    ProjectStatus                       `json:"status"`
-	Connector *ProjectOutputsTeamProjectConnector `json:"connector"`
-	Workflow  *ProjectOutputsTeamProjectWorkflow  `json:"workflow"`
+	Connector *ProjectOutputsTeamProjectConnector `json:"connector,omitempty"`
+	Workflow  *ProjectOutputsTeamProjectWorkflow  `json:"workflow,omitempty"`
 }
 
 // GetId returns ProjectOutputsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -10755,7 +10755,7 @@ func (v *ProjectOutputsTeamProject) GetWorkflow() *ProjectOutputsTeamProjectWork
 
 // ProjectOutputsTeamProjectConnector includes the requested fields of the GraphQL type ProjectConnector.
 type ProjectOutputsTeamProjectConnector struct {
-	Type   *ProjectConnectorType                                           `json:"type"`
+	Type   *ProjectConnectorType                                           `json:"type,omitempty"`
 	Fields []ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField `json:"fields"`
 }
 
@@ -10769,10 +10769,10 @@ func (v *ProjectOutputsTeamProjectConnector) GetFields() []ProjectOutputsTeamPro
 
 // ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField includes the requested fields of the GraphQL type ProjectConnectorField.
 type ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField struct {
-	Type        *VariableType `json:"type"`
-	Name        *string       `json:"name"`
-	DisplayName *string       `json:"displayName"`
-	Value       *string       `json:"value"`
+	Type        *VariableType `json:"type,omitempty"`
+	Name        *string       `json:"name,omitempty"`
+	DisplayName *string       `json:"displayName,omitempty"`
+	Value       *string       `json:"value,omitempty"`
 }
 
 // GetType returns ProjectOutputsTeamProjectConnectorFieldsProjectConnectorField.Type, and is useful for accessing the field via an interface.
@@ -10805,10 +10805,10 @@ func (v *ProjectOutputsTeamProjectWorkflow) GetId() uuid.UUID { return v.Id }
 
 // ProjectSourceDetail includes the GraphQL fields of Source requested by the fragment ProjectSourceDetail.
 type ProjectSourceDetail struct {
-	Git               *ProjectSourceDetailGitGitSource                             `json:"git"`
-	TerraformModule   *ProjectSourceDetailTerraformModuleTerraformModuleSource     `json:"terraformModule"`
-	HelmRepository    *ProjectSourceDetailHelmRepositoryHelmRepositorySource       `json:"helmRepository"`
-	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry"`
+	Git               *ProjectSourceDetailGitGitSource                             `json:"git,omitempty"`
+	TerraformModule   *ProjectSourceDetailTerraformModuleTerraformModuleSource     `json:"terraformModule,omitempty"`
+	HelmRepository    *ProjectSourceDetailHelmRepositoryHelmRepositorySource       `json:"helmRepository,omitempty"`
+	ContainerRegistry *ProjectSourceDetailContainerRegistryContainerRegistrySource `json:"containerRegistry,omitempty"`
 }
 
 // GetGit returns ProjectSourceDetail.Git, and is useful for accessing the field via an interface.
@@ -10831,11 +10831,11 @@ func (v *ProjectSourceDetail) GetContainerRegistry() *ProjectSourceDetailContain
 
 // ProjectSourceDetailContainerRegistryContainerRegistrySource includes the requested fields of the GraphQL type ContainerRegistrySource.
 type ProjectSourceDetailContainerRegistryContainerRegistrySource struct {
-	RegistryId  *uuid.UUID `json:"registryId"`
-	RegistryUrl *string    `json:"registryUrl"`
+	RegistryId  *uuid.UUID `json:"registryId,omitempty"`
+	RegistryUrl *string    `json:"registryUrl,omitempty"`
 	Repository  string     `json:"repository"`
-	Tag         *string    `json:"tag"`
-	Digest      *string    `json:"digest"`
+	Tag         *string    `json:"tag,omitempty"`
+	Digest      *string    `json:"digest,omitempty"`
 }
 
 // GetRegistryId returns ProjectSourceDetailContainerRegistryContainerRegistrySource.RegistryId, and is useful for accessing the field via an interface.
@@ -10864,9 +10864,9 @@ func (v *ProjectSourceDetailContainerRegistryContainerRegistrySource) GetDigest(
 // ProjectSourceDetailGitGitSource includes the requested fields of the GraphQL type GitSource.
 type ProjectSourceDetailGitGitSource struct {
 	Repository  string                                      `json:"repository"`
-	Ref         *string                                     `json:"ref"`
-	Path        *string                                     `json:"path"`
-	Integration *ProjectSourceDetailGitGitSourceIntegration `json:"integration"`
+	Ref         *string                                     `json:"ref,omitempty"`
+	Path        *string                                     `json:"path,omitempty"`
+	Integration *ProjectSourceDetailGitGitSourceIntegration `json:"integration,omitempty"`
 }
 
 // GetRepository returns ProjectSourceDetailGitGitSource.Repository, and is useful for accessing the field via an interface.
@@ -10885,9 +10885,9 @@ func (v *ProjectSourceDetailGitGitSource) GetIntegration() *ProjectSourceDetailG
 
 // ProjectSourceDetailGitGitSourceIntegration includes the requested fields of the GraphQL type GitSourceIntegration.
 type ProjectSourceDetailGitGitSourceIntegration struct {
-	GithubInstallationId *int       `json:"githubInstallationId"`
-	GithubIntegrationId  *uuid.UUID `json:"githubIntegrationId"`
-	GitlabIntegrationId  *uuid.UUID `json:"gitlabIntegrationId"`
+	GithubInstallationId *int       `json:"githubInstallationId,omitempty"`
+	GithubIntegrationId  *uuid.UUID `json:"githubIntegrationId,omitempty"`
+	GitlabIntegrationId  *uuid.UUID `json:"gitlabIntegrationId,omitempty"`
 }
 
 // GetGithubInstallationId returns ProjectSourceDetailGitGitSourceIntegration.GithubInstallationId, and is useful for accessing the field via an interface.
@@ -10909,7 +10909,7 @@ func (v *ProjectSourceDetailGitGitSourceIntegration) GetGitlabIntegrationId() *u
 type ProjectSourceDetailHelmRepositoryHelmRepositorySource struct {
 	RepositoryUrl string  `json:"repositoryUrl"`
 	Chart         string  `json:"chart"`
-	Version       *string `json:"version"`
+	Version       *string `json:"version,omitempty"`
 }
 
 // GetRepositoryUrl returns ProjectSourceDetailHelmRepositoryHelmRepositorySource.RepositoryUrl, and is useful for accessing the field via an interface.
@@ -10930,9 +10930,9 @@ type ProjectSourceDetailTerraformModuleTerraformModuleSource struct {
 	// Any valid Terraform Module source: https://developer.hashicorp.com/terraform/language/modules/sources
 	Source string `json:"source"`
 	// The version field is only applicable to Terraform Registry sources
-	Version *string `json:"version"`
+	Version *string `json:"version,omitempty"`
 	// Configuring an integration provides authentication to retrieve the module from private sources
-	Integration *ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration `json:"integration"`
+	Integration *ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration `json:"integration,omitempty"`
 }
 
 // GetSource returns ProjectSourceDetailTerraformModuleTerraformModuleSource.Source, and is useful for accessing the field via an interface.
@@ -10950,7 +10950,7 @@ func (v *ProjectSourceDetailTerraformModuleTerraformModuleSource) GetIntegration
 
 // ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration includes the requested fields of the GraphQL type TerraformModuleSourceIntegration.
 type ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration struct {
-	Git *ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegrationGitGitSourceIntegration `json:"git"`
+	Git *ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegrationGitGitSourceIntegration `json:"git,omitempty"`
 }
 
 // GetGit returns ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration.Git, and is useful for accessing the field via an interface.
@@ -10960,7 +10960,7 @@ func (v *ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegration) Get
 
 // ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegrationGitGitSourceIntegration includes the requested fields of the GraphQL type GitSourceIntegration.
 type ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegrationGitGitSourceIntegration struct {
-	GithubInstallationId *int `json:"githubInstallationId"`
+	GithubInstallationId *int `json:"githubInstallationId,omitempty"`
 }
 
 // GetGithubInstallationId returns ProjectSourceDetailTerraformModuleTerraformModuleSourceIntegrationGitGitSourceIntegration.GithubInstallationId, and is useful for accessing the field via an interface.
@@ -11001,7 +11001,7 @@ const (
 )
 
 type ProjectStatusCriterion struct {
-	Value []string `json:"value,omitempty"`
+	Value []string `json:"value"`
 }
 
 // GetValue returns ProjectStatusCriterion.Value, and is useful for accessing the field via an interface.
@@ -11009,7 +11009,7 @@ func (v *ProjectStatusCriterion) GetValue() []string { return v.Value }
 
 // projectStatusOnlyResponse is returned by projectStatusOnly on success.
 type ProjectStatusOnlyResponse struct {
-	Team *ProjectStatusOnlyTeam `json:"team"`
+	Team *ProjectStatusOnlyTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectStatusOnlyResponse.Team, and is useful for accessing the field via an interface.
@@ -11026,7 +11026,7 @@ func (v *ProjectStatusOnlyResponse) GetTeam() *ProjectStatusOnlyTeam { return v.
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectStatusOnlyTeam struct {
 	Id      uuid.UUID                     `json:"id"`
-	Project *ProjectStatusOnlyTeamProject `json:"project"`
+	Project *ProjectStatusOnlyTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ProjectStatusOnlyTeam.Id, and is useful for accessing the field via an interface.
@@ -11050,7 +11050,7 @@ func (v *ProjectStatusOnlyTeamProject) GetStatus() ProjectStatus { return v.Stat
 // ProjectWithBlueprint includes the GraphQL fields of Project requested by the fragment ProjectWithBlueprint.
 type ProjectWithBlueprint struct {
 	Id        uuid.UUID                      `json:"id"`
-	Blueprint *ProjectWithBlueprintBlueprint `json:"blueprint"`
+	Blueprint *ProjectWithBlueprintBlueprint `json:"blueprint,omitempty"`
 }
 
 // GetId returns ProjectWithBlueprint.Id, and is useful for accessing the field via an interface.
@@ -11083,7 +11083,7 @@ type ProjectWithBlueprintBlueprintConfiguration struct {
 	// An identifier for this blueprint, unique within the owner's namespace.
 	Slug string `json:"slug"`
 	// A url for a logo image.
-	LogoUrl *string `json:"logoUrl"`
+	LogoUrl *string `json:"logoUrl,omitempty"`
 }
 
 // GetSlug returns ProjectWithBlueprintBlueprintConfiguration.Slug, and is useful for accessing the field via an interface.
@@ -11170,9 +11170,9 @@ type __premarshalProjectWithClustersClustersCluster struct {
 
 	State ClusterState `json:"state"`
 
-	Connected *bool `json:"connected"`
+	Connected *bool `json:"connected,omitempty"`
 
-	CloudProvider *CloudProvider `json:"cloudProvider"`
+	CloudProvider *CloudProvider `json:"cloudProvider,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -11203,7 +11203,7 @@ func (v *ProjectWithClustersClustersCluster) __premarshalJSON() (*__premarshalPr
 // ProjectWithDeploymentTime includes the GraphQL fields of Project requested by the fragment ProjectWithDeploymentTime.
 type ProjectWithDeploymentTime struct {
 	Id                   uuid.UUID                                      `json:"id"`
-	DeploymentTimestamps *ProjectWithDeploymentTimeDeploymentTimestamps `json:"deploymentTimestamps"`
+	DeploymentTimestamps *ProjectWithDeploymentTimeDeploymentTimestamps `json:"deploymentTimestamps,omitempty"`
 	UpdatedAt            time.Time                                      `json:"updatedAt"`
 }
 
@@ -11220,7 +11220,7 @@ func (v *ProjectWithDeploymentTime) GetUpdatedAt() time.Time { return v.UpdatedA
 
 // ProjectWithDeploymentTimeDeploymentTimestamps includes the requested fields of the GraphQL type DeploymentTimestamps.
 type ProjectWithDeploymentTimeDeploymentTimestamps struct {
-	LastUpdatedAt *time.Time `json:"lastUpdatedAt"`
+	LastUpdatedAt *time.Time `json:"lastUpdatedAt,omitempty"`
 }
 
 // GetLastUpdatedAt returns ProjectWithDeploymentTimeDeploymentTimestamps.LastUpdatedAt, and is useful for accessing the field via an interface.
@@ -11254,7 +11254,7 @@ func (v *ProjectWithStatus) GetStatus() ProjectStatus { return v.Status }
 
 // projectsCountResponse is returned by projectsCount on success.
 type ProjectsCountResponse struct {
-	Team *ProjectsCountTeam `json:"team"`
+	Team *ProjectsCountTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectsCountResponse.Team, and is useful for accessing the field via an interface.
@@ -11271,7 +11271,7 @@ func (v *ProjectsCountResponse) GetTeam() *ProjectsCountTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectsCountTeam struct {
 	Id       uuid.UUID                                   `json:"id"`
-	Projects *ProjectsCountTeamProjectsProjectConnection `json:"projects"`
+	Projects *ProjectsCountTeamProjectsProjectConnection `json:"projects,omitempty"`
 }
 
 // GetId returns ProjectsCountTeam.Id, and is useful for accessing the field via an interface.
@@ -11309,7 +11309,7 @@ func (v *ProjectsInput) GetFilter() *ProjectFilter { return v.Filter }
 
 // projectsWithBlueprintResponse is returned by projectsWithBlueprint on success.
 type ProjectsWithBlueprintResponse struct {
-	Team *ProjectsWithBlueprintTeam `json:"team"`
+	Team *ProjectsWithBlueprintTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectsWithBlueprintResponse.Team, and is useful for accessing the field via an interface.
@@ -11326,7 +11326,7 @@ func (v *ProjectsWithBlueprintResponse) GetTeam() *ProjectsWithBlueprintTeam { r
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectsWithBlueprintTeam struct {
 	Id       uuid.UUID                                           `json:"id"`
-	Projects *ProjectsWithBlueprintTeamProjectsProjectConnection `json:"projects"`
+	Projects *ProjectsWithBlueprintTeamProjectsProjectConnection `json:"projects,omitempty"`
 }
 
 // GetId returns ProjectsWithBlueprintTeam.Id, and is useful for accessing the field via an interface.
@@ -11390,7 +11390,7 @@ func (v *ProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject) Unmarsh
 type __premarshalProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject struct {
 	Id uuid.UUID `json:"id"`
 
-	Blueprint *ProjectWithBlueprintBlueprint `json:"blueprint"`
+	Blueprint *ProjectWithBlueprintBlueprint `json:"blueprint,omitempty"`
 }
 
 func (v *ProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject) MarshalJSON() ([]byte, error) {
@@ -11411,7 +11411,7 @@ func (v *ProjectsWithBlueprintTeamProjectsProjectConnectionNodesProject) __prema
 
 // projectsWithDeploymentTimesResponse is returned by projectsWithDeploymentTimes on success.
 type ProjectsWithDeploymentTimesResponse struct {
-	Team *ProjectsWithDeploymentTimesTeam `json:"team"`
+	Team *ProjectsWithDeploymentTimesTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectsWithDeploymentTimesResponse.Team, and is useful for accessing the field via an interface.
@@ -11430,7 +11430,7 @@ func (v *ProjectsWithDeploymentTimesResponse) GetTeam() *ProjectsWithDeploymentT
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectsWithDeploymentTimesTeam struct {
 	Id       uuid.UUID                                                 `json:"id"`
-	Projects *ProjectsWithDeploymentTimesTeamProjectsProjectConnection `json:"projects"`
+	Projects *ProjectsWithDeploymentTimesTeamProjectsProjectConnection `json:"projects,omitempty"`
 }
 
 // GetId returns ProjectsWithDeploymentTimesTeam.Id, and is useful for accessing the field via an interface.
@@ -11499,7 +11499,7 @@ func (v *ProjectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject) U
 type __premarshalProjectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject struct {
 	Id uuid.UUID `json:"id"`
 
-	DeploymentTimestamps *ProjectWithDeploymentTimeDeploymentTimestamps `json:"deploymentTimestamps"`
+	DeploymentTimestamps *ProjectWithDeploymentTimeDeploymentTimestamps `json:"deploymentTimestamps,omitempty"`
 
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -11523,7 +11523,7 @@ func (v *ProjectsWithDeploymentTimesTeamProjectsProjectConnectionNodesProject) _
 
 // projectsWithStatusResponse is returned by projectsWithStatus on success.
 type ProjectsWithStatusResponse struct {
-	Team *ProjectsWithStatusTeam `json:"team"`
+	Team *ProjectsWithStatusTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ProjectsWithStatusResponse.Team, and is useful for accessing the field via an interface.
@@ -11540,7 +11540,7 @@ func (v *ProjectsWithStatusResponse) GetTeam() *ProjectsWithStatusTeam { return 
 // Being a member of sub-team does not confer access to the parent team.
 type ProjectsWithStatusTeam struct {
 	Id       uuid.UUID                                        `json:"id"`
-	Projects *ProjectsWithStatusTeamProjectsProjectConnection `json:"projects"`
+	Projects *ProjectsWithStatusTeamProjectsProjectConnection `json:"projects,omitempty"`
 }
 
 // GetId returns ProjectsWithStatusTeam.Id, and is useful for accessing the field via an interface.
@@ -11725,10 +11725,10 @@ func __marshalResourceLogs(v *ResourceLogs) ([]byte, error) {
 // ResourceLogs includes the GraphQL fields of CertificateResource requested by the fragment ResourceLogs.
 type ResourceLogsCertificateResource struct {
 	ExternalId   string  `json:"externalId"`
-	ExternalType *string `json:"externalType"`
-	ExternalLink *string `json:"externalLink"`
+	ExternalType *string `json:"externalType,omitempty"`
+	ExternalLink *string `json:"externalLink,omitempty"`
 	DisplayName  string  `json:"displayName"`
-	Status       *string `json:"status"`
+	Status       *string `json:"status,omitempty"`
 }
 
 // GetExternalId returns ResourceLogsCertificateResource.ExternalId, and is useful for accessing the field via an interface.
@@ -11749,11 +11749,11 @@ func (v *ResourceLogsCertificateResource) GetStatus() *string { return v.Status 
 // ResourceLogs includes the GraphQL fields of ContainerResource requested by the fragment ResourceLogs.
 type ResourceLogsContainerResource struct {
 	ExternalId   string            `json:"externalId"`
-	ExternalType *string           `json:"externalType"`
-	ExternalLink *string           `json:"externalLink"`
+	ExternalType *string           `json:"externalType,omitempty"`
+	ExternalLink *string           `json:"externalLink,omitempty"`
 	DisplayName  string            `json:"displayName"`
-	Status       *string           `json:"status"`
-	Logs         *ResourceLogsLogs `json:"logs"`
+	Status       *string           `json:"status,omitempty"`
+	Logs         *ResourceLogsLogs `json:"logs,omitempty"`
 }
 
 // GetExternalId returns ResourceLogsContainerResource.ExternalId, and is useful for accessing the field via an interface.
@@ -11777,10 +11777,10 @@ func (v *ResourceLogsContainerResource) GetLogs() *ResourceLogsLogs { return v.L
 // ResourceLogs includes the GraphQL fields of EndpointResource requested by the fragment ResourceLogs.
 type ResourceLogsEndpointResource struct {
 	ExternalId   string  `json:"externalId"`
-	ExternalType *string `json:"externalType"`
-	ExternalLink *string `json:"externalLink"`
+	ExternalType *string `json:"externalType,omitempty"`
+	ExternalLink *string `json:"externalLink,omitempty"`
 	DisplayName  string  `json:"displayName"`
-	Status       *string `json:"status"`
+	Status       *string `json:"status,omitempty"`
 }
 
 // GetExternalId returns ResourceLogsEndpointResource.ExternalId, and is useful for accessing the field via an interface.
@@ -11802,7 +11802,7 @@ func (v *ResourceLogsEndpointResource) GetStatus() *string { return v.Status }
 type ResourceLogsLogs struct {
 	Id        string                            `json:"id"`
 	Completed bool                              `json:"completed"`
-	Expired   *bool                             `json:"expired"`
+	Expired   *bool                             `json:"expired,omitempty"`
 	Entries   []ResourceLogsLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -11821,7 +11821,7 @@ func (v *ResourceLogsLogs) GetEntries() []ResourceLogsLogsEntriesLogEntry { retu
 // ResourceLogsLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type ResourceLogsLogsEntriesLogEntry struct {
 	Text      string     `json:"text"`
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 }
 
 // GetText returns ResourceLogsLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
@@ -11832,7 +11832,7 @@ func (v *ResourceLogsLogsEntriesLogEntry) GetTimestamp() *time.Time { return v.T
 
 // resourceLogsResponse is returned by resourceLogs on success.
 type ResourceLogsResponse struct {
-	Team *ResourceLogsTeam `json:"team"`
+	Team *ResourceLogsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ResourceLogsResponse.Team, and is useful for accessing the field via an interface.
@@ -12026,7 +12026,7 @@ func __marshalResourceLogsTeamResource(v *ResourceLogsTeamResource) ([]byte, err
 
 // ResourceLogsTeamResourceCertificateResource includes the requested fields of the GraphQL type CertificateResource.
 type ResourceLogsTeamResourceCertificateResource struct {
-	Typename                        *string `json:"__typename"`
+	Typename                        *string `json:"__typename,omitempty"`
 	ResourceLogsCertificateResource `json:"-"`
 }
 
@@ -12084,17 +12084,17 @@ func (v *ResourceLogsTeamResourceCertificateResource) UnmarshalJSON(b []byte) er
 }
 
 type __premarshalResourceLogsTeamResourceCertificateResource struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	ExternalId string `json:"externalId"`
 
-	ExternalType *string `json:"externalType"`
+	ExternalType *string `json:"externalType,omitempty"`
 
-	ExternalLink *string `json:"externalLink"`
+	ExternalLink *string `json:"externalLink,omitempty"`
 
 	DisplayName string `json:"displayName"`
 
-	Status *string `json:"status"`
+	Status *string `json:"status,omitempty"`
 }
 
 func (v *ResourceLogsTeamResourceCertificateResource) MarshalJSON() ([]byte, error) {
@@ -12119,7 +12119,7 @@ func (v *ResourceLogsTeamResourceCertificateResource) __premarshalJSON() (*__pre
 
 // ResourceLogsTeamResourceContainerResource includes the requested fields of the GraphQL type ContainerResource.
 type ResourceLogsTeamResourceContainerResource struct {
-	Typename                      *string `json:"__typename"`
+	Typename                      *string `json:"__typename,omitempty"`
 	ResourceLogsContainerResource `json:"-"`
 }
 
@@ -12182,19 +12182,19 @@ func (v *ResourceLogsTeamResourceContainerResource) UnmarshalJSON(b []byte) erro
 }
 
 type __premarshalResourceLogsTeamResourceContainerResource struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	ExternalId string `json:"externalId"`
 
-	ExternalType *string `json:"externalType"`
+	ExternalType *string `json:"externalType,omitempty"`
 
-	ExternalLink *string `json:"externalLink"`
+	ExternalLink *string `json:"externalLink,omitempty"`
 
 	DisplayName string `json:"displayName"`
 
-	Status *string `json:"status"`
+	Status *string `json:"status,omitempty"`
 
-	Logs *ResourceLogsLogs `json:"logs"`
+	Logs *ResourceLogsLogs `json:"logs,omitempty"`
 }
 
 func (v *ResourceLogsTeamResourceContainerResource) MarshalJSON() ([]byte, error) {
@@ -12220,7 +12220,7 @@ func (v *ResourceLogsTeamResourceContainerResource) __premarshalJSON() (*__prema
 
 // ResourceLogsTeamResourceEndpointResource includes the requested fields of the GraphQL type EndpointResource.
 type ResourceLogsTeamResourceEndpointResource struct {
-	Typename                     *string `json:"__typename"`
+	Typename                     *string `json:"__typename,omitempty"`
 	ResourceLogsEndpointResource `json:"-"`
 }
 
@@ -12278,17 +12278,17 @@ func (v *ResourceLogsTeamResourceEndpointResource) UnmarshalJSON(b []byte) error
 }
 
 type __premarshalResourceLogsTeamResourceEndpointResource struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	ExternalId string `json:"externalId"`
 
-	ExternalType *string `json:"externalType"`
+	ExternalType *string `json:"externalType,omitempty"`
 
-	ExternalLink *string `json:"externalLink"`
+	ExternalLink *string `json:"externalLink,omitempty"`
 
 	DisplayName string `json:"displayName"`
 
-	Status *string `json:"status"`
+	Status *string `json:"status,omitempty"`
 }
 
 func (v *ResourceLogsTeamResourceEndpointResource) MarshalJSON() ([]byte, error) {
@@ -12338,7 +12338,7 @@ const (
 
 // resourcesWithLogsResponse is returned by resourcesWithLogs on success.
 type ResourcesWithLogsResponse struct {
-	Team *ResourcesWithLogsTeam `json:"team"`
+	Team *ResourcesWithLogsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ResourcesWithLogsResponse.Team, and is useful for accessing the field via an interface.
@@ -12355,7 +12355,7 @@ func (v *ResourcesWithLogsResponse) GetTeam() *ResourcesWithLogsTeam { return v.
 // Being a member of sub-team does not confer access to the parent team.
 type ResourcesWithLogsTeam struct {
 	Id      uuid.UUID                     `json:"id"`
-	Project *ResourcesWithLogsTeamProject `json:"project"`
+	Project *ResourcesWithLogsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ResourcesWithLogsTeam.Id, and is useful for accessing the field via an interface.
@@ -12461,7 +12461,7 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResource struct {
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -12507,7 +12507,7 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceLog) GetEntries() []R
 // ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry struct {
 	Text      string     `json:"text"`
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 }
 
 // GetText returns ResourcesWithLogsTeamProjectResourcesCloudResourceLogEntriesLogEntry.Text, and is useful for accessing the field via an interface.
@@ -12595,7 +12595,7 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResourceResourcesClou
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -12690,7 +12690,7 @@ type __premarshalResourcesWithLogsTeamProjectResourcesCloudResourceResourcesClou
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -12719,7 +12719,7 @@ func (v *ResourcesWithLogsTeamProjectResourcesCloudResourceResourcesCloudResourc
 
 // resourcesWithMetricsResponse is returned by resourcesWithMetrics on success.
 type ResourcesWithMetricsResponse struct {
-	Team *ResourcesWithMetricsTeam `json:"team"`
+	Team *ResourcesWithMetricsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns ResourcesWithMetricsResponse.Team, and is useful for accessing the field via an interface.
@@ -12736,7 +12736,7 @@ func (v *ResourcesWithMetricsResponse) GetTeam() *ResourcesWithMetricsTeam { ret
 // Being a member of sub-team does not confer access to the parent team.
 type ResourcesWithMetricsTeam struct {
 	Id      uuid.UUID                        `json:"id"`
-	Project *ResourcesWithMetricsTeamProject `json:"project"`
+	Project *ResourcesWithMetricsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns ResourcesWithMetricsTeam.Id, and is useful for accessing the field via an interface.
@@ -12842,7 +12842,7 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResource struct {
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -12927,7 +12927,7 @@ func (v *ResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream
 }
 
 type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceMetricMetricStream struct {
-	Type *MetricType `json:"type"`
+	Type *MetricType `json:"type,omitempty"`
 
 	Query string `json:"query"`
 
@@ -13032,7 +13032,7 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesC
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -13127,7 +13127,7 @@ type __premarshalResourcesWithMetricsTeamProjectResourcesCloudResourceResourcesC
 
 	Type ResourceType `json:"type"`
 
-	CreatedAt *time.Time `json:"createdAt"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
 
 	Owners []CloudResourceOwnersResourceOwner `json:"owners"`
 
@@ -13477,7 +13477,7 @@ type RevisionDetailV1RevisionMetadata struct {
 	// consult the `authorInfo.creatorDeleted` flag (see `RevisionAuthorInfo`).
 	CreatedBy RevisionDetailV1RevisionMetadataCreatedByUser `json:"createdBy"`
 	// A revision may have additional information about how it was initiated.
-	AuthorInfo *RevisionDetailV1RevisionMetadataAuthorInfoRevisionAuthorInfo `json:"authorInfo"`
+	AuthorInfo *RevisionDetailV1RevisionMetadataAuthorInfoRevisionAuthorInfo `json:"authorInfo,omitempty"`
 }
 
 // GetId returns RevisionDetailV1RevisionMetadata.Id, and is useful for accessing the field via an interface.
@@ -13525,7 +13525,7 @@ type RevisionDetailV1RevisionMetadataCreatedByUser struct {
 	Id     uuid.UUID `json:"id"`
 	Login  string    `json:"login"`
 	Name   string    `json:"name"`
-	Avatar *string   `json:"avatar"`
+	Avatar *string   `json:"avatar,omitempty"`
 }
 
 // GetId returns RevisionDetailV1RevisionMetadataCreatedByUser.Id, and is useful for accessing the field via an interface.
@@ -13555,9 +13555,9 @@ func (v *RevisionDetailV1VultrAccountConfiguration) GetRevisionMetadata() Revisi
 }
 
 type S3BucketBackendInput struct {
-	AwsAccountId uuid.UUID `json:"awsAccountId,omitempty"`
-	BucketName   string    `json:"bucketName,omitempty"`
-	Region       string    `json:"region,omitempty"`
+	AwsAccountId uuid.UUID `json:"awsAccountId"`
+	BucketName   string    `json:"bucketName"`
+	Region       string    `json:"region"`
 	Key          *string   `json:"key,omitempty"`
 }
 
@@ -13574,8 +13574,8 @@ func (v *S3BucketBackendInput) GetRegion() string { return v.Region }
 func (v *S3BucketBackendInput) GetKey() *string { return v.Key }
 
 type SecretMountDataInput struct {
-	SecretName string `json:"secretName,omitempty"`
-	MountPath  string `json:"mountPath,omitempty"`
+	SecretName string `json:"secretName"`
+	MountPath  string `json:"mountPath"`
 	ReadOnly   *bool  `json:"readOnly,omitempty"`
 }
 
@@ -13640,7 +13640,7 @@ func (v *StringCriterion) GetOperator() *FilterCriterionOperatorType { return v.
 
 // subGroupResponse is returned by subGroup on success.
 type SubGroupResponse struct {
-	Team *SubGroupTeam `json:"team"`
+	Team *SubGroupTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns SubGroupResponse.Team, and is useful for accessing the field via an interface.
@@ -13751,8 +13751,8 @@ type SubmitWorkflowRunSubmitWorkflowWorkflowRun struct {
 func (v *SubmitWorkflowRunSubmitWorkflowWorkflowRun) GetId() uuid.UUID { return v.Id }
 
 type TCPProbeInput struct {
-	Host string `json:"host,omitempty"`
-	Port string `json:"port,omitempty"`
+	Host string `json:"host"`
+	Port string `json:"port"`
 }
 
 // GetHost returns TCPProbeInput.Host, and is useful for accessing the field via an interface.
@@ -13763,7 +13763,7 @@ func (v *TCPProbeInput) GetPort() string { return v.Port }
 
 // teamResponse is returned by team on success.
 type TeamResponse struct {
-	Team *TeamTeam `json:"team"`
+	Team *TeamTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns TeamResponse.Team, and is useful for accessing the field via an interface.
@@ -13793,7 +13793,7 @@ func (v *TeamTeam) GetName() string { return v.Name }
 type TerraformAutomaticOutputConfigurationInput struct {
 	Disabled  *bool    `json:"disabled,omitempty"`
 	Sensitive *bool    `json:"sensitive,omitempty"`
-	Excluded  []string `json:"excluded,omitempty"`
+	Excluded  []string `json:"excluded"`
 }
 
 // GetDisabled returns TerraformAutomaticOutputConfigurationInput.Disabled, and is useful for accessing the field via an interface.
@@ -13806,7 +13806,7 @@ func (v *TerraformAutomaticOutputConfigurationInput) GetSensitive() *bool { retu
 func (v *TerraformAutomaticOutputConfigurationInput) GetExcluded() []string { return v.Excluded }
 
 type TerraformModuleSourceInput struct {
-	Source      string                                 `json:"source,omitempty"`
+	Source      string                                 `json:"source"`
 	Version     *string                                `json:"version,omitempty"`
 	Integration *TerraformModuleSourceIntegrationInput `json:"integration,omitempty"`
 }
@@ -13878,9 +13878,9 @@ func (v *TerraformStateBackendInput) GetS3Bucket() *S3BucketBackendInput { retur
 func (v *TerraformStateBackendInput) GetGcsBucket() *GCSBucketBackendInput { return v.GcsBucket }
 
 type TerraformTargetConfigurationInput struct {
-	StateBackend TerraformStateBackendInput `json:"stateBackend,omitempty"`
+	StateBackend TerraformStateBackendInput `json:"stateBackend"`
 	ModuleName   *string                    `json:"moduleName,omitempty"`
-	Provider     TerraformProviderInput     `json:"provider,omitempty"`
+	Provider     TerraformProviderInput     `json:"provider"`
 }
 
 // GetStateBackend returns TerraformTargetConfigurationInput.StateBackend, and is useful for accessing the field via an interface.
@@ -13912,9 +13912,9 @@ func (v *TriggerConfigurationInput) GetEvent() *EventTriggerConfigurationInput {
 func (v *TriggerConfigurationInput) GetAction() *ActionTriggerConfigurationInput { return v.Action }
 
 type TriggerDefinitionInput struct {
-	Action        TriggerActionType         `json:"action,omitempty"`
-	Events        []TriggerEventType        `json:"events,omitempty"`
-	Configuration TriggerConfigurationInput `json:"configuration,omitempty"`
+	Action        TriggerActionType         `json:"action"`
+	Events        []TriggerEventType        `json:"events"`
+	Configuration TriggerConfigurationInput `json:"configuration"`
 }
 
 // GetAction returns TriggerDefinitionInput.Action, and is useful for accessing the field via an interface.
@@ -13971,9 +13971,9 @@ type UpdateDeployUpdateDeploy struct {
 func (v *UpdateDeployUpdateDeploy) GetId() uuid.UUID { return v.Id }
 
 type UpdateGroupInput struct {
-	Id   uuid.UUID     `json:"id,omitempty"`
+	Id   uuid.UUID     `json:"id"`
 	Name *string       `json:"name,omitempty"`
-	Envs []EnvVarInput `json:"envs,omitempty"`
+	Envs []EnvVarInput `json:"envs"`
 }
 
 // GetId returns UpdateGroupInput.Id, and is useful for accessing the field via an interface.
@@ -14035,7 +14035,7 @@ type UpdateProjectInput struct {
 	SubGroupId          *uuid.UUID                `json:"subGroupId,omitempty"`
 	SubGroupName        *string                   `json:"subGroupName,omitempty"`
 	Name                *string                   `json:"name,omitempty"`
-	Envs                []EnvVarInput             `json:"envs,omitempty"`
+	Envs                []EnvVarInput             `json:"envs"`
 	ObservabilityConfig *ObservabilityConfigInput `json:"observabilityConfig,omitempty"`
 }
 
@@ -14083,9 +14083,9 @@ func (v *UpdateProjectUpdateProject) GetId() uuid.UUID { return v.Id }
 func (v *UpdateProjectUpdateProject) GetName() string { return v.Name }
 
 type UpdateSubGroupInput struct {
-	Id   uuid.UUID     `json:"id,omitempty"`
+	Id   uuid.UUID     `json:"id"`
 	Name *string       `json:"name,omitempty"`
-	Envs []EnvVarInput `json:"envs,omitempty"`
+	Envs []EnvVarInput `json:"envs"`
 }
 
 // GetId returns UpdateSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -14146,7 +14146,7 @@ func (v *UpdateSubGroupUpdateSubGroupEnvsEnvVar) GetName() string { return v.Nam
 func (v *UpdateSubGroupUpdateSubGroupEnvsEnvVar) GetValue() string { return v.Value }
 
 type UpdateTriggerInput struct {
-	TriggerId  uuid.UUID               `json:"triggerId,omitempty"`
+	TriggerId  uuid.UUID               `json:"triggerId"`
 	Definition *TriggerDefinitionInput `json:"definition,omitempty"`
 }
 
@@ -14263,8 +14263,8 @@ const (
 )
 
 type VolumeSpecInput struct {
-	Size      int    `json:"size,omitempty"`
-	MountPath string `json:"mountPath,omitempty"`
+	Size      int    `json:"size"`
+	MountPath string `json:"mountPath"`
 }
 
 // GetSize returns VolumeSpecInput.Size, and is useful for accessing the field via an interface.
@@ -14274,8 +14274,8 @@ func (v *VolumeSpecInput) GetSize() int { return v.Size }
 func (v *VolumeSpecInput) GetMountPath() string { return v.MountPath }
 
 type WorkflowBranchDefinitionInput struct {
-	Name      string `json:"name,omitempty"`
-	CommitSha string `json:"commitSha,omitempty"`
+	Name      string `json:"name"`
+	CommitSha string `json:"commitSha"`
 }
 
 // GetName returns WorkflowBranchDefinitionInput.Name, and is useful for accessing the field via an interface.
@@ -14285,7 +14285,7 @@ func (v *WorkflowBranchDefinitionInput) GetName() string { return v.Name }
 func (v *WorkflowBranchDefinitionInput) GetCommitSha() string { return v.CommitSha }
 
 type WorkflowDefinitionInput struct {
-	Steps             []WorkflowStepDefinitionInput  `json:"steps,omitempty"`
+	Steps             []WorkflowStepDefinitionInput  `json:"steps"`
 	Source            *SourceInput                   `json:"source,omitempty"`
 	Branch            *WorkflowBranchDefinitionInput `json:"branch,omitempty"`
 	WorkflowClusterId *uuid.UUID                     `json:"workflowClusterId,omitempty"`
@@ -14321,7 +14321,7 @@ func (v *WorkflowDetail) GetTriggers() WorkflowDetailTriggersTriggerConnection {
 
 // workflowDetailResponse is returned by workflowDetail on success.
 type WorkflowDetailResponse struct {
-	Team *WorkflowDetailTeam `json:"team"`
+	Team *WorkflowDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -14330,8 +14330,8 @@ func (v *WorkflowDetailResponse) GetTeam() *WorkflowDetailTeam { return v.Team }
 // WorkflowDetailStepsWorkflowStepDefinition includes the requested fields of the GraphQL type WorkflowStepDefinition.
 type WorkflowDetailStepsWorkflowStepDefinition struct {
 	Action         WorkflowStepActionType `json:"action"`
-	SequenceNumber *int                   `json:"sequenceNumber"`
-	Disabled       *bool                  `json:"disabled"`
+	SequenceNumber *int                   `json:"sequenceNumber,omitempty"`
+	Disabled       *bool                  `json:"disabled,omitempty"`
 }
 
 // GetAction returns WorkflowDetailStepsWorkflowStepDefinition.Action, and is useful for accessing the field via an interface.
@@ -14355,7 +14355,7 @@ func (v *WorkflowDetailStepsWorkflowStepDefinition) GetDisabled() *bool { return
 // A member of parent team will have equal access to all sub-teams.
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowDetailTeam struct {
-	Project *WorkflowDetailTeamProject `json:"project"`
+	Project *WorkflowDetailTeamProject `json:"project,omitempty"`
 }
 
 // GetProject returns WorkflowDetailTeam.Project, and is useful for accessing the field via an interface.
@@ -14363,7 +14363,7 @@ func (v *WorkflowDetailTeam) GetProject() *WorkflowDetailTeamProject { return v.
 
 // WorkflowDetailTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowDetailTeamProject struct {
-	Workflow *WorkflowDetailTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowDetailTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetWorkflow returns WorkflowDetailTeamProject.Workflow, and is useful for accessing the field via an interface.
@@ -14458,7 +14458,7 @@ type WorkflowDetailTriggersTriggerConnectionNodesTrigger struct {
 	Id            uuid.UUID                                                         `json:"id"`
 	Action        TriggerActionType                                                 `json:"action"`
 	Events        []TriggerEventType                                                `json:"events"`
-	Configuration *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration `json:"configuration"`
+	Configuration *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration `json:"configuration,omitempty"`
 }
 
 // GetId returns WorkflowDetailTriggersTriggerConnectionNodesTrigger.Id, and is useful for accessing the field via an interface.
@@ -14481,8 +14481,8 @@ func (v *WorkflowDetailTriggersTriggerConnectionNodesTrigger) GetConfiguration()
 
 // WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration includes the requested fields of the GraphQL type TriggerConfiguration.
 type WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration struct {
-	Event  *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfiguration   `json:"event"`
-	Action *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionActionTriggerConfiguration `json:"action"`
+	Event  *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfiguration   `json:"event,omitempty"`
+	Action *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionActionTriggerConfiguration `json:"action,omitempty"`
 }
 
 // GetEvent returns WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration.Event, and is useful for accessing the field via an interface.
@@ -14497,7 +14497,7 @@ func (v *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfiguration) GetAc
 
 // WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionActionTriggerConfiguration includes the requested fields of the GraphQL type ActionTriggerConfiguration.
 type WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionActionTriggerConfiguration struct {
-	WorkflowId *uuid.UUID `json:"workflowId"`
+	WorkflowId *uuid.UUID `json:"workflowId,omitempty"`
 }
 
 // GetWorkflowId returns WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionActionTriggerConfiguration.WorkflowId, and is useful for accessing the field via an interface.
@@ -14507,7 +14507,7 @@ func (v *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationActionA
 
 // WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfiguration includes the requested fields of the GraphQL type EventTriggerConfiguration.
 type WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfiguration struct {
-	Git *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfigurationGitGitEventTriggerConfiguration `json:"git"`
+	Git *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfigurationGitGitEventTriggerConfiguration `json:"git,omitempty"`
 }
 
 // GetGit returns WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfiguration.Git, and is useful for accessing the field via an interface.
@@ -14517,11 +14517,11 @@ func (v *WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEv
 
 // WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfigurationGitGitEventTriggerConfiguration includes the requested fields of the GraphQL type GitEventTriggerConfiguration.
 type WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfigurationGitGitEventTriggerConfiguration struct {
-	RepoId             *string `json:"repoId"`
-	RepoBranchName     *string `json:"repoBranchName"`
-	RepoOwner          *string `json:"repoOwner"`
-	RepoName           *string `json:"repoName"`
-	GithubConnectionId *int    `json:"githubConnectionId"`
+	RepoId             *string `json:"repoId,omitempty"`
+	RepoBranchName     *string `json:"repoBranchName,omitempty"`
+	RepoOwner          *string `json:"repoOwner,omitempty"`
+	RepoName           *string `json:"repoName,omitempty"`
+	GithubConnectionId *int    `json:"githubConnectionId,omitempty"`
 }
 
 // GetRepoId returns WorkflowDetailTriggersTriggerConnectionNodesTriggerConfigurationEventEventTriggerConfigurationGitGitEventTriggerConfiguration.RepoId, and is useful for accessing the field via an interface.
@@ -14558,7 +14558,7 @@ const (
 )
 
 type WorkflowRunDefinitionInput struct {
-	Steps  []WorkflowRunStepDefinitionInput `json:"steps,omitempty"`
+	Steps  []WorkflowRunStepDefinitionInput `json:"steps"`
 	Source *SourceInput                     `json:"source,omitempty"`
 	Branch *WorkflowBranchDefinitionInput   `json:"branch,omitempty"`
 }
@@ -14575,7 +14575,7 @@ func (v *WorkflowRunDefinitionInput) GetBranch() *WorkflowBranchDefinitionInput 
 // WorkflowRunDetail includes the GraphQL fields of WorkflowRun requested by the fragment WorkflowRunDetail.
 type WorkflowRunDetail struct {
 	WorkflowRunListItem `json:"-"`
-	FinishedAt          *time.Time                               `json:"finishedAt"`
+	FinishedAt          *time.Time                               `json:"finishedAt,omitempty"`
 	Steps               []*WorkflowRunDetailStepsWorkflowRunStep `json:"-"`
 }
 
@@ -14644,9 +14644,9 @@ func (v *WorkflowRunDetail) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunDetail struct {
-	FinishedAt *time.Time `json:"finishedAt"`
+	FinishedAt *time.Time `json:"finishedAt,omitempty"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -14698,7 +14698,7 @@ func (v *WorkflowRunDetail) __premarshalJSON() (*__premarshalWorkflowRunDetail, 
 
 // workflowRunDetailLogsResponse is returned by workflowRunDetailLogs on success.
 type WorkflowRunDetailLogsResponse struct {
-	Team *WorkflowRunDetailLogsTeam `json:"team"`
+	Team *WorkflowRunDetailLogsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowRunDetailLogsResponse.Team, and is useful for accessing the field via an interface.
@@ -14715,7 +14715,7 @@ func (v *WorkflowRunDetailLogsResponse) GetTeam() *WorkflowRunDetailLogsTeam { r
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowRunDetailLogsTeam struct {
 	Id      uuid.UUID                         `json:"id"`
-	Project *WorkflowRunDetailLogsTeamProject `json:"project"`
+	Project *WorkflowRunDetailLogsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeam.Id, and is useful for accessing the field via an interface.
@@ -14727,7 +14727,7 @@ func (v *WorkflowRunDetailLogsTeam) GetProject() *WorkflowRunDetailLogsTeamProje
 // WorkflowRunDetailLogsTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowRunDetailLogsTeamProject struct {
 	Id       uuid.UUID                                 `json:"id"`
-	Workflow *WorkflowRunDetailLogsTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowRunDetailLogsTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailLogsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -14949,8 +14949,8 @@ func __marshalWorkflowRunDetailLogsTeamProjectWorkflowRunStep(v *WorkflowRunDeta
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStep struct {
-	Typename *string                                                          `json:"__typename"`
-	Logs     *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs `json:"logs"`
+	Typename *string                                                          `json:"__typename,omitempty"`
+	Logs     *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs `json:"logs,omitempty"`
 }
 
 // GetTypename returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -14967,7 +14967,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStep) GetLogs() 
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs struct {
 	Id        string                                                                           `json:"id"`
 	Completed bool                                                                             `json:"completed"`
-	Expired   *bool                                                                            `json:"expired"`
+	Expired   *bool                                                                            `json:"expired,omitempty"`
 	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -14991,7 +14991,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogs) GetEnt
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesLogEntry struct {
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Text      string     `json:"text"`
 }
 
@@ -15007,7 +15007,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepBuildRunStepLogsEntriesL
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 }
 
 // GetTypename returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -15017,7 +15017,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep) Get
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 }
 
 // GetTypename returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -15027,7 +15027,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepDeployRunStep) GetTypena
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 }
 
 // GetTypename returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -15037,8 +15037,8 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepDestroyRunStep) GetTypen
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStep struct {
-	Typename *string                                                        `json:"__typename"`
-	Logs     *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs `json:"logs"`
+	Typename *string                                                        `json:"__typename,omitempty"`
+	Logs     *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs `json:"logs,omitempty"`
 }
 
 // GetTypename returns WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -15055,7 +15055,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStep) GetLogs() *W
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs struct {
 	Id        string                                                                         `json:"id"`
 	Completed bool                                                                           `json:"completed"`
-	Expired   *bool                                                                          `json:"expired"`
+	Expired   *bool                                                                          `json:"expired,omitempty"`
 	Entries   []WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -15079,7 +15079,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogs) GetEntri
 
 // WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLogEntry struct {
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Text      string     `json:"text"`
 }
 
@@ -15095,7 +15095,7 @@ func (v *WorkflowRunDetailLogsTeamProjectWorkflowRunStepJobRunStepLogsEntriesLog
 
 // workflowRunDetailResponse is returned by workflowRunDetail on success.
 type WorkflowRunDetailResponse struct {
-	Team *WorkflowRunDetailTeam `json:"team"`
+	Team *WorkflowRunDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowRunDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -15103,7 +15103,7 @@ func (v *WorkflowRunDetailResponse) GetTeam() *WorkflowRunDetailTeam { return v.
 
 // WorkflowRunDetailStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunDetailStepsBuildRunStep struct {
-	Typename                          *string `json:"__typename"`
+	Typename                          *string `json:"__typename,omitempty"`
 	WorkflowRunStepDetailBuildRunStep `json:"-"`
 }
 
@@ -15191,7 +15191,7 @@ func (v *WorkflowRunDetailStepsBuildRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunDetailStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -15207,13 +15207,13 @@ type __premarshalWorkflowRunDetailStepsBuildRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	Outputs []*WorkflowRunStepDetailOutputsBuildArtifact `json:"outputs"`
+	Outputs []*WorkflowRunStepDetailOutputsBuildArtifact `json:"outputs,omitempty"`
 }
 
 func (v *WorkflowRunDetailStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -15261,7 +15261,7 @@ func (v *WorkflowRunDetailStepsBuildRunStep) __premarshalJSON() (*__premarshalWo
 
 // WorkflowRunDetailStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunDetailStepsClusterPrecheckStep struct {
-	Typename                                 *string `json:"__typename"`
+	Typename                                 *string `json:"__typename,omitempty"`
 	WorkflowRunStepDetailClusterPrecheckStep `json:"-"`
 }
 
@@ -15349,7 +15349,7 @@ func (v *WorkflowRunDetailStepsClusterPrecheckStep) UnmarshalJSON(b []byte) erro
 }
 
 type __premarshalWorkflowRunDetailStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -15365,13 +15365,13 @@ type __premarshalWorkflowRunDetailStepsClusterPrecheckStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	Cluster *WorkflowRunStepDetailCluster `json:"cluster"`
+	Cluster *WorkflowRunStepDetailCluster `json:"cluster,omitempty"`
 }
 
 func (v *WorkflowRunDetailStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -15419,7 +15419,7 @@ func (v *WorkflowRunDetailStepsClusterPrecheckStep) __premarshalJSON() (*__prema
 
 // WorkflowRunDetailStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunDetailStepsDeployRunStep struct {
-	Typename                           *string `json:"__typename"`
+	Typename                           *string `json:"__typename,omitempty"`
 	WorkflowRunStepDetailDeployRunStep `json:"-"`
 }
 
@@ -15507,7 +15507,7 @@ func (v *WorkflowRunDetailStepsDeployRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunDetailStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -15523,13 +15523,13 @@ type __premarshalWorkflowRunDetailStepsDeployRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	WorkflowRun *WorkflowRunStepDetailWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepDetailWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 func (v *WorkflowRunDetailStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -15577,7 +15577,7 @@ func (v *WorkflowRunDetailStepsDeployRunStep) __premarshalJSON() (*__premarshalW
 
 // WorkflowRunDetailStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunDetailStepsDestroyRunStep struct {
-	Typename                            *string `json:"__typename"`
+	Typename                            *string `json:"__typename,omitempty"`
 	WorkflowRunStepDetailDestroyRunStep `json:"-"`
 }
 
@@ -15660,7 +15660,7 @@ func (v *WorkflowRunDetailStepsDestroyRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunDetailStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -15676,11 +15676,11 @@ type __premarshalWorkflowRunDetailStepsDestroyRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunDetailStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -15727,7 +15727,7 @@ func (v *WorkflowRunDetailStepsDestroyRunStep) __premarshalJSON() (*__premarshal
 
 // WorkflowRunDetailStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunDetailStepsJobRunStep struct {
-	Typename                        *string `json:"__typename"`
+	Typename                        *string `json:"__typename,omitempty"`
 	WorkflowRunStepDetailJobRunStep `json:"-"`
 }
 
@@ -15810,7 +15810,7 @@ func (v *WorkflowRunDetailStepsJobRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunDetailStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -15826,11 +15826,11 @@ type __premarshalWorkflowRunDetailStepsJobRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunDetailStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -16022,7 +16022,7 @@ func __marshalWorkflowRunDetailStepsWorkflowRunStep(v *WorkflowRunDetailStepsWor
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowRunDetailTeam struct {
 	Id      uuid.UUID                     `json:"id"`
-	Project *WorkflowRunDetailTeamProject `json:"project"`
+	Project *WorkflowRunDetailTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailTeam.Id, and is useful for accessing the field via an interface.
@@ -16034,7 +16034,7 @@ func (v *WorkflowRunDetailTeam) GetProject() *WorkflowRunDetailTeamProject { ret
 // WorkflowRunDetailTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowRunDetailTeamProject struct {
 	Id       uuid.UUID                             `json:"id"`
-	Workflow *WorkflowRunDetailTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowRunDetailTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns WorkflowRunDetailTeamProject.Id, and is useful for accessing the field via an interface.
@@ -16120,9 +16120,9 @@ func (v *WorkflowRunDetailTeamProjectWorkflowRun) UnmarshalJSON(b []byte) error 
 }
 
 type __premarshalWorkflowRunDetailTeamProjectWorkflowRun struct {
-	FinishedAt *time.Time `json:"finishedAt"`
+	FinishedAt *time.Time `json:"finishedAt,omitempty"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -16245,7 +16245,7 @@ type __premarshalWorkflowRunListItem struct {
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunListItem) MarshalJSON() ([]byte, error) {
@@ -16288,7 +16288,7 @@ func (v *WorkflowRunListItem) __premarshalJSON() (*__premarshalWorkflowRunListIt
 
 // WorkflowRunListItemStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunListItemStepsBuildRunStep struct {
-	Typename       *string                                                           `json:"__typename"`
+	Typename       *string                                                           `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                         `json:"id"`
 	Action         GenericWorkflowStepActionType                                     `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -16296,9 +16296,9 @@ type WorkflowRunListItemStepsBuildRunStep struct {
 	SequenceNumber int                                                               `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                         `json:"createdAt"`
 	UpdatedAt      time.Time                                                         `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                        `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                            `json:"executionType"`
-	Outputs        []*WorkflowRunListItemStepsBuildRunStepOutputsBuildArtifact       `json:"outputs"`
+	ExecutionId    *uuid.UUID                                                        `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                            `json:"executionType,omitempty"`
+	Outputs        []*WorkflowRunListItemStepsBuildRunStepOutputsBuildArtifact       `json:"outputs,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -16382,7 +16382,7 @@ func (v *WorkflowRunListItemStepsBuildRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunListItemStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -16398,11 +16398,11 @@ type __premarshalWorkflowRunListItemStepsBuildRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	Outputs []*WorkflowRunListItemStepsBuildRunStepOutputsBuildArtifact `json:"outputs"`
+	Outputs []*WorkflowRunListItemStepsBuildRunStepOutputsBuildArtifact `json:"outputs,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -16461,7 +16461,7 @@ func (v *WorkflowRunListItemStepsBuildRunStepOutputsBuildArtifact) GetImage() st
 
 // WorkflowRunListItemStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunListItemStepsClusterPrecheckStep struct {
-	Typename       *string                                                           `json:"__typename"`
+	Typename       *string                                                           `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                         `json:"id"`
 	Action         GenericWorkflowStepActionType                                     `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -16469,8 +16469,8 @@ type WorkflowRunListItemStepsClusterPrecheckStep struct {
 	SequenceNumber int                                                               `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                         `json:"createdAt"`
 	UpdatedAt      time.Time                                                         `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                        `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                            `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                        `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                            `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -16555,7 +16555,7 @@ func (v *WorkflowRunListItemStepsClusterPrecheckStep) UnmarshalJSON(b []byte) er
 }
 
 type __premarshalWorkflowRunListItemStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -16571,9 +16571,9 @@ type __premarshalWorkflowRunListItemStepsClusterPrecheckStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -16619,7 +16619,7 @@ func (v *WorkflowRunListItemStepsClusterPrecheckStep) __premarshalJSON() (*__pre
 
 // WorkflowRunListItemStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunListItemStepsDeployRunStep struct {
-	Typename       *string                                                           `json:"__typename"`
+	Typename       *string                                                           `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                         `json:"id"`
 	Action         GenericWorkflowStepActionType                                     `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -16627,9 +16627,9 @@ type WorkflowRunListItemStepsDeployRunStep struct {
 	SequenceNumber int                                                               `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                         `json:"createdAt"`
 	UpdatedAt      time.Time                                                         `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                        `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                            `json:"executionType"`
-	WorkflowRun    *WorkflowRunListItemStepsDeployRunStepWorkflowRun                 `json:"workflowRun"`
+	ExecutionId    *uuid.UUID                                                        `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                            `json:"executionType,omitempty"`
+	WorkflowRun    *WorkflowRunListItemStepsDeployRunStepWorkflowRun                 `json:"workflowRun,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -16713,7 +16713,7 @@ func (v *WorkflowRunListItemStepsDeployRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -16729,11 +16729,11 @@ type __premarshalWorkflowRunListItemStepsDeployRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	WorkflowRun *WorkflowRunListItemStepsDeployRunStepWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunListItemStepsDeployRunStepWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -16865,7 +16865,7 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRun struct {
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRun) MarshalJSON() ([]byte, error) {
@@ -16909,7 +16909,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRun) __premarshalJSON() (*
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename       *string                                                                                        `json:"__typename"`
+	Typename       *string                                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                  `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -16917,8 +16917,8 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep struct {
 	SequenceNumber int                                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -17011,7 +17011,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep) Unma
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -17027,9 +17027,9 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunSt
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -17075,7 +17075,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsBuildRunStep) __pr
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename       *string                                                                                        `json:"__typename"`
+	Typename       *string                                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                  `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -17083,8 +17083,8 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep st
 	SequenceNumber int                                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -17177,7 +17177,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckSte
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -17193,9 +17193,9 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPre
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -17241,7 +17241,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsClusterPrecheckSte
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename       *string                                                                                        `json:"__typename"`
+	Typename       *string                                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                  `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -17249,8 +17249,8 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep struct {
 	SequenceNumber int                                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -17343,7 +17343,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep) Unm
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -17359,9 +17359,9 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -17407,7 +17407,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDeployRunStep) __p
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename       *string                                                                                        `json:"__typename"`
+	Typename       *string                                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                  `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -17415,8 +17415,8 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep struct 
 	SequenceNumber int                                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -17509,7 +17509,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep) Un
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -17525,9 +17525,9 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -17573,7 +17573,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsDestroyRunStep) __
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep struct {
-	Typename       *string                                                                                        `json:"__typename"`
+	Typename       *string                                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                  `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -17581,8 +17581,8 @@ type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep struct {
 	SequenceNumber int                                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                         `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -17675,7 +17675,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep) Unmars
 }
 
 type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -17691,9 +17691,9 @@ type __premarshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -17892,7 +17892,7 @@ func __marshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunSt
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -17908,7 +17908,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDep
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -17924,7 +17924,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDep
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -17940,7 +17940,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDep
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -17956,7 +17956,7 @@ func (v *WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDep
 
 // WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18089,7 +18089,7 @@ func __marshalWorkflowRunListItemStepsDeployRunStepWorkflowRunStepsWorkflowRunSt
 
 // WorkflowRunListItemStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunListItemStepsDestroyRunStep struct {
-	Typename       *string                                                           `json:"__typename"`
+	Typename       *string                                                           `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                         `json:"id"`
 	Action         GenericWorkflowStepActionType                                     `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -18097,8 +18097,8 @@ type WorkflowRunListItemStepsDestroyRunStep struct {
 	SequenceNumber int                                                               `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                         `json:"createdAt"`
 	UpdatedAt      time.Time                                                         `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                        `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                            `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                        `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                            `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -18177,7 +18177,7 @@ func (v *WorkflowRunListItemStepsDestroyRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunListItemStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -18193,9 +18193,9 @@ type __premarshalWorkflowRunListItemStepsDestroyRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -18241,7 +18241,7 @@ func (v *WorkflowRunListItemStepsDestroyRunStep) __premarshalJSON() (*__premarsh
 
 // WorkflowRunListItemStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunListItemStepsJobRunStep struct {
-	Typename       *string                                                           `json:"__typename"`
+	Typename       *string                                                           `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                         `json:"id"`
 	Action         GenericWorkflowStepActionType                                     `json:"action"`
 	DependsOn      []WorkflowRunListItemStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -18249,8 +18249,8 @@ type WorkflowRunListItemStepsJobRunStep struct {
 	SequenceNumber int                                                               `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                         `json:"createdAt"`
 	UpdatedAt      time.Time                                                         `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                        `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                            `json:"executionType"`
+	ExecutionId    *uuid.UUID                                                        `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                            `json:"executionType,omitempty"`
 }
 
 // GetTypename returns WorkflowRunListItemStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -18329,7 +18329,7 @@ func (v *WorkflowRunListItemStepsJobRunStep) UnmarshalJSON(b []byte) error {
 }
 
 type __premarshalWorkflowRunListItemStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -18345,9 +18345,9 @@ type __premarshalWorkflowRunListItemStepsJobRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 }
 
 func (v *WorkflowRunListItemStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -18546,7 +18546,7 @@ func __marshalWorkflowRunListItemStepsWorkflowRunStep(v *WorkflowRunListItemStep
 
 // WorkflowRunListItemStepsWorkflowRunStepDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunListItemStepsWorkflowRunStepDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18560,7 +18560,7 @@ func (v *WorkflowRunListItemStepsWorkflowRunStepDependsOnBuildRunStep) GetId() u
 
 // WorkflowRunListItemStepsWorkflowRunStepDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunListItemStepsWorkflowRunStepDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18576,7 +18576,7 @@ func (v *WorkflowRunListItemStepsWorkflowRunStepDependsOnClusterPrecheckStep) Ge
 
 // WorkflowRunListItemStepsWorkflowRunStepDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunListItemStepsWorkflowRunStepDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18592,7 +18592,7 @@ func (v *WorkflowRunListItemStepsWorkflowRunStepDependsOnDeployRunStep) GetId() 
 
 // WorkflowRunListItemStepsWorkflowRunStepDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunListItemStepsWorkflowRunStepDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18608,7 +18608,7 @@ func (v *WorkflowRunListItemStepsWorkflowRunStepDependsOnDestroyRunStep) GetId()
 
 // WorkflowRunListItemStepsWorkflowRunStepDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunListItemStepsWorkflowRunStepDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -18748,8 +18748,8 @@ const (
 )
 
 type WorkflowRunStepDefinitionInput struct {
-	Action         WorkflowStepActionType                   `json:"action,omitempty"`
-	DependsOn      []int                                    `json:"dependsOn,omitempty"`
+	Action         WorkflowStepActionType                   `json:"action"`
+	DependsOn      []int                                    `json:"dependsOn"`
 	Disabled       *bool                                    `json:"disabled,omitempty"`
 	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
 	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
@@ -18779,7 +18779,7 @@ func (v *WorkflowRunStepDefinitionInput) GetMetadata() *WorkflowRunStepDefinitio
 }
 
 type WorkflowRunStepDefinitionMetadataInput struct {
-	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps,omitempty"`
+	DeploySteps []DriverWorkflowStepActionType `json:"deploySteps"`
 }
 
 // GetDeploySteps returns WorkflowRunStepDefinitionMetadataInput.DeploySteps, and is useful for accessing the field via an interface.
@@ -18945,10 +18945,10 @@ type WorkflowRunStepDetailBuildRunStep struct {
 	SequenceNumber int                                             `json:"sequenceNumber"`
 	CreatedAt      time.Time                                       `json:"createdAt"`
 	UpdatedAt      time.Time                                       `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                      `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                          `json:"executionType"`
-	ExecutionError *string                                         `json:"executionError"`
-	Outputs        []*WorkflowRunStepDetailOutputsBuildArtifact    `json:"outputs"`
+	ExecutionId    *uuid.UUID                                      `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                          `json:"executionType,omitempty"`
+	ExecutionError *string                                         `json:"executionError,omitempty"`
+	Outputs        []*WorkflowRunStepDetailOutputsBuildArtifact    `json:"outputs,omitempty"`
 }
 
 // GetId returns WorkflowRunStepDetailBuildRunStep.Id, and is useful for accessing the field via an interface.
@@ -19046,13 +19046,13 @@ type __premarshalWorkflowRunStepDetailBuildRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	Outputs []*WorkflowRunStepDetailOutputsBuildArtifact `json:"outputs"`
+	Outputs []*WorkflowRunStepDetailOutputsBuildArtifact `json:"outputs,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -19157,9 +19157,9 @@ type __premarshalWorkflowRunStepDetailCluster struct {
 
 	State ClusterState `json:"state"`
 
-	Connected *bool `json:"connected"`
+	Connected *bool `json:"connected,omitempty"`
 
-	CloudProvider *CloudProvider `json:"cloudProvider"`
+	CloudProvider *CloudProvider `json:"cloudProvider,omitempty"`
 
 	CreatedAt time.Time `json:"createdAt"`
 
@@ -19196,10 +19196,10 @@ type WorkflowRunStepDetailClusterPrecheckStep struct {
 	SequenceNumber int                                             `json:"sequenceNumber"`
 	CreatedAt      time.Time                                       `json:"createdAt"`
 	UpdatedAt      time.Time                                       `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                      `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                          `json:"executionType"`
-	ExecutionError *string                                         `json:"executionError"`
-	Cluster        *WorkflowRunStepDetailCluster                   `json:"cluster"`
+	ExecutionId    *uuid.UUID                                      `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                          `json:"executionType,omitempty"`
+	ExecutionError *string                                         `json:"executionError,omitempty"`
+	Cluster        *WorkflowRunStepDetailCluster                   `json:"cluster,omitempty"`
 }
 
 // GetId returns WorkflowRunStepDetailClusterPrecheckStep.Id, and is useful for accessing the field via an interface.
@@ -19299,13 +19299,13 @@ type __premarshalWorkflowRunStepDetailClusterPrecheckStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	Cluster *WorkflowRunStepDetailCluster `json:"cluster"`
+	Cluster *WorkflowRunStepDetailCluster `json:"cluster,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -19352,7 +19352,7 @@ func (v *WorkflowRunStepDetailClusterPrecheckStep) __premarshalJSON() (*__premar
 
 // WorkflowRunStepDetailDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepDetailDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -19364,7 +19364,7 @@ func (v *WorkflowRunStepDetailDependsOnBuildRunStep) GetId() uuid.UUID { return 
 
 // WorkflowRunStepDetailDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepDetailDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -19376,7 +19376,7 @@ func (v *WorkflowRunStepDetailDependsOnClusterPrecheckStep) GetId() uuid.UUID { 
 
 // WorkflowRunStepDetailDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepDetailDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -19388,7 +19388,7 @@ func (v *WorkflowRunStepDetailDependsOnDeployRunStep) GetId() uuid.UUID { return
 
 // WorkflowRunStepDetailDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepDetailDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -19400,7 +19400,7 @@ func (v *WorkflowRunStepDetailDependsOnDestroyRunStep) GetId() uuid.UUID { retur
 
 // WorkflowRunStepDetailDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepDetailDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -19536,10 +19536,10 @@ type WorkflowRunStepDetailDeployRunStep struct {
 	SequenceNumber int                                             `json:"sequenceNumber"`
 	CreatedAt      time.Time                                       `json:"createdAt"`
 	UpdatedAt      time.Time                                       `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                      `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                          `json:"executionType"`
-	ExecutionError *string                                         `json:"executionError"`
-	WorkflowRun    *WorkflowRunStepDetailWorkflowRun               `json:"workflowRun"`
+	ExecutionId    *uuid.UUID                                      `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                          `json:"executionType,omitempty"`
+	ExecutionError *string                                         `json:"executionError,omitempty"`
+	WorkflowRun    *WorkflowRunStepDetailWorkflowRun               `json:"workflowRun,omitempty"`
 }
 
 // GetId returns WorkflowRunStepDetailDeployRunStep.Id, and is useful for accessing the field via an interface.
@@ -19637,13 +19637,13 @@ type __premarshalWorkflowRunStepDetailDeployRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 
-	WorkflowRun *WorkflowRunStepDetailWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepDetailWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -19697,9 +19697,9 @@ type WorkflowRunStepDetailDestroyRunStep struct {
 	SequenceNumber int                                             `json:"sequenceNumber"`
 	CreatedAt      time.Time                                       `json:"createdAt"`
 	UpdatedAt      time.Time                                       `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                      `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                          `json:"executionType"`
-	ExecutionError *string                                         `json:"executionError"`
+	ExecutionId    *uuid.UUID                                      `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                          `json:"executionType,omitempty"`
+	ExecutionError *string                                         `json:"executionError,omitempty"`
 }
 
 // GetId returns WorkflowRunStepDetailDestroyRunStep.Id, and is useful for accessing the field via an interface.
@@ -19792,11 +19792,11 @@ type __premarshalWorkflowRunStepDetailDestroyRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -19849,9 +19849,9 @@ type WorkflowRunStepDetailJobRunStep struct {
 	SequenceNumber int                                             `json:"sequenceNumber"`
 	CreatedAt      time.Time                                       `json:"createdAt"`
 	UpdatedAt      time.Time                                       `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                      `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                          `json:"executionType"`
-	ExecutionError *string                                         `json:"executionError"`
+	ExecutionId    *uuid.UUID                                      `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                          `json:"executionType,omitempty"`
+	ExecutionError *string                                         `json:"executionError,omitempty"`
 }
 
 // GetId returns WorkflowRunStepDetailJobRunStep.Id, and is useful for accessing the field via an interface.
@@ -19942,11 +19942,11 @@ type __premarshalWorkflowRunStepDetailJobRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailJobRunStep) MarshalJSON() ([]byte, error) {
@@ -20083,7 +20083,7 @@ type __premarshalWorkflowRunStepDetailWorkflowRun struct {
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRun) MarshalJSON() ([]byte, error) {
@@ -20127,7 +20127,7 @@ func (v *WorkflowRunStepDetailWorkflowRun) __premarshalJSON() (*__premarshalWork
 
 // WorkflowRunStepDetailWorkflowRunStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
-	Typename       *string                                                                        `json:"__typename"`
+	Typename       *string                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                  `json:"action"`
 	DependsOn      []WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -20135,9 +20135,9 @@ type WorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
 	SequenceNumber int                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType"`
-	ExecutionError *string                                                                        `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType,omitempty"`
+	ExecutionError *string                                                                        `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -20231,7 +20231,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) UnmarshalJSON(b []by
 }
 
 type __premarshalWorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -20247,11 +20247,11 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsBuildRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -20298,7 +20298,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsBuildRunStep) __premarshalJSON() (
 
 // WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct {
-	Typename       *string                                                                        `json:"__typename"`
+	Typename       *string                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                  `json:"action"`
 	DependsOn      []WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -20306,9 +20306,9 @@ type WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct {
 	SequenceNumber int                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType"`
-	ExecutionError *string                                                                        `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType,omitempty"`
+	ExecutionError *string                                                                        `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -20404,7 +20404,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) UnmarshalJSON
 }
 
 type __premarshalWorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -20420,11 +20420,11 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep struct
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -20471,7 +20471,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsClusterPrecheckStep) __premarshalJ
 
 // WorkflowRunStepDetailWorkflowRunStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
-	Typename       *string                                                                        `json:"__typename"`
+	Typename       *string                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                  `json:"action"`
 	DependsOn      []WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -20479,9 +20479,9 @@ type WorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
 	SequenceNumber int                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType"`
-	ExecutionError *string                                                                        `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType,omitempty"`
+	ExecutionError *string                                                                        `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -20575,7 +20575,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) UnmarshalJSON(b []b
 }
 
 type __premarshalWorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -20591,11 +20591,11 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDeployRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -20642,7 +20642,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDeployRunStep) __premarshalJSON() 
 
 // WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
-	Typename       *string                                                                        `json:"__typename"`
+	Typename       *string                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                  `json:"action"`
 	DependsOn      []WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -20650,9 +20650,9 @@ type WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
 	SequenceNumber int                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType"`
-	ExecutionError *string                                                                        `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType,omitempty"`
+	ExecutionError *string                                                                        `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -20748,7 +20748,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) UnmarshalJSON(b []
 }
 
 type __premarshalWorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -20764,11 +20764,11 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsDestroyRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -20815,7 +20815,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsDestroyRunStep) __premarshalJSON()
 
 // WorkflowRunStepDetailWorkflowRunStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
-	Typename       *string                                                                        `json:"__typename"`
+	Typename       *string                                                                        `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                      `json:"id"`
 	Action         GenericWorkflowStepActionType                                                  `json:"action"`
 	DependsOn      []WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -20823,9 +20823,9 @@ type WorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
 	SequenceNumber int                                                                            `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                      `json:"createdAt"`
 	UpdatedAt      time.Time                                                                      `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                     `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType"`
-	ExecutionError *string                                                                        `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                     `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                         `json:"executionType,omitempty"`
+	ExecutionError *string                                                                        `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepDetailWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -20919,7 +20919,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) UnmarshalJSON(b []byte
 }
 
 type __premarshalWorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -20935,11 +20935,11 @@ type __premarshalWorkflowRunStepDetailWorkflowRunStepsJobRunStep struct {
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepDetailWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -21141,7 +21141,7 @@ func __marshalWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStep(v *WorkflowRu
 
 // WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21157,7 +21157,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnBuildRunSt
 
 // WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21173,7 +21173,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnClusterPre
 
 // WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21189,7 +21189,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDeployRunS
 
 // WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21205,7 +21205,7 @@ func (v *WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnDestroyRun
 
 // WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21338,7 +21338,7 @@ func __marshalWorkflowRunStepDetailWorkflowRunStepsWorkflowRunStepDependsOnWorkf
 
 // workflowRunStepNestedDetailLogsResponse is returned by workflowRunStepNestedDetailLogs on success.
 type WorkflowRunStepNestedDetailLogsResponse struct {
-	Team *WorkflowRunStepNestedDetailLogsTeam `json:"team"`
+	Team *WorkflowRunStepNestedDetailLogsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowRunStepNestedDetailLogsResponse.Team, and is useful for accessing the field via an interface.
@@ -21357,7 +21357,7 @@ func (v *WorkflowRunStepNestedDetailLogsResponse) GetTeam() *WorkflowRunStepNest
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowRunStepNestedDetailLogsTeam struct {
 	Id      uuid.UUID                                   `json:"id"`
-	Project *WorkflowRunStepNestedDetailLogsTeamProject `json:"project"`
+	Project *WorkflowRunStepNestedDetailLogsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeam.Id, and is useful for accessing the field via an interface.
@@ -21371,7 +21371,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeam) GetProject() *WorkflowRunStepNeste
 // WorkflowRunStepNestedDetailLogsTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowRunStepNestedDetailLogsTeamProject struct {
 	Id       uuid.UUID                                           `json:"id"`
-	Workflow *WorkflowRunStepNestedDetailLogsTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowRunStepNestedDetailLogsTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailLogsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -21595,7 +21595,7 @@ func __marshalWorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStep(v *Workf
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21611,7 +21611,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepBuildRunStep) 
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21627,9 +21627,9 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepClusterPrechec
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStep struct {
-	Typename    *string                                                                            `json:"__typename"`
+	Typename    *string                                                                            `json:"__typename,omitempty"`
 	Id          uuid.UUID                                                                          `json:"id"`
-	WorkflowRun *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -21875,7 +21875,7 @@ func __marshalWorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRun
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21891,7 +21891,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21907,7 +21907,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21923,7 +21923,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -21939,9 +21939,9 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStep struct {
-	Typename *string                                                                                              `json:"__typename"`
+	Typename *string                                                                                              `json:"__typename,omitempty"`
 	Id       uuid.UUID                                                                                            `json:"id"`
-	Logs     *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs `json:"logs"`
+	Logs     *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs `json:"logs,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -21963,7 +21963,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogs struct {
 	Id        string                                                                                                               `json:"id"`
 	Completed bool                                                                                                                 `json:"completed"`
-	Expired   *bool                                                                                                                `json:"expired"`
+	Expired   *bool                                                                                                                `json:"expired,omitempty"`
 	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -21989,7 +21989,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry struct {
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Text      string     `json:"text"`
 }
 
@@ -22005,9 +22005,9 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDeployRunStepW
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep struct {
-	Typename    *string                                                                             `json:"__typename"`
+	Typename    *string                                                                             `json:"__typename,omitempty"`
 	Id          uuid.UUID                                                                           `json:"id"`
-	WorkflowRun *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -22253,7 +22253,7 @@ func __marshalWorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRu
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22269,7 +22269,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22285,7 +22285,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22301,7 +22301,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22317,9 +22317,9 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStep struct {
-	Typename *string                                                                                               `json:"__typename"`
+	Typename *string                                                                                               `json:"__typename,omitempty"`
 	Id       uuid.UUID                                                                                             `json:"id"`
-	Logs     *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs `json:"logs"`
+	Logs     *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs `json:"logs,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -22341,7 +22341,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogs struct {
 	Id        string                                                                                                                `json:"id"`
 	Completed bool                                                                                                                  `json:"completed"`
-	Expired   *bool                                                                                                                 `json:"expired"`
+	Expired   *bool                                                                                                                 `json:"expired,omitempty"`
 	Entries   []WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry `json:"entries"`
 }
 
@@ -22367,7 +22367,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepJobRunStepLogsEntriesLogEntry struct {
-	Timestamp *time.Time `json:"timestamp"`
+	Timestamp *time.Time `json:"timestamp,omitempty"`
 	Text      string     `json:"text"`
 }
 
@@ -22383,7 +22383,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepDestroyRunStep
 
 // WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22399,7 +22399,7 @@ func (v *WorkflowRunStepNestedDetailLogsTeamProjectWorkflowRunStepJobRunStep) Ge
 
 // workflowRunStepNestedDetailResponse is returned by workflowRunStepNestedDetail on success.
 type WorkflowRunStepNestedDetailResponse struct {
-	Team *WorkflowRunStepNestedDetailTeam `json:"team"`
+	Team *WorkflowRunStepNestedDetailTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowRunStepNestedDetailResponse.Team, and is useful for accessing the field via an interface.
@@ -22418,7 +22418,7 @@ func (v *WorkflowRunStepNestedDetailResponse) GetTeam() *WorkflowRunStepNestedDe
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowRunStepNestedDetailTeam struct {
 	Id      uuid.UUID                               `json:"id"`
-	Project *WorkflowRunStepNestedDetailTeamProject `json:"project"`
+	Project *WorkflowRunStepNestedDetailTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailTeam.Id, and is useful for accessing the field via an interface.
@@ -22432,7 +22432,7 @@ func (v *WorkflowRunStepNestedDetailTeam) GetProject() *WorkflowRunStepNestedDet
 // WorkflowRunStepNestedDetailTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowRunStepNestedDetailTeamProject struct {
 	Id       uuid.UUID                                       `json:"id"`
-	Workflow *WorkflowRunStepNestedDetailTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowRunStepNestedDetailTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns WorkflowRunStepNestedDetailTeamProject.Id, and is useful for accessing the field via an interface.
@@ -22656,7 +22656,7 @@ func __marshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStep(v *WorkflowR
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22672,7 +22672,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepBuildRunStep) GetI
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -22688,9 +22688,9 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepClusterPrecheckSte
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStep struct {
-	Typename    *string                                                                        `json:"__typename"`
+	Typename    *string                                                                        `json:"__typename,omitempty"`
 	Id          uuid.UUID                                                                      `json:"id"`
-	WorkflowRun *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -22799,7 +22799,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRun) MarshalJSON() ([]byte, error) {
@@ -22843,7 +22843,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename       *string                                                                                                                     `json:"__typename"`
+	Typename       *string                                                                                                                     `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                   `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                               `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -22851,9 +22851,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	SequenceNumber int                                                                                                                         `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                   `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType"`
-	ExecutionError *string                                                                                                                     `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                     `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -22951,7 +22951,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -22967,11 +22967,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -23018,7 +23018,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename       *string                                                                                                                     `json:"__typename"`
+	Typename       *string                                                                                                                     `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                   `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                               `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -23026,9 +23026,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	SequenceNumber int                                                                                                                         `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                   `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType"`
-	ExecutionError *string                                                                                                                     `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                     `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -23126,7 +23126,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -23142,11 +23142,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -23193,7 +23193,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename       *string                                                                                                                     `json:"__typename"`
+	Typename       *string                                                                                                                     `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                   `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                               `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -23201,9 +23201,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	SequenceNumber int                                                                                                                         `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                   `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType"`
-	ExecutionError *string                                                                                                                     `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                     `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23301,7 +23301,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -23317,11 +23317,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -23368,7 +23368,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename       *string                                                                                                                     `json:"__typename"`
+	Typename       *string                                                                                                                     `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                   `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                               `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -23376,9 +23376,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	SequenceNumber int                                                                                                                         `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                   `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType"`
-	ExecutionError *string                                                                                                                     `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                     `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23476,7 +23476,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -23492,11 +23492,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -23543,7 +23543,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep struct {
-	Typename       *string                                                                                                                     `json:"__typename"`
+	Typename       *string                                                                                                                     `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                   `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                               `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -23551,9 +23551,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowR
 	SequenceNumber int                                                                                                                         `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                   `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                   `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType"`
-	ExecutionError *string                                                                                                                     `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                  `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                      `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                     `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -23651,7 +23651,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -23667,11 +23667,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunS
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -23873,7 +23873,7 @@ func __marshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStep
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -23889,7 +23889,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -23905,7 +23905,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -23921,7 +23921,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -23937,7 +23937,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkf
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -24070,9 +24070,9 @@ func __marshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDeployRunStep
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStep struct {
-	Typename    *string                                                                         `json:"__typename"`
+	Typename    *string                                                                         `json:"__typename,omitempty"`
 	Id          uuid.UUID                                                                       `json:"id"`
-	WorkflowRun *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRun `json:"workflowRun"`
+	WorkflowRun *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRun `json:"workflowRun,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24181,7 +24181,7 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRun) MarshalJSON() ([]byte, error) {
@@ -24225,7 +24225,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename       *string                                                                                                                      `json:"__typename"`
+	Typename       *string                                                                                                                      `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                    `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                                `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -24233,9 +24233,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	SequenceNumber int                                                                                                                          `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType"`
-	ExecutionError *string                                                                                                                      `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                      `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24333,7 +24333,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -24349,11 +24349,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsBuildRunStep) MarshalJSON() ([]byte, error) {
@@ -24400,7 +24400,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename       *string                                                                                                                      `json:"__typename"`
+	Typename       *string                                                                                                                      `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                    `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                                `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -24408,9 +24408,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	SequenceNumber int                                                                                                                          `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType"`
-	ExecutionError *string                                                                                                                      `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                      `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep.Typename, and is useful for accessing the field via an interface.
@@ -24508,7 +24508,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -24524,11 +24524,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsClusterPrecheckStep) MarshalJSON() ([]byte, error) {
@@ -24575,7 +24575,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename       *string                                                                                                                      `json:"__typename"`
+	Typename       *string                                                                                                                      `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                    `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                                `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -24583,9 +24583,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	SequenceNumber int                                                                                                                          `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType"`
-	ExecutionError *string                                                                                                                      `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                      `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24683,7 +24683,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -24699,11 +24699,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDeployRunStep) MarshalJSON() ([]byte, error) {
@@ -24750,7 +24750,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename       *string                                                                                                                      `json:"__typename"`
+	Typename       *string                                                                                                                      `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                    `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                                `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -24758,9 +24758,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	SequenceNumber int                                                                                                                          `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType"`
-	ExecutionError *string                                                                                                                      `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                      `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep.Typename, and is useful for accessing the field via an interface.
@@ -24858,7 +24858,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -24874,11 +24874,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsDestroyRunStep) MarshalJSON() ([]byte, error) {
@@ -24925,7 +24925,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep struct {
-	Typename       *string                                                                                                                      `json:"__typename"`
+	Typename       *string                                                                                                                      `json:"__typename,omitempty"`
 	Id             uuid.UUID                                                                                                                    `json:"id"`
 	Action         GenericWorkflowStepActionType                                                                                                `json:"action"`
 	DependsOn      []WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnWorkflowRunStep `json:"-"`
@@ -24933,9 +24933,9 @@ type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflow
 	SequenceNumber int                                                                                                                          `json:"sequenceNumber"`
 	CreatedAt      time.Time                                                                                                                    `json:"createdAt"`
 	UpdatedAt      time.Time                                                                                                                    `json:"updatedAt"`
-	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId"`
-	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType"`
-	ExecutionError *string                                                                                                                      `json:"executionError"`
+	ExecutionId    *uuid.UUID                                                                                                                   `json:"executionId,omitempty"`
+	ExecutionType  *WorkflowExecutionType                                                                                                       `json:"executionType,omitempty"`
+	ExecutionError *string                                                                                                                      `json:"executionError,omitempty"`
 }
 
 // GetTypename returns WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep.Typename, and is useful for accessing the field via an interface.
@@ -25033,7 +25033,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 }
 
 type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep struct {
-	Typename *string `json:"__typename"`
+	Typename *string `json:"__typename,omitempty"`
 
 	Id uuid.UUID `json:"id"`
 
@@ -25049,11 +25049,11 @@ type __premarshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRun
 
 	UpdatedAt time.Time `json:"updatedAt"`
 
-	ExecutionId *uuid.UUID `json:"executionId"`
+	ExecutionId *uuid.UUID `json:"executionId,omitempty"`
 
-	ExecutionType *WorkflowExecutionType `json:"executionType"`
+	ExecutionType *WorkflowExecutionType `json:"executionType,omitempty"`
 
-	ExecutionError *string `json:"executionError"`
+	ExecutionError *string `json:"executionError,omitempty"`
 }
 
 func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsJobRunStep) MarshalJSON() ([]byte, error) {
@@ -25255,7 +25255,7 @@ func __marshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunSte
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep includes the requested fields of the GraphQL type BuildRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnBuildRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25271,7 +25271,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep includes the requested fields of the GraphQL type ClusterPrecheckStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnClusterPrecheckStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25287,7 +25287,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep includes the requested fields of the GraphQL type DeployRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnDeployRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25303,7 +25303,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep includes the requested fields of the GraphQL type DestroyRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnDestroyRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25319,7 +25319,7 @@ func (v *WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWork
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunStepWorkflowRunStepsWorkflowRunStepDependsOnJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25452,7 +25452,7 @@ func __marshalWorkflowRunStepNestedDetailTeamProjectWorkflowRunStepDestroyRunSte
 
 // WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepJobRunStep includes the requested fields of the GraphQL type JobRunStep.
 type WorkflowRunStepNestedDetailTeamProjectWorkflowRunStepJobRunStep struct {
-	Typename *string   `json:"__typename"`
+	Typename *string   `json:"__typename,omitempty"`
 	Id       uuid.UUID `json:"id"`
 }
 
@@ -25479,7 +25479,7 @@ const (
 
 // workflowRunsResponse is returned by workflowRuns on success.
 type WorkflowRunsResponse struct {
-	Team *WorkflowRunsTeam `json:"team"`
+	Team *WorkflowRunsTeam `json:"team,omitempty"`
 }
 
 // GetTeam returns WorkflowRunsResponse.Team, and is useful for accessing the field via an interface.
@@ -25496,7 +25496,7 @@ func (v *WorkflowRunsResponse) GetTeam() *WorkflowRunsTeam { return v.Team }
 // Being a member of sub-team does not confer access to the parent team.
 type WorkflowRunsTeam struct {
 	Id      uuid.UUID                `json:"id"`
-	Project *WorkflowRunsTeamProject `json:"project"`
+	Project *WorkflowRunsTeamProject `json:"project,omitempty"`
 }
 
 // GetId returns WorkflowRunsTeam.Id, and is useful for accessing the field via an interface.
@@ -25508,7 +25508,7 @@ func (v *WorkflowRunsTeam) GetProject() *WorkflowRunsTeamProject { return v.Proj
 // WorkflowRunsTeamProject includes the requested fields of the GraphQL type Project.
 type WorkflowRunsTeamProject struct {
 	Id       uuid.UUID                        `json:"id"`
-	Workflow *WorkflowRunsTeamProjectWorkflow `json:"workflow"`
+	Workflow *WorkflowRunsTeamProjectWorkflow `json:"workflow,omitempty"`
 }
 
 // GetId returns WorkflowRunsTeamProject.Id, and is useful for accessing the field via an interface.
@@ -25617,7 +25617,7 @@ type __premarshalWorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionNodesWo
 
 	CreatedAt time.Time `json:"createdAt"`
 
-	Steps []json.RawMessage `json:"steps"`
+	Steps []json.RawMessage `json:"steps,omitempty"`
 }
 
 func (v *WorkflowRunsTeamProjectWorkflowRunsWorkflowRunConnectionNodesWorkflowRun) MarshalJSON() ([]byte, error) {
@@ -25679,8 +25679,8 @@ const (
 )
 
 type WorkflowStepDefinitionInput struct {
-	Action         WorkflowStepActionType                   `json:"action,omitempty"`
-	DependsOn      []int                                    `json:"dependsOn,omitempty"`
+	Action         WorkflowStepActionType                   `json:"action"`
+	DependsOn      []int                                    `json:"dependsOn"`
 	Disabled       *bool                                    `json:"disabled,omitempty"`
 	MatchingRule   *WorkflowStepDefinitionMatchingRuleInput `json:"matchingRule,omitempty"`
 	SequenceNumber *int                                     `json:"sequenceNumber,omitempty"`
@@ -25720,7 +25720,7 @@ func (v *WorkflowStepDefinitionMatchingRuleInput) GetBranchName() *string { retu
 
 // __abortWorkflowRunInput is used internally by genqlient
 type __abortWorkflowRunInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __abortWorkflowRunInput.Id, and is useful for accessing the field via an interface.
@@ -25728,8 +25728,8 @@ func (v *__abortWorkflowRunInput) GetId() uuid.UUID { return v.Id }
 
 // __approveWorkflowRunStepInput is used internally by genqlient
 type __approveWorkflowRunStepInput struct {
-	StepId    uuid.UUID `json:"stepId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	StepId    uuid.UUID `json:"stepId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetStepId returns __approveWorkflowRunStepInput.StepId, and is useful for accessing the field via an interface.
@@ -25740,7 +25740,7 @@ func (v *__approveWorkflowRunStepInput) GetProjectId() uuid.UUID { return v.Proj
 
 // __blueprintByIdInput is used internally by genqlient
 type __blueprintByIdInput struct {
-	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
+	BlueprintId uuid.UUID `json:"blueprintId"`
 }
 
 // GetBlueprintId returns __blueprintByIdInput.BlueprintId, and is useful for accessing the field via an interface.
@@ -25748,8 +25748,8 @@ func (v *__blueprintByIdInput) GetBlueprintId() uuid.UUID { return v.BlueprintId
 
 // __blueprintInput is used internally by genqlient
 type __blueprintInput struct {
-	TeamId      uuid.UUID `json:"teamId,omitempty"`
-	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
+	TeamId      uuid.UUID `json:"teamId"`
+	BlueprintId uuid.UUID `json:"blueprintId"`
 }
 
 // GetTeamId returns __blueprintInput.TeamId, and is useful for accessing the field via an interface.
@@ -25760,8 +25760,8 @@ func (v *__blueprintInput) GetBlueprintId() uuid.UUID { return v.BlueprintId }
 
 // __blueprintRevisionsInput is used internally by genqlient
 type __blueprintRevisionsInput struct {
-	TeamId      uuid.UUID `json:"teamId,omitempty"`
-	BlueprintId uuid.UUID `json:"blueprintId,omitempty"`
+	TeamId      uuid.UUID `json:"teamId"`
+	BlueprintId uuid.UUID `json:"blueprintId"`
 }
 
 // GetTeamId returns __blueprintRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25772,9 +25772,9 @@ func (v *__blueprintRevisionsInput) GetBlueprintId() uuid.UUID { return v.Bluepr
 
 // __buildArtifactsInput is used internally by genqlient
 type __buildArtifactsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	Page      PageInput `json:"page,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	Page      PageInput `json:"page"`
 }
 
 // GetTeamId returns __buildArtifactsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25788,9 +25788,9 @@ func (v *__buildArtifactsInput) GetPage() PageInput { return v.Page }
 
 // __buildRunDetailInput is used internally by genqlient
 type __buildRunDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	RunId     uuid.UUID `json:"runId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	RunId     uuid.UUID `json:"runId"`
 }
 
 // GetTeamId returns __buildRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -25804,9 +25804,9 @@ func (v *__buildRunDetailInput) GetRunId() uuid.UUID { return v.RunId }
 
 // __buildRunsInput is used internally by genqlient
 type __buildRunsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	Page      PageInput `json:"page,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	Page      PageInput `json:"page"`
 }
 
 // GetTeamId returns __buildRunsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25820,8 +25820,8 @@ func (v *__buildRunsInput) GetPage() PageInput { return v.Page }
 
 // __cloudRevisionsInput is used internally by genqlient
 type __cloudRevisionsInput struct {
-	TeamId  uuid.UUID `json:"teamId,omitempty"`
-	CloudId uuid.UUID `json:"cloudId,omitempty"`
+	TeamId  uuid.UUID `json:"teamId"`
+	CloudId uuid.UUID `json:"cloudId"`
 }
 
 // GetTeamId returns __cloudRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25832,8 +25832,8 @@ func (v *__cloudRevisionsInput) GetCloudId() uuid.UUID { return v.CloudId }
 
 // __clusterDetailsInput is used internally by genqlient
 type __clusterDetailsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ClusterId uuid.UUID `json:"clusterId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ClusterId uuid.UUID `json:"clusterId"`
 }
 
 // GetTeamId returns __clusterDetailsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25844,8 +25844,8 @@ func (v *__clusterDetailsInput) GetClusterId() uuid.UUID { return v.ClusterId }
 
 // __clusterRevisionsInput is used internally by genqlient
 type __clusterRevisionsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ClusterId uuid.UUID `json:"clusterId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ClusterId uuid.UUID `json:"clusterId"`
 }
 
 // GetTeamId returns __clusterRevisionsInput.TeamId, and is useful for accessing the field via an interface.
@@ -25856,8 +25856,8 @@ func (v *__clusterRevisionsInput) GetClusterId() uuid.UUID { return v.ClusterId 
 
 // __clusterStatusInput is used internally by genqlient
 type __clusterStatusInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ClusterId uuid.UUID `json:"clusterId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ClusterId uuid.UUID `json:"clusterId"`
 }
 
 // GetTeamId returns __clusterStatusInput.TeamId, and is useful for accessing the field via an interface.
@@ -25868,7 +25868,7 @@ func (v *__clusterStatusInput) GetClusterId() uuid.UUID { return v.ClusterId }
 
 // __createBuildRunInput is used internally by genqlient
 type __createBuildRunInput struct {
-	BuildId uuid.UUID `json:"buildId,omitempty"`
+	BuildId uuid.UUID `json:"buildId"`
 }
 
 // GetBuildId returns __createBuildRunInput.BuildId, and is useful for accessing the field via an interface.
@@ -25876,7 +25876,7 @@ func (v *__createBuildRunInput) GetBuildId() uuid.UUID { return v.BuildId }
 
 // __createDeployRunInput is used internally by genqlient
 type __createDeployRunInput struct {
-	Input CreateDeployRunInput `json:"input,omitempty"`
+	Input CreateDeployRunInput `json:"input"`
 }
 
 // GetInput returns __createDeployRunInput.Input, and is useful for accessing the field via an interface.
@@ -25884,7 +25884,7 @@ func (v *__createDeployRunInput) GetInput() CreateDeployRunInput { return v.Inpu
 
 // __createGroupInput is used internally by genqlient
 type __createGroupInput struct {
-	Input CreateGroupInput `json:"input,omitempty"`
+	Input CreateGroupInput `json:"input"`
 }
 
 // GetInput returns __createGroupInput.Input, and is useful for accessing the field via an interface.
@@ -25892,7 +25892,7 @@ func (v *__createGroupInput) GetInput() CreateGroupInput { return v.Input }
 
 // __createProjectInput is used internally by genqlient
 type __createProjectInput struct {
-	Input CreateProjectInput `json:"input,omitempty"`
+	Input CreateProjectInput `json:"input"`
 }
 
 // GetInput returns __createProjectInput.Input, and is useful for accessing the field via an interface.
@@ -25900,7 +25900,7 @@ func (v *__createProjectInput) GetInput() CreateProjectInput { return v.Input }
 
 // __createSubGroupInput is used internally by genqlient
 type __createSubGroupInput struct {
-	Input CreateSubGroupInput `json:"input,omitempty"`
+	Input CreateSubGroupInput `json:"input"`
 }
 
 // GetInput returns __createSubGroupInput.Input, and is useful for accessing the field via an interface.
@@ -25908,8 +25908,8 @@ func (v *__createSubGroupInput) GetInput() CreateSubGroupInput { return v.Input 
 
 // __createUserPersonalAccessTokenInput is used internally by genqlient
 type __createUserPersonalAccessTokenInput struct {
-	UserId uuid.UUID `json:"userId,omitempty"`
-	Name   string    `json:"name,omitempty"`
+	UserId uuid.UUID `json:"userId"`
+	Name   string    `json:"name"`
 }
 
 // GetUserId returns __createUserPersonalAccessTokenInput.UserId, and is useful for accessing the field via an interface.
@@ -25920,7 +25920,7 @@ func (v *__createUserPersonalAccessTokenInput) GetName() string { return v.Name 
 
 // __createWorkflowTriggerInput is used internally by genqlient
 type __createWorkflowTriggerInput struct {
-	Input CreateTriggerInput `json:"input,omitempty"`
+	Input CreateTriggerInput `json:"input"`
 }
 
 // GetInput returns __createWorkflowTriggerInput.Input, and is useful for accessing the field via an interface.
@@ -25928,7 +25928,7 @@ func (v *__createWorkflowTriggerInput) GetInput() CreateTriggerInput { return v.
 
 // __deleteGroupInput is used internally by genqlient
 type __deleteGroupInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __deleteGroupInput.Id, and is useful for accessing the field via an interface.
@@ -25936,7 +25936,7 @@ func (v *__deleteGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteProjectAndResourcesInput is used internally by genqlient
 type __deleteProjectAndResourcesInput struct {
-	Id              uuid.UUID `json:"id,omitempty"`
+	Id              uuid.UUID `json:"id"`
 	DeleteOnFailure *bool     `json:"deleteOnFailure,omitempty"`
 }
 
@@ -25948,7 +25948,7 @@ func (v *__deleteProjectAndResourcesInput) GetDeleteOnFailure() *bool { return v
 
 // __deleteProjectInput is used internally by genqlient
 type __deleteProjectInput struct {
-	Id    uuid.UUID `json:"id,omitempty"`
+	Id    uuid.UUID `json:"id"`
 	Force *bool     `json:"force,omitempty"`
 }
 
@@ -25960,7 +25960,7 @@ func (v *__deleteProjectInput) GetForce() *bool { return v.Force }
 
 // __deleteProjectResourcesInput is used internally by genqlient
 type __deleteProjectResourcesInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __deleteProjectResourcesInput.Id, and is useful for accessing the field via an interface.
@@ -25968,7 +25968,7 @@ func (v *__deleteProjectResourcesInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteSubGroupInput is used internally by genqlient
 type __deleteSubGroupInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __deleteSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -25976,7 +25976,7 @@ func (v *__deleteSubGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteUserPersonalAccessTokenInput is used internally by genqlient
 type __deleteUserPersonalAccessTokenInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __deleteUserPersonalAccessTokenInput.Id, and is useful for accessing the field via an interface.
@@ -25984,7 +25984,7 @@ func (v *__deleteUserPersonalAccessTokenInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteWorkflowTriggerInput is used internally by genqlient
 type __deleteWorkflowTriggerInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __deleteWorkflowTriggerInput.Id, and is useful for accessing the field via an interface.
@@ -25992,8 +25992,8 @@ func (v *__deleteWorkflowTriggerInput) GetId() uuid.UUID { return v.Id }
 
 // __duplicateProjectInput is used internally by genqlient
 type __duplicateProjectInput struct {
-	Id    uuid.UUID             `json:"id,omitempty"`
-	Input DuplicateProjectInput `json:"input,omitempty"`
+	Id    uuid.UUID             `json:"id"`
+	Input DuplicateProjectInput `json:"input"`
 }
 
 // GetId returns __duplicateProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26004,8 +26004,8 @@ func (v *__duplicateProjectInput) GetInput() DuplicateProjectInput { return v.In
 
 // __ejectClusterComponentInput is used internally by genqlient
 type __ejectClusterComponentInput struct {
-	ClusterId uuid.UUID                  `json:"clusterId,omitempty"`
-	Input     EjectClusterComponentInput `json:"input,omitempty"`
+	ClusterId uuid.UUID                  `json:"clusterId"`
+	Input     EjectClusterComponentInput `json:"input"`
 }
 
 // GetClusterId returns __ejectClusterComponentInput.ClusterId, and is useful for accessing the field via an interface.
@@ -26016,7 +26016,7 @@ func (v *__ejectClusterComponentInput) GetInput() EjectClusterComponentInput { r
 
 // __generateDownloadableLogLinkForWorkflowRunStepInput is used internally by genqlient
 type __generateDownloadableLogLinkForWorkflowRunStepInput struct {
-	ActionStepId uuid.UUID `json:"actionStepId,omitempty"`
+	ActionStepId uuid.UUID `json:"actionStepId"`
 }
 
 // GetActionStepId returns __generateDownloadableLogLinkForWorkflowRunStepInput.ActionStepId, and is useful for accessing the field via an interface.
@@ -26026,8 +26026,8 @@ func (v *__generateDownloadableLogLinkForWorkflowRunStepInput) GetActionStepId()
 
 // __groupInput is used internally by genqlient
 type __groupInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
-	Id     uuid.UUID `json:"id,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
+	Id     uuid.UUID `json:"id"`
 }
 
 // GetTeamId returns __groupInput.TeamId, and is useful for accessing the field via an interface.
@@ -26038,8 +26038,8 @@ func (v *__groupInput) GetId() uuid.UUID { return v.Id }
 
 // __groupSubGroupsInput is used internally by genqlient
 type __groupSubGroupsInput struct {
-	TeamId  uuid.UUID `json:"teamId,omitempty"`
-	GroupId uuid.UUID `json:"groupId,omitempty"`
+	TeamId  uuid.UUID `json:"teamId"`
+	GroupId uuid.UUID `json:"groupId"`
 }
 
 // GetTeamId returns __groupSubGroupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26050,8 +26050,8 @@ func (v *__groupSubGroupsInput) GetGroupId() uuid.UUID { return v.GroupId }
 
 // __groupsInput is used internally by genqlient
 type __groupsInput struct {
-	TeamId uuid.UUID   `json:"teamId,omitempty"`
-	Input  GroupsInput `json:"input,omitempty"`
+	TeamId uuid.UUID   `json:"teamId"`
+	Input  GroupsInput `json:"input"`
 }
 
 // GetTeamId returns __groupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26062,7 +26062,7 @@ func (v *__groupsInput) GetInput() GroupsInput { return v.Input }
 
 // __groupsWithSubgroupsInput is used internally by genqlient
 type __groupsWithSubgroupsInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetTeamId returns __groupsWithSubgroupsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26070,7 +26070,7 @@ func (v *__groupsWithSubgroupsInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __insightsCloudsMetricInput is used internally by genqlient
 type __insightsCloudsMetricInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetTeamId returns __insightsCloudsMetricInput.TeamId, and is useful for accessing the field via an interface.
@@ -26078,7 +26078,7 @@ func (v *__insightsCloudsMetricInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __insightsClustersMetricInput is used internally by genqlient
 type __insightsClustersMetricInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetTeamId returns __insightsClustersMetricInput.TeamId, and is useful for accessing the field via an interface.
@@ -26086,8 +26086,8 @@ func (v *__insightsClustersMetricInput) GetTeamId() uuid.UUID { return v.TeamId 
 
 // __jobListInput is used internally by genqlient
 type __jobListInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __jobListInput.TeamId, and is useful for accessing the field via an interface.
@@ -26098,8 +26098,8 @@ func (v *__jobListInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __jobRunDetailInput is used internally by genqlient
 type __jobRunDetailInput struct {
-	Id     uuid.UUID `json:"id,omitempty"`
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	Id     uuid.UUID `json:"id"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetId returns __jobRunDetailInput.Id, and is useful for accessing the field via an interface.
@@ -26110,9 +26110,9 @@ func (v *__jobRunDetailInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __jobRunListInput is used internally by genqlient
 type __jobRunListInput struct {
-	Id     uuid.UUID `json:"id,omitempty"`
-	TeamId uuid.UUID `json:"teamId,omitempty"`
-	Page   PageInput `json:"page,omitempty"`
+	Id     uuid.UUID `json:"id"`
+	TeamId uuid.UUID `json:"teamId"`
+	Page   PageInput `json:"page"`
 }
 
 // GetId returns __jobRunListInput.Id, and is useful for accessing the field via an interface.
@@ -26126,8 +26126,8 @@ func (v *__jobRunListInput) GetPage() PageInput { return v.Page }
 
 // __jobRunLogsInput is used internally by genqlient
 type __jobRunLogsInput struct {
-	Id     uuid.UUID `json:"id,omitempty"`
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	Id     uuid.UUID `json:"id"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetId returns __jobRunLogsInput.Id, and is useful for accessing the field via an interface.
@@ -26138,7 +26138,7 @@ func (v *__jobRunLogsInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __linkProjectInput is used internally by genqlient
 type __linkProjectInput struct {
-	Input ProjectLinkInput `json:"input,omitempty"`
+	Input ProjectLinkInput `json:"input"`
 }
 
 // GetInput returns __linkProjectInput.Input, and is useful for accessing the field via an interface.
@@ -26146,8 +26146,8 @@ func (v *__linkProjectInput) GetInput() ProjectLinkInput { return v.Input }
 
 // __observabilityConfigInput is used internally by genqlient
 type __observabilityConfigInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __observabilityConfigInput.TeamId, and is useful for accessing the field via an interface.
@@ -26158,9 +26158,9 @@ func (v *__observabilityConfigInput) GetProjectId() uuid.UUID { return v.Project
 
 // __projectAvailableProvidersInput is used internally by genqlient
 type __projectAvailableProvidersInput struct {
-	TeamId    uuid.UUID       `json:"teamId,omitempty"`
-	ProjectId uuid.UUID       `json:"projectId,omitempty"`
-	LinkType  ProjectLinkType `json:"linkType,omitempty"`
+	TeamId    uuid.UUID       `json:"teamId"`
+	ProjectId uuid.UUID       `json:"projectId"`
+	LinkType  ProjectLinkType `json:"linkType"`
 }
 
 // GetTeamId returns __projectAvailableProvidersInput.TeamId, and is useful for accessing the field via an interface.
@@ -26174,8 +26174,8 @@ func (v *__projectAvailableProvidersInput) GetLinkType() ProjectLinkType { retur
 
 // __projectClustersInput is used internally by genqlient
 type __projectClustersInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectClustersInput.TeamId, and is useful for accessing the field via an interface.
@@ -26186,8 +26186,8 @@ func (v *__projectClustersInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectDeployDetailInput is used internally by genqlient
 type __projectDeployDetailInput struct {
-	TeamId   uuid.UUID `json:"teamId,omitempty"`
-	DeployId uuid.UUID `json:"deployId,omitempty"`
+	TeamId   uuid.UUID `json:"teamId"`
+	DeployId uuid.UUID `json:"deployId"`
 }
 
 // GetTeamId returns __projectDeployDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26198,8 +26198,8 @@ func (v *__projectDeployDetailInput) GetDeployId() uuid.UUID { return v.DeployId
 
 // __projectDeployRevisionsInput is used internally by genqlient
 type __projectDeployRevisionsInput struct {
-	TeamId    uuid.UUID  `json:"teamId,omitempty"`
-	ProjectId uuid.UUID  `json:"projectId,omitempty"`
+	TeamId    uuid.UUID  `json:"teamId"`
+	ProjectId uuid.UUID  `json:"projectId"`
 	Page      *PageInput `json:"page,omitempty"`
 }
 
@@ -26214,8 +26214,8 @@ func (v *__projectDeployRevisionsInput) GetPage() *PageInput { return v.Page }
 
 // __projectDeployRunDetailInput is used internally by genqlient
 type __projectDeployRunDetailInput struct {
-	TeamId      uuid.UUID `json:"teamId,omitempty"`
-	DeployRunId uuid.UUID `json:"deployRunId,omitempty"`
+	TeamId      uuid.UUID `json:"teamId"`
+	DeployRunId uuid.UUID `json:"deployRunId"`
 }
 
 // GetTeamId returns __projectDeployRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26226,8 +26226,8 @@ func (v *__projectDeployRunDetailInput) GetDeployRunId() uuid.UUID { return v.De
 
 // __projectDeploysInput is used internally by genqlient
 type __projectDeploysInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectDeploysInput.TeamId, and is useful for accessing the field via an interface.
@@ -26238,8 +26238,8 @@ func (v *__projectDeploysInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectDetailInput is used internally by genqlient
 type __projectDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26250,8 +26250,8 @@ func (v *__projectDetailInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectInfoInput is used internally by genqlient
 type __projectInfoInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectInfoInput.TeamId, and is useful for accessing the field via an interface.
@@ -26262,9 +26262,9 @@ func (v *__projectInfoInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectLinkedProjectsInput is used internally by genqlient
 type __projectLinkedProjectsInput struct {
-	TeamId    uuid.UUID       `json:"teamId,omitempty"`
-	ProjectId uuid.UUID       `json:"projectId,omitempty"`
-	LinkType  ProjectLinkType `json:"linkType,omitempty"`
+	TeamId    uuid.UUID       `json:"teamId"`
+	ProjectId uuid.UUID       `json:"projectId"`
+	LinkType  ProjectLinkType `json:"linkType"`
 }
 
 // GetTeamId returns __projectLinkedProjectsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26278,8 +26278,8 @@ func (v *__projectLinkedProjectsInput) GetLinkType() ProjectLinkType { return v.
 
 // __projectOutputInput is used internally by genqlient
 type __projectOutputInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectOutputInput.TeamId, and is useful for accessing the field via an interface.
@@ -26290,8 +26290,8 @@ func (v *__projectOutputInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectOutputsInput is used internally by genqlient
 type __projectOutputsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectOutputsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26302,8 +26302,8 @@ func (v *__projectOutputsInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __projectStatusOnlyInput is used internally by genqlient
 type __projectStatusOnlyInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __projectStatusOnlyInput.TeamId, and is useful for accessing the field via an interface.
@@ -26314,7 +26314,7 @@ func (v *__projectStatusOnlyInput) GetProjectId() uuid.UUID { return v.ProjectId
 
 // __projectsCountInput is used internally by genqlient
 type __projectsCountInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetTeamId returns __projectsCountInput.TeamId, and is useful for accessing the field via an interface.
@@ -26322,7 +26322,7 @@ func (v *__projectsCountInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __projectsWithBlueprintInput is used internally by genqlient
 type __projectsWithBlueprintInput struct {
-	TeamId uuid.UUID `json:"teamId,omitempty"`
+	TeamId uuid.UUID `json:"teamId"`
 }
 
 // GetTeamId returns __projectsWithBlueprintInput.TeamId, and is useful for accessing the field via an interface.
@@ -26330,8 +26330,8 @@ func (v *__projectsWithBlueprintInput) GetTeamId() uuid.UUID { return v.TeamId }
 
 // __projectsWithDeploymentTimesInput is used internally by genqlient
 type __projectsWithDeploymentTimesInput struct {
-	TeamId uuid.UUID     `json:"teamId,omitempty"`
-	Input  ProjectsInput `json:"input,omitempty"`
+	TeamId uuid.UUID     `json:"teamId"`
+	Input  ProjectsInput `json:"input"`
 }
 
 // GetTeamId returns __projectsWithDeploymentTimesInput.TeamId, and is useful for accessing the field via an interface.
@@ -26342,8 +26342,8 @@ func (v *__projectsWithDeploymentTimesInput) GetInput() ProjectsInput { return v
 
 // __projectsWithStatusInput is used internally by genqlient
 type __projectsWithStatusInput struct {
-	TeamId uuid.UUID     `json:"teamId,omitempty"`
-	Input  ProjectsInput `json:"input,omitempty"`
+	TeamId uuid.UUID     `json:"teamId"`
+	Input  ProjectsInput `json:"input"`
 }
 
 // GetTeamId returns __projectsWithStatusInput.TeamId, and is useful for accessing the field via an interface.
@@ -26354,8 +26354,8 @@ func (v *__projectsWithStatusInput) GetInput() ProjectsInput { return v.Input }
 
 // __resourceLogsInput is used internally by genqlient
 type __resourceLogsInput struct {
-	TeamId     uuid.UUID `json:"teamId,omitempty"`
-	ResourceId uuid.UUID `json:"resourceId,omitempty"`
+	TeamId     uuid.UUID `json:"teamId"`
+	ResourceId uuid.UUID `json:"resourceId"`
 }
 
 // GetTeamId returns __resourceLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26366,9 +26366,9 @@ func (v *__resourceLogsInput) GetResourceId() uuid.UUID { return v.ResourceId }
 
 // __resourcesWithLogsInput is used internally by genqlient
 type __resourcesWithLogsInput struct {
-	TeamId    uuid.UUID                           `json:"teamId,omitempty"`
-	ProjectId uuid.UUID                           `json:"projectId,omitempty"`
-	ClusterId uuid.UUID                           `json:"clusterId,omitempty"`
+	TeamId    uuid.UUID                           `json:"teamId"`
+	ProjectId uuid.UUID                           `json:"projectId"`
+	ClusterId uuid.UUID                           `json:"clusterId"`
 	Selector  *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
@@ -26388,10 +26388,10 @@ func (v *__resourcesWithLogsInput) GetSelector() *ObservabilityResourceSelectorI
 
 // __resourcesWithMetricsInput is used internally by genqlient
 type __resourcesWithMetricsInput struct {
-	TeamId      uuid.UUID                           `json:"teamId,omitempty"`
-	ProjectId   uuid.UUID                           `json:"projectId,omitempty"`
-	ClusterId   uuid.UUID                           `json:"clusterId,omitempty"`
-	MetricTypes []MetricType                        `json:"metricTypes,omitempty"`
+	TeamId      uuid.UUID                           `json:"teamId"`
+	ProjectId   uuid.UUID                           `json:"projectId"`
+	ClusterId   uuid.UUID                           `json:"clusterId"`
+	MetricTypes []MetricType                        `json:"metricTypes"`
 	Selector    *ObservabilityResourceSelectorInput `json:"selector,omitempty"`
 }
 
@@ -26414,9 +26414,9 @@ func (v *__resourcesWithMetricsInput) GetSelector() *ObservabilityResourceSelect
 
 // __subGroupInput is used internally by genqlient
 type __subGroupInput struct {
-	TeamId  uuid.UUID `json:"teamId,omitempty"`
-	GroupId uuid.UUID `json:"groupId,omitempty"`
-	Id      uuid.UUID `json:"id,omitempty"`
+	TeamId  uuid.UUID `json:"teamId"`
+	GroupId uuid.UUID `json:"groupId"`
+	Id      uuid.UUID `json:"id"`
 }
 
 // GetTeamId returns __subGroupInput.TeamId, and is useful for accessing the field via an interface.
@@ -26430,7 +26430,7 @@ func (v *__subGroupInput) GetId() uuid.UUID { return v.Id }
 
 // __submitWorkflowRunInput is used internally by genqlient
 type __submitWorkflowRunInput struct {
-	WorkflowId uuid.UUID                   `json:"workflowId,omitempty"`
+	WorkflowId uuid.UUID                   `json:"workflowId"`
 	Definition *WorkflowRunDefinitionInput `json:"definition,omitempty"`
 }
 
@@ -26442,7 +26442,7 @@ func (v *__submitWorkflowRunInput) GetDefinition() *WorkflowRunDefinitionInput {
 
 // __teamInput is used internally by genqlient
 type __teamInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __teamInput.Id, and is useful for accessing the field via an interface.
@@ -26450,7 +26450,7 @@ func (v *__teamInput) GetId() uuid.UUID { return v.Id }
 
 // __unlinkProjectInput is used internally by genqlient
 type __unlinkProjectInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __unlinkProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26458,8 +26458,8 @@ func (v *__unlinkProjectInput) GetId() uuid.UUID { return v.Id }
 
 // __updateDeployInput is used internally by genqlient
 type __updateDeployInput struct {
-	Id    uuid.UUID         `json:"id,omitempty"`
-	Input UpdateDeployInput `json:"input,omitempty"`
+	Id    uuid.UUID         `json:"id"`
+	Input UpdateDeployInput `json:"input"`
 }
 
 // GetId returns __updateDeployInput.Id, and is useful for accessing the field via an interface.
@@ -26470,8 +26470,8 @@ func (v *__updateDeployInput) GetInput() UpdateDeployInput { return v.Input }
 
 // __updateGroupInput is used internally by genqlient
 type __updateGroupInput struct {
-	Id    uuid.UUID        `json:"id,omitempty"`
-	Input UpdateGroupInput `json:"input,omitempty"`
+	Id    uuid.UUID        `json:"id"`
+	Input UpdateGroupInput `json:"input"`
 }
 
 // GetId returns __updateGroupInput.Id, and is useful for accessing the field via an interface.
@@ -26482,8 +26482,8 @@ func (v *__updateGroupInput) GetInput() UpdateGroupInput { return v.Input }
 
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
-	Id    uuid.UUID          `json:"id,omitempty"`
-	Input UpdateProjectInput `json:"input,omitempty"`
+	Id    uuid.UUID          `json:"id"`
+	Input UpdateProjectInput `json:"input"`
 }
 
 // GetId returns __updateProjectInput.Id, and is useful for accessing the field via an interface.
@@ -26494,8 +26494,8 @@ func (v *__updateProjectInput) GetInput() UpdateProjectInput { return v.Input }
 
 // __updateSubGroupInput is used internally by genqlient
 type __updateSubGroupInput struct {
-	Id    uuid.UUID           `json:"id,omitempty"`
-	Input UpdateSubGroupInput `json:"input,omitempty"`
+	Id    uuid.UUID           `json:"id"`
+	Input UpdateSubGroupInput `json:"input"`
 }
 
 // GetId returns __updateSubGroupInput.Id, and is useful for accessing the field via an interface.
@@ -26506,8 +26506,8 @@ func (v *__updateSubGroupInput) GetInput() UpdateSubGroupInput { return v.Input 
 
 // __updateWorkflowInput is used internally by genqlient
 type __updateWorkflowInput struct {
-	Id    uuid.UUID           `json:"id,omitempty"`
-	Input UpdateWorkflowInput `json:"input,omitempty"`
+	Id    uuid.UUID           `json:"id"`
+	Input UpdateWorkflowInput `json:"input"`
 }
 
 // GetId returns __updateWorkflowInput.Id, and is useful for accessing the field via an interface.
@@ -26518,8 +26518,8 @@ func (v *__updateWorkflowInput) GetInput() UpdateWorkflowInput { return v.Input 
 
 // __updateWorkflowTriggerInput is used internally by genqlient
 type __updateWorkflowTriggerInput struct {
-	Id    uuid.UUID          `json:"id,omitempty"`
-	Input UpdateTriggerInput `json:"input,omitempty"`
+	Id    uuid.UUID          `json:"id"`
+	Input UpdateTriggerInput `json:"input"`
 }
 
 // GetId returns __updateWorkflowTriggerInput.Id, and is useful for accessing the field via an interface.
@@ -26530,7 +26530,7 @@ func (v *__updateWorkflowTriggerInput) GetInput() UpdateTriggerInput { return v.
 
 // __userPersonalAccessTokensInput is used internally by genqlient
 type __userPersonalAccessTokensInput struct {
-	Id uuid.UUID `json:"id,omitempty"`
+	Id uuid.UUID `json:"id"`
 }
 
 // GetId returns __userPersonalAccessTokensInput.Id, and is useful for accessing the field via an interface.
@@ -26538,8 +26538,8 @@ func (v *__userPersonalAccessTokensInput) GetId() uuid.UUID { return v.Id }
 
 // __workflowDetailInput is used internally by genqlient
 type __workflowDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
 }
 
 // GetTeamId returns __workflowDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26550,9 +26550,9 @@ func (v *__workflowDetailInput) GetProjectId() uuid.UUID { return v.ProjectId }
 
 // __workflowRunDetailInput is used internally by genqlient
 type __workflowRunDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	RunId     uuid.UUID `json:"runId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	RunId     uuid.UUID `json:"runId"`
 }
 
 // GetTeamId returns __workflowRunDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26566,10 +26566,10 @@ func (v *__workflowRunDetailInput) GetRunId() uuid.UUID { return v.RunId }
 
 // __workflowRunDetailLogsInput is used internally by genqlient
 type __workflowRunDetailLogsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	RunId     uuid.UUID `json:"runId,omitempty"`
-	StepId    uuid.UUID `json:"stepId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	RunId     uuid.UUID `json:"runId"`
+	StepId    uuid.UUID `json:"stepId"`
 }
 
 // GetTeamId returns __workflowRunDetailLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26586,10 +26586,10 @@ func (v *__workflowRunDetailLogsInput) GetStepId() uuid.UUID { return v.StepId }
 
 // __workflowRunStepNestedDetailInput is used internally by genqlient
 type __workflowRunStepNestedDetailInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	RunId     uuid.UUID `json:"runId,omitempty"`
-	StepId    uuid.UUID `json:"stepId,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	RunId     uuid.UUID `json:"runId"`
+	StepId    uuid.UUID `json:"stepId"`
 }
 
 // GetTeamId returns __workflowRunStepNestedDetailInput.TeamId, and is useful for accessing the field via an interface.
@@ -26606,11 +26606,11 @@ func (v *__workflowRunStepNestedDetailInput) GetStepId() uuid.UUID { return v.St
 
 // __workflowRunStepNestedDetailLogsInput is used internally by genqlient
 type __workflowRunStepNestedDetailLogsInput struct {
-	TeamId       uuid.UUID `json:"teamId,omitempty"`
-	ProjectId    uuid.UUID `json:"projectId,omitempty"`
-	RunId        uuid.UUID `json:"runId,omitempty"`
-	StepId       uuid.UUID `json:"stepId,omitempty"`
-	ActionStepId uuid.UUID `json:"actionStepId,omitempty"`
+	TeamId       uuid.UUID `json:"teamId"`
+	ProjectId    uuid.UUID `json:"projectId"`
+	RunId        uuid.UUID `json:"runId"`
+	StepId       uuid.UUID `json:"stepId"`
+	ActionStepId uuid.UUID `json:"actionStepId"`
 }
 
 // GetTeamId returns __workflowRunStepNestedDetailLogsInput.TeamId, and is useful for accessing the field via an interface.
@@ -26630,9 +26630,9 @@ func (v *__workflowRunStepNestedDetailLogsInput) GetActionStepId() uuid.UUID { r
 
 // __workflowRunsInput is used internally by genqlient
 type __workflowRunsInput struct {
-	TeamId    uuid.UUID `json:"teamId,omitempty"`
-	ProjectId uuid.UUID `json:"projectId,omitempty"`
-	Page      PageInput `json:"page,omitempty"`
+	TeamId    uuid.UUID `json:"teamId"`
+	ProjectId uuid.UUID `json:"projectId"`
+	Page      PageInput `json:"page"`
 }
 
 // GetTeamId returns __workflowRunsInput.TeamId, and is useful for accessing the field via an interface.
