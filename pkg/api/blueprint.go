@@ -38,7 +38,7 @@ func (c *Client) GetBlueprint(ctx context.Context, id uuid.UUID) (*BlueprintSumm
 		return nil, err
 	}
 
-	res, err := GetBlueprintQuery(ctx, c.gql, user.Id, id)
+	res, err := GetBlueprintQuery(ctx, c.gql, user.Id.String(), id)
 	if err := copier.Copy(out, res.User.Blueprint.BlueprintSummary); err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *Client) DeleteBlueprint(ctx context.Context, id uuid.UUID) error {
 		return err
 	}
 	if !res.DeleteBlueprint {
-		return fmt.Errorf("Failed to delete blueprint")
+		return fmt.Errorf("failed to delete blueprint")
 	}
 
 	return nil
@@ -89,7 +89,7 @@ func (c *Client) ListBlueprints(ctx context.Context, pageInput PageInput) (*Blue
 		return nil, err
 	}
 
-	res, err := GetBlueprintsQuery(ctx, c.gql, user.Id, pageInput)
+	res, err := GetBlueprintsQuery(ctx, c.gql, user.Id.String(), pageInput)
 	bp := &res.User.Blueprints
 
 	return bp, err

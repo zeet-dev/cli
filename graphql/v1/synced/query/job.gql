@@ -2,6 +2,7 @@ query jobList($teamId: UUID!, $projectId: UUID!) {
   team(id: $teamId) {
     id
     project(id: $projectId) {
+      id
       jobs {
         ...JobListItem
       }

@@ -180,7 +180,9 @@ fragment WorkflowDetail on Workflow {
 
 query workflowDetail($teamId: UUID!, $projectId: UUID!) {
   team(id: $teamId) {
+    id
     project(id: $projectId) {
+      id
       workflow {
         ...WorkflowDetail
       }
@@ -203,6 +205,7 @@ query workflowRunDetailLogs(
         run(id: $runId) {
           id
           step(id: $stepId) {
+            id
             ... on JobRunStep {
               logs {
                 id

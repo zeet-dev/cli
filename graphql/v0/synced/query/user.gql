@@ -44,6 +44,7 @@ query awsPolicyJson(
   user(id: $userId) {
     id
     awsAccount(id: $awsAccountId) {
+      id
       awsPolicyJson(input: $awsPolicyJsonInput) {
         awsPolicyJson
       }

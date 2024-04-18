@@ -156,27 +156,6 @@ fragment ProjectSourceDetail on Source {
   }
 }
 
-fragment ProjectBlueprintConfigurationDetailV1 on BlueprintConfiguration {
-  ...BlueprintConfigurationDetail
-  driverConfiguration {
-    ... on BlueprintTerraformConfiguration {
-      source {
-        ...ProjectSourceDetail
-      }
-    }
-    ... on BlueprintHelmConfiguration {
-      source {
-        ...ProjectSourceDetail
-      }
-    }
-    ... on BlueprintManifestConfiguration {
-      source {
-        ...ProjectSourceDetail
-      }
-    }
-  }
-}
-
 fragment ProjectDetail on Project {
   ...ProjectInfo
   deploys {
@@ -421,6 +400,14 @@ fragment DeployConfigurationDetail on Deploy {
             bucketName
             prefix
           }
+          linodeBucket {
+            linodeAccountId
+            bucketName
+            region
+            key
+            accessKey
+            secretAccessKey
+          }
         }
         provider {
           awsAccount {
@@ -430,6 +417,9 @@ fragment DeployConfigurationDetail on Deploy {
             id
           }
           doAccount {
+            id
+          }
+          linodeAccount {
             id
           }
           region
@@ -602,6 +592,7 @@ query projectOutput($teamId: UUID!, $projectId: UUID!) {
   team(id: $teamId) {
     id
     project(id: $projectId) {
+      id
       ...ProjectOutput
     }
   }

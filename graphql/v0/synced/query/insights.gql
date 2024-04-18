@@ -17,6 +17,7 @@ query insightsAlertsMetric($teamId: ID!) {
           id
           name
           source {
+            id
             type
           }
           image

@@ -61,7 +61,7 @@ func (c *Client) GetProductionBranch(ctx context.Context, projectID uuid.UUID) (
 		  }
 		}
 	`
-	res, err := GetProductionBranchQuery(ctx, c.gql, projectID)
+	res, err := GetProductionBranchQuery(ctx, c.gql, projectID.String())
 	if err != nil {
 		return "", err
 	}
@@ -93,7 +93,7 @@ func (c *Client) UpdateProject(ctx context.Context, projectID uuid.UUID, image s
 		  }
 		}
 	`
-	_, err := UpdateProjectMutation(ctx, c.gql, projectID, image)
+	_, err := UpdateProjectMutation(ctx, c.gql, projectID.String(), image)
 	if err != nil {
 		return err
 	}

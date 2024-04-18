@@ -104,11 +104,43 @@ input AddProjectCollaboratorInput {
   role: ProjectCollaboratorRole!
 }
 
+"""
+Defines the input parameters required to add a custom domain to a repository.
+"""
 input AddRepoCustomDomainInput {
+  """
+  The unique identifier of the repository to which the custom domain will be added.
+  """
   id: UUID!
+
+  """
+  The domain name to be added and configured for the repository. This domain cannot be changed once set.
+  """
   domain: String!
+
+  """
+  Optional. Specifies whether to disable the automatic SSL certificate management for this domain.
+  Useful when handling certificates through external mechanisms or different processes.
+  """
+  disableCertManager: Boolean
+
+  """
+  Optional. Updates the challenge type used by the certificate manager for
+  verifying domain ownership and issuing SSL certificates.
+  This can affect how domain verification is performed, with options like 'dns01' and 'http01'.
+  """
   certManagerChallengerType: CertManagerChallengeType
+
+  """
+  Optional. The unique identifier of another custom domain certificate that this new domain should sync with.
+  This removes the need to manage certificates separately, ensuring consistent configurations across multiple domains.
+  """
   syncDomainID: UUID
+
+  """
+  Optional. The target external port to be used for the custom domain. If not provided, the first https port will be used.
+  """
+  servicePort: Int
 }
 
 input AddTeamMemberInput {
@@ -400,9 +432,11 @@ enum BillingActionNotAllowed {
 
 type BillingOverview {
   currentProducts: [Product!]
+  hasUpgradedProducts: Boolean!
   externalLinks: ExternalBillingProviderLinks
   subscriptionUsageAllowed: SubscriptionUsageAllowed!
   subscriptionFeatures: SubscriptionFeatures!
+  isBillingSetup: Boolean!
 }
 
 type BitbucketAccount {
@@ -1258,6 +1292,33 @@ enum ClusterStatus {
   UNREACHABLE
 }
 
+type ClusterValidation {
+  errors: [ClusterValidationError!]
+}
+
+type ClusterValidationError {
+  type: ClusterValidationErrorType!
+  docs: String!
+  message: String!
+  fixable: Boolean!
+}
+
+enum ClusterValidationErrorType {
+  OUT_OF_QUOTA
+  BILLING_NOT_ENABLED
+}
+
+input ClusterValidationInput {
+  cloudProvider: CloudProvider!
+  region: String
+  domainName: String
+  awsAccountCredentialsID: UUID
+  gcpAccountCredentialsID: UUID
+  doAccountCredentialsID: UUID
+  linodeAccountCredentialsID: UUID
+  azureAccountCredentialsID: UUID
+}
+
 type ComplexLogs {
   previous: [LogEntry!]
   current: [LogEntry!]
@@ -1399,6 +1460,7 @@ input CreateBlueprintInput {
 
 input CreateClusterInput {
   userID: UUID!
+  placeholderClusterID: UUID
   awsAccountID: UUID
   gcpAccountID: UUID
   doAccountID: UUID
@@ -1409,6 +1471,7 @@ input CreateClusterInput {
   name: String!
   region: String!
   isExternal: Boolean
+  domainName: String
   gcpClusterCreationOptions: GcpClusterCreationOptions
 }
 
@@ -1461,24 +1524,6 @@ input CreateIPFSServiceInput {
   name: String!
   awsAccountID: UUID!
   clusterID: UUID!
-}
-
-input CreateManifestAppInput {
-  userID: UUID!
-
-  """- v0.ProjectID or v1.GroupID"""
-  projectID: UUID
-  environmentName: String
-
-  """- v0.EnvironmentID or v1.SubGroupID"""
-  environmentID: UUID
-  name: String!
-  deployTarget: ProjectDeployInput!
-  namespace: String
-  githubConnection: GithubConnectionInput
-  gitRepository: String
-  manifests: [String!]
-  manifestValue: String
 }
 
 input CreateProjectDockerInput {
@@ -1597,55 +1642,6 @@ input CreateProjectHelmInput {
   values: String
   valuesRef: String
   enabled: Boolean
-}
-
-input CreateProjectInput {
-  userID: UUID
-  name: String
-
-  """- v0.ProjectID or v1.GroupID"""
-  projectID: UUID
-
-  """- v0.EnvironmentID or v1.SubGroupID"""
-  environmentID: UUID
-  projectName: String
-  environmentName: String
-  installation: ID
-  owner: String
-  repo: String
-  gitRepository: String
-  githubConnection: GithubConnectionInput
-  gitlabConnection: GitlabConnectionInput
-  buildTarget: BuildTargetInput
-  deployTarget: ProjectDeployInput
-  productionBranch: String
-  deployService: Boolean
-  deployJob: Boolean
-  manualDeploy: Boolean
-  autoRetry: Boolean
-  autoRollback: Boolean
-  deployBranch: Boolean
-  branchIgnore: String
-  containerRepository: String
-  containerCacheRepository: String
-  containerRegistryID: UUID
-  resources: ContainerResourcesSpecInput
-  buildResources: ContainerResourcesSpecInput
-  branchResources: ContainerResourcesSpecInput
-  envs: [EnvVarInput!]
-  ports: JSON
-  replication: [ReplicationInput!]
-  volumes: JSON
-  cpu: String
-  memory: String
-  dedicated: Boolean
-  gpu: String
-  buildCommand: String
-  buildType: String
-  runCommand: String
-  staticPath: String
-  enabled: Boolean
-  teamID: ID
 }
 
 input CreateProjectsFromTemplateInput {
@@ -1767,6 +1763,7 @@ type CustomDomain {
   syncDomain: CustomDomain
   instructions: [DNSRecord!]
   certificate: Certificate
+  port: Port
 }
 
 input DatabaseDeployTargetInput {
@@ -1852,6 +1849,7 @@ type Deployment {
   """
   deploymentError: DeploymentError
   branch: String
+  gitRef: String
   build: Build
   buildStage: BuildStage
   testStage: PipelineStage
@@ -1948,6 +1946,7 @@ enum DeploymentStatus {
 input DeployRepoBranchInput {
   id: UUID!
   branch: String!
+  gitRef: String
 }
 
 enum DeployRuntime {
@@ -2810,6 +2809,7 @@ enum JobRunState {
   JOB_RUN_FAILED
   JOB_RUN_SUCCEEDED
   JOB_RUN_PENDING_APPROVAL
+  JOB_RUN_PENDING_BUILD
 }
 
 scalar JSON
@@ -2822,6 +2822,12 @@ input KanikoFlagsInput {
   compressedCaching: Boolean
 }
 
+enum KAppType {
+  AUTO
+  DEPLOYMENT
+  STATEFULSET
+}
+
 type KubernetesCustomization {
   nodeSelector: MapString
   hostNetwork: Boolean
@@ -2832,6 +2838,7 @@ type KubernetesCustomization {
   serviceAnnotations: MapString
   ingressAnnotations: MapString
   clusterIssuerName: String
+  kappType: KAppType
 }
 
 input KubernetesCustomizationInput {
@@ -2843,6 +2850,7 @@ input KubernetesCustomizationInput {
   serviceAnnotations: JSON
   ingressAnnotations: JSON
   clusterIssuerName: String
+  kappType: KAppType
 }
 
 type KubernetesManifestGeneratorConfiguration {
@@ -2939,6 +2947,24 @@ type LinodeAccount {
   createdAt: Time!
   updatedAt: Time!
   networks: [Network!]
+}
+
+input LinodeBucketBackendInput {
+  linodeAccountID: UUID!
+  bucketName: String!
+  key: String!
+  region: String!
+  accessKey: String!
+  secretAccessKey: String!
+}
+
+type LinodeBucketConfiguration {
+  linodeAccountId: UUID!
+  bucketName: String!
+  key: String!
+  region: String!
+  accessKey: String!
+  secretAccessKey: String!
 }
 
 type LoadBalancer {
@@ -3132,7 +3158,7 @@ type Mutation {
   disableRepo(id: ID!): Repo!
   deleteRepo(id: ID!): Boolean!
   unlinkRepo(id: ID!): Boolean!
-  buildRepo(id: ID!, branch: String, noCache: Boolean): Repo!
+  buildRepo(id: ID!, branch: String, noCache: Boolean, gitRef: String): Repo!
   abortBuild(id: UUID!): Repo!
   deployRepo(id: ID!): Repo!
   deployRepoBranch(input: DeployRepoBranchInput!): Repo!
@@ -3182,7 +3208,6 @@ type Mutation {
   addCoreWeaveAccount(input: AddCoreWeaveAccountInput!): CoreWeaveAccount!
   updateCoreWeaveAccount(input: UpdateCoreWeaveAccountInput!): Boolean!
   removeCoreWeaveAccount(id: UUID!): Boolean!
-  createDatabase(input: CreateDatabaseInput): Repo!
   linkDatabase(input: LinkDatabaseInput!): Repo!
   unlinkDatabase(id: UUID!): Boolean
   updateDatabaseLink(input: updateDatabaseLinkInput!): Repo!
@@ -3271,7 +3296,6 @@ type Mutation {
   addLinodeAccount(input: AddLinodeAccountInput!): LinodeAccount!
   updateLinodeAccount(input: UpdateLinodeAccountInput!): Boolean!
   removeLinodeAccount(id: UUID!): Boolean!
-  createManifestApp(input: CreateManifestAppInput): Repo!
   createProjectV2(input: CreateProjectV2Input!): Project!
   updateProjectV2(input: UpdateProjectV2Input!): Project!
   deleteProjectV2(id: UUID!): Boolean!
@@ -3279,6 +3303,12 @@ type Mutation {
   updateProjectEnvironment(input: UpdateProjectEnvironmentInput!): ProjectEnvironment!
   deleteProjectEnvironment(id: UUID!): Boolean!
   moveRepoToProjectEnvironment(input: MoveRepoInput!): Repo!
+
+  """
+  Configures project permissions, for one or more projects, assigning the specified role to the specified users.
+  All projects must belong to a single team, and all the targeted users must belong to that same team.
+  """
+  configureProjectPermissions(projectIds: [UUID!]!, permissions: ProjectPermissionsInput!): Boolean!
   dispatchRepoGroupAction(input: dispatchRepoGroupActionInput!): Boolean
 
   """
@@ -3300,7 +3330,6 @@ type Mutation {
 
   """- id: v0.RepoID"""
   migrateGithubConnection(id: UUID!, installationID: String!): Repo!
-  createProject(input: CreateProjectInput): Repo!
   createProjectDocker(input: CreateProjectDockerInput): Repo!
   createProjectGit(input: CreateProjectGitInput): Repo!
   createResourceAlpha(input: CreateResourceAlphaInput!): Repo!
@@ -3595,6 +3624,7 @@ type PlanTierV2 implements Product {
 
 type Port {
   port: String!
+  externalPort: String!
   protocol: String!
   public: Boolean!
   https: Boolean!
@@ -3602,12 +3632,62 @@ type Port {
   loadBalancer: Boolean!
 }
 
+"""
+Represents the configuration parameters for a service port.
+Allows specifying external port exposure, protocol handling, and LoadBalancer provisioning.
+"""
 input PortInput {
+  """
+  The internal port number or range that the service runs on within the cluster.
+  Specified as a string in the format "start-end" for port ranges (e.g., "3000-3005").
+  If a range is provided, it will be applied to both internal and external ports.
+  In this case, 'externalPort' must not be specified.
+  """
   port: String!
+
+  """
+  Optional. The external port number or range exposed outside the Kubernetes cluster.
+  Useful for configuring load balancers or ingress controllers for external exposure on a different port.
+  If a port range is provided for 'port', this field must be either empty or the same as the 'port' value.
+  If a single port is specified for 'port', this field can be used to expose the service on a different external port.
+  """
+  externalPort: String
+
+  """
+  The protocol used for data transmission through this port.
+  Supported protocols are defined in the PortProtocol enum (e.g., TCP, UDP).
+  """
   protocol: PortProtocol!
+
+  """
+  Determines the exposure of the port.
+  - When 'true' and 'https' is also 'true', an Ingress is created for secure external access.
+  - When 'true' and 'https' is 'false', the port is exposed using "HostPort" on the container for unsecured external access.
+  - When 'false', the port is only accessible thru a Service within the cluster.
+  """
   public: Boolean!
+
+  """
+  Specifies whether HTTPS should be used for secure communication.
+  When 'true' and 'public' is also 'true', secure external access is enabled via an Ingress.
+  Setting 'https' to 'true' is not allowed when 'public' is 'false', as it contradicts the internal-only port configuration.
+  """
   https: Boolean!
+
+  """
+  Optional. Indicates support for the gRPC protocol over HTTPS.
+  Only relevant when 'https' is 'true'.
+  If 'true', the load balancer's traffic handling is adjusted to accommodate gRPC traffic.
+  """
   grpc: Boolean
+
+  """
+  Optional. Specifies whether Zeet should provision the Kubernetes service in LoadBalancer mode.
+  When 'true', the service is accessible through a cloud LoadBalancer with its
+  own IP and port, enabling direct external access.
+  This option is useful for services that require external access without an ingress controller.
+  """
+  loadBalancer: Boolean
 }
 
 enum PortProtocol {
@@ -3758,6 +3838,12 @@ type Project {
   repos: [Repo!]!
   owner: User!
   active: Boolean!
+  permissions: ProjectPermissions
+
+  """
+  When true, this project will be automatically deleted when the last Repo or ProjectV3 is deleted.
+  """
+  autoCleanupEnabled: Boolean!
   revisions(page: PageInput): ProjectRevisionConnection
   createdAt: Time!
   updatedAt: Time!
@@ -3897,6 +3983,21 @@ type ProjectPack implements Product {
   productTypeMetadata: ProductTypeMetadata
 }
 
+type ProjectPermissions {
+  users: [ProjectUserPermissions!]!
+  availableRoles: [TeamMemberProjectRole!]!
+}
+
+input ProjectPermissionsInput {
+  """The users to apply the role to."""
+  userIds: [UUID!]!
+
+  """
+  The name of the project role to apply to all users specified by `userIds`. Null unsets the project role.
+  """
+  teamMemberProjectRoleName: String
+}
+
 type ProjectRevision implements RevisableEntity {
   revisionData: JSON!
   revisionMetadata: RevisionMetadata!
@@ -3931,6 +4032,12 @@ type ProjectTemplate {
   volumes: [VolumeSpec!]
   gpu: Int
   dedicated: Boolean
+}
+
+type ProjectUserPermissions {
+  user: User
+  teamRole: TeamMemberRole
+  projectRole: TeamMemberProjectRole
 }
 
 type ProjectV3 {
@@ -4282,6 +4389,7 @@ type RepoBranchConnection {
 type RepoBranchV2 {
   id: UUID!
   name: String!
+  gitRef: String
   state: String
   status: String
   environmentSlug: String
@@ -4893,6 +5001,11 @@ type TeamMemberInvitation {
   createdAt: Time!
 }
 
+type TeamMemberProjectRole {
+  name: String!
+  description: String
+}
+
 enum TeamMemberRole {
   OWNER
   ADMIN
@@ -5132,6 +5245,7 @@ type TerraformProvider {
   awsAccount: AWSAccount
   gcpAccount: GCPAccount
   doAccount: DOAccount
+  linodeAccount: LinodeAccount
 
   """Region name, when applicable"""
   region: String
@@ -5146,6 +5260,9 @@ input TerraformProviderInput {
 
   """Zeet ID for a connected DigitalOcean Account"""
   doAccountID: UUID
+
+  """Zeet ID for a connected Linode Account"""
+  linodeAccountID: UUID
 
   """Region name, when applicable"""
   region: String
@@ -5178,11 +5295,13 @@ type TerraformStateBackend {
   region: String
   s3Bucket: S3BucketConfiguration
   gcsBucket: GCSBucketConfiguration
+  linodeBucket: LinodeBucketConfiguration
 }
 
 input TerraformStateBackendInput {
   s3Bucket: S3BucketBackendInput
   gcsBucket: GCSBucketBackendInput
+  linodeBucket: LinodeBucketBackendInput
 }
 
 scalar Time
@@ -5288,6 +5407,7 @@ input UpdateBranchInput {
   id: UUID
   repoID: UUID
   name: String
+  gitRef: String
   image: String
   githubSha: String
   build: Boolean
@@ -5478,6 +5598,9 @@ input UpdateProjectV2Input {
   id: UUID!
   name: String
   envs: [EnvVarInput!]
+
+  """Update the autoCleanupEnabled attribute. When null, no change is made."""
+  autoCleanupEnabled: Boolean
 }
 
 input UpdateProjectV3Input {
@@ -5502,11 +5625,38 @@ input UpdateProjectV3Input {
   helmConfiguration: HelmProjectV3ConfigurationInput
 }
 
+"""
+Defines the input parameters required to update an existing custom domain configuration for a repository.
+"""
 input UpdateRepoCustomDomainInput {
+  """
+  The unique identifier of the custom domain configuration to be updated.
+  """
   id: UUID!
+
+  """
+  Optional. Specifies whether to disable the automatic SSL certificate management for this domain.
+  Useful when handling certificates through external mechanisms or different processes.
+  """
   disableCertManager: Boolean
+
+  """
+  Optional. Updates the challenge type used by the certificate manager for
+  verifying domain ownership and issuing SSL certificates.
+  This can affect how domain verification is performed, with options like 'dns01' and 'http01'.
+  """
   certManagerChallengerType: CertManagerChallengeType
+
+  """
+  Optional. The unique identifier of another custom domain certificate that this new domain should sync with.
+  This removes the need to manage certificates separately, ensuring consistent configurations across multiple domains.
+  """
   syncDomainID: UUID
+
+  """
+  Optional. The target external port to be used for the custom domain. If not provided, the first https port will be used.
+  """
+  servicePort: Int
 }
 
 input UpdateRepoPipelineLinkInput {
@@ -5663,6 +5813,8 @@ type User implements ProfileOwner & ProjectOwner {
 
   """Billing Overview only exists for users with subscriptions, i.e. a team"""
   billingOverview: BillingOverview
+  validateCloud(context: ClusterValidationInput!): ClusterValidation!
+  fixCloud(errorType: ClusterValidationErrorType!, context: ClusterValidationInput!): Boolean!
   blueprints(page: PageInput): BlueprintConnection
   blueprint(id: UUID!): Blueprint
   projectV3(id: UUID!): ProjectV3

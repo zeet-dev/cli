@@ -25,5 +25,5 @@ func (c *Client) GetCurrentUser(ctx context.Context) (*User, error) {
 		return nil, err
 	}
 
-	return &User{Id: res.CurrentUser.Id, Login: res.CurrentUser.Login}, nil
+	return &User{Id: uuid.MustParse(res.CurrentUser.Id), Login: res.CurrentUser.Login}, nil
 }

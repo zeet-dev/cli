@@ -22,7 +22,9 @@ query userGithubRepos {
 
 query teamGithubRepos($path: String!) {
   team(path: $path) {
+    id
     user {
+      id
       githubInstallations {
         id
         targetType
@@ -58,6 +60,7 @@ query userGithubOrgs {
 
 fragment GithubDetail on GitHubRepository {
   defaultBranch {
+    id
     name
   }
   ports {

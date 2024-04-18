@@ -1,6 +1,7 @@
 fragment BranchCommon on RepoBranchV2 {
   id
   name
+  gitRef
   createdAt
   updatedAt
   state
@@ -12,6 +13,7 @@ fragment BranchCommon on RepoBranchV2 {
 }
 query projectActiveBranchesCount($id: ID!) {
   currentUser {
+    id
     repo(id: $id) {
       id
       branchesV2(input: { active: true }) {
@@ -23,6 +25,7 @@ query projectActiveBranchesCount($id: ID!) {
 
 query projectBranches($id: ID!, $active: Boolean) {
   currentUser {
+    id
     repo(id: $id) {
       id
       productionBranchV2 {

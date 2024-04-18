@@ -1,8 +1,10 @@
-query buildArtifacts($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
-{
+query buildArtifacts($teamId: UUID!, $projectId: UUID!, $page: PageInput!) {
   team(id: $teamId) {
+    id
     project(id: $projectId) {
+      id
       build {
+        id
         runs(input: { filter: {}, page: $page }) {
           totalCount
           pageInfo {
@@ -27,6 +29,7 @@ fragment BuildRunListItem on BuildRun {
   id
   sequence
   jobRun {
+    id
     createdAt
     state
   }
@@ -56,10 +59,11 @@ fragment BuildRunDetail on BuildRun {
   }
 }
 
-query buildRuns($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
-{
+query buildRuns($teamId: UUID!, $projectId: UUID!, $page: PageInput!) {
   team(id: $teamId) {
+    id
     project(id: $projectId) {
+      id
       build {
         id
         runs(input: { page: $page, filter: {} }) {
@@ -76,10 +80,11 @@ query buildRuns($teamId: UUID!, $projectId: UUID!, $page: PageInput!)
   }
 }
 
-query buildRunDetail($teamId: UUID!, $projectId: UUID!, $runId: UUID!)
-{
+query buildRunDetail($teamId: UUID!, $projectId: UUID!, $runId: UUID!) {
   team(id: $teamId) {
+    id
     project(id: $projectId) {
+      id
       build {
         id
         run(id: $runId) {

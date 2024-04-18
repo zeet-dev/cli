@@ -227,6 +227,16 @@ query blueprint($userId: ID!, $permissionsUserId: UUID!, $blueprintId: UUID!) {
   }
 }
 
+query blueprintName($userId: ID!, $blueprintId: UUID!) {
+  user(id: $userId) {
+    id
+    blueprint(id: $blueprintId) {
+      id
+      displayName
+    }
+  }
+}
+
 query blueprintWithProjects(
   $userId: ID!
   $permissionsUserId: UUID!

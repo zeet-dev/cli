@@ -158,6 +158,7 @@ fragment UserClouds on User {
   awsAccounts {
     id
     clusters {
+      id
       name
     }
     projectV3Adapters {
@@ -172,6 +173,7 @@ fragment UserClouds on User {
       ...ProjectV3AdapterConnectionCommon
     }
     clusters {
+      id
       name
     }
     updatedAt
@@ -184,6 +186,7 @@ fragment UserClouds on User {
     }
     updatedAt
     clusters {
+      id
       name
     }
     ...DOAccountDetail
@@ -192,6 +195,7 @@ fragment UserClouds on User {
     id
     updatedAt
     clusters {
+      id
       name
       projectV3Adapters {
         ...ProjectV3AdapterConnectionCommon
@@ -206,6 +210,7 @@ fragment UserClouds on User {
     }
     updatedAt
     clusters {
+      id
       name
     }
     ...LinodeAccountDetail
@@ -213,6 +218,7 @@ fragment UserClouds on User {
   vultrAccounts {
     id
     clusters {
+      id
       name
     }
     projectV3Adapters {
@@ -224,6 +230,7 @@ fragment UserClouds on User {
   azureAccounts {
     id
     clusters {
+      id
       name
     }
     projectV3Adapters {
@@ -238,6 +245,40 @@ query userClouds($id: ID!) {
   user(id: $id) {
     id
     ...UserClouds
+  }
+}
+
+query cloudNames($teamId: ID!) {
+  user(id: $teamId) {
+    id
+    awsAccounts {
+      id
+      name
+    }
+    gcpAccounts {
+      id
+      name
+    }
+    doAccounts {
+      id
+      name
+    }
+    coreweaveAccounts {
+      id
+      name
+    }
+    linodeAccounts {
+      id
+      name
+    }
+    vultrAccounts {
+      id
+      name
+    }
+    azureAccounts {
+      id
+      name
+    }
   }
 }
 

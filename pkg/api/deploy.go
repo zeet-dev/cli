@@ -57,7 +57,7 @@ func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch s
 	out := &Deployment{}
 
 	if branch == "" {
-		res, err := BuildRepoDefaultBranchMutation(ctx, c.gql, projectID, noCache)
+		res, err := BuildRepoDefaultBranchMutation(ctx, c.gql, projectID.String(), noCache)
 		if err != nil {
 			return nil, err
 		}
@@ -65,7 +65,7 @@ func (c *Client) BuildProject(ctx context.Context, projectID uuid.UUID, branch s
 			return nil, err
 		}
 	} else {
-		res, err := BuildRepoMutation(ctx, c.gql, projectID, branch, noCache)
+		res, err := BuildRepoMutation(ctx, c.gql, projectID.String(), branch, noCache)
 		if err != nil {
 			return nil, err
 		}
@@ -122,7 +122,7 @@ func (c *Client) GetBuildLogs(ctx context.Context, deployID uuid.UUID) (out []Lo
 		}
 	`
 
-	res, err := GetBuildLogsQuery(ctx, c.gql, deployID)
+	res, err := GetBuildLogsQuery(ctx, c.gql, deployID.String())
 	if err != nil {
 		return
 	}
@@ -148,7 +148,7 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, deployID uuid.UUID) (out
 		  }
 		}
 	`
-	res, err := GetDeploymentLogsQuery(ctx, c.gql, deployID)
+	res, err := GetDeploymentLogsQuery(ctx, c.gql, deployID.String())
 	if err != nil {
 		return
 	}
@@ -170,7 +170,7 @@ func (c *Client) GetRuntimeLogs(ctx context.Context, deployID uuid.UUID) (out []
 		  }
 		}
 	`
-	res, err := GetRuntimeLogsQuery(ctx, c.gql, deployID)
+	res, err := GetRuntimeLogsQuery(ctx, c.gql, deployID.String())
 	if err != nil {
 		return
 	}
@@ -195,7 +195,7 @@ func (c *Client) GetDeployment(ctx context.Context, deploymentID uuid.UUID) (*De
 		  }
 		}
 	`
-	res, err := GetDeploymentInfoQuery(ctx, c.gql, deploymentID)
+	res, err := GetDeploymentInfoQuery(ctx, c.gql, deploymentID.String())
 	if err != nil {
 		return nil, err
 	}
@@ -222,7 +222,7 @@ func (c *Client) GetDeploymentStatus(ctx context.Context, deploymentID uuid.UUID
 		  }
 		}
 	`
-	res, err := GetDeploymentReplicaStatusQuery(ctx, c.gql, deploymentID)
+	res, err := GetDeploymentReplicaStatusQuery(ctx, c.gql, deploymentID.String())
 	if err != nil {
 		return nil, err
 	}

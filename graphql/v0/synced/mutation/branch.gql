@@ -1,5 +1,5 @@
-mutation createBranch($id: UUID!, $name: String!) {
-  updateBranch(input: { repoID: $id, name: $name, deploy: true }) {
+mutation createBranch($input: UpdateBranchInput!) {
+  updateBranch(input: $input) {
     id
     ...BranchCommon
   }

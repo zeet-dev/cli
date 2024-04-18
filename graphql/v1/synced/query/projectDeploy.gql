@@ -40,6 +40,7 @@ query projectDeployRevisions(
               hasNextPage
             }
             nodes {
+              id
               ...RevisionDetailV1
             }
           }

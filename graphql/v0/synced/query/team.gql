@@ -7,6 +7,9 @@ fragment TeamCommon on Team {
   user {
     id
     ...UserCommon
+    billingOverview {
+      ...BillingOverviewDetail
+    }
   }
 }
 
@@ -83,11 +86,39 @@ query teamByName($name: String!) {
 query userTeams {
   currentUser {
     id
+    email
     teams {
       id
       team {
         id
         ...TeamCommon
+      }
+      role
+    }
+  }
+}
+
+query userTeamsAnalytics {
+  currentUser {
+    id
+    email
+    teams {
+      id
+      team {
+        id
+        name
+        ...TeamCommon
+        members {
+          id
+        }
+        clusters: user {
+          id
+          clusters {
+            id
+            name
+            status
+          }
+        }
       }
       role
     }
@@ -154,7 +185,7 @@ query currentUsageMetrics(
       totalCount
     }
     clusters {
-      id 
+      id
     }
     awsAccounts {
       id
@@ -177,6 +208,7 @@ query currentUsageMetrics(
     blueprints(page: $pageInput) {
       totalCount
       nodes {
+        id
         owner {
           login
         }
@@ -184,6 +216,7 @@ query currentUsageMetrics(
     }
   }
   currentUser {
+    id
     permissions {
       user(userID: $permissionsUserId) {
         mutations

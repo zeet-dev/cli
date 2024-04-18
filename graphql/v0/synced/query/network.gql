@@ -85,6 +85,7 @@ fragment RepoNetwork on Repo {
   }
   ports {
     port
+    externalPort
     protocol
     public
     https

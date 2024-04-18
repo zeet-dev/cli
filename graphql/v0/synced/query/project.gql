@@ -56,6 +56,7 @@ query projectsWithRepo($userId: ID!, $filterInput: FilterInput!) {
     id
     projectV3Adapters(filter: $filterInput) {
       nodes {
+        id
         ...ProjectWithRepo
       }
     }
@@ -68,6 +69,7 @@ fragment ProjectListItem on ProjectV3Adapter {
   repo {
     id
     cluster {
+      id
       state
     }
   }
@@ -95,6 +97,7 @@ fragment ProjectWithRepo on ProjectV3Adapter {
       name
     }
     productionDeployment {
+      id
       endpoints
       privateEndpoint
     }
@@ -133,6 +136,7 @@ query userBasicProjects($id: ID!) {
 
 query projectRevisions($id: UUID!, $page: PageInput) {
   project(id: $id) {
+    id
     revisions(page: $page) {
       totalCount
       pageInfo {
@@ -148,6 +152,28 @@ query projectRevisions($id: UUID!, $page: PageInput) {
   }
 }
 
+query projectPermissions($id: UUID!) {
+  project(id: $id) {
+    id
+    permissions {
+      availableRoles {
+        name
+        description
+      }
+      users {
+        user {
+          ...UserPublicCommon
+        }
+        teamRole
+        projectRole {
+          name
+          description
+        }
+      }
+    }
+  }
+}
+
 fragment ProjectBasic on Project {
   id
   name
@@ -155,6 +181,7 @@ fragment ProjectBasic on Project {
     id
     login
   }
+  autoCleanupEnabled
 }
 
 fragment ProjectContext on Project {
@@ -176,6 +203,8 @@ fragment ProjectContext on Project {
     id
     login
   }
+
+  autoCleanupEnabled
 
   createdAt
   updatedAt

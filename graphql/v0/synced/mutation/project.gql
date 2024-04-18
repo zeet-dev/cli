@@ -89,7 +89,18 @@ mutation moveRepo($input: MoveRepoInput!) {
   moveRepoToProjectEnvironment(input: $input) {
     ...RepoDetail
     projectEnvironment {
+      id
       name
     }
   }
+}
+
+mutation configureUserProjectPermissions(
+  $projectID: UUID!
+  $permission: ProjectPermissionsInput!
+) {
+  configureProjectPermissions(
+    projectIds: [$projectID]
+    permissions: $permission
+  )
 }

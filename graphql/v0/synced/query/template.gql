@@ -19,6 +19,7 @@ fragment TemplateCommon on Template {
     image
 
     source {
+      id
       type
       name
     }

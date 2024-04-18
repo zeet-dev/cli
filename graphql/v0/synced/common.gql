@@ -48,6 +48,12 @@ fragment RepoCommon on Repo {
     type
     name
   }
+  productionBranch
+  productionBranchV2 {
+    id
+    name
+    gitRef
+  }
   deployTarget
   deployType
 
@@ -141,6 +147,7 @@ fragment DeploymentCommon on Deployment {
   }
 
   build {
+    id
     image
   }
   alternativeImages {
@@ -487,6 +494,7 @@ fragment RepoDetail on Repo {
   databaseEngine
   databaseVersion
   databaseEnvs {
+    id
     name
     value
   }
@@ -494,6 +502,7 @@ fragment RepoDetail on Repo {
     id
     envPrefix
     envs {
+      id
       name
       value
     }

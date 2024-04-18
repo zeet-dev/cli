@@ -10,9 +10,6 @@ fragment ClusterDetailV1 on Cluster {
 
   createdAt
   updatedAt
-
-  updatedAt
-  createdAt
 }
 
 query clusterDetails($teamId: UUID!, $clusterId: UUID!) {

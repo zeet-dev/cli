@@ -396,3 +396,17 @@ query terraformEjectionStatus($id: ID!, $clusterId: UUID!) {
     }
   }
 }
+
+query validateCloudForClusterCreation($userId: ID!, $context: ClusterValidationInput!) {
+  user(id: $userId) {
+    id
+    validateCloud(context: $context) {
+      errors {
+        docs
+        fixable
+        message
+        type
+      }
+    }
+  }
+}

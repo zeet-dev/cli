@@ -28,7 +28,7 @@ func (c *Client) UpdateClusterKubeconfig(ctx context.Context, clusterId uuid.UUI
 		File []byte    `json:"file"`
 		Id   uuid.UUID `json:"id"`
 	}
-	var res updateClusterResponse
+	var res UpdateClusterResponse
 	err := c.upload.UploadFile(query, input{File: kubeconfig, Id: clusterId}, "file", kubeconfig, res)
 	if err != nil {
 		return nil, err
@@ -39,12 +39,6 @@ func (c *Client) UpdateClusterKubeconfig(ctx context.Context, clusterId uuid.UUI
 	}
 
 	return out, nil
-}
-
-type GetClusterKubeconfigResponse struct {
-	ID         uuid.UUID
-	Name       string
-	Kubeconfig string
 }
 
 func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) (*GetClusterKubeconfigResponse, error) {
@@ -66,22 +60,11 @@ func (c *Client) GetClusterKubeconfig(ctx context.Context, clusterID uuid.UUID) 
 	}
 
 	return &GetClusterKubeconfigResponse{
-		ID:         res.CurrentUser.Cluster.Id,
-		Name:       res.CurrentUser.Cluster.Name,
-		Kubeconfig: res.CurrentUser.Cluster.Kubeconfig,
+		CurrentUser: res.CurrentUser,
 	}, nil
 }
 
-type ListClustersResponse struct {
-	ID              uuid.UUID
-	Name            string
-	CloudProvider   string
-	ClusterProvider string
-	Region          string
-	Connected       bool
-}
-
-func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersResponse, error) {
+func (c *Client) ListClusters(ctx context.Context, path string) (*ListClustersResponse, error) {
 	_ = `# @genqlient
 		query listClusters {
 		  currentUser {
@@ -124,19 +107,23 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 			}
 		}
 
-		out := make([]ListClustersResponse, len(res.Team.User.Clusters))
+		clusters := make([]ListClustersCurrentUserClustersCluster, len(res.Team.User.Clusters))
 		for i, cluster := range res.Team.User.Clusters {
-			out[i] = ListClustersResponse{
-				ID:              cluster.Id,
+			clusters[i] = ListClustersCurrentUserClustersCluster{
+				Id:              cluster.Id,
 				Name:            cluster.Name,
-				CloudProvider:   string(cluster.CloudProvider),
-				ClusterProvider: string(cluster.ClusterProvider),
+				CloudProvider:   cluster.CloudProvider,
+				ClusterProvider: cluster.ClusterProvider,
 				Region:          cluster.Region,
 				Connected:       cluster.Connected,
 			}
 		}
 
-		return out, nil
+		return &ListClustersResponse{
+			CurrentUser: ListClustersCurrentUser{
+				Clusters: clusters,
+			},
+		}, nil
 	}
 
 	res, err := ListClustersQuery(ctx, c.gql)
@@ -148,17 +135,21 @@ func (c *Client) ListClusters(ctx context.Context, path string) ([]ListClustersR
 		}
 	}
 
-	out := make([]ListClustersResponse, len(res.CurrentUser.Clusters))
+	clusters := make([]ListClustersCurrentUserClustersCluster, len(res.CurrentUser.Clusters))
 	for i, cluster := range res.CurrentUser.Clusters {
-		out[i] = ListClustersResponse{
-			ID:              cluster.Id,
+		clusters[i] = ListClustersCurrentUserClustersCluster{
+			Id:              cluster.Id,
 			Name:            cluster.Name,
-			CloudProvider:   string(cluster.CloudProvider),
-			ClusterProvider: string(cluster.ClusterProvider),
+			CloudProvider:   cluster.CloudProvider,
+			ClusterProvider: cluster.ClusterProvider,
 			Region:          cluster.Region,
 			Connected:       cluster.Connected,
 		}
 	}
 
-	return out, nil
+	return &ListClustersResponse{
+		CurrentUser: ListClustersCurrentUser{
+			Clusters: clusters,
+		},
+	}, nil
 }
