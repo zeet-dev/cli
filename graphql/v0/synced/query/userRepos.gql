@@ -132,6 +132,7 @@ fragment RepoCommonWithDB on Repo {
     id
     envPrefix
     envs {
+      id
       name
       value
     }

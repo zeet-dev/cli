@@ -18,7 +18,7 @@ func (c *Client) DeleteRepo(ctx context.Context, repoID uuid.UUID) error {
 		}
 	`
 
-	_, err := DeleteMutation(ctx, c.gql, repoID)
+	_, err := DeleteMutation(ctx, c.gql, repoID.String())
 	return err
 }
 
@@ -40,7 +40,7 @@ func (c *Client) SetEnvVars(ctx context.Context, repoID uuid.UUID, vars map[stri
 		  }
 		}
 	`
-	_, err := SetEnvVarsMutation(ctx, c.gql, repoID, inp)
+	_, err := SetEnvVarsMutation(ctx, c.gql, repoID.String(), inp)
 	return err
 }
 
@@ -57,7 +57,7 @@ func (c *Client) GetEnvVars(ctx context.Context, repoID uuid.UUID) (map[string]s
 		  }
 		}
 	`
-	res, err := GetEnvVarsQuery(ctx, c.gql, repoID)
+	res, err := GetEnvVarsQuery(ctx, c.gql, repoID.String())
 	if err != nil {
 		return nil, err
 	}

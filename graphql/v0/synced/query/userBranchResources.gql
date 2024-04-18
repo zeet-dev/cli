@@ -4,6 +4,7 @@ query userBranchResources($repoId: ID!, $branch: String) {
     repo(id: $repoId) {
       id
       branch(name: $branch) {
+        id
         resources {
           id
           resourceType

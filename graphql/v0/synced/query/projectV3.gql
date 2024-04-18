@@ -106,12 +106,21 @@ fragment ProjectV3Detail on ProjectV3 {
           location
           prefix
         }
+        linodeBucket {
+          linodeAccountId
+          bucketName
+          region
+          key
+        }
       }
       provider {
         awsAccount {
           id
         }
         gcpAccount {
+          id
+        }
+        linodeAccount {
           id
         }
         region

@@ -46,6 +46,33 @@ query repoForProjectEnvironment(
   }
 }
 
+query repoOverview(
+  $path: String!
+  $environment: String!
+  $repo: String!
+) {
+  project(path: $path) {
+    id
+    environment(name: $environment) {
+      id
+      name
+      repo(name: $repo) {
+        id
+        deployTarget
+        deployType
+        source {
+          id
+          type
+        }
+        jobRuns {
+          totalCount
+        }
+        deployService
+      }
+    }
+  }
+}
+
 query repoForProject($path: String!, $repo: String!) {
   project(path: $path) {
     id

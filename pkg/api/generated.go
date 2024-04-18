@@ -12,7 +12,7 @@ import (
 )
 
 type AdapterStatusCriterion struct {
-	Value []*string `json:"value"`
+	Value []*string `json:"value,omitempty"`
 }
 
 // GetValue returns AdapterStatusCriterion.Value, and is useful for accessing the field via an interface.
@@ -22,7 +22,7 @@ func (v *AdapterStatusCriterion) GetValue() []*string { return v.Value }
 type BlueprintConnection struct {
 	TotalCount int                                 `json:"totalCount"`
 	PageInfo   PageInfo                            `json:"pageInfo"`
-	Nodes      []BlueprintConnectionNodesBlueprint `json:"nodes"`
+	Nodes      []BlueprintConnectionNodesBlueprint `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns BlueprintConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -111,7 +111,7 @@ type __premarshalBlueprintConnectionNodesBlueprint struct {
 
 	RichInputSchema string `json:"richInputSchema"`
 
-	Tags []string `json:"tags"`
+	Tags []string `json:"tags,omitempty"`
 }
 
 func (v *BlueprintConnectionNodesBlueprint) MarshalJSON() ([]byte, error) {
@@ -146,7 +146,7 @@ const (
 )
 
 type BlueprintMetadataFilter struct {
-	Name *StringCriterion `json:"name"`
+	Name *StringCriterion `json:"name,omitempty"`
 }
 
 // GetName returns BlueprintMetadataFilter.Name, and is useful for accessing the field via an interface.
@@ -161,7 +161,7 @@ type BlueprintSummary struct {
 	Type            BlueprintType `json:"type"`
 	ProjectCount    int           `json:"projectCount"`
 	RichInputSchema string        `json:"richInputSchema"`
-	Tags            []string      `json:"tags"`
+	Tags            []string      `json:"tags,omitempty"`
 }
 
 // GetId returns BlueprintSummary.Id, and is useful for accessing the field via an interface.
@@ -200,11 +200,105 @@ const (
 )
 
 type BooleanCriterion struct {
-	Value *bool `json:"value"`
+	Value *bool `json:"value,omitempty"`
 }
 
 // GetValue returns BooleanCriterion.Value, and is useful for accessing the field via an interface.
 func (v *BooleanCriterion) GetValue() *bool { return v.Value }
+
+// BuildRepoBuildRepo includes the requested fields of the GraphQL type Repo.
+type BuildRepoBuildRepo struct {
+	Deployments []BuildRepoBuildRepoDeploymentsDeployment `json:"deployments,omitempty"`
+}
+
+// GetDeployments returns BuildRepoBuildRepo.Deployments, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepo) GetDeployments() []BuildRepoBuildRepoDeploymentsDeployment {
+	return v.Deployments
+}
+
+// BuildRepoBuildRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
+type BuildRepoBuildRepoDeploymentsDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns BuildRepoBuildRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepoDeploymentsDeployment) GetId() string { return v.Id }
+
+// GetStatus returns BuildRepoBuildRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepoDeploymentsDeployment) GetStatus() DeploymentStatus { return v.Status }
+
+// GetBranch returns BuildRepoBuildRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepoDeploymentsDeployment) GetBranch() string { return v.Branch }
+
+// GetEndpoints returns BuildRepoBuildRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepoDeploymentsDeployment) GetEndpoints() []string { return v.Endpoints }
+
+// GetPrivateEndpoint returns BuildRepoBuildRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *BuildRepoBuildRepoDeploymentsDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// BuildRepoDefaultBranchBuildRepo includes the requested fields of the GraphQL type Repo.
+type BuildRepoDefaultBranchBuildRepo struct {
+	Deployments []BuildRepoDefaultBranchBuildRepoDeploymentsDeployment `json:"deployments,omitempty"`
+}
+
+// GetDeployments returns BuildRepoDefaultBranchBuildRepo.Deployments, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepo) GetDeployments() []BuildRepoDefaultBranchBuildRepoDeploymentsDeployment {
+	return v.Deployments
+}
+
+// BuildRepoDefaultBranchBuildRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
+type BuildRepoDefaultBranchBuildRepoDeploymentsDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns BuildRepoDefaultBranchBuildRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetId() string { return v.Id }
+
+// GetStatus returns BuildRepoDefaultBranchBuildRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetBranch returns BuildRepoDefaultBranchBuildRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetBranch() string { return v.Branch }
+
+// GetEndpoints returns BuildRepoDefaultBranchBuildRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetEndpoints() []string {
+	return v.Endpoints
+}
+
+// GetPrivateEndpoint returns BuildRepoDefaultBranchBuildRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// buildRepoDefaultBranchResponse is returned by buildRepoDefaultBranch on success.
+type BuildRepoDefaultBranchResponse struct {
+	BuildRepo BuildRepoDefaultBranchBuildRepo `json:"buildRepo"`
+}
+
+// GetBuildRepo returns BuildRepoDefaultBranchResponse.BuildRepo, and is useful for accessing the field via an interface.
+func (v *BuildRepoDefaultBranchResponse) GetBuildRepo() BuildRepoDefaultBranchBuildRepo {
+	return v.BuildRepo
+}
+
+// buildRepoResponse is returned by buildRepo on success.
+type BuildRepoResponse struct {
+	BuildRepo BuildRepoBuildRepo `json:"buildRepo"`
+}
+
+// GetBuildRepo returns BuildRepoResponse.BuildRepo, and is useful for accessing the field via an interface.
+func (v *BuildRepoResponse) GetBuildRepo() BuildRepoBuildRepo { return v.BuildRepo }
 
 type CloudProvider string
 
@@ -238,10 +332,78 @@ const (
 	ClusterProviderVke       ClusterProvider = "VKE"
 )
 
+// deleteBlueprintResponse is returned by deleteBlueprint on success.
+type DeleteBlueprintResponse struct {
+	DeleteBlueprint bool `json:"deleteBlueprint"`
+}
+
+// GetDeleteBlueprint returns DeleteBlueprintResponse.DeleteBlueprint, and is useful for accessing the field via an interface.
+func (v *DeleteBlueprintResponse) GetDeleteBlueprint() bool { return v.DeleteBlueprint }
+
+// deleteResponse is returned by delete on success.
+type DeleteResponse struct {
+	DeleteRepo bool `json:"deleteRepo"`
+}
+
+// GetDeleteRepo returns DeleteResponse.DeleteRepo, and is useful for accessing the field via an interface.
+func (v *DeleteResponse) GetDeleteRepo() bool { return v.DeleteRepo }
+
+// DeployRepoBranchDeployRepoBranchRepo includes the requested fields of the GraphQL type Repo.
+type DeployRepoBranchDeployRepoBranchRepo struct {
+	Deployments []DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment `json:"deployments,omitempty"`
+}
+
+// GetDeployments returns DeployRepoBranchDeployRepoBranchRepo.Deployments, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepo) GetDeployments() []DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment {
+	return v.Deployments
+}
+
+// DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
+type DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetId() string { return v.Id }
+
+// GetStatus returns DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetBranch returns DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetBranch() string {
+	return v.Branch
+}
+
+// GetEndpoints returns DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetEndpoints() []string {
+	return v.Endpoints
+}
+
+// GetPrivateEndpoint returns DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// deployRepoBranchResponse is returned by deployRepoBranch on success.
+type DeployRepoBranchResponse struct {
+	DeployRepoBranch DeployRepoBranchDeployRepoBranchRepo `json:"deployRepoBranch"`
+}
+
+// GetDeployRepoBranch returns DeployRepoBranchResponse.DeployRepoBranch, and is useful for accessing the field via an interface.
+func (v *DeployRepoBranchResponse) GetDeployRepoBranch() DeployRepoBranchDeployRepoBranchRepo {
+	return v.DeployRepoBranch
+}
+
 type DeployableDriverActionExecutionFilter struct {
-	Ids         *MultiEntityCriterion      `json:"ids"`
-	ActionTypes *DriverActionTypeCriterion `json:"actionTypes"`
-	ResourceIds *MultiEntityCriterion      `json:"resourceIds"`
+	Ids         *MultiEntityCriterion      `json:"ids,omitempty"`
+	ActionTypes *DriverActionTypeCriterion `json:"actionTypes,omitempty"`
+	ResourceIds *MultiEntityCriterion      `json:"resourceIds,omitempty"`
 }
 
 // GetIds returns DeployableDriverActionExecutionFilter.Ids, and is useful for accessing the field via an interface.
@@ -276,8 +438,8 @@ const (
 )
 
 type DriverActionTypeCriterion struct {
-	Value    []*BlueprintDriverAction     `json:"value"`
-	Operator *FilterCriterionOperatorType `json:"operator"`
+	Value    []*BlueprintDriverAction     `json:"value,omitempty"`
+	Operator *FilterCriterionOperatorType `json:"operator,omitempty"`
 }
 
 // GetValue returns DriverActionTypeCriterion.Value, and is useful for accessing the field via an interface.
@@ -302,12 +464,12 @@ func (v *EnvVarInput) GetValue() string { return v.Value }
 func (v *EnvVarInput) GetSealed() bool { return v.Sealed }
 
 type FilterCriterion struct {
-	UserFilter                            *UserFilter                            `json:"userFilter"`
-	ResourceFilter                        *ResourceFilter                        `json:"resourceFilter"`
-	RepoFilter                            *RepoFilter                            `json:"repoFilter"`
-	DeployableDriverActionExecutionFilter *DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter"`
-	ResourceAdapterFilter                 *ResourceAdapterFilter                 `json:"resourceAdapterFilter"`
-	BlueprintMetadataFilter               *BlueprintMetadataFilter               `json:"blueprintMetadataFilter"`
+	UserFilter                            *UserFilter                            `json:"userFilter,omitempty"`
+	ResourceFilter                        *ResourceFilter                        `json:"resourceFilter,omitempty"`
+	RepoFilter                            *RepoFilter                            `json:"repoFilter,omitempty"`
+	DeployableDriverActionExecutionFilter *DeployableDriverActionExecutionFilter `json:"deployableDriverActionExecutionFilter,omitempty"`
+	ResourceAdapterFilter                 *ResourceAdapterFilter                 `json:"resourceAdapterFilter,omitempty"`
+	BlueprintMetadataFilter               *BlueprintMetadataFilter               `json:"blueprintMetadataFilter,omitempty"`
 }
 
 // GetUserFilter returns FilterCriterion.UserFilter, and is useful for accessing the field via an interface.
@@ -347,8 +509,8 @@ const (
 )
 
 type FilterExpression struct {
-	Operator *FilterExpressionOperator `json:"operator"`
-	Filters  []*FilterNode             `json:"filters"`
+	Operator *FilterExpressionOperator `json:"operator,omitempty"`
+	Filters  []*FilterNode             `json:"filters,omitempty"`
 }
 
 // GetOperator returns FilterExpression.Operator, and is useful for accessing the field via an interface.
@@ -366,9 +528,9 @@ const (
 )
 
 type FilterInput struct {
-	Sort   *SortInput  `json:"sort"`
-	Page   *PageInput  `json:"page"`
-	Filter *FilterNode `json:"filter"`
+	Sort   *SortInput  `json:"sort,omitempty"`
+	Page   *PageInput  `json:"page,omitempty"`
+	Filter *FilterNode `json:"filter,omitempty"`
 }
 
 // GetSort returns FilterInput.Sort, and is useful for accessing the field via an interface.
@@ -381,8 +543,8 @@ func (v *FilterInput) GetPage() *PageInput { return v.Page }
 func (v *FilterInput) GetFilter() *FilterNode { return v.Filter }
 
 type FilterNode struct {
-	Expression *FilterExpression `json:"expression"`
-	Criterion  *FilterCriterion  `json:"criterion"`
+	Expression *FilterExpression `json:"expression,omitempty"`
+	Criterion  *FilterCriterion  `json:"criterion,omitempty"`
 }
 
 // GetExpression returns FilterNode.Expression, and is useful for accessing the field via an interface.
@@ -390,6 +552,196 @@ func (v *FilterNode) GetExpression() *FilterExpression { return v.Expression }
 
 // GetCriterion returns FilterNode.Criterion, and is useful for accessing the field via an interface.
 func (v *FilterNode) GetCriterion() *FilterCriterion { return v.Criterion }
+
+// getBlueprintResponse is returned by getBlueprint on success.
+type GetBlueprintResponse struct {
+	User GetBlueprintUser `json:"user"`
+}
+
+// GetUser returns GetBlueprintResponse.User, and is useful for accessing the field via an interface.
+func (v *GetBlueprintResponse) GetUser() GetBlueprintUser { return v.User }
+
+// GetBlueprintUser includes the requested fields of the GraphQL type User.
+type GetBlueprintUser struct {
+	Blueprint GetBlueprintUserBlueprint `json:"blueprint"`
+}
+
+// GetBlueprint returns GetBlueprintUser.Blueprint, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUser) GetBlueprint() GetBlueprintUserBlueprint { return v.Blueprint }
+
+// GetBlueprintUserBlueprint includes the requested fields of the GraphQL type Blueprint.
+type GetBlueprintUserBlueprint struct {
+	BlueprintSummary `json:"-"`
+}
+
+// GetId returns GetBlueprintUserBlueprint.Id, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetId() uuid.UUID { return v.BlueprintSummary.Id }
+
+// GetSlug returns GetBlueprintUserBlueprint.Slug, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetSlug() string { return v.BlueprintSummary.Slug }
+
+// GetDisplayName returns GetBlueprintUserBlueprint.DisplayName, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetDisplayName() string { return v.BlueprintSummary.DisplayName }
+
+// GetDescription returns GetBlueprintUserBlueprint.Description, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetDescription() string { return v.BlueprintSummary.Description }
+
+// GetType returns GetBlueprintUserBlueprint.Type, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetType() BlueprintType { return v.BlueprintSummary.Type }
+
+// GetProjectCount returns GetBlueprintUserBlueprint.ProjectCount, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetProjectCount() int { return v.BlueprintSummary.ProjectCount }
+
+// GetRichInputSchema returns GetBlueprintUserBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetRichInputSchema() string {
+	return v.BlueprintSummary.RichInputSchema
+}
+
+// GetTags returns GetBlueprintUserBlueprint.Tags, and is useful for accessing the field via an interface.
+func (v *GetBlueprintUserBlueprint) GetTags() []string { return v.BlueprintSummary.Tags }
+
+func (v *GetBlueprintUserBlueprint) UnmarshalJSON(b []byte) error {
+
+	if string(b) == "null" {
+		return nil
+	}
+
+	var firstPass struct {
+		*GetBlueprintUserBlueprint
+		graphql.NoUnmarshalJSON
+	}
+	firstPass.GetBlueprintUserBlueprint = v
+
+	err := json.Unmarshal(b, &firstPass)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(
+		b, &v.BlueprintSummary)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+type __premarshalGetBlueprintUserBlueprint struct {
+	Id uuid.UUID `json:"id"`
+
+	Slug string `json:"slug"`
+
+	DisplayName string `json:"displayName"`
+
+	Description string `json:"description"`
+
+	Type BlueprintType `json:"type"`
+
+	ProjectCount int `json:"projectCount"`
+
+	RichInputSchema string `json:"richInputSchema"`
+
+	Tags []string `json:"tags,omitempty"`
+}
+
+func (v *GetBlueprintUserBlueprint) MarshalJSON() ([]byte, error) {
+	premarshaled, err := v.__premarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	return json.Marshal(premarshaled)
+}
+
+func (v *GetBlueprintUserBlueprint) __premarshalJSON() (*__premarshalGetBlueprintUserBlueprint, error) {
+	var retval __premarshalGetBlueprintUserBlueprint
+
+	retval.Id = v.BlueprintSummary.Id
+	retval.Slug = v.BlueprintSummary.Slug
+	retval.DisplayName = v.BlueprintSummary.DisplayName
+	retval.Description = v.BlueprintSummary.Description
+	retval.Type = v.BlueprintSummary.Type
+	retval.ProjectCount = v.BlueprintSummary.ProjectCount
+	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
+	retval.Tags = v.BlueprintSummary.Tags
+	return &retval, nil
+}
+
+// getBlueprintsResponse is returned by getBlueprints on success.
+type GetBlueprintsResponse struct {
+	User GetBlueprintsUser `json:"user"`
+}
+
+// GetUser returns GetBlueprintsResponse.User, and is useful for accessing the field via an interface.
+func (v *GetBlueprintsResponse) GetUser() GetBlueprintsUser { return v.User }
+
+// GetBlueprintsUser includes the requested fields of the GraphQL type User.
+type GetBlueprintsUser struct {
+	Blueprints BlueprintConnection `json:"blueprints"`
+}
+
+// GetBlueprints returns GetBlueprintsUser.Blueprints, and is useful for accessing the field via an interface.
+func (v *GetBlueprintsUser) GetBlueprints() BlueprintConnection { return v.Blueprints }
+
+// GetBuildLogsCurrentUser includes the requested fields of the GraphQL type User.
+type GetBuildLogsCurrentUser struct {
+	Deployment GetBuildLogsCurrentUserDeployment `json:"deployment"`
+}
+
+// GetDeployment returns GetBuildLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUser) GetDeployment() GetBuildLogsCurrentUserDeployment {
+	return v.Deployment
+}
+
+// GetBuildLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type GetBuildLogsCurrentUserDeployment struct {
+	Build GetBuildLogsCurrentUserDeploymentBuild `json:"build"`
+}
+
+// GetBuild returns GetBuildLogsCurrentUserDeployment.Build, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUserDeployment) GetBuild() GetBuildLogsCurrentUserDeploymentBuild {
+	return v.Build
+}
+
+// GetBuildLogsCurrentUserDeploymentBuild includes the requested fields of the GraphQL type Build.
+type GetBuildLogsCurrentUserDeploymentBuild struct {
+	Logs GetBuildLogsCurrentUserDeploymentBuildLogs `json:"logs"`
+}
+
+// GetLogs returns GetBuildLogsCurrentUserDeploymentBuild.Logs, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUserDeploymentBuild) GetLogs() GetBuildLogsCurrentUserDeploymentBuildLogs {
+	return v.Logs
+}
+
+// GetBuildLogsCurrentUserDeploymentBuildLogs includes the requested fields of the GraphQL type Logs.
+type GetBuildLogsCurrentUserDeploymentBuildLogs struct {
+	Entries []GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry `json:"entries,omitempty"`
+}
+
+// GetEntries returns GetBuildLogsCurrentUserDeploymentBuildLogs.Entries, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUserDeploymentBuildLogs) GetEntries() []GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry {
+	return v.Entries
+}
+
+// GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry struct {
+	Text      string    `json:"text"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+// GetText returns GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry) GetText() string { return v.Text }
+
+// GetTimestamp returns GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry) GetTimestamp() time.Time {
+	return v.Timestamp
+}
+
+// getBuildLogsResponse is returned by getBuildLogs on success.
+type GetBuildLogsResponse struct {
+	CurrentUser GetBuildLogsCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetBuildLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetBuildLogsResponse) GetCurrentUser() GetBuildLogsCurrentUser { return v.CurrentUser }
 
 // GetCloudAWSCurrentUser includes the requested fields of the GraphQL type User.
 type GetCloudAWSCurrentUser struct {
@@ -523,6 +875,603 @@ type GetCloudLinodeResponse struct {
 // GetCurrentUser returns GetCloudLinodeResponse.CurrentUser, and is useful for accessing the field via an interface.
 func (v *GetCloudLinodeResponse) GetCurrentUser() GetCloudLinodeCurrentUser { return v.CurrentUser }
 
+// GetClusterKubeconfigCurrentUser includes the requested fields of the GraphQL type User.
+type GetClusterKubeconfigCurrentUser struct {
+	Cluster GetClusterKubeconfigCurrentUserCluster `json:"cluster"`
+}
+
+// GetCluster returns GetClusterKubeconfigCurrentUser.Cluster, and is useful for accessing the field via an interface.
+func (v *GetClusterKubeconfigCurrentUser) GetCluster() GetClusterKubeconfigCurrentUserCluster {
+	return v.Cluster
+}
+
+// GetClusterKubeconfigCurrentUserCluster includes the requested fields of the GraphQL type Cluster.
+type GetClusterKubeconfigCurrentUserCluster struct {
+	Id         uuid.UUID `json:"id"`
+	Name       string    `json:"name"`
+	Kubeconfig string    `json:"kubeconfig"`
+}
+
+// GetId returns GetClusterKubeconfigCurrentUserCluster.Id, and is useful for accessing the field via an interface.
+func (v *GetClusterKubeconfigCurrentUserCluster) GetId() uuid.UUID { return v.Id }
+
+// GetName returns GetClusterKubeconfigCurrentUserCluster.Name, and is useful for accessing the field via an interface.
+func (v *GetClusterKubeconfigCurrentUserCluster) GetName() string { return v.Name }
+
+// GetKubeconfig returns GetClusterKubeconfigCurrentUserCluster.Kubeconfig, and is useful for accessing the field via an interface.
+func (v *GetClusterKubeconfigCurrentUserCluster) GetKubeconfig() string { return v.Kubeconfig }
+
+// getClusterKubeconfigResponse is returned by getClusterKubeconfig on success.
+type GetClusterKubeconfigResponse struct {
+	CurrentUser GetClusterKubeconfigCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetClusterKubeconfigResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetClusterKubeconfigResponse) GetCurrentUser() GetClusterKubeconfigCurrentUser {
+	return v.CurrentUser
+}
+
+// GetCurrentUserCurrentUser includes the requested fields of the GraphQL type User.
+type GetCurrentUserCurrentUser struct {
+	Id    string `json:"id"`
+	Login string `json:"login"`
+}
+
+// GetId returns GetCurrentUserCurrentUser.Id, and is useful for accessing the field via an interface.
+func (v *GetCurrentUserCurrentUser) GetId() string { return v.Id }
+
+// GetLogin returns GetCurrentUserCurrentUser.Login, and is useful for accessing the field via an interface.
+func (v *GetCurrentUserCurrentUser) GetLogin() string { return v.Login }
+
+// getCurrentUserResponse is returned by getCurrentUser on success.
+type GetCurrentUserResponse struct {
+	CurrentUser GetCurrentUserCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetCurrentUserResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetCurrentUserResponse) GetCurrentUser() GetCurrentUserCurrentUser { return v.CurrentUser }
+
+// GetDeploymentInfoCurrentUser includes the requested fields of the GraphQL type User.
+type GetDeploymentInfoCurrentUser struct {
+	Deployment GetDeploymentInfoCurrentUserDeployment `json:"deployment"`
+}
+
+// GetDeployment returns GetDeploymentInfoCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUser) GetDeployment() GetDeploymentInfoCurrentUserDeployment {
+	return v.Deployment
+}
+
+// GetDeploymentInfoCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type GetDeploymentInfoCurrentUserDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+	ErrorMessage    string           `json:"errorMessage"`
+}
+
+// GetId returns GetDeploymentInfoCurrentUserDeployment.Id, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUserDeployment) GetId() string { return v.Id }
+
+// GetStatus returns GetDeploymentInfoCurrentUserDeployment.Status, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUserDeployment) GetStatus() DeploymentStatus { return v.Status }
+
+// GetEndpoints returns GetDeploymentInfoCurrentUserDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUserDeployment) GetEndpoints() []string { return v.Endpoints }
+
+// GetPrivateEndpoint returns GetDeploymentInfoCurrentUserDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUserDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// GetErrorMessage returns GetDeploymentInfoCurrentUserDeployment.ErrorMessage, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoCurrentUserDeployment) GetErrorMessage() string { return v.ErrorMessage }
+
+// getDeploymentInfoResponse is returned by getDeploymentInfo on success.
+type GetDeploymentInfoResponse struct {
+	CurrentUser GetDeploymentInfoCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetDeploymentInfoResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetDeploymentInfoResponse) GetCurrentUser() GetDeploymentInfoCurrentUser {
+	return v.CurrentUser
+}
+
+// GetDeploymentLogsCurrentUser includes the requested fields of the GraphQL type User.
+type GetDeploymentLogsCurrentUser struct {
+	Deployment GetDeploymentLogsCurrentUserDeployment `json:"deployment"`
+}
+
+// GetDeployment returns GetDeploymentLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUser) GetDeployment() GetDeploymentLogsCurrentUserDeployment {
+	return v.Deployment
+}
+
+// GetDeploymentLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type GetDeploymentLogsCurrentUserDeployment struct {
+	DeployStep GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep `json:"deployStep"`
+}
+
+// GetDeployStep returns GetDeploymentLogsCurrentUserDeployment.DeployStep, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUserDeployment) GetDeployStep() GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep {
+	return v.DeployStep
+}
+
+// GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep includes the requested fields of the GraphQL type PipelineStep.
+type GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep struct {
+	Logs GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs `json:"logs"`
+}
+
+// GetLogs returns GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep.Logs, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep) GetLogs() GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs {
+	return v.Logs
+}
+
+// GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs includes the requested fields of the GraphQL type Logs.
+type GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs struct {
+	Entries []GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry `json:"entries,omitempty"`
+}
+
+// GetEntries returns GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs.Entries, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs) GetEntries() []GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry {
+	return v.Entries
+}
+
+// GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry struct {
+	Text      string    `json:"text"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+// GetText returns GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetText() string {
+	return v.Text
+}
+
+// GetTimestamp returns GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetTimestamp() time.Time {
+	return v.Timestamp
+}
+
+// getDeploymentLogsResponse is returned by getDeploymentLogs on success.
+type GetDeploymentLogsResponse struct {
+	CurrentUser GetDeploymentLogsCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetDeploymentLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetDeploymentLogsResponse) GetCurrentUser() GetDeploymentLogsCurrentUser {
+	return v.CurrentUser
+}
+
+// GetDeploymentReplicaStatusCurrentUser includes the requested fields of the GraphQL type User.
+type GetDeploymentReplicaStatusCurrentUser struct {
+	Deployment GetDeploymentReplicaStatusCurrentUserDeployment `json:"deployment"`
+}
+
+// GetDeployment returns GetDeploymentReplicaStatusCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUser) GetDeployment() GetDeploymentReplicaStatusCurrentUserDeployment {
+	return v.Deployment
+}
+
+// GetDeploymentReplicaStatusCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type GetDeploymentReplicaStatusCurrentUserDeployment struct {
+	DeployStatus GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus `json:"deployStatus"`
+}
+
+// GetDeployStatus returns GetDeploymentReplicaStatusCurrentUserDeployment.DeployStatus, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeployment) GetDeployStatus() GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus {
+	return v.DeployStatus
+}
+
+// GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus includes the requested fields of the GraphQL type DeployStatus.
+type GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus struct {
+	Replicas        int    `json:"replicas"`
+	ReadyReplicas   int    `json:"readyReplicas"`
+	RunningReplicas int    `json:"runningReplicas"`
+	State           string `json:"state"`
+	ErrorMessage    string `json:"errorMessage"`
+}
+
+// GetReplicas returns GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.Replicas, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetReplicas() int {
+	return v.Replicas
+}
+
+// GetReadyReplicas returns GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.ReadyReplicas, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetReadyReplicas() int {
+	return v.ReadyReplicas
+}
+
+// GetRunningReplicas returns GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.RunningReplicas, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetRunningReplicas() int {
+	return v.RunningReplicas
+}
+
+// GetState returns GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.State, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetState() string {
+	return v.State
+}
+
+// GetErrorMessage returns GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.ErrorMessage, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetErrorMessage() string {
+	return v.ErrorMessage
+}
+
+// getDeploymentReplicaStatusResponse is returned by getDeploymentReplicaStatus on success.
+type GetDeploymentReplicaStatusResponse struct {
+	CurrentUser GetDeploymentReplicaStatusCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetDeploymentReplicaStatusResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetDeploymentReplicaStatusResponse) GetCurrentUser() GetDeploymentReplicaStatusCurrentUser {
+	return v.CurrentUser
+}
+
+// GetEnvVarsCurrentUser includes the requested fields of the GraphQL type User.
+type GetEnvVarsCurrentUser struct {
+	Repo GetEnvVarsCurrentUserRepo `json:"repo"`
+}
+
+// GetRepo returns GetEnvVarsCurrentUser.Repo, and is useful for accessing the field via an interface.
+func (v *GetEnvVarsCurrentUser) GetRepo() GetEnvVarsCurrentUserRepo { return v.Repo }
+
+// GetEnvVarsCurrentUserRepo includes the requested fields of the GraphQL type Repo.
+type GetEnvVarsCurrentUserRepo struct {
+	Envs []GetEnvVarsCurrentUserRepoEnvsEnvVar `json:"envs,omitempty"`
+}
+
+// GetEnvs returns GetEnvVarsCurrentUserRepo.Envs, and is useful for accessing the field via an interface.
+func (v *GetEnvVarsCurrentUserRepo) GetEnvs() []GetEnvVarsCurrentUserRepoEnvsEnvVar { return v.Envs }
+
+// GetEnvVarsCurrentUserRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type GetEnvVarsCurrentUserRepoEnvsEnvVar struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+// GetName returns GetEnvVarsCurrentUserRepoEnvsEnvVar.Name, and is useful for accessing the field via an interface.
+func (v *GetEnvVarsCurrentUserRepoEnvsEnvVar) GetName() string { return v.Name }
+
+// GetValue returns GetEnvVarsCurrentUserRepoEnvsEnvVar.Value, and is useful for accessing the field via an interface.
+func (v *GetEnvVarsCurrentUserRepoEnvsEnvVar) GetValue() string { return v.Value }
+
+// getEnvVarsResponse is returned by getEnvVars on success.
+type GetEnvVarsResponse struct {
+	CurrentUser GetEnvVarsCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetEnvVarsResponse) GetCurrentUser() GetEnvVarsCurrentUser { return v.CurrentUser }
+
+// GetJobLogsRepo includes the requested fields of the GraphQL type Repo.
+type GetJobLogsRepo struct {
+	JobRun GetJobLogsRepoJobRun `json:"jobRun"`
+}
+
+// GetJobRun returns GetJobLogsRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *GetJobLogsRepo) GetJobRun() GetJobLogsRepoJobRun { return v.JobRun }
+
+// GetJobLogsRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type GetJobLogsRepoJobRun struct {
+	Logs GetJobLogsRepoJobRunLogs `json:"logs"`
+}
+
+// GetLogs returns GetJobLogsRepoJobRun.Logs, and is useful for accessing the field via an interface.
+func (v *GetJobLogsRepoJobRun) GetLogs() GetJobLogsRepoJobRunLogs { return v.Logs }
+
+// GetJobLogsRepoJobRunLogs includes the requested fields of the GraphQL type Logs.
+type GetJobLogsRepoJobRunLogs struct {
+	Entries []GetJobLogsRepoJobRunLogsEntriesLogEntry `json:"entries,omitempty"`
+}
+
+// GetEntries returns GetJobLogsRepoJobRunLogs.Entries, and is useful for accessing the field via an interface.
+func (v *GetJobLogsRepoJobRunLogs) GetEntries() []GetJobLogsRepoJobRunLogsEntriesLogEntry {
+	return v.Entries
+}
+
+// GetJobLogsRepoJobRunLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
+type GetJobLogsRepoJobRunLogsEntriesLogEntry struct {
+	Text      string    `json:"text"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+// GetText returns GetJobLogsRepoJobRunLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *GetJobLogsRepoJobRunLogsEntriesLogEntry) GetText() string { return v.Text }
+
+// GetTimestamp returns GetJobLogsRepoJobRunLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *GetJobLogsRepoJobRunLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
+
+// getJobLogsResponse is returned by getJobLogs on success.
+type GetJobLogsResponse struct {
+	Repo GetJobLogsRepo `json:"repo"`
+}
+
+// GetRepo returns GetJobLogsResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetJobLogsResponse) GetRepo() GetJobLogsRepo { return v.Repo }
+
+// GetJobRepo includes the requested fields of the GraphQL type Repo.
+type GetJobRepo struct {
+	JobRun GetJobRepoJobRun `json:"jobRun"`
+}
+
+// GetJobRun returns GetJobRepo.JobRun, and is useful for accessing the field via an interface.
+func (v *GetJobRepo) GetJobRun() GetJobRepoJobRun { return v.JobRun }
+
+// GetJobRepoJobRun includes the requested fields of the GraphQL type JobRun.
+type GetJobRepoJobRun struct {
+	Id    uuid.UUID   `json:"id"`
+	State JobRunState `json:"state"`
+}
+
+// GetId returns GetJobRepoJobRun.Id, and is useful for accessing the field via an interface.
+func (v *GetJobRepoJobRun) GetId() uuid.UUID { return v.Id }
+
+// GetState returns GetJobRepoJobRun.State, and is useful for accessing the field via an interface.
+func (v *GetJobRepoJobRun) GetState() JobRunState { return v.State }
+
+// getJobResponse is returned by getJob on success.
+type GetJobResponse struct {
+	Repo GetJobRepo `json:"repo"`
+}
+
+// GetRepo returns GetJobResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetJobResponse) GetRepo() GetJobRepo { return v.Repo }
+
+// GetLatestDeploymentRepo includes the requested fields of the GraphQL type Repo.
+type GetLatestDeploymentRepo struct {
+	Branch GetLatestDeploymentRepoBranchRepoBranchV2 `json:"branch"`
+}
+
+// GetBranch returns GetLatestDeploymentRepo.Branch, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepo) GetBranch() GetLatestDeploymentRepoBranchRepoBranchV2 {
+	return v.Branch
+}
+
+// GetLatestDeploymentRepoBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type GetLatestDeploymentRepoBranchRepoBranchV2 struct {
+	LatestDeployment GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment `json:"latestDeployment"`
+}
+
+// GetLatestDeployment returns GetLatestDeploymentRepoBranchRepoBranchV2.LatestDeployment, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2) GetLatestDeployment() GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment {
+	return v.LatestDeployment
+}
+
+// GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment includes the requested fields of the GraphQL type Deployment.
+type GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Branch          string           `json:"branch"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Id, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetId() string { return v.Id }
+
+// GetStatus returns GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Status, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetBranch returns GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Branch, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetBranch() string {
+	return v.Branch
+}
+
+// GetEndpoints returns GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetEndpoints() []string {
+	return v.Endpoints
+}
+
+// GetPrivateEndpoint returns GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// getLatestDeploymentResponse is returned by getLatestDeployment on success.
+type GetLatestDeploymentResponse struct {
+	Repo GetLatestDeploymentRepo `json:"repo"`
+}
+
+// GetRepo returns GetLatestDeploymentResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetLatestDeploymentResponse) GetRepo() GetLatestDeploymentRepo { return v.Repo }
+
+// GetProductionBranchCurrentUser includes the requested fields of the GraphQL type User.
+type GetProductionBranchCurrentUser struct {
+	Repo GetProductionBranchCurrentUserRepo `json:"repo"`
+}
+
+// GetRepo returns GetProductionBranchCurrentUser.Repo, and is useful for accessing the field via an interface.
+func (v *GetProductionBranchCurrentUser) GetRepo() GetProductionBranchCurrentUserRepo { return v.Repo }
+
+// GetProductionBranchCurrentUserRepo includes the requested fields of the GraphQL type Repo.
+type GetProductionBranchCurrentUserRepo struct {
+	// - v0.RepoID
+	Id                 string                                                           `json:"id"`
+	ProductionBranchV2 GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 `json:"productionBranchV2"`
+}
+
+// GetId returns GetProductionBranchCurrentUserRepo.Id, and is useful for accessing the field via an interface.
+func (v *GetProductionBranchCurrentUserRepo) GetId() string { return v.Id }
+
+// GetProductionBranchV2 returns GetProductionBranchCurrentUserRepo.ProductionBranchV2, and is useful for accessing the field via an interface.
+func (v *GetProductionBranchCurrentUserRepo) GetProductionBranchV2() GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 {
+	return v.ProductionBranchV2
+}
+
+// GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 struct {
+	Name string `json:"name"`
+}
+
+// GetName returns GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2.Name, and is useful for accessing the field via an interface.
+func (v *GetProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2) GetName() string {
+	return v.Name
+}
+
+// getProductionBranchResponse is returned by getProductionBranch on success.
+type GetProductionBranchResponse struct {
+	CurrentUser GetProductionBranchCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetProductionBranchResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetProductionBranchResponse) GetCurrentUser() GetProductionBranchCurrentUser {
+	return v.CurrentUser
+}
+
+// GetProductionDeploymentRepo includes the requested fields of the GraphQL type Repo.
+type GetProductionDeploymentRepo struct {
+	ProductionDeployment GetProductionDeploymentRepoProductionDeployment `json:"productionDeployment"`
+}
+
+// GetProductionDeployment returns GetProductionDeploymentRepo.ProductionDeployment, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentRepo) GetProductionDeployment() GetProductionDeploymentRepoProductionDeployment {
+	return v.ProductionDeployment
+}
+
+// GetProductionDeploymentRepoProductionDeployment includes the requested fields of the GraphQL type Deployment.
+type GetProductionDeploymentRepoProductionDeployment struct {
+	Id              string           `json:"id"`
+	Status          DeploymentStatus `json:"status"`
+	Endpoints       []string         `json:"endpoints,omitempty"`
+	PrivateEndpoint string           `json:"privateEndpoint"`
+}
+
+// GetId returns GetProductionDeploymentRepoProductionDeployment.Id, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentRepoProductionDeployment) GetId() string { return v.Id }
+
+// GetStatus returns GetProductionDeploymentRepoProductionDeployment.Status, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentRepoProductionDeployment) GetStatus() DeploymentStatus {
+	return v.Status
+}
+
+// GetEndpoints returns GetProductionDeploymentRepoProductionDeployment.Endpoints, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentRepoProductionDeployment) GetEndpoints() []string { return v.Endpoints }
+
+// GetPrivateEndpoint returns GetProductionDeploymentRepoProductionDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentRepoProductionDeployment) GetPrivateEndpoint() string {
+	return v.PrivateEndpoint
+}
+
+// getProductionDeploymentResponse is returned by getProductionDeployment on success.
+type GetProductionDeploymentResponse struct {
+	Repo GetProductionDeploymentRepo `json:"repo"`
+}
+
+// GetRepo returns GetProductionDeploymentResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetProductionDeploymentResponse) GetRepo() GetProductionDeploymentRepo { return v.Repo }
+
+// GetProjectByPathRepo includes the requested fields of the GraphQL type Repo.
+type GetProjectByPathRepo struct {
+	// - v0.RepoID
+	Id string `json:"id"`
+}
+
+// GetId returns GetProjectByPathRepo.Id, and is useful for accessing the field via an interface.
+func (v *GetProjectByPathRepo) GetId() string { return v.Id }
+
+// getProjectByPathResponse is returned by getProjectByPath on success.
+type GetProjectByPathResponse struct {
+	Repo GetProjectByPathRepo `json:"repo"`
+}
+
+// GetRepo returns GetProjectByPathResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetProjectByPathResponse) GetRepo() GetProjectByPathRepo { return v.Repo }
+
+// GetProjectPathRepo includes the requested fields of the GraphQL type Repo.
+type GetProjectPathRepo struct {
+	FullPath string `json:"fullPath"`
+}
+
+// GetFullPath returns GetProjectPathRepo.FullPath, and is useful for accessing the field via an interface.
+func (v *GetProjectPathRepo) GetFullPath() string { return v.FullPath }
+
+// getProjectPathResponse is returned by getProjectPath on success.
+type GetProjectPathResponse struct {
+	Repo GetProjectPathRepo `json:"repo"`
+}
+
+// GetRepo returns GetProjectPathResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetProjectPathResponse) GetRepo() GetProjectPathRepo { return v.Repo }
+
+// getProjectV3sResponse is returned by getProjectV3s on success.
+type GetProjectV3sResponse struct {
+	User *GetProjectV3sUser `json:"user,omitempty"`
+}
+
+// GetUser returns GetProjectV3sResponse.User, and is useful for accessing the field via an interface.
+func (v *GetProjectV3sResponse) GetUser() *GetProjectV3sUser { return v.User }
+
+// GetProjectV3sUser includes the requested fields of the GraphQL type User.
+type GetProjectV3sUser struct {
+	ProjectV3Adapters *ProjectV3AdapterConnection `json:"projectV3Adapters,omitempty"`
+}
+
+// GetProjectV3Adapters returns GetProjectV3sUser.ProjectV3Adapters, and is useful for accessing the field via an interface.
+func (v *GetProjectV3sUser) GetProjectV3Adapters() *ProjectV3AdapterConnection {
+	return v.ProjectV3Adapters
+}
+
+// GetRepoRepo includes the requested fields of the GraphQL type Repo.
+type GetRepoRepo struct {
+	// - v0.RepoID
+	Id string `json:"id"`
+}
+
+// GetId returns GetRepoRepo.Id, and is useful for accessing the field via an interface.
+func (v *GetRepoRepo) GetId() string { return v.Id }
+
+// getRepoResponse is returned by getRepo on success.
+type GetRepoResponse struct {
+	Repo GetRepoRepo `json:"repo"`
+}
+
+// GetRepo returns GetRepoResponse.Repo, and is useful for accessing the field via an interface.
+func (v *GetRepoResponse) GetRepo() GetRepoRepo { return v.Repo }
+
+// GetRuntimeLogsCurrentUser includes the requested fields of the GraphQL type User.
+type GetRuntimeLogsCurrentUser struct {
+	Deployment GetRuntimeLogsCurrentUserDeployment `json:"deployment"`
+}
+
+// GetDeployment returns GetRuntimeLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
+func (v *GetRuntimeLogsCurrentUser) GetDeployment() GetRuntimeLogsCurrentUserDeployment {
+	return v.Deployment
+}
+
+// GetRuntimeLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
+type GetRuntimeLogsCurrentUserDeployment struct {
+	Logs []GetRuntimeLogsCurrentUserDeploymentLogsLogEntry `json:"logs,omitempty"`
+}
+
+// GetLogs returns GetRuntimeLogsCurrentUserDeployment.Logs, and is useful for accessing the field via an interface.
+func (v *GetRuntimeLogsCurrentUserDeployment) GetLogs() []GetRuntimeLogsCurrentUserDeploymentLogsLogEntry {
+	return v.Logs
+}
+
+// GetRuntimeLogsCurrentUserDeploymentLogsLogEntry includes the requested fields of the GraphQL type LogEntry.
+type GetRuntimeLogsCurrentUserDeploymentLogsLogEntry struct {
+	Text      string    `json:"text"`
+	Timestamp time.Time `json:"timestamp"`
+}
+
+// GetText returns GetRuntimeLogsCurrentUserDeploymentLogsLogEntry.Text, and is useful for accessing the field via an interface.
+func (v *GetRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetText() string { return v.Text }
+
+// GetTimestamp returns GetRuntimeLogsCurrentUserDeploymentLogsLogEntry.Timestamp, and is useful for accessing the field via an interface.
+func (v *GetRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetTimestamp() time.Time {
+	return v.Timestamp
+}
+
+// getRuntimeLogsResponse is returned by getRuntimeLogs on success.
+type GetRuntimeLogsResponse struct {
+	CurrentUser GetRuntimeLogsCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns GetRuntimeLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *GetRuntimeLogsResponse) GetCurrentUser() GetRuntimeLogsCurrentUser { return v.CurrentUser }
+
 type JobRunState string
 
 const (
@@ -531,10 +1480,119 @@ const (
 	JobRunStateJobRunFailed          JobRunState = "JOB_RUN_FAILED"
 	JobRunStateJobRunSucceeded       JobRunState = "JOB_RUN_SUCCEEDED"
 	JobRunStateJobRunPendingApproval JobRunState = "JOB_RUN_PENDING_APPROVAL"
+	JobRunStateJobRunPendingBuild    JobRunState = "JOB_RUN_PENDING_BUILD"
 )
 
+// ListClustersCurrentUser includes the requested fields of the GraphQL type User.
+type ListClustersCurrentUser struct {
+	Clusters []ListClustersCurrentUserClustersCluster `json:"clusters,omitempty"`
+}
+
+// GetClusters returns ListClustersCurrentUser.Clusters, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUser) GetClusters() []ListClustersCurrentUserClustersCluster {
+	return v.Clusters
+}
+
+// ListClustersCurrentUserClustersCluster includes the requested fields of the GraphQL type Cluster.
+type ListClustersCurrentUserClustersCluster struct {
+	Id              uuid.UUID       `json:"id"`
+	Name            string          `json:"name"`
+	CloudProvider   CloudProvider   `json:"cloudProvider"`
+	ClusterProvider ClusterProvider `json:"clusterProvider"`
+	Region          string          `json:"region"`
+	Connected       bool            `json:"connected"`
+}
+
+// GetId returns ListClustersCurrentUserClustersCluster.Id, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetId() uuid.UUID { return v.Id }
+
+// GetName returns ListClustersCurrentUserClustersCluster.Name, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetName() string { return v.Name }
+
+// GetCloudProvider returns ListClustersCurrentUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetCloudProvider() CloudProvider {
+	return v.CloudProvider
+}
+
+// GetClusterProvider returns ListClustersCurrentUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetClusterProvider() ClusterProvider {
+	return v.ClusterProvider
+}
+
+// GetRegion returns ListClustersCurrentUserClustersCluster.Region, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetRegion() string { return v.Region }
+
+// GetConnected returns ListClustersCurrentUserClustersCluster.Connected, and is useful for accessing the field via an interface.
+func (v *ListClustersCurrentUserClustersCluster) GetConnected() bool { return v.Connected }
+
+// listClustersForTeamResponse is returned by listClustersForTeam on success.
+type ListClustersForTeamResponse struct {
+	Team ListClustersForTeamTeam `json:"team"`
+}
+
+// GetTeam returns ListClustersForTeamResponse.Team, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamResponse) GetTeam() ListClustersForTeamTeam { return v.Team }
+
+// ListClustersForTeamTeam includes the requested fields of the GraphQL type Team.
+type ListClustersForTeamTeam struct {
+	User ListClustersForTeamTeamUser `json:"user"`
+}
+
+// GetUser returns ListClustersForTeamTeam.User, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeam) GetUser() ListClustersForTeamTeamUser { return v.User }
+
+// ListClustersForTeamTeamUser includes the requested fields of the GraphQL type User.
+type ListClustersForTeamTeamUser struct {
+	Clusters []ListClustersForTeamTeamUserClustersCluster `json:"clusters,omitempty"`
+}
+
+// GetClusters returns ListClustersForTeamTeamUser.Clusters, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUser) GetClusters() []ListClustersForTeamTeamUserClustersCluster {
+	return v.Clusters
+}
+
+// ListClustersForTeamTeamUserClustersCluster includes the requested fields of the GraphQL type Cluster.
+type ListClustersForTeamTeamUserClustersCluster struct {
+	Id              uuid.UUID       `json:"id"`
+	Name            string          `json:"name"`
+	CloudProvider   CloudProvider   `json:"cloudProvider"`
+	ClusterProvider ClusterProvider `json:"clusterProvider"`
+	Region          string          `json:"region"`
+	Connected       bool            `json:"connected"`
+}
+
+// GetId returns ListClustersForTeamTeamUserClustersCluster.Id, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetId() uuid.UUID { return v.Id }
+
+// GetName returns ListClustersForTeamTeamUserClustersCluster.Name, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetName() string { return v.Name }
+
+// GetCloudProvider returns ListClustersForTeamTeamUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetCloudProvider() CloudProvider {
+	return v.CloudProvider
+}
+
+// GetClusterProvider returns ListClustersForTeamTeamUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetClusterProvider() ClusterProvider {
+	return v.ClusterProvider
+}
+
+// GetRegion returns ListClustersForTeamTeamUserClustersCluster.Region, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetRegion() string { return v.Region }
+
+// GetConnected returns ListClustersForTeamTeamUserClustersCluster.Connected, and is useful for accessing the field via an interface.
+func (v *ListClustersForTeamTeamUserClustersCluster) GetConnected() bool { return v.Connected }
+
+// listClustersResponse is returned by listClusters on success.
+type ListClustersResponse struct {
+	CurrentUser ListClustersCurrentUser `json:"currentUser"`
+}
+
+// GetCurrentUser returns ListClustersResponse.CurrentUser, and is useful for accessing the field via an interface.
+func (v *ListClustersResponse) GetCurrentUser() ListClustersCurrentUser { return v.CurrentUser }
+
 type MultiEntityCriterion struct {
-	Value []*uuid.UUID `json:"value"`
+	Value []*uuid.UUID `json:"value,omitempty"`
 }
 
 // GetValue returns MultiEntityCriterion.Value, and is useful for accessing the field via an interface.
@@ -561,37 +1619,37 @@ func (v *PageInfo) GetHasNextPage() bool { return v.HasNextPage }
 func (v *PageInfo) GetHasPreviousPage() bool { return v.HasPreviousPage }
 
 type PageInput struct {
-	First  int    `json:"first"`
-	Last   int    `json:"last"`
-	After  string `json:"after"`
-	Before string `json:"before"`
-	Filter string `json:"filter"`
-	Sort   string `json:"sort"`
+	First  int     `json:"first"`
+	Last   *int    `json:"last,omitempty"`
+	After  string  `json:"after"`
+	Before *string `json:"before,omitempty"`
+	Filter *string `json:"filter,omitempty"`
+	Sort   *string `json:"sort,omitempty"`
 }
 
 // GetFirst returns PageInput.First, and is useful for accessing the field via an interface.
 func (v *PageInput) GetFirst() int { return v.First }
 
 // GetLast returns PageInput.Last, and is useful for accessing the field via an interface.
-func (v *PageInput) GetLast() int { return v.Last }
+func (v *PageInput) GetLast() *int { return v.Last }
 
 // GetAfter returns PageInput.After, and is useful for accessing the field via an interface.
 func (v *PageInput) GetAfter() string { return v.After }
 
 // GetBefore returns PageInput.Before, and is useful for accessing the field via an interface.
-func (v *PageInput) GetBefore() string { return v.Before }
+func (v *PageInput) GetBefore() *string { return v.Before }
 
 // GetFilter returns PageInput.Filter, and is useful for accessing the field via an interface.
-func (v *PageInput) GetFilter() string { return v.Filter }
+func (v *PageInput) GetFilter() *string { return v.Filter }
 
 // GetSort returns PageInput.Sort, and is useful for accessing the field via an interface.
-func (v *PageInput) GetSort() string { return v.Sort }
+func (v *PageInput) GetSort() *string { return v.Sort }
 
 // ProjectV3AdapterConnection includes the requested fields of the GraphQL type ProjectV3AdapterConnection.
 type ProjectV3AdapterConnection struct {
-	TotalCount *int                                               `json:"totalCount"`
-	PageInfo   *PageInfo                                          `json:"pageInfo"`
-	Nodes      []*ProjectV3AdapterConnectionNodesProjectV3Adapter `json:"nodes"`
+	TotalCount *int                                               `json:"totalCount,omitempty"`
+	PageInfo   *PageInfo                                          `json:"pageInfo,omitempty"`
+	Nodes      []*ProjectV3AdapterConnectionNodesProjectV3Adapter `json:"nodes,omitempty"`
 }
 
 // GetTotalCount returns ProjectV3AdapterConnection.TotalCount, and is useful for accessing the field via an interface.
@@ -720,26 +1778,26 @@ func (v *ProjectV3AdapterSummaryProjectV3) GetName() string { return v.Name }
 // ProjectV3AdapterSummaryRepo includes the requested fields of the GraphQL type Repo.
 type ProjectV3AdapterSummaryRepo struct {
 	// - v0.RepoID
-	Id   uuid.UUID `json:"id"`
-	Name string    `json:"name"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
 }
 
 // GetId returns ProjectV3AdapterSummaryRepo.Id, and is useful for accessing the field via an interface.
-func (v *ProjectV3AdapterSummaryRepo) GetId() uuid.UUID { return v.Id }
+func (v *ProjectV3AdapterSummaryRepo) GetId() string { return v.Id }
 
 // GetName returns ProjectV3AdapterSummaryRepo.Name, and is useful for accessing the field via an interface.
 func (v *ProjectV3AdapterSummaryRepo) GetName() string { return v.Name }
 
 type RepoFilter struct {
-	Status *RepoStatusCriterion `json:"status"`
+	Status *RepoStatusCriterion `json:"status,omitempty"`
 }
 
 // GetStatus returns RepoFilter.Status, and is useful for accessing the field via an interface.
 func (v *RepoFilter) GetStatus() *RepoStatusCriterion { return v.Status }
 
 type RepoStatusCriterion struct {
-	Value    *string                      `json:"value"`
-	Operator *FilterCriterionOperatorType `json:"operator"`
+	Value    *string                      `json:"value,omitempty"`
+	Operator *FilterCriterionOperatorType `json:"operator,omitempty"`
 }
 
 // GetValue returns RepoStatusCriterion.Value, and is useful for accessing the field via an interface.
@@ -749,16 +1807,16 @@ func (v *RepoStatusCriterion) GetValue() *string { return v.Value }
 func (v *RepoStatusCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
 type ResourceAdapterFilter struct {
-	Ids             *MultiEntityCriterion   `json:"ids"`
-	RepoIds         *MultiEntityCriterion   `json:"repoIds"`
-	ResourceIds     *MultiEntityCriterion   `json:"resourceIds"`
-	DeployableIds   *MultiEntityCriterion   `json:"deployableIds"`
-	Name            *StringCriterion        `json:"name"`
-	Status          *AdapterStatusCriterion `json:"status"`
-	ProjectName     *StringCriterion        `json:"projectName"`
-	EnvironmentName *StringCriterion        `json:"environmentName"`
+	Ids             *MultiEntityCriterion   `json:"ids,omitempty"`
+	RepoIds         *MultiEntityCriterion   `json:"repoIds,omitempty"`
+	ResourceIds     *MultiEntityCriterion   `json:"resourceIds,omitempty"`
+	DeployableIds   *MultiEntityCriterion   `json:"deployableIds,omitempty"`
+	Name            *StringCriterion        `json:"name,omitempty"`
+	Status          *AdapterStatusCriterion `json:"status,omitempty"`
+	ProjectName     *StringCriterion        `json:"projectName,omitempty"`
+	EnvironmentName *StringCriterion        `json:"environmentName,omitempty"`
 	// Active=true or Paused=false
-	Active *BooleanCriterion `json:"active"`
+	Active *BooleanCriterion `json:"active,omitempty"`
 }
 
 // GetIds returns ResourceAdapterFilter.Ids, and is useful for accessing the field via an interface.
@@ -789,9 +1847,9 @@ func (v *ResourceAdapterFilter) GetEnvironmentName() *StringCriterion { return v
 func (v *ResourceAdapterFilter) GetActive() *BooleanCriterion { return v.Active }
 
 type ResourceFilter struct {
-	Ids           *MultiEntityCriterion `json:"ids"`
-	DeployableIds *MultiEntityCriterion `json:"deployableIds"`
-	UserIds       *MultiEntityCriterion `json:"userIds"`
+	Ids           *MultiEntityCriterion `json:"ids,omitempty"`
+	DeployableIds *MultiEntityCriterion `json:"deployableIds,omitempty"`
+	UserIds       *MultiEntityCriterion `json:"userIds,omitempty"`
 }
 
 // GetIds returns ResourceFilter.Ids, and is useful for accessing the field via an interface.
@@ -803,6 +1861,50 @@ func (v *ResourceFilter) GetDeployableIds() *MultiEntityCriterion { return v.Dep
 // GetUserIds returns ResourceFilter.UserIds, and is useful for accessing the field via an interface.
 func (v *ResourceFilter) GetUserIds() *MultiEntityCriterion { return v.UserIds }
 
+// runJobResponse is returned by runJob on success.
+type RunJobResponse struct {
+	RunJob RunJobRunJobJobRun `json:"runJob"`
+}
+
+// GetRunJob returns RunJobResponse.RunJob, and is useful for accessing the field via an interface.
+func (v *RunJobResponse) GetRunJob() RunJobRunJobJobRun { return v.RunJob }
+
+// RunJobRunJobJobRun includes the requested fields of the GraphQL type JobRun.
+type RunJobRunJobJobRun struct {
+	State JobRunState `json:"state"`
+	Id    uuid.UUID   `json:"id"`
+}
+
+// GetState returns RunJobRunJobJobRun.State, and is useful for accessing the field via an interface.
+func (v *RunJobRunJobJobRun) GetState() JobRunState { return v.State }
+
+// GetId returns RunJobRunJobJobRun.Id, and is useful for accessing the field via an interface.
+func (v *RunJobRunJobJobRun) GetId() uuid.UUID { return v.Id }
+
+// setEnvVarsResponse is returned by setEnvVars on success.
+type SetEnvVarsResponse struct {
+	SetRepoEnvs SetEnvVarsSetRepoEnvsRepo `json:"setRepoEnvs"`
+}
+
+// GetSetRepoEnvs returns SetEnvVarsResponse.SetRepoEnvs, and is useful for accessing the field via an interface.
+func (v *SetEnvVarsResponse) GetSetRepoEnvs() SetEnvVarsSetRepoEnvsRepo { return v.SetRepoEnvs }
+
+// SetEnvVarsSetRepoEnvsRepo includes the requested fields of the GraphQL type Repo.
+type SetEnvVarsSetRepoEnvsRepo struct {
+	Envs []SetEnvVarsSetRepoEnvsRepoEnvsEnvVar `json:"envs,omitempty"`
+}
+
+// GetEnvs returns SetEnvVarsSetRepoEnvsRepo.Envs, and is useful for accessing the field via an interface.
+func (v *SetEnvVarsSetRepoEnvsRepo) GetEnvs() []SetEnvVarsSetRepoEnvsRepoEnvsEnvVar { return v.Envs }
+
+// SetEnvVarsSetRepoEnvsRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
+type SetEnvVarsSetRepoEnvsRepoEnvsEnvVar struct {
+	Id string `json:"id"`
+}
+
+// GetId returns SetEnvVarsSetRepoEnvsRepoEnvsEnvVar.Id, and is useful for accessing the field via an interface.
+func (v *SetEnvVarsSetRepoEnvsRepoEnvsEnvVar) GetId() string { return v.Id }
+
 type SortDirection string
 
 const (
@@ -811,8 +1913,8 @@ const (
 )
 
 type SortInput struct {
-	Direction *SortDirection `json:"direction"`
-	Field     *string        `json:"field"`
+	Direction *SortDirection `json:"direction,omitempty"`
+	Field     *string        `json:"field,omitempty"`
 }
 
 // GetDirection returns SortInput.Direction, and is useful for accessing the field via an interface.
@@ -822,8 +1924,8 @@ func (v *SortInput) GetDirection() *SortDirection { return v.Direction }
 func (v *SortInput) GetField() *string { return v.Field }
 
 type StringCriterion struct {
-	Value    *string                      `json:"value"`
-	Operator *FilterCriterionOperatorType `json:"operator"`
+	Value    *string                      `json:"value,omitempty"`
+	Operator *FilterCriterionOperatorType `json:"operator,omitempty"`
 }
 
 // GetValue returns StringCriterion.Value, and is useful for accessing the field via an interface.
@@ -832,8 +1934,61 @@ func (v *StringCriterion) GetValue() *string { return v.Value }
 // GetOperator returns StringCriterion.Operator, and is useful for accessing the field via an interface.
 func (v *StringCriterion) GetOperator() *FilterCriterionOperatorType { return v.Operator }
 
+// updateBranchResponse is returned by updateBranch on success.
+type UpdateBranchResponse struct {
+	UpdateBranch UpdateBranchUpdateBranchRepoBranchV2 `json:"updateBranch"`
+}
+
+// GetUpdateBranch returns UpdateBranchResponse.UpdateBranch, and is useful for accessing the field via an interface.
+func (v *UpdateBranchResponse) GetUpdateBranch() UpdateBranchUpdateBranchRepoBranchV2 {
+	return v.UpdateBranch
+}
+
+// UpdateBranchUpdateBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
+type UpdateBranchUpdateBranchRepoBranchV2 struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns UpdateBranchUpdateBranchRepoBranchV2.Id, and is useful for accessing the field via an interface.
+func (v *UpdateBranchUpdateBranchRepoBranchV2) GetId() uuid.UUID { return v.Id }
+
+// updateClusterResponse is returned by updateCluster on success.
+type UpdateClusterResponse struct {
+	UpdateCluster UpdateClusterUpdateCluster `json:"updateCluster"`
+}
+
+// GetUpdateCluster returns UpdateClusterResponse.UpdateCluster, and is useful for accessing the field via an interface.
+func (v *UpdateClusterResponse) GetUpdateCluster() UpdateClusterUpdateCluster { return v.UpdateCluster }
+
+// UpdateClusterUpdateCluster includes the requested fields of the GraphQL type Cluster.
+type UpdateClusterUpdateCluster struct {
+	Id uuid.UUID `json:"id"`
+}
+
+// GetId returns UpdateClusterUpdateCluster.Id, and is useful for accessing the field via an interface.
+func (v *UpdateClusterUpdateCluster) GetId() uuid.UUID { return v.Id }
+
+// updateProjectResponse is returned by updateProject on success.
+type UpdateProjectResponse struct {
+	UpdateProject UpdateProjectUpdateProjectRepo `json:"updateProject"`
+}
+
+// GetUpdateProject returns UpdateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
+func (v *UpdateProjectResponse) GetUpdateProject() UpdateProjectUpdateProjectRepo {
+	return v.UpdateProject
+}
+
+// UpdateProjectUpdateProjectRepo includes the requested fields of the GraphQL type Repo.
+type UpdateProjectUpdateProjectRepo struct {
+	// - v0.RepoID
+	Id string `json:"id"`
+}
+
+// GetId returns UpdateProjectUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
+func (v *UpdateProjectUpdateProjectRepo) GetId() string { return v.Id }
+
 type UserFilter struct {
-	Ids *MultiEntityCriterion `json:"ids"`
+	Ids *MultiEntityCriterion `json:"ids,omitempty"`
 }
 
 // GetIds returns UserFilter.Ids, and is useful for accessing the field via an interface.
@@ -873,25 +2028,25 @@ func (v *__GetCloudLinodeInput) GetId() uuid.UUID { return v.Id }
 
 // __buildRepoDefaultBranchInput is used internally by genqlient
 type __buildRepoDefaultBranchInput struct {
-	Id      uuid.UUID `json:"id"`
-	NoCache bool      `json:"noCache"`
+	Id      string `json:"id"`
+	NoCache bool   `json:"noCache"`
 }
 
 // GetId returns __buildRepoDefaultBranchInput.Id, and is useful for accessing the field via an interface.
-func (v *__buildRepoDefaultBranchInput) GetId() uuid.UUID { return v.Id }
+func (v *__buildRepoDefaultBranchInput) GetId() string { return v.Id }
 
 // GetNoCache returns __buildRepoDefaultBranchInput.NoCache, and is useful for accessing the field via an interface.
 func (v *__buildRepoDefaultBranchInput) GetNoCache() bool { return v.NoCache }
 
 // __buildRepoInput is used internally by genqlient
 type __buildRepoInput struct {
-	Id      uuid.UUID `json:"id"`
-	Branch  string    `json:"branch"`
-	NoCache bool      `json:"noCache"`
+	Id      string `json:"id"`
+	Branch  string `json:"branch"`
+	NoCache bool   `json:"noCache"`
 }
 
 // GetId returns __buildRepoInput.Id, and is useful for accessing the field via an interface.
-func (v *__buildRepoInput) GetId() uuid.UUID { return v.Id }
+func (v *__buildRepoInput) GetId() string { return v.Id }
 
 // GetBranch returns __buildRepoInput.Branch, and is useful for accessing the field via an interface.
 func (v *__buildRepoInput) GetBranch() string { return v.Branch }
@@ -909,11 +2064,11 @@ func (v *__deleteBlueprintInput) GetId() uuid.UUID { return v.Id }
 
 // __deleteInput is used internally by genqlient
 type __deleteInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __deleteInput.Id, and is useful for accessing the field via an interface.
-func (v *__deleteInput) GetId() uuid.UUID { return v.Id }
+func (v *__deleteInput) GetId() string { return v.Id }
 
 // __deployRepoBranchInput is used internally by genqlient
 type __deployRepoBranchInput struct {
@@ -929,35 +2084,35 @@ func (v *__deployRepoBranchInput) GetProjectId() uuid.UUID { return v.ProjectId 
 
 // __getBlueprintInput is used internally by genqlient
 type __getBlueprintInput struct {
-	UserID      uuid.UUID `json:"userID"`
+	UserID      string    `json:"userID"`
 	BlueprintID uuid.UUID `json:"blueprintID"`
 }
 
 // GetUserID returns __getBlueprintInput.UserID, and is useful for accessing the field via an interface.
-func (v *__getBlueprintInput) GetUserID() uuid.UUID { return v.UserID }
+func (v *__getBlueprintInput) GetUserID() string { return v.UserID }
 
 // GetBlueprintID returns __getBlueprintInput.BlueprintID, and is useful for accessing the field via an interface.
 func (v *__getBlueprintInput) GetBlueprintID() uuid.UUID { return v.BlueprintID }
 
 // __getBlueprintsInput is used internally by genqlient
 type __getBlueprintsInput struct {
-	UserId    uuid.UUID `json:"userId"`
+	UserId    string    `json:"userId"`
 	PageInput PageInput `json:"pageInput"`
 }
 
 // GetUserId returns __getBlueprintsInput.UserId, and is useful for accessing the field via an interface.
-func (v *__getBlueprintsInput) GetUserId() uuid.UUID { return v.UserId }
+func (v *__getBlueprintsInput) GetUserId() string { return v.UserId }
 
 // GetPageInput returns __getBlueprintsInput.PageInput, and is useful for accessing the field via an interface.
 func (v *__getBlueprintsInput) GetPageInput() PageInput { return v.PageInput }
 
 // __getBuildLogsInput is used internally by genqlient
 type __getBuildLogsInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getBuildLogsInput.Id, and is useful for accessing the field via an interface.
-func (v *__getBuildLogsInput) GetId() uuid.UUID { return v.Id }
+func (v *__getBuildLogsInput) GetId() string { return v.Id }
 
 // __getClusterKubeconfigInput is used internally by genqlient
 type __getClusterKubeconfigInput struct {
@@ -969,35 +2124,35 @@ func (v *__getClusterKubeconfigInput) GetId() uuid.UUID { return v.Id }
 
 // __getDeploymentInfoInput is used internally by genqlient
 type __getDeploymentInfoInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getDeploymentInfoInput.Id, and is useful for accessing the field via an interface.
-func (v *__getDeploymentInfoInput) GetId() uuid.UUID { return v.Id }
+func (v *__getDeploymentInfoInput) GetId() string { return v.Id }
 
 // __getDeploymentLogsInput is used internally by genqlient
 type __getDeploymentLogsInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getDeploymentLogsInput.Id, and is useful for accessing the field via an interface.
-func (v *__getDeploymentLogsInput) GetId() uuid.UUID { return v.Id }
+func (v *__getDeploymentLogsInput) GetId() string { return v.Id }
 
 // __getDeploymentReplicaStatusInput is used internally by genqlient
 type __getDeploymentReplicaStatusInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getDeploymentReplicaStatusInput.Id, and is useful for accessing the field via an interface.
-func (v *__getDeploymentReplicaStatusInput) GetId() uuid.UUID { return v.Id }
+func (v *__getDeploymentReplicaStatusInput) GetId() string { return v.Id }
 
 // __getEnvVarsInput is used internally by genqlient
 type __getEnvVarsInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getEnvVarsInput.Id, and is useful for accessing the field via an interface.
-func (v *__getEnvVarsInput) GetId() uuid.UUID { return v.Id }
+func (v *__getEnvVarsInput) GetId() string { return v.Id }
 
 // __getJobInput is used internally by genqlient
 type __getJobInput struct {
@@ -1037,11 +2192,11 @@ func (v *__getLatestDeploymentInput) GetBranch() string { return v.Branch }
 
 // __getProductionBranchInput is used internally by genqlient
 type __getProductionBranchInput struct {
-	RepoId uuid.UUID `json:"repoId"`
+	RepoId string `json:"repoId"`
 }
 
 // GetRepoId returns __getProductionBranchInput.RepoId, and is useful for accessing the field via an interface.
-func (v *__getProductionBranchInput) GetRepoId() uuid.UUID { return v.RepoId }
+func (v *__getProductionBranchInput) GetRepoId() string { return v.RepoId }
 
 // __getProductionDeploymentInput is used internally by genqlient
 type __getProductionDeploymentInput struct {
@@ -1069,12 +2224,12 @@ func (v *__getProjectPathInput) GetId() uuid.UUID { return v.Id }
 
 // __getProjectV3sInput is used internally by genqlient
 type __getProjectV3sInput struct {
-	UserId *uuid.UUID   `json:"userId"`
-	Filter *FilterInput `json:"filter"`
+	UserId *string      `json:"userId,omitempty"`
+	Filter *FilterInput `json:"filter,omitempty"`
 }
 
 // GetUserId returns __getProjectV3sInput.UserId, and is useful for accessing the field via an interface.
-func (v *__getProjectV3sInput) GetUserId() *uuid.UUID { return v.UserId }
+func (v *__getProjectV3sInput) GetUserId() *string { return v.UserId }
 
 // GetFilter returns __getProjectV3sInput.Filter, and is useful for accessing the field via an interface.
 func (v *__getProjectV3sInput) GetFilter() *FilterInput { return v.Filter }
@@ -1089,11 +2244,11 @@ func (v *__getRepoInput) GetPath() string { return v.Path }
 
 // __getRuntimeLogsInput is used internally by genqlient
 type __getRuntimeLogsInput struct {
-	Id uuid.UUID `json:"id"`
+	Id string `json:"id"`
 }
 
 // GetId returns __getRuntimeLogsInput.Id, and is useful for accessing the field via an interface.
-func (v *__getRuntimeLogsInput) GetId() uuid.UUID { return v.Id }
+func (v *__getRuntimeLogsInput) GetId() string { return v.Id }
 
 // __listClustersForTeamInput is used internally by genqlient
 type __listClustersForTeamInput struct {
@@ -1121,12 +2276,12 @@ func (v *__runJobInput) GetBuild() bool { return v.Build }
 
 // __setEnvVarsInput is used internally by genqlient
 type __setEnvVarsInput struct {
-	Id   uuid.UUID     `json:"id"`
-	Envs []EnvVarInput `json:"envs"`
+	Id   string        `json:"id"`
+	Envs []EnvVarInput `json:"envs,omitempty"`
 }
 
 // GetId returns __setEnvVarsInput.Id, and is useful for accessing the field via an interface.
-func (v *__setEnvVarsInput) GetId() uuid.UUID { return v.Id }
+func (v *__setEnvVarsInput) GetId() string { return v.Id }
 
 // GetEnvs returns __setEnvVarsInput.Envs, and is useful for accessing the field via an interface.
 func (v *__setEnvVarsInput) GetEnvs() []EnvVarInput { return v.Envs }
@@ -1165,1169 +2320,15 @@ func (v *__updateClusterInput) GetFile() string { return v.File }
 
 // __updateProjectInput is used internally by genqlient
 type __updateProjectInput struct {
-	ProjectID uuid.UUID `json:"projectID"`
-	Image     string    `json:"image"`
+	ProjectID string `json:"projectID"`
+	Image     string `json:"image"`
 }
 
 // GetProjectID returns __updateProjectInput.ProjectID, and is useful for accessing the field via an interface.
-func (v *__updateProjectInput) GetProjectID() uuid.UUID { return v.ProjectID }
+func (v *__updateProjectInput) GetProjectID() string { return v.ProjectID }
 
 // GetImage returns __updateProjectInput.Image, and is useful for accessing the field via an interface.
 func (v *__updateProjectInput) GetImage() string { return v.Image }
-
-// buildRepoBuildRepo includes the requested fields of the GraphQL type Repo.
-type buildRepoBuildRepo struct {
-	Deployments []buildRepoBuildRepoDeploymentsDeployment `json:"deployments"`
-}
-
-// GetDeployments returns buildRepoBuildRepo.Deployments, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepo) GetDeployments() []buildRepoBuildRepoDeploymentsDeployment {
-	return v.Deployments
-}
-
-// buildRepoBuildRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
-type buildRepoBuildRepoDeploymentsDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Branch          string           `json:"branch"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-}
-
-// GetId returns buildRepoBuildRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepoDeploymentsDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns buildRepoBuildRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepoDeploymentsDeployment) GetStatus() DeploymentStatus { return v.Status }
-
-// GetBranch returns buildRepoBuildRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepoDeploymentsDeployment) GetBranch() string { return v.Branch }
-
-// GetEndpoints returns buildRepoBuildRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepoDeploymentsDeployment) GetEndpoints() []string { return v.Endpoints }
-
-// GetPrivateEndpoint returns buildRepoBuildRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *buildRepoBuildRepoDeploymentsDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// buildRepoDefaultBranchBuildRepo includes the requested fields of the GraphQL type Repo.
-type buildRepoDefaultBranchBuildRepo struct {
-	Deployments []buildRepoDefaultBranchBuildRepoDeploymentsDeployment `json:"deployments"`
-}
-
-// GetDeployments returns buildRepoDefaultBranchBuildRepo.Deployments, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepo) GetDeployments() []buildRepoDefaultBranchBuildRepoDeploymentsDeployment {
-	return v.Deployments
-}
-
-// buildRepoDefaultBranchBuildRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
-type buildRepoDefaultBranchBuildRepoDeploymentsDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Branch          string           `json:"branch"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-}
-
-// GetId returns buildRepoDefaultBranchBuildRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns buildRepoDefaultBranchBuildRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetStatus() DeploymentStatus {
-	return v.Status
-}
-
-// GetBranch returns buildRepoDefaultBranchBuildRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetBranch() string { return v.Branch }
-
-// GetEndpoints returns buildRepoDefaultBranchBuildRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetEndpoints() []string {
-	return v.Endpoints
-}
-
-// GetPrivateEndpoint returns buildRepoDefaultBranchBuildRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchBuildRepoDeploymentsDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// buildRepoDefaultBranchResponse is returned by buildRepoDefaultBranch on success.
-type buildRepoDefaultBranchResponse struct {
-	BuildRepo buildRepoDefaultBranchBuildRepo `json:"buildRepo"`
-}
-
-// GetBuildRepo returns buildRepoDefaultBranchResponse.BuildRepo, and is useful for accessing the field via an interface.
-func (v *buildRepoDefaultBranchResponse) GetBuildRepo() buildRepoDefaultBranchBuildRepo {
-	return v.BuildRepo
-}
-
-// buildRepoResponse is returned by buildRepo on success.
-type buildRepoResponse struct {
-	BuildRepo buildRepoBuildRepo `json:"buildRepo"`
-}
-
-// GetBuildRepo returns buildRepoResponse.BuildRepo, and is useful for accessing the field via an interface.
-func (v *buildRepoResponse) GetBuildRepo() buildRepoBuildRepo { return v.BuildRepo }
-
-// deleteBlueprintResponse is returned by deleteBlueprint on success.
-type deleteBlueprintResponse struct {
-	DeleteBlueprint bool `json:"deleteBlueprint"`
-}
-
-// GetDeleteBlueprint returns deleteBlueprintResponse.DeleteBlueprint, and is useful for accessing the field via an interface.
-func (v *deleteBlueprintResponse) GetDeleteBlueprint() bool { return v.DeleteBlueprint }
-
-// deleteResponse is returned by delete on success.
-type deleteResponse struct {
-	DeleteRepo bool `json:"deleteRepo"`
-}
-
-// GetDeleteRepo returns deleteResponse.DeleteRepo, and is useful for accessing the field via an interface.
-func (v *deleteResponse) GetDeleteRepo() bool { return v.DeleteRepo }
-
-// deployRepoBranchDeployRepoBranchRepo includes the requested fields of the GraphQL type Repo.
-type deployRepoBranchDeployRepoBranchRepo struct {
-	Deployments []deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment `json:"deployments"`
-}
-
-// GetDeployments returns deployRepoBranchDeployRepoBranchRepo.Deployments, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepo) GetDeployments() []deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment {
-	return v.Deployments
-}
-
-// deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment includes the requested fields of the GraphQL type Deployment.
-type deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Branch          string           `json:"branch"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-}
-
-// GetId returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Id, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Status, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetStatus() DeploymentStatus {
-	return v.Status
-}
-
-// GetBranch returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Branch, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetBranch() string {
-	return v.Branch
-}
-
-// GetEndpoints returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetEndpoints() []string {
-	return v.Endpoints
-}
-
-// GetPrivateEndpoint returns deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchDeployRepoBranchRepoDeploymentsDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// deployRepoBranchResponse is returned by deployRepoBranch on success.
-type deployRepoBranchResponse struct {
-	DeployRepoBranch deployRepoBranchDeployRepoBranchRepo `json:"deployRepoBranch"`
-}
-
-// GetDeployRepoBranch returns deployRepoBranchResponse.DeployRepoBranch, and is useful for accessing the field via an interface.
-func (v *deployRepoBranchResponse) GetDeployRepoBranch() deployRepoBranchDeployRepoBranchRepo {
-	return v.DeployRepoBranch
-}
-
-// getBlueprintResponse is returned by getBlueprint on success.
-type getBlueprintResponse struct {
-	User getBlueprintUser `json:"user"`
-}
-
-// GetUser returns getBlueprintResponse.User, and is useful for accessing the field via an interface.
-func (v *getBlueprintResponse) GetUser() getBlueprintUser { return v.User }
-
-// getBlueprintUser includes the requested fields of the GraphQL type User.
-type getBlueprintUser struct {
-	Blueprint getBlueprintUserBlueprint `json:"blueprint"`
-}
-
-// GetBlueprint returns getBlueprintUser.Blueprint, and is useful for accessing the field via an interface.
-func (v *getBlueprintUser) GetBlueprint() getBlueprintUserBlueprint { return v.Blueprint }
-
-// getBlueprintUserBlueprint includes the requested fields of the GraphQL type Blueprint.
-type getBlueprintUserBlueprint struct {
-	BlueprintSummary `json:"-"`
-}
-
-// GetId returns getBlueprintUserBlueprint.Id, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetId() uuid.UUID { return v.BlueprintSummary.Id }
-
-// GetSlug returns getBlueprintUserBlueprint.Slug, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetSlug() string { return v.BlueprintSummary.Slug }
-
-// GetDisplayName returns getBlueprintUserBlueprint.DisplayName, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetDisplayName() string { return v.BlueprintSummary.DisplayName }
-
-// GetDescription returns getBlueprintUserBlueprint.Description, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetDescription() string { return v.BlueprintSummary.Description }
-
-// GetType returns getBlueprintUserBlueprint.Type, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetType() BlueprintType { return v.BlueprintSummary.Type }
-
-// GetProjectCount returns getBlueprintUserBlueprint.ProjectCount, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetProjectCount() int { return v.BlueprintSummary.ProjectCount }
-
-// GetRichInputSchema returns getBlueprintUserBlueprint.RichInputSchema, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetRichInputSchema() string {
-	return v.BlueprintSummary.RichInputSchema
-}
-
-// GetTags returns getBlueprintUserBlueprint.Tags, and is useful for accessing the field via an interface.
-func (v *getBlueprintUserBlueprint) GetTags() []string { return v.BlueprintSummary.Tags }
-
-func (v *getBlueprintUserBlueprint) UnmarshalJSON(b []byte) error {
-
-	if string(b) == "null" {
-		return nil
-	}
-
-	var firstPass struct {
-		*getBlueprintUserBlueprint
-		graphql.NoUnmarshalJSON
-	}
-	firstPass.getBlueprintUserBlueprint = v
-
-	err := json.Unmarshal(b, &firstPass)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(
-		b, &v.BlueprintSummary)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-type __premarshalgetBlueprintUserBlueprint struct {
-	Id uuid.UUID `json:"id"`
-
-	Slug string `json:"slug"`
-
-	DisplayName string `json:"displayName"`
-
-	Description string `json:"description"`
-
-	Type BlueprintType `json:"type"`
-
-	ProjectCount int `json:"projectCount"`
-
-	RichInputSchema string `json:"richInputSchema"`
-
-	Tags []string `json:"tags"`
-}
-
-func (v *getBlueprintUserBlueprint) MarshalJSON() ([]byte, error) {
-	premarshaled, err := v.__premarshalJSON()
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(premarshaled)
-}
-
-func (v *getBlueprintUserBlueprint) __premarshalJSON() (*__premarshalgetBlueprintUserBlueprint, error) {
-	var retval __premarshalgetBlueprintUserBlueprint
-
-	retval.Id = v.BlueprintSummary.Id
-	retval.Slug = v.BlueprintSummary.Slug
-	retval.DisplayName = v.BlueprintSummary.DisplayName
-	retval.Description = v.BlueprintSummary.Description
-	retval.Type = v.BlueprintSummary.Type
-	retval.ProjectCount = v.BlueprintSummary.ProjectCount
-	retval.RichInputSchema = v.BlueprintSummary.RichInputSchema
-	retval.Tags = v.BlueprintSummary.Tags
-	return &retval, nil
-}
-
-// getBlueprintsResponse is returned by getBlueprints on success.
-type getBlueprintsResponse struct {
-	User getBlueprintsUser `json:"user"`
-}
-
-// GetUser returns getBlueprintsResponse.User, and is useful for accessing the field via an interface.
-func (v *getBlueprintsResponse) GetUser() getBlueprintsUser { return v.User }
-
-// getBlueprintsUser includes the requested fields of the GraphQL type User.
-type getBlueprintsUser struct {
-	Blueprints BlueprintConnection `json:"blueprints"`
-}
-
-// GetBlueprints returns getBlueprintsUser.Blueprints, and is useful for accessing the field via an interface.
-func (v *getBlueprintsUser) GetBlueprints() BlueprintConnection { return v.Blueprints }
-
-// getBuildLogsCurrentUser includes the requested fields of the GraphQL type User.
-type getBuildLogsCurrentUser struct {
-	Deployment getBuildLogsCurrentUserDeployment `json:"deployment"`
-}
-
-// GetDeployment returns getBuildLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUser) GetDeployment() getBuildLogsCurrentUserDeployment {
-	return v.Deployment
-}
-
-// getBuildLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
-type getBuildLogsCurrentUserDeployment struct {
-	Build getBuildLogsCurrentUserDeploymentBuild `json:"build"`
-}
-
-// GetBuild returns getBuildLogsCurrentUserDeployment.Build, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUserDeployment) GetBuild() getBuildLogsCurrentUserDeploymentBuild {
-	return v.Build
-}
-
-// getBuildLogsCurrentUserDeploymentBuild includes the requested fields of the GraphQL type Build.
-type getBuildLogsCurrentUserDeploymentBuild struct {
-	Logs getBuildLogsCurrentUserDeploymentBuildLogs `json:"logs"`
-}
-
-// GetLogs returns getBuildLogsCurrentUserDeploymentBuild.Logs, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUserDeploymentBuild) GetLogs() getBuildLogsCurrentUserDeploymentBuildLogs {
-	return v.Logs
-}
-
-// getBuildLogsCurrentUserDeploymentBuildLogs includes the requested fields of the GraphQL type Logs.
-type getBuildLogsCurrentUserDeploymentBuildLogs struct {
-	Entries []getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry `json:"entries"`
-}
-
-// GetEntries returns getBuildLogsCurrentUserDeploymentBuildLogs.Entries, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUserDeploymentBuildLogs) GetEntries() []getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry {
-	return v.Entries
-}
-
-// getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry struct {
-	Text      string    `json:"text"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
-// GetText returns getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry) GetText() string { return v.Text }
-
-// GetTimestamp returns getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getBuildLogsCurrentUserDeploymentBuildLogsEntriesLogEntry) GetTimestamp() time.Time {
-	return v.Timestamp
-}
-
-// getBuildLogsResponse is returned by getBuildLogs on success.
-type getBuildLogsResponse struct {
-	CurrentUser getBuildLogsCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getBuildLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getBuildLogsResponse) GetCurrentUser() getBuildLogsCurrentUser { return v.CurrentUser }
-
-// getClusterKubeconfigCurrentUser includes the requested fields of the GraphQL type User.
-type getClusterKubeconfigCurrentUser struct {
-	Cluster getClusterKubeconfigCurrentUserCluster `json:"cluster"`
-}
-
-// GetCluster returns getClusterKubeconfigCurrentUser.Cluster, and is useful for accessing the field via an interface.
-func (v *getClusterKubeconfigCurrentUser) GetCluster() getClusterKubeconfigCurrentUserCluster {
-	return v.Cluster
-}
-
-// getClusterKubeconfigCurrentUserCluster includes the requested fields of the GraphQL type Cluster.
-type getClusterKubeconfigCurrentUserCluster struct {
-	Id         uuid.UUID `json:"id"`
-	Name       string    `json:"name"`
-	Kubeconfig string    `json:"kubeconfig"`
-}
-
-// GetId returns getClusterKubeconfigCurrentUserCluster.Id, and is useful for accessing the field via an interface.
-func (v *getClusterKubeconfigCurrentUserCluster) GetId() uuid.UUID { return v.Id }
-
-// GetName returns getClusterKubeconfigCurrentUserCluster.Name, and is useful for accessing the field via an interface.
-func (v *getClusterKubeconfigCurrentUserCluster) GetName() string { return v.Name }
-
-// GetKubeconfig returns getClusterKubeconfigCurrentUserCluster.Kubeconfig, and is useful for accessing the field via an interface.
-func (v *getClusterKubeconfigCurrentUserCluster) GetKubeconfig() string { return v.Kubeconfig }
-
-// getClusterKubeconfigResponse is returned by getClusterKubeconfig on success.
-type getClusterKubeconfigResponse struct {
-	CurrentUser getClusterKubeconfigCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getClusterKubeconfigResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getClusterKubeconfigResponse) GetCurrentUser() getClusterKubeconfigCurrentUser {
-	return v.CurrentUser
-}
-
-// getCurrentUserCurrentUser includes the requested fields of the GraphQL type User.
-type getCurrentUserCurrentUser struct {
-	Id    uuid.UUID `json:"id"`
-	Login string    `json:"login"`
-}
-
-// GetId returns getCurrentUserCurrentUser.Id, and is useful for accessing the field via an interface.
-func (v *getCurrentUserCurrentUser) GetId() uuid.UUID { return v.Id }
-
-// GetLogin returns getCurrentUserCurrentUser.Login, and is useful for accessing the field via an interface.
-func (v *getCurrentUserCurrentUser) GetLogin() string { return v.Login }
-
-// getCurrentUserResponse is returned by getCurrentUser on success.
-type getCurrentUserResponse struct {
-	CurrentUser getCurrentUserCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getCurrentUserResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getCurrentUserResponse) GetCurrentUser() getCurrentUserCurrentUser { return v.CurrentUser }
-
-// getDeploymentInfoCurrentUser includes the requested fields of the GraphQL type User.
-type getDeploymentInfoCurrentUser struct {
-	Deployment getDeploymentInfoCurrentUserDeployment `json:"deployment"`
-}
-
-// GetDeployment returns getDeploymentInfoCurrentUser.Deployment, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUser) GetDeployment() getDeploymentInfoCurrentUserDeployment {
-	return v.Deployment
-}
-
-// getDeploymentInfoCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
-type getDeploymentInfoCurrentUserDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-	ErrorMessage    string           `json:"errorMessage"`
-}
-
-// GetId returns getDeploymentInfoCurrentUserDeployment.Id, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUserDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns getDeploymentInfoCurrentUserDeployment.Status, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUserDeployment) GetStatus() DeploymentStatus { return v.Status }
-
-// GetEndpoints returns getDeploymentInfoCurrentUserDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUserDeployment) GetEndpoints() []string { return v.Endpoints }
-
-// GetPrivateEndpoint returns getDeploymentInfoCurrentUserDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUserDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// GetErrorMessage returns getDeploymentInfoCurrentUserDeployment.ErrorMessage, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoCurrentUserDeployment) GetErrorMessage() string { return v.ErrorMessage }
-
-// getDeploymentInfoResponse is returned by getDeploymentInfo on success.
-type getDeploymentInfoResponse struct {
-	CurrentUser getDeploymentInfoCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getDeploymentInfoResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getDeploymentInfoResponse) GetCurrentUser() getDeploymentInfoCurrentUser {
-	return v.CurrentUser
-}
-
-// getDeploymentLogsCurrentUser includes the requested fields of the GraphQL type User.
-type getDeploymentLogsCurrentUser struct {
-	Deployment getDeploymentLogsCurrentUserDeployment `json:"deployment"`
-}
-
-// GetDeployment returns getDeploymentLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUser) GetDeployment() getDeploymentLogsCurrentUserDeployment {
-	return v.Deployment
-}
-
-// getDeploymentLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
-type getDeploymentLogsCurrentUserDeployment struct {
-	DeployStep getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep `json:"deployStep"`
-}
-
-// GetDeployStep returns getDeploymentLogsCurrentUserDeployment.DeployStep, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeployment) GetDeployStep() getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep {
-	return v.DeployStep
-}
-
-// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep includes the requested fields of the GraphQL type PipelineStep.
-type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep struct {
-	Logs getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs `json:"logs"`
-}
-
-// GetLogs returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep.Logs, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStep) GetLogs() getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs {
-	return v.Logs
-}
-
-// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs includes the requested fields of the GraphQL type Logs.
-type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs struct {
-	Entries []getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry `json:"entries"`
-}
-
-// GetEntries returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs.Entries, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogs) GetEntries() []getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry {
-	return v.Entries
-}
-
-// getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry struct {
-	Text      string    `json:"text"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
-// GetText returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetText() string {
-	return v.Text
-}
-
-// GetTimestamp returns getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsCurrentUserDeploymentDeployStepPipelineStepLogsEntriesLogEntry) GetTimestamp() time.Time {
-	return v.Timestamp
-}
-
-// getDeploymentLogsResponse is returned by getDeploymentLogs on success.
-type getDeploymentLogsResponse struct {
-	CurrentUser getDeploymentLogsCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getDeploymentLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getDeploymentLogsResponse) GetCurrentUser() getDeploymentLogsCurrentUser {
-	return v.CurrentUser
-}
-
-// getDeploymentReplicaStatusCurrentUser includes the requested fields of the GraphQL type User.
-type getDeploymentReplicaStatusCurrentUser struct {
-	Deployment getDeploymentReplicaStatusCurrentUserDeployment `json:"deployment"`
-}
-
-// GetDeployment returns getDeploymentReplicaStatusCurrentUser.Deployment, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUser) GetDeployment() getDeploymentReplicaStatusCurrentUserDeployment {
-	return v.Deployment
-}
-
-// getDeploymentReplicaStatusCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
-type getDeploymentReplicaStatusCurrentUserDeployment struct {
-	DeployStatus getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus `json:"deployStatus"`
-}
-
-// GetDeployStatus returns getDeploymentReplicaStatusCurrentUserDeployment.DeployStatus, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeployment) GetDeployStatus() getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus {
-	return v.DeployStatus
-}
-
-// getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus includes the requested fields of the GraphQL type DeployStatus.
-type getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus struct {
-	Replicas        int    `json:"replicas"`
-	ReadyReplicas   int    `json:"readyReplicas"`
-	RunningReplicas int    `json:"runningReplicas"`
-	State           string `json:"state"`
-	ErrorMessage    string `json:"errorMessage"`
-}
-
-// GetReplicas returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.Replicas, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetReplicas() int {
-	return v.Replicas
-}
-
-// GetReadyReplicas returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.ReadyReplicas, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetReadyReplicas() int {
-	return v.ReadyReplicas
-}
-
-// GetRunningReplicas returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.RunningReplicas, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetRunningReplicas() int {
-	return v.RunningReplicas
-}
-
-// GetState returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.State, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetState() string {
-	return v.State
-}
-
-// GetErrorMessage returns getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus.ErrorMessage, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusCurrentUserDeploymentDeployStatus) GetErrorMessage() string {
-	return v.ErrorMessage
-}
-
-// getDeploymentReplicaStatusResponse is returned by getDeploymentReplicaStatus on success.
-type getDeploymentReplicaStatusResponse struct {
-	CurrentUser getDeploymentReplicaStatusCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getDeploymentReplicaStatusResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getDeploymentReplicaStatusResponse) GetCurrentUser() getDeploymentReplicaStatusCurrentUser {
-	return v.CurrentUser
-}
-
-// getEnvVarsCurrentUser includes the requested fields of the GraphQL type User.
-type getEnvVarsCurrentUser struct {
-	Repo getEnvVarsCurrentUserRepo `json:"repo"`
-}
-
-// GetRepo returns getEnvVarsCurrentUser.Repo, and is useful for accessing the field via an interface.
-func (v *getEnvVarsCurrentUser) GetRepo() getEnvVarsCurrentUserRepo { return v.Repo }
-
-// getEnvVarsCurrentUserRepo includes the requested fields of the GraphQL type Repo.
-type getEnvVarsCurrentUserRepo struct {
-	Envs []getEnvVarsCurrentUserRepoEnvsEnvVar `json:"envs"`
-}
-
-// GetEnvs returns getEnvVarsCurrentUserRepo.Envs, and is useful for accessing the field via an interface.
-func (v *getEnvVarsCurrentUserRepo) GetEnvs() []getEnvVarsCurrentUserRepoEnvsEnvVar { return v.Envs }
-
-// getEnvVarsCurrentUserRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
-type getEnvVarsCurrentUserRepoEnvsEnvVar struct {
-	Name  string `json:"name"`
-	Value string `json:"value"`
-}
-
-// GetName returns getEnvVarsCurrentUserRepoEnvsEnvVar.Name, and is useful for accessing the field via an interface.
-func (v *getEnvVarsCurrentUserRepoEnvsEnvVar) GetName() string { return v.Name }
-
-// GetValue returns getEnvVarsCurrentUserRepoEnvsEnvVar.Value, and is useful for accessing the field via an interface.
-func (v *getEnvVarsCurrentUserRepoEnvsEnvVar) GetValue() string { return v.Value }
-
-// getEnvVarsResponse is returned by getEnvVars on success.
-type getEnvVarsResponse struct {
-	CurrentUser getEnvVarsCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getEnvVarsResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getEnvVarsResponse) GetCurrentUser() getEnvVarsCurrentUser { return v.CurrentUser }
-
-// getJobLogsRepo includes the requested fields of the GraphQL type Repo.
-type getJobLogsRepo struct {
-	JobRun getJobLogsRepoJobRun `json:"jobRun"`
-}
-
-// GetJobRun returns getJobLogsRepo.JobRun, and is useful for accessing the field via an interface.
-func (v *getJobLogsRepo) GetJobRun() getJobLogsRepoJobRun { return v.JobRun }
-
-// getJobLogsRepoJobRun includes the requested fields of the GraphQL type JobRun.
-type getJobLogsRepoJobRun struct {
-	Logs getJobLogsRepoJobRunLogs `json:"logs"`
-}
-
-// GetLogs returns getJobLogsRepoJobRun.Logs, and is useful for accessing the field via an interface.
-func (v *getJobLogsRepoJobRun) GetLogs() getJobLogsRepoJobRunLogs { return v.Logs }
-
-// getJobLogsRepoJobRunLogs includes the requested fields of the GraphQL type Logs.
-type getJobLogsRepoJobRunLogs struct {
-	Entries []getJobLogsRepoJobRunLogsEntriesLogEntry `json:"entries"`
-}
-
-// GetEntries returns getJobLogsRepoJobRunLogs.Entries, and is useful for accessing the field via an interface.
-func (v *getJobLogsRepoJobRunLogs) GetEntries() []getJobLogsRepoJobRunLogsEntriesLogEntry {
-	return v.Entries
-}
-
-// getJobLogsRepoJobRunLogsEntriesLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getJobLogsRepoJobRunLogsEntriesLogEntry struct {
-	Text      string    `json:"text"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
-// GetText returns getJobLogsRepoJobRunLogsEntriesLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getJobLogsRepoJobRunLogsEntriesLogEntry) GetText() string { return v.Text }
-
-// GetTimestamp returns getJobLogsRepoJobRunLogsEntriesLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getJobLogsRepoJobRunLogsEntriesLogEntry) GetTimestamp() time.Time { return v.Timestamp }
-
-// getJobLogsResponse is returned by getJobLogs on success.
-type getJobLogsResponse struct {
-	Repo getJobLogsRepo `json:"repo"`
-}
-
-// GetRepo returns getJobLogsResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getJobLogsResponse) GetRepo() getJobLogsRepo { return v.Repo }
-
-// getJobRepo includes the requested fields of the GraphQL type Repo.
-type getJobRepo struct {
-	JobRun getJobRepoJobRun `json:"jobRun"`
-}
-
-// GetJobRun returns getJobRepo.JobRun, and is useful for accessing the field via an interface.
-func (v *getJobRepo) GetJobRun() getJobRepoJobRun { return v.JobRun }
-
-// getJobRepoJobRun includes the requested fields of the GraphQL type JobRun.
-type getJobRepoJobRun struct {
-	Id    uuid.UUID   `json:"id"`
-	State JobRunState `json:"state"`
-}
-
-// GetId returns getJobRepoJobRun.Id, and is useful for accessing the field via an interface.
-func (v *getJobRepoJobRun) GetId() uuid.UUID { return v.Id }
-
-// GetState returns getJobRepoJobRun.State, and is useful for accessing the field via an interface.
-func (v *getJobRepoJobRun) GetState() JobRunState { return v.State }
-
-// getJobResponse is returned by getJob on success.
-type getJobResponse struct {
-	Repo getJobRepo `json:"repo"`
-}
-
-// GetRepo returns getJobResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getJobResponse) GetRepo() getJobRepo { return v.Repo }
-
-// getLatestDeploymentRepo includes the requested fields of the GraphQL type Repo.
-type getLatestDeploymentRepo struct {
-	Branch getLatestDeploymentRepoBranchRepoBranchV2 `json:"branch"`
-}
-
-// GetBranch returns getLatestDeploymentRepo.Branch, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepo) GetBranch() getLatestDeploymentRepoBranchRepoBranchV2 {
-	return v.Branch
-}
-
-// getLatestDeploymentRepoBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
-type getLatestDeploymentRepoBranchRepoBranchV2 struct {
-	LatestDeployment getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment `json:"latestDeployment"`
-}
-
-// GetLatestDeployment returns getLatestDeploymentRepoBranchRepoBranchV2.LatestDeployment, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2) GetLatestDeployment() getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment {
-	return v.LatestDeployment
-}
-
-// getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment includes the requested fields of the GraphQL type Deployment.
-type getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Branch          string           `json:"branch"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-}
-
-// GetId returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Id, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Status, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetStatus() DeploymentStatus {
-	return v.Status
-}
-
-// GetBranch returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Branch, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetBranch() string {
-	return v.Branch
-}
-
-// GetEndpoints returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetEndpoints() []string {
-	return v.Endpoints
-}
-
-// GetPrivateEndpoint returns getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentRepoBranchRepoBranchV2LatestDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// getLatestDeploymentResponse is returned by getLatestDeployment on success.
-type getLatestDeploymentResponse struct {
-	Repo getLatestDeploymentRepo `json:"repo"`
-}
-
-// GetRepo returns getLatestDeploymentResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getLatestDeploymentResponse) GetRepo() getLatestDeploymentRepo { return v.Repo }
-
-// getProductionBranchCurrentUser includes the requested fields of the GraphQL type User.
-type getProductionBranchCurrentUser struct {
-	Repo getProductionBranchCurrentUserRepo `json:"repo"`
-}
-
-// GetRepo returns getProductionBranchCurrentUser.Repo, and is useful for accessing the field via an interface.
-func (v *getProductionBranchCurrentUser) GetRepo() getProductionBranchCurrentUserRepo { return v.Repo }
-
-// getProductionBranchCurrentUserRepo includes the requested fields of the GraphQL type Repo.
-type getProductionBranchCurrentUserRepo struct {
-	// - v0.RepoID
-	Id                 uuid.UUID                                                        `json:"id"`
-	ProductionBranchV2 getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 `json:"productionBranchV2"`
-}
-
-// GetId returns getProductionBranchCurrentUserRepo.Id, and is useful for accessing the field via an interface.
-func (v *getProductionBranchCurrentUserRepo) GetId() uuid.UUID { return v.Id }
-
-// GetProductionBranchV2 returns getProductionBranchCurrentUserRepo.ProductionBranchV2, and is useful for accessing the field via an interface.
-func (v *getProductionBranchCurrentUserRepo) GetProductionBranchV2() getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 {
-	return v.ProductionBranchV2
-}
-
-// getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
-type getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2 struct {
-	Name string `json:"name"`
-}
-
-// GetName returns getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2.Name, and is useful for accessing the field via an interface.
-func (v *getProductionBranchCurrentUserRepoProductionBranchV2RepoBranchV2) GetName() string {
-	return v.Name
-}
-
-// getProductionBranchResponse is returned by getProductionBranch on success.
-type getProductionBranchResponse struct {
-	CurrentUser getProductionBranchCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getProductionBranchResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getProductionBranchResponse) GetCurrentUser() getProductionBranchCurrentUser {
-	return v.CurrentUser
-}
-
-// getProductionDeploymentRepo includes the requested fields of the GraphQL type Repo.
-type getProductionDeploymentRepo struct {
-	ProductionDeployment getProductionDeploymentRepoProductionDeployment `json:"productionDeployment"`
-}
-
-// GetProductionDeployment returns getProductionDeploymentRepo.ProductionDeployment, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentRepo) GetProductionDeployment() getProductionDeploymentRepoProductionDeployment {
-	return v.ProductionDeployment
-}
-
-// getProductionDeploymentRepoProductionDeployment includes the requested fields of the GraphQL type Deployment.
-type getProductionDeploymentRepoProductionDeployment struct {
-	Id              uuid.UUID        `json:"id"`
-	Status          DeploymentStatus `json:"status"`
-	Endpoints       []string         `json:"endpoints"`
-	PrivateEndpoint string           `json:"privateEndpoint"`
-}
-
-// GetId returns getProductionDeploymentRepoProductionDeployment.Id, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentRepoProductionDeployment) GetId() uuid.UUID { return v.Id }
-
-// GetStatus returns getProductionDeploymentRepoProductionDeployment.Status, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentRepoProductionDeployment) GetStatus() DeploymentStatus {
-	return v.Status
-}
-
-// GetEndpoints returns getProductionDeploymentRepoProductionDeployment.Endpoints, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentRepoProductionDeployment) GetEndpoints() []string { return v.Endpoints }
-
-// GetPrivateEndpoint returns getProductionDeploymentRepoProductionDeployment.PrivateEndpoint, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentRepoProductionDeployment) GetPrivateEndpoint() string {
-	return v.PrivateEndpoint
-}
-
-// getProductionDeploymentResponse is returned by getProductionDeployment on success.
-type getProductionDeploymentResponse struct {
-	Repo getProductionDeploymentRepo `json:"repo"`
-}
-
-// GetRepo returns getProductionDeploymentResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getProductionDeploymentResponse) GetRepo() getProductionDeploymentRepo { return v.Repo }
-
-// getProjectByPathRepo includes the requested fields of the GraphQL type Repo.
-type getProjectByPathRepo struct {
-	// - v0.RepoID
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns getProjectByPathRepo.Id, and is useful for accessing the field via an interface.
-func (v *getProjectByPathRepo) GetId() uuid.UUID { return v.Id }
-
-// getProjectByPathResponse is returned by getProjectByPath on success.
-type getProjectByPathResponse struct {
-	Repo getProjectByPathRepo `json:"repo"`
-}
-
-// GetRepo returns getProjectByPathResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectByPathResponse) GetRepo() getProjectByPathRepo { return v.Repo }
-
-// getProjectPathRepo includes the requested fields of the GraphQL type Repo.
-type getProjectPathRepo struct {
-	FullPath string `json:"fullPath"`
-}
-
-// GetFullPath returns getProjectPathRepo.FullPath, and is useful for accessing the field via an interface.
-func (v *getProjectPathRepo) GetFullPath() string { return v.FullPath }
-
-// getProjectPathResponse is returned by getProjectPath on success.
-type getProjectPathResponse struct {
-	Repo getProjectPathRepo `json:"repo"`
-}
-
-// GetRepo returns getProjectPathResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getProjectPathResponse) GetRepo() getProjectPathRepo { return v.Repo }
-
-// getProjectV3sResponse is returned by getProjectV3s on success.
-type getProjectV3sResponse struct {
-	User *getProjectV3sUser `json:"user"`
-}
-
-// GetUser returns getProjectV3sResponse.User, and is useful for accessing the field via an interface.
-func (v *getProjectV3sResponse) GetUser() *getProjectV3sUser { return v.User }
-
-// getProjectV3sUser includes the requested fields of the GraphQL type User.
-type getProjectV3sUser struct {
-	ProjectV3Adapters *ProjectV3AdapterConnection `json:"projectV3Adapters"`
-}
-
-// GetProjectV3Adapters returns getProjectV3sUser.ProjectV3Adapters, and is useful for accessing the field via an interface.
-func (v *getProjectV3sUser) GetProjectV3Adapters() *ProjectV3AdapterConnection {
-	return v.ProjectV3Adapters
-}
-
-// getRepoRepo includes the requested fields of the GraphQL type Repo.
-type getRepoRepo struct {
-	// - v0.RepoID
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns getRepoRepo.Id, and is useful for accessing the field via an interface.
-func (v *getRepoRepo) GetId() uuid.UUID { return v.Id }
-
-// getRepoResponse is returned by getRepo on success.
-type getRepoResponse struct {
-	Repo getRepoRepo `json:"repo"`
-}
-
-// GetRepo returns getRepoResponse.Repo, and is useful for accessing the field via an interface.
-func (v *getRepoResponse) GetRepo() getRepoRepo { return v.Repo }
-
-// getRuntimeLogsCurrentUser includes the requested fields of the GraphQL type User.
-type getRuntimeLogsCurrentUser struct {
-	Deployment getRuntimeLogsCurrentUserDeployment `json:"deployment"`
-}
-
-// GetDeployment returns getRuntimeLogsCurrentUser.Deployment, and is useful for accessing the field via an interface.
-func (v *getRuntimeLogsCurrentUser) GetDeployment() getRuntimeLogsCurrentUserDeployment {
-	return v.Deployment
-}
-
-// getRuntimeLogsCurrentUserDeployment includes the requested fields of the GraphQL type Deployment.
-type getRuntimeLogsCurrentUserDeployment struct {
-	Logs []getRuntimeLogsCurrentUserDeploymentLogsLogEntry `json:"logs"`
-}
-
-// GetLogs returns getRuntimeLogsCurrentUserDeployment.Logs, and is useful for accessing the field via an interface.
-func (v *getRuntimeLogsCurrentUserDeployment) GetLogs() []getRuntimeLogsCurrentUserDeploymentLogsLogEntry {
-	return v.Logs
-}
-
-// getRuntimeLogsCurrentUserDeploymentLogsLogEntry includes the requested fields of the GraphQL type LogEntry.
-type getRuntimeLogsCurrentUserDeploymentLogsLogEntry struct {
-	Text      string    `json:"text"`
-	Timestamp time.Time `json:"timestamp"`
-}
-
-// GetText returns getRuntimeLogsCurrentUserDeploymentLogsLogEntry.Text, and is useful for accessing the field via an interface.
-func (v *getRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetText() string { return v.Text }
-
-// GetTimestamp returns getRuntimeLogsCurrentUserDeploymentLogsLogEntry.Timestamp, and is useful for accessing the field via an interface.
-func (v *getRuntimeLogsCurrentUserDeploymentLogsLogEntry) GetTimestamp() time.Time {
-	return v.Timestamp
-}
-
-// getRuntimeLogsResponse is returned by getRuntimeLogs on success.
-type getRuntimeLogsResponse struct {
-	CurrentUser getRuntimeLogsCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns getRuntimeLogsResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *getRuntimeLogsResponse) GetCurrentUser() getRuntimeLogsCurrentUser { return v.CurrentUser }
-
-// listClustersCurrentUser includes the requested fields of the GraphQL type User.
-type listClustersCurrentUser struct {
-	Clusters []listClustersCurrentUserClustersCluster `json:"clusters"`
-}
-
-// GetClusters returns listClustersCurrentUser.Clusters, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUser) GetClusters() []listClustersCurrentUserClustersCluster {
-	return v.Clusters
-}
-
-// listClustersCurrentUserClustersCluster includes the requested fields of the GraphQL type Cluster.
-type listClustersCurrentUserClustersCluster struct {
-	Id              uuid.UUID       `json:"id"`
-	Name            string          `json:"name"`
-	CloudProvider   CloudProvider   `json:"cloudProvider"`
-	ClusterProvider ClusterProvider `json:"clusterProvider"`
-	Region          string          `json:"region"`
-	Connected       bool            `json:"connected"`
-}
-
-// GetId returns listClustersCurrentUserClustersCluster.Id, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetId() uuid.UUID { return v.Id }
-
-// GetName returns listClustersCurrentUserClustersCluster.Name, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetName() string { return v.Name }
-
-// GetCloudProvider returns listClustersCurrentUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetCloudProvider() CloudProvider {
-	return v.CloudProvider
-}
-
-// GetClusterProvider returns listClustersCurrentUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetClusterProvider() ClusterProvider {
-	return v.ClusterProvider
-}
-
-// GetRegion returns listClustersCurrentUserClustersCluster.Region, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetRegion() string { return v.Region }
-
-// GetConnected returns listClustersCurrentUserClustersCluster.Connected, and is useful for accessing the field via an interface.
-func (v *listClustersCurrentUserClustersCluster) GetConnected() bool { return v.Connected }
-
-// listClustersForTeamResponse is returned by listClustersForTeam on success.
-type listClustersForTeamResponse struct {
-	Team listClustersForTeamTeam `json:"team"`
-}
-
-// GetTeam returns listClustersForTeamResponse.Team, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamResponse) GetTeam() listClustersForTeamTeam { return v.Team }
-
-// listClustersForTeamTeam includes the requested fields of the GraphQL type Team.
-type listClustersForTeamTeam struct {
-	User listClustersForTeamTeamUser `json:"user"`
-}
-
-// GetUser returns listClustersForTeamTeam.User, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeam) GetUser() listClustersForTeamTeamUser { return v.User }
-
-// listClustersForTeamTeamUser includes the requested fields of the GraphQL type User.
-type listClustersForTeamTeamUser struct {
-	Clusters []listClustersForTeamTeamUserClustersCluster `json:"clusters"`
-}
-
-// GetClusters returns listClustersForTeamTeamUser.Clusters, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUser) GetClusters() []listClustersForTeamTeamUserClustersCluster {
-	return v.Clusters
-}
-
-// listClustersForTeamTeamUserClustersCluster includes the requested fields of the GraphQL type Cluster.
-type listClustersForTeamTeamUserClustersCluster struct {
-	Id              uuid.UUID       `json:"id"`
-	Name            string          `json:"name"`
-	CloudProvider   CloudProvider   `json:"cloudProvider"`
-	ClusterProvider ClusterProvider `json:"clusterProvider"`
-	Region          string          `json:"region"`
-	Connected       bool            `json:"connected"`
-}
-
-// GetId returns listClustersForTeamTeamUserClustersCluster.Id, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetId() uuid.UUID { return v.Id }
-
-// GetName returns listClustersForTeamTeamUserClustersCluster.Name, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetName() string { return v.Name }
-
-// GetCloudProvider returns listClustersForTeamTeamUserClustersCluster.CloudProvider, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetCloudProvider() CloudProvider {
-	return v.CloudProvider
-}
-
-// GetClusterProvider returns listClustersForTeamTeamUserClustersCluster.ClusterProvider, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetClusterProvider() ClusterProvider {
-	return v.ClusterProvider
-}
-
-// GetRegion returns listClustersForTeamTeamUserClustersCluster.Region, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetRegion() string { return v.Region }
-
-// GetConnected returns listClustersForTeamTeamUserClustersCluster.Connected, and is useful for accessing the field via an interface.
-func (v *listClustersForTeamTeamUserClustersCluster) GetConnected() bool { return v.Connected }
-
-// listClustersResponse is returned by listClusters on success.
-type listClustersResponse struct {
-	CurrentUser listClustersCurrentUser `json:"currentUser"`
-}
-
-// GetCurrentUser returns listClustersResponse.CurrentUser, and is useful for accessing the field via an interface.
-func (v *listClustersResponse) GetCurrentUser() listClustersCurrentUser { return v.CurrentUser }
-
-// runJobResponse is returned by runJob on success.
-type runJobResponse struct {
-	RunJob runJobRunJobJobRun `json:"runJob"`
-}
-
-// GetRunJob returns runJobResponse.RunJob, and is useful for accessing the field via an interface.
-func (v *runJobResponse) GetRunJob() runJobRunJobJobRun { return v.RunJob }
-
-// runJobRunJobJobRun includes the requested fields of the GraphQL type JobRun.
-type runJobRunJobJobRun struct {
-	State JobRunState `json:"state"`
-	Id    uuid.UUID   `json:"id"`
-}
-
-// GetState returns runJobRunJobJobRun.State, and is useful for accessing the field via an interface.
-func (v *runJobRunJobJobRun) GetState() JobRunState { return v.State }
-
-// GetId returns runJobRunJobJobRun.Id, and is useful for accessing the field via an interface.
-func (v *runJobRunJobJobRun) GetId() uuid.UUID { return v.Id }
-
-// setEnvVarsResponse is returned by setEnvVars on success.
-type setEnvVarsResponse struct {
-	SetRepoEnvs setEnvVarsSetRepoEnvsRepo `json:"setRepoEnvs"`
-}
-
-// GetSetRepoEnvs returns setEnvVarsResponse.SetRepoEnvs, and is useful for accessing the field via an interface.
-func (v *setEnvVarsResponse) GetSetRepoEnvs() setEnvVarsSetRepoEnvsRepo { return v.SetRepoEnvs }
-
-// setEnvVarsSetRepoEnvsRepo includes the requested fields of the GraphQL type Repo.
-type setEnvVarsSetRepoEnvsRepo struct {
-	Envs []setEnvVarsSetRepoEnvsRepoEnvsEnvVar `json:"envs"`
-}
-
-// GetEnvs returns setEnvVarsSetRepoEnvsRepo.Envs, and is useful for accessing the field via an interface.
-func (v *setEnvVarsSetRepoEnvsRepo) GetEnvs() []setEnvVarsSetRepoEnvsRepoEnvsEnvVar { return v.Envs }
-
-// setEnvVarsSetRepoEnvsRepoEnvsEnvVar includes the requested fields of the GraphQL type EnvVar.
-type setEnvVarsSetRepoEnvsRepoEnvsEnvVar struct {
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns setEnvVarsSetRepoEnvsRepoEnvsEnvVar.Id, and is useful for accessing the field via an interface.
-func (v *setEnvVarsSetRepoEnvsRepoEnvsEnvVar) GetId() uuid.UUID { return v.Id }
-
-// updateBranchResponse is returned by updateBranch on success.
-type updateBranchResponse struct {
-	UpdateBranch updateBranchUpdateBranchRepoBranchV2 `json:"updateBranch"`
-}
-
-// GetUpdateBranch returns updateBranchResponse.UpdateBranch, and is useful for accessing the field via an interface.
-func (v *updateBranchResponse) GetUpdateBranch() updateBranchUpdateBranchRepoBranchV2 {
-	return v.UpdateBranch
-}
-
-// updateBranchUpdateBranchRepoBranchV2 includes the requested fields of the GraphQL type RepoBranchV2.
-type updateBranchUpdateBranchRepoBranchV2 struct {
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns updateBranchUpdateBranchRepoBranchV2.Id, and is useful for accessing the field via an interface.
-func (v *updateBranchUpdateBranchRepoBranchV2) GetId() uuid.UUID { return v.Id }
-
-// updateClusterResponse is returned by updateCluster on success.
-type updateClusterResponse struct {
-	UpdateCluster updateClusterUpdateCluster `json:"updateCluster"`
-}
-
-// GetUpdateCluster returns updateClusterResponse.UpdateCluster, and is useful for accessing the field via an interface.
-func (v *updateClusterResponse) GetUpdateCluster() updateClusterUpdateCluster { return v.UpdateCluster }
-
-// updateClusterUpdateCluster includes the requested fields of the GraphQL type Cluster.
-type updateClusterUpdateCluster struct {
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns updateClusterUpdateCluster.Id, and is useful for accessing the field via an interface.
-func (v *updateClusterUpdateCluster) GetId() uuid.UUID { return v.Id }
-
-// updateProjectResponse is returned by updateProject on success.
-type updateProjectResponse struct {
-	UpdateProject updateProjectUpdateProjectRepo `json:"updateProject"`
-}
-
-// GetUpdateProject returns updateProjectResponse.UpdateProject, and is useful for accessing the field via an interface.
-func (v *updateProjectResponse) GetUpdateProject() updateProjectUpdateProjectRepo {
-	return v.UpdateProject
-}
-
-// updateProjectUpdateProjectRepo includes the requested fields of the GraphQL type Repo.
-type updateProjectUpdateProjectRepo struct {
-	// - v0.RepoID
-	Id uuid.UUID `json:"id"`
-}
-
-// GetId returns updateProjectUpdateProjectRepo.Id, and is useful for accessing the field via an interface.
-func (v *updateProjectUpdateProjectRepo) GetId() uuid.UUID { return v.Id }
 
 // The query or mutation executed by GetCloudAWS.
 const GetCloudAWS_Operation = `
@@ -2501,10 +2502,10 @@ mutation buildRepo ($id: ID!, $branch: String, $noCache: Boolean) {
 func BuildRepoMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
+	id string,
 	branch string,
 	noCache bool,
-) (*buildRepoResponse, error) {
+) (*BuildRepoResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "buildRepo",
 		Query:  buildRepo_Operation,
@@ -2516,7 +2517,7 @@ func BuildRepoMutation(
 	}
 	var err_ error
 
-	var data_ buildRepoResponse
+	var data_ BuildRepoResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2546,9 +2547,9 @@ mutation buildRepoDefaultBranch ($id: ID!, $noCache: Boolean) {
 func BuildRepoDefaultBranchMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
+	id string,
 	noCache bool,
-) (*buildRepoDefaultBranchResponse, error) {
+) (*BuildRepoDefaultBranchResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "buildRepoDefaultBranch",
 		Query:  buildRepoDefaultBranch_Operation,
@@ -2559,7 +2560,7 @@ func BuildRepoDefaultBranchMutation(
 	}
 	var err_ error
 
-	var data_ buildRepoDefaultBranchResponse
+	var data_ BuildRepoDefaultBranchResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2581,8 +2582,8 @@ mutation delete ($id: ID!) {
 func DeleteMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*deleteResponse, error) {
+	id string,
+) (*DeleteResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "delete",
 		Query:  delete_Operation,
@@ -2592,7 +2593,7 @@ func DeleteMutation(
 	}
 	var err_ error
 
-	var data_ deleteResponse
+	var data_ DeleteResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2615,7 +2616,7 @@ func DeleteBlueprintMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*deleteBlueprintResponse, error) {
+) (*DeleteBlueprintResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deleteBlueprint",
 		Query:  deleteBlueprint_Operation,
@@ -2625,7 +2626,7 @@ func DeleteBlueprintMutation(
 	}
 	var err_ error
 
-	var data_ deleteBlueprintResponse
+	var data_ DeleteBlueprintResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2657,7 +2658,7 @@ func DeployRepoBranchMutation(
 	client_ graphql.Client,
 	branch string,
 	projectId uuid.UUID,
-) (*deployRepoBranchResponse, error) {
+) (*DeployRepoBranchResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "deployRepoBranch",
 		Query:  deployRepoBranch_Operation,
@@ -2668,7 +2669,7 @@ func DeployRepoBranchMutation(
 	}
 	var err_ error
 
-	var data_ deployRepoBranchResponse
+	var data_ DeployRepoBranchResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2704,9 +2705,9 @@ fragment BlueprintSummary on Blueprint {
 func GetBlueprintQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	userID uuid.UUID,
+	userID string,
 	blueprintID uuid.UUID,
-) (*getBlueprintResponse, error) {
+) (*GetBlueprintResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getBlueprint",
 		Query:  getBlueprint_Operation,
@@ -2717,7 +2718,7 @@ func GetBlueprintQuery(
 	}
 	var err_ error
 
-	var data_ getBlueprintResponse
+	var data_ GetBlueprintResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2762,9 +2763,9 @@ fragment BlueprintSummary on Blueprint {
 func GetBlueprintsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	userId uuid.UUID,
+	userId string,
 	pageInput PageInput,
-) (*getBlueprintsResponse, error) {
+) (*GetBlueprintsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getBlueprints",
 		Query:  getBlueprints_Operation,
@@ -2775,7 +2776,7 @@ func GetBlueprintsQuery(
 	}
 	var err_ error
 
-	var data_ getBlueprintsResponse
+	var data_ GetBlueprintsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2808,8 +2809,8 @@ query getBuildLogs ($id: ID!) {
 func GetBuildLogsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getBuildLogsResponse, error) {
+	id string,
+) (*GetBuildLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getBuildLogs",
 		Query:  getBuildLogs_Operation,
@@ -2819,7 +2820,7 @@ func GetBuildLogsQuery(
 	}
 	var err_ error
 
-	var data_ getBuildLogsResponse
+	var data_ GetBuildLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2848,7 +2849,7 @@ func GetClusterKubeconfigQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*getClusterKubeconfigResponse, error) {
+) (*GetClusterKubeconfigResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getClusterKubeconfig",
 		Query:  getClusterKubeconfig_Operation,
@@ -2858,7 +2859,7 @@ func GetClusterKubeconfigQuery(
 	}
 	var err_ error
 
-	var data_ getClusterKubeconfigResponse
+	var data_ GetClusterKubeconfigResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2883,14 +2884,14 @@ query getCurrentUser {
 func GetCurrentUserQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*getCurrentUserResponse, error) {
+) (*GetCurrentUserResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getCurrentUser",
 		Query:  getCurrentUser_Operation,
 	}
 	var err_ error
 
-	var data_ getCurrentUserResponse
+	var data_ GetCurrentUserResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2920,8 +2921,8 @@ query getDeploymentInfo ($id: ID!) {
 func GetDeploymentInfoQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentInfoResponse, error) {
+	id string,
+) (*GetDeploymentInfoResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getDeploymentInfo",
 		Query:  getDeploymentInfo_Operation,
@@ -2931,7 +2932,7 @@ func GetDeploymentInfoQuery(
 	}
 	var err_ error
 
-	var data_ getDeploymentInfoResponse
+	var data_ GetDeploymentInfoResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -2964,8 +2965,8 @@ query getDeploymentLogs ($id: ID!) {
 func GetDeploymentLogsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentLogsResponse, error) {
+	id string,
+) (*GetDeploymentLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getDeploymentLogs",
 		Query:  getDeploymentLogs_Operation,
@@ -2975,7 +2976,7 @@ func GetDeploymentLogsQuery(
 	}
 	var err_ error
 
-	var data_ getDeploymentLogsResponse
+	var data_ GetDeploymentLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3007,8 +3008,8 @@ query getDeploymentReplicaStatus ($id: ID!) {
 func GetDeploymentReplicaStatusQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getDeploymentReplicaStatusResponse, error) {
+	id string,
+) (*GetDeploymentReplicaStatusResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getDeploymentReplicaStatus",
 		Query:  getDeploymentReplicaStatus_Operation,
@@ -3018,7 +3019,7 @@ func GetDeploymentReplicaStatusQuery(
 	}
 	var err_ error
 
-	var data_ getDeploymentReplicaStatusResponse
+	var data_ GetDeploymentReplicaStatusResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3047,8 +3048,8 @@ query getEnvVars ($id: ID!) {
 func GetEnvVarsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getEnvVarsResponse, error) {
+	id string,
+) (*GetEnvVarsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getEnvVars",
 		Query:  getEnvVars_Operation,
@@ -3058,7 +3059,7 @@ func GetEnvVarsQuery(
 	}
 	var err_ error
 
-	var data_ getEnvVarsResponse
+	var data_ GetEnvVarsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3087,7 +3088,7 @@ func GetJobQuery(
 	client_ graphql.Client,
 	projectID uuid.UUID,
 	jobID uuid.UUID,
-) (*getJobResponse, error) {
+) (*GetJobResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getJob",
 		Query:  getJob_Operation,
@@ -3098,7 +3099,7 @@ func GetJobQuery(
 	}
 	var err_ error
 
-	var data_ getJobResponse
+	var data_ GetJobResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3131,7 +3132,7 @@ func GetJobLogsQuery(
 	client_ graphql.Client,
 	repoID uuid.UUID,
 	jobID uuid.UUID,
-) (*getJobLogsResponse, error) {
+) (*GetJobLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getJobLogs",
 		Query:  getJobLogs_Operation,
@@ -3142,7 +3143,7 @@ func GetJobLogsQuery(
 	}
 	var err_ error
 
-	var data_ getJobLogsResponse
+	var data_ GetJobLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3176,7 +3177,7 @@ func GetLatestDeploymentQuery(
 	client_ graphql.Client,
 	project string,
 	branch string,
-) (*getLatestDeploymentResponse, error) {
+) (*GetLatestDeploymentResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getLatestDeployment",
 		Query:  getLatestDeployment_Operation,
@@ -3187,7 +3188,7 @@ func GetLatestDeploymentQuery(
 	}
 	var err_ error
 
-	var data_ getLatestDeploymentResponse
+	var data_ GetLatestDeploymentResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3216,8 +3217,8 @@ query getProductionBranch ($repoId: ID!) {
 func GetProductionBranchQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	repoId uuid.UUID,
-) (*getProductionBranchResponse, error) {
+	repoId string,
+) (*GetProductionBranchResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getProductionBranch",
 		Query:  getProductionBranch_Operation,
@@ -3227,7 +3228,7 @@ func GetProductionBranchQuery(
 	}
 	var err_ error
 
-	var data_ getProductionBranchResponse
+	var data_ GetProductionBranchResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3257,7 +3258,7 @@ func GetProductionDeploymentQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	project string,
-) (*getProductionDeploymentResponse, error) {
+) (*GetProductionDeploymentResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getProductionDeployment",
 		Query:  getProductionDeployment_Operation,
@@ -3267,7 +3268,7 @@ func GetProductionDeploymentQuery(
 	}
 	var err_ error
 
-	var data_ getProductionDeploymentResponse
+	var data_ GetProductionDeploymentResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3292,7 +3293,7 @@ func GetProjectByPathQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	path string,
-) (*getProjectByPathResponse, error) {
+) (*GetProjectByPathResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getProjectByPath",
 		Query:  getProjectByPath_Operation,
@@ -3302,7 +3303,7 @@ func GetProjectByPathQuery(
 	}
 	var err_ error
 
-	var data_ getProjectByPathResponse
+	var data_ GetProjectByPathResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3327,7 +3328,7 @@ func GetProjectPathQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	id uuid.UUID,
-) (*getProjectPathResponse, error) {
+) (*GetProjectPathResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getProjectPath",
 		Query:  getProjectPath_Operation,
@@ -3337,7 +3338,7 @@ func GetProjectPathQuery(
 	}
 	var err_ error
 
-	var data_ getProjectPathResponse
+	var data_ GetProjectPathResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3384,9 +3385,9 @@ fragment ProjectV3AdapterSummary on ProjectV3Adapter {
 func GetProjectV3sQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	userId *uuid.UUID,
+	userId *string,
 	filter *FilterInput,
-) (*getProjectV3sResponse, error) {
+) (*GetProjectV3sResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getProjectV3s",
 		Query:  getProjectV3s_Operation,
@@ -3397,7 +3398,7 @@ func GetProjectV3sQuery(
 	}
 	var err_ error
 
-	var data_ getProjectV3sResponse
+	var data_ GetProjectV3sResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3422,7 +3423,7 @@ func GetRepoQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	path string,
-) (*getRepoResponse, error) {
+) (*GetRepoResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getRepo",
 		Query:  getRepo_Operation,
@@ -3432,7 +3433,7 @@ func GetRepoQuery(
 	}
 	var err_ error
 
-	var data_ getRepoResponse
+	var data_ GetRepoResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3461,8 +3462,8 @@ query getRuntimeLogs ($id: ID!) {
 func GetRuntimeLogsQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
-) (*getRuntimeLogsResponse, error) {
+	id string,
+) (*GetRuntimeLogsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "getRuntimeLogs",
 		Query:  getRuntimeLogs_Operation,
@@ -3472,7 +3473,7 @@ func GetRuntimeLogsQuery(
 	}
 	var err_ error
 
-	var data_ getRuntimeLogsResponse
+	var data_ GetRuntimeLogsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3503,14 +3504,14 @@ query listClusters {
 func ListClustersQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
-) (*listClustersResponse, error) {
+) (*ListClustersResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "listClusters",
 		Query:  listClusters_Operation,
 	}
 	var err_ error
 
-	var data_ listClustersResponse
+	var data_ ListClustersResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3544,7 +3545,7 @@ func ListClustersForTeamQuery(
 	ctx_ context.Context,
 	client_ graphql.Client,
 	path string,
-) (*listClustersForTeamResponse, error) {
+) (*ListClustersForTeamResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "listClustersForTeam",
 		Query:  listClustersForTeam_Operation,
@@ -3554,7 +3555,7 @@ func ListClustersForTeamQuery(
 	}
 	var err_ error
 
-	var data_ listClustersForTeamResponse
+	var data_ ListClustersForTeamResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3582,7 +3583,7 @@ func RunJobMutation(
 	id uuid.UUID,
 	command string,
 	build bool,
-) (*runJobResponse, error) {
+) (*RunJobResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "runJob",
 		Query:  runJob_Operation,
@@ -3594,7 +3595,7 @@ func RunJobMutation(
 	}
 	var err_ error
 
-	var data_ runJobResponse
+	var data_ RunJobResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3620,9 +3621,9 @@ mutation setEnvVars ($id: ID!, $envs: [EnvVarInput!]!) {
 func SetEnvVarsMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	id uuid.UUID,
+	id string,
 	envs []EnvVarInput,
-) (*setEnvVarsResponse, error) {
+) (*SetEnvVarsResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "setEnvVars",
 		Query:  setEnvVars_Operation,
@@ -3633,7 +3634,7 @@ func SetEnvVarsMutation(
 	}
 	var err_ error
 
-	var data_ setEnvVarsResponse
+	var data_ SetEnvVarsResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3661,7 +3662,7 @@ func UpdateBranchMutation(
 	deploy bool,
 	projectID uuid.UUID,
 	branchName string,
-) (*updateBranchResponse, error) {
+) (*UpdateBranchResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateBranch",
 		Query:  updateBranch_Operation,
@@ -3674,7 +3675,7 @@ func UpdateBranchMutation(
 	}
 	var err_ error
 
-	var data_ updateBranchResponse
+	var data_ UpdateBranchResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3700,7 +3701,7 @@ func UpdateClusterMutation(
 	client_ graphql.Client,
 	id uuid.UUID,
 	file string,
-) (*updateClusterResponse, error) {
+) (*UpdateClusterResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateCluster",
 		Query:  updateCluster_Operation,
@@ -3711,7 +3712,7 @@ func UpdateClusterMutation(
 	}
 	var err_ error
 
-	var data_ updateClusterResponse
+	var data_ UpdateClusterResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(
@@ -3735,9 +3736,9 @@ mutation updateProject ($projectID: ID!, $image: String!) {
 func UpdateProjectMutation(
 	ctx_ context.Context,
 	client_ graphql.Client,
-	projectID uuid.UUID,
+	projectID string,
 	image string,
-) (*updateProjectResponse, error) {
+) (*UpdateProjectResponse, error) {
 	req_ := &graphql.Request{
 		OpName: "updateProject",
 		Query:  updateProject_Operation,
@@ -3748,7 +3749,7 @@ func UpdateProjectMutation(
 	}
 	var err_ error
 
-	var data_ updateProjectResponse
+	var data_ UpdateProjectResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(

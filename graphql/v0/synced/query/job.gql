@@ -2,6 +2,7 @@ fragment JobCommon on JobRun {
   id
   state
   build {
+    id
     version
   }
   command
@@ -11,6 +12,7 @@ fragment JobCommon on JobRun {
 
 query projectJobs($id: ID!) {
   currentUser {
+    id
     repo(id: $id) {
       id
       jobRuns {
@@ -26,6 +28,7 @@ query projectJobs($id: ID!) {
 
 query projectJob($repoID: ID!, $jobID: UUID!) {
   currentUser {
+    id
     repo(id: $repoID) {
       id
       jobRun(id: $jobID) {
@@ -51,6 +54,7 @@ query projectJob($repoID: ID!, $jobID: UUID!) {
 
 query userJob($jobID: UUID!) {
   currentUser {
+    id
     jobRun(id: $jobID) {
       id
       ...JobCommon

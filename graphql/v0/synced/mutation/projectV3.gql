@@ -1,10 +1,13 @@
 mutation createResourceAlpha($input: CreateResourceAlphaInput!) {
   createResourceAlpha(input: $input) {
+    id
     name
     project {
+      id
       name
     }
     projectEnvironment {
+      id
       name
     }
   }
@@ -21,9 +24,11 @@ mutation duplicateProjectV3($input: DuplicateProjectV3Input!) {
     id
     name
     project {
+      id
       name
     }
     projectEnvironment {
+      id
       name
     }
   }

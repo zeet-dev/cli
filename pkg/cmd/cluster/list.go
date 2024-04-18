@@ -56,8 +56,8 @@ func runClusterList(opts *ClusterListOptions) error {
 
 	switch opts.OutputFormat {
 	case "text":
-		for _, cluster := range clusters {
-			fmt.Fprintln(opts.IO.Out, cluster.ID, cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected)
+		for _, cluster := range clusters.CurrentUser.Clusters {
+			fmt.Fprintln(opts.IO.Out, cluster.Id, cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected)
 		}
 	case "json":
 		output, err := json.MarshalIndent(clusters, "", "  ")
@@ -84,9 +84,9 @@ func runClusterList(opts *ClusterListOptions) error {
 			text.FgGreen.Sprint("Connected"),
 		})
 
-		for _, cluster := range clusters {
+		for _, cluster := range clusters.CurrentUser.Clusters {
 			t.AppendRows([]table.Row{
-				{cluster.ID.String(), cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected},
+				{cluster.Id.String(), cluster.Name, cluster.CloudProvider, cluster.ClusterProvider, cluster.Region, cluster.Connected},
 			})
 		}
 

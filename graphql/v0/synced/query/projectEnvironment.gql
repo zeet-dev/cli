@@ -102,7 +102,9 @@ query projectEnvironmentRevisions(
   $page: PageInput
 ) {
   project(id: $projectId) {
+    id
     environment(id: $id) {
+      id
       revisions(page: $page) {
         totalCount
         pageInfo {

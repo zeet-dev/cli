@@ -70,21 +70,21 @@ func runClusterLogin(opts *ClusterLoginOptions) error {
 		return err
 	}
 
-	ofile := path.Join(home, ".zeet", "clusters", cluster.ID.String(), "kubeconfig.yaml")
+	ofile := path.Join(home, ".zeet", "clusters", cluster.CurrentUser.Cluster.Id.String(), "kubeconfig.yaml")
 
 	if err := os.MkdirAll(filepath.Dir(ofile), os.ModePerm); err != nil {
 		return err
 	}
 
-	if err := os.WriteFile(ofile, []byte(cluster.Kubeconfig), 0600); err != nil {
+	if err := os.WriteFile(ofile, []byte(cluster.CurrentUser.Cluster.Kubeconfig), 0600); err != nil {
 		return err
 	}
 
 	if eval {
-		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s %s creds fetched", Name, cluster.Name)))
+		fmt.Fprintln(opts.IO.ErrOut, color.GreenString(fmt.Sprintf("%s %s creds fetched", Name, cluster.CurrentUser.Cluster.Name)))
 		fmt.Fprintf(opts.IO.Out, "export KUBECONFIG=%s", ofile)
 	} else {
-		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s %s creds fetched", Name, cluster.Name)))
+		fmt.Fprintln(opts.IO.Out, color.GreenString(fmt.Sprintf("%s %s creds fetched", Name, cluster.CurrentUser.Cluster.Name)))
 	}
 
 	return nil

@@ -2037,6 +2037,7 @@ enum JobRunState {
   JOB_RUN_FAILED
   JOB_RUN_SUCCEEDED
   JOB_RUN_PENDING_APPROVAL
+  JOB_RUN_PENDING_BUILD
 }
 
 type JobRunStep implements WorkflowRunStep {
@@ -2219,6 +2220,24 @@ type LinodeAccountConfigurationConnection {
   totalCount: Int!
   pageInfo: PageInfo!
   nodes: [LinodeAccountConfiguration!]!
+}
+
+input LinodeBucketBackendInput {
+  linodeAccountId: UUID!
+  bucketName: String!
+  key: String!
+  region: String!
+  accessKey: String!
+  secretAccessKey: String!
+}
+
+type LinodeBucketConfiguration {
+  linodeAccountId: UUID!
+  bucketName: String!
+  key: String!
+  region: String!
+  accessKey: String!
+  secretAccessKey: String!
 }
 
 type Log {
@@ -3171,6 +3190,7 @@ type TerraformProvider {
   awsAccount: AWSAccount
   gcpAccount: GCPAccount
   doAccount: DOAccount
+  linodeAccount: LinodeAccount
 
   """Region name, when applicable"""
   region: String
@@ -3186,6 +3206,9 @@ input TerraformProviderInput {
   """Zeet ID for a connected DigitalOcean Account"""
   doAccountId: UUID
 
+  """Zeet ID for a connected Linode Account"""
+  linodeAccountId: UUID
+
   """Region name, when applicable"""
   region: String
 }
@@ -3193,11 +3216,13 @@ input TerraformProviderInput {
 type TerraformStateBackend {
   s3Bucket: S3BucketConfiguration
   gcsBucket: GCSBucketConfiguration
+  linodeBucket: LinodeBucketConfiguration
 }
 
 input TerraformStateBackendInput {
   s3Bucket: S3BucketBackendInput
   gcsBucket: GCSBucketBackendInput
+  linodeBucket: LinodeBucketBackendInput
 }
 
 type TerraformTargetConfiguration {
@@ -3306,7 +3331,6 @@ input UpdateGitlabIntegrationInput {
 }
 
 input UpdateGroupInput {
-  id: UUID!
   name: String
   envs: [EnvVarInput!]
 }
@@ -3331,7 +3355,6 @@ input UpdateProjectLinkInput {
 }
 
 input UpdateSubGroupInput {
-  id: UUID!
   name: String
   envs: [EnvVarInput!]
 }

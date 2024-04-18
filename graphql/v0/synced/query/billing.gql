@@ -2,6 +2,8 @@ fragment BillingOverviewDetail on BillingOverview {
   currentProducts {
     ...ProductDetail
   }
+  hasUpgradedProducts
+  isBillingSetup
   externalLinks {
     invoiceHistory {
       ...UrlOrContactUsDetail
